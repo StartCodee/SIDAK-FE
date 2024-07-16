@@ -26,7 +26,7 @@ import {
 	ChevronRightIcon,
 	SewingPinFilledIcon,
 	PersonIcon,
-	DesktopIcon,
+	ArrowUpIcon,
 	EnvelopeClosedIcon,
 } from '@radix-ui/react-icons';
 import Image from 'next/image';
@@ -60,8 +60,11 @@ export default function Home() {
 
 	return (
 		<main className="">
+			<Navbar />
+
 			{/* image header */}
-			<div className="relative h-96">
+
+			<div className="relative h-64 flex items-center justify-center">
 				<Image
 					src={Background}
 					alt="background"
@@ -69,52 +72,79 @@ export default function Home() {
 					objectFit="cover"
 					className="z-0"
 				/>
-				<Image
-					src={vector1}
-					alt="vector1"
-					width={580}
-					height={580}
-					objectFit="cover"
-					className="absolute opacity-60 right-0 z-10"
-				/>
-				<Image
-					src={vector2}
-					alt="vector2"
-					width={580}
-					height={580}
-					objectFit="cover"
-					className="absolute drop-shadow-md opacity-25 right-0 z-20"
-				/>
-				<Navbar />
+				<div className="hidden lg:block">
+					<Image
+						src={vector1}
+						alt="vector1"
+						width={390}
+						height={390}
+						objectFit="cover"
+						className="absolute opacity-60 right-0 top-0"
+					/>
+					<Image
+						src={vector2}
+						alt="vector2"
+						width={390}
+						height={390}
+						objectFit="cover"
+						className="absolute drop-shadow-md opacity-25 right-0 top-0"
+					/>
+				</div>
 
-				<Image
-					src={sidak}
-					alt="sidak"
-					width={900}
-					height={190}
-					objectFit="cover"
-					className="absolute bottom-28 left-32 z-30"
-				/>
-				<div className="flex absolute bottom-10 gap-4 items-center left-32 z-30">
-					<Image
-						src={bank}
-						alt="bank"
-						width={45}
-						height={45}
-						objectFit="cover"
-						className=""
-					/>
-					<Image
-						src={sulaw}
-						alt="sulaw"
-						width={30}
-						height={30}
-						objectFit="cover"
-						className=""
-					/>
-					<Button className="bg-red-700 rounded-full text-white">
-						KETAHUI HARGA TERKINI
-					</Button>
+				<div className="flex-col absolute  items-center ">
+					<p className="text-white text-4xl font-semibold">
+						Sistem Informasi Komoditas : Harga dan Pasokan
+					</p>
+				</div>
+				<div className="absolute bottom-0 mt-8 left-1/2 transform -translate-x-1/2 shadow-xl rounded-full p-4 flex bg-white z-30">
+					<div className="flex-col">
+						<h1 className="font-bold text-sm">Jenis Informasi</h1>
+						<DropdownMenu>
+							<DropdownMenuTrigger className="flex items-center gap-6">
+								BERAS <ChevronDownIcon />
+							</DropdownMenuTrigger>
+							<DropdownMenuContent>
+								<DropdownMenuLabel>Pilih Kategori</DropdownMenuLabel>
+								<DropdownMenuItem>BERAS</DropdownMenuItem>
+								<DropdownMenuItem>BERAS</DropdownMenuItem>
+								<DropdownMenuItem>BERAS</DropdownMenuItem>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem>BERAS</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+					</div>
+					<Separator orientation="vertical" className="mx-4 bg-black" />
+					<div className="flex-col">
+						<h1 className="font-bold text-sm">Komoditas</h1>
+						<DropdownMenu>
+							<DropdownMenuTrigger className="flex items-center gap-6">
+								Beras <ChevronDownIcon />
+							</DropdownMenuTrigger>
+							<DropdownMenuContent>
+								<DropdownMenuLabel>Pilih Komoditas</DropdownMenuLabel>
+								<DropdownMenuItem>Beras</DropdownMenuItem>
+								<DropdownMenuItem>Beras</DropdownMenuItem>
+								<DropdownMenuItem>Beras</DropdownMenuItem>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem>Beras</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+					</div>
+					<Separator orientation="vertical" className="mx-4" />
+					<div className="flex-col">
+						<h1 className="font-bold text-sm ">Bulan</h1>
+						<DropdownMenu>
+							<DropdownMenuTrigger className="flex items-center gap-6">
+								APRIL <ChevronDownIcon />
+							</DropdownMenuTrigger>
+							<DropdownMenuContent>
+								<DropdownMenuLabel>Pilih Bulan</DropdownMenuLabel>
+								{months.map((month, index) => (
+									<DropdownMenuItem key={index}>{month}</DropdownMenuItem>
+								))}
+							</DropdownMenuContent>
+						</DropdownMenu>
+					</div>
 				</div>
 			</div>
 
@@ -132,130 +162,99 @@ export default function Home() {
 				</div>
 				<div className="flex justify-between pt-10">
 					<div className="flex-col">
-						<h1 className="text-4xl font-extrabold">NERACA PANGAN</h1>
+						<h1 className="text-4xl font-extrabold">PETA PERUBAHAN HARGA</h1>
 						<Badge className="bg-green-400 text-sm rounded-full text-white gap-2">
 							<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal 15
 							April 2024
 						</Badge>
 					</div>
-					<div>
-						<div className="shadow-xl rounded-full h-full w-full p-4 flex">
-							<div className="flex-col">
-								<h1 className="font-bold text-sm">Kategori Komoditas</h1>
-								<DropdownMenu>
-									<DropdownMenuTrigger className="flex items-center gap-6">
-										BERAS <ChevronDownIcon />
-									</DropdownMenuTrigger>
-									<DropdownMenuContent>
-										<DropdownMenuLabel>Pilih Kategori</DropdownMenuLabel>
-										<DropdownMenuItem>BERAS</DropdownMenuItem>
-										<DropdownMenuItem>BERAS</DropdownMenuItem>
-										<DropdownMenuItem>BERAS</DropdownMenuItem>
-										<DropdownMenuSeparator />
-										<DropdownMenuItem>BERAS</DropdownMenuItem>
-									</DropdownMenuContent>
-								</DropdownMenu>
-							</div>
-							<Separator orientation="vertical" className="mx-4" />
-							<div className="flex-col">
-								<h1 className="font-bold text-sm ">Bulan</h1>
-								<DropdownMenu>
-									<DropdownMenuTrigger className="flex items-center gap-6">
-										APRIL <ChevronDownIcon />
-									</DropdownMenuTrigger>
-									<DropdownMenuContent>
-										<DropdownMenuLabel>Pilih Bulan</DropdownMenuLabel>
-										{months.map((month, index) => (
-											<DropdownMenuItem key={index}>{month}</DropdownMenuItem>
-										))}
-									</DropdownMenuContent>
-								</DropdownMenu>
-							</div>
-						</div>
-					</div>
+					<div></div>
 				</div>
 				<div className="flex justify-between items-center">
 					<Map />
 					{/* card with data information */}
 					<div className="flex-col space-y-4">
 						<Card className="flex rounded-2xl">
-							<div className="w-40 h-40 bg-red-600 rounded-2xl">
-								<SewingPinFilledIcon className="w-full h-full text-white" />
-							</div>
 							<div>
 								<CardHeader>
 									<CardTitle>Kota Palu</CardTitle>
 								</CardHeader>
 								<CardContent>
-									<CardDescription>Ketersediaan : 80 Ton</CardDescription>
-									<CardDescription>Kebutuhan : 80</CardDescription>
-									<Separator />
-									<CardDescription>
-										Neraca Pangan : (3.879)  Ton / defisit
-									</CardDescription>
+									<div className="flex justify-between">
+										15.000/kg
+										<div className="p-4 rounded-md bg-green-500">
+											<ArrowUpIcon className="text-white" />
+											RP.298
+										</div>
+									</div>
 								</CardContent>
 							</div>
 						</Card>
 						<Card className="flex rounded-2xl">
-							<div className="w-40 h-40 bg-green-600 rounded-2xl">
-								<SewingPinFilledIcon className="w-full h-full text-white" />
+							<div>
+								<CardHeader>
+									<CardTitle>Kabupaten Buol</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<div className="flex justify-between">
+										14.100/kg
+										<div className="p-4 rounded-md bg-green-500">
+											<ArrowUpIcon className="text-white" />
+											RP.298
+										</div>
+									</div>
+								</CardContent>
 							</div>
+						</Card>
+						<Card className="flex rounded-2xl">
 							<div>
 								<CardHeader>
 									<CardTitle>Kabupaten Sigi</CardTitle>
 								</CardHeader>
 								<CardContent>
-									<CardDescription>Ketersediaan : 80 Ton</CardDescription>
-									<CardDescription>Kebutuhan : 80</CardDescription>
-									<Separator />
-									<CardDescription>
-										Neraca Pangan : (3.879)  Ton / defisit
-									</CardDescription>
+									<div className="flex justify-between">
+										15.000/kg
+										<div className="p-4 rounded-md bg-green-500">
+											<ArrowUpIcon className="text-white" />
+											RP.298
+										</div>
+									</div>
 								</CardContent>
 							</div>
 						</Card>
 						<Card className="flex rounded-2xl">
-							<div className="w-40 h-40 bg-red-600 rounded-2xl">
-								<SewingPinFilledIcon className="w-full h-full text-white" />
-							</div>
 							<div>
 								<CardHeader>
-									<CardTitle>Kabupaten Donggala </CardTitle>
+									<CardTitle>Kabupaten Tolitoli</CardTitle>
 								</CardHeader>
 								<CardContent>
-									<CardDescription>Ketersediaan : 80 Ton</CardDescription>
-									<CardDescription>Kebutuhan : 80</CardDescription>
-									<Separator />
-									<CardDescription>
-										Neraca Pangan : (3.879)  Ton / defisit
-									</CardDescription>
+									<div className="flex justify-between">
+										15.000/kg
+										<div className="p-4 rounded-md bg-green-500">
+											<ArrowUpIcon className="text-white" />
+											RP.298
+										</div>
+									</div>
 								</CardContent>
 							</div>
 						</Card>
 						<Card className="flex rounded-2xl">
-							<div className="w-40 h-40 bg-green-600 rounded-2xl">
-								<SewingPinFilledIcon className="w-full h-full text-white" />
-							</div>
 							<div>
 								<CardHeader>
-									<CardTitle>Kabupaten Parigi Moutong</CardTitle>
+									<CardTitle>Kabupaten Banggai</CardTitle>
 								</CardHeader>
 								<CardContent>
-									<CardDescription>Ketersediaan : 80 Ton</CardDescription>
-									<CardDescription>Kebutuhan : 80</CardDescription>
-									<Separator />
-									<CardDescription>
-										Neraca Pangan : (3.879)  Ton / defisit
-									</CardDescription>
+									<div className="flex justify-between">
+										15.000/kg
+										<div className="p-4 rounded-md bg-green-500">
+											<ArrowUpIcon className="text-white" />
+											RP.298
+										</div>
+									</div>
 								</CardContent>
 							</div>
 						</Card>
 						<div className="flex justify-between ">
-							<div className="flex items-center gap-2">
-								<h1 className="text-lg font-bold text-blue-400">Peta</h1>
-								<Switch />
-								<h1 className="text-lg font-bold text-blue-400">Grafis</h1>
-							</div>
 							<h1 className="text-2xl text-blue-600 font-bold flex items-center">
 								Data Selengkapnya <ChevronRightIcon width={30} height={30} />
 							</h1>
@@ -267,47 +266,47 @@ export default function Home() {
 			<section className="px-20 pt-4 space-y-4">
 				<h1>*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar</h1>
 				<div className="flex justify-between">
-					<Card className="flex items-center p-0 content-center justify-items-center">
-						<div className="bg-blue-400 rounded-lg">
+					<Card className="flex items-center p-4 rounded-xl gap-4 content-center justify-items-center">
+						<div className="bg-blue-400 p-2 rounded-md">
 							<PersonIcon width={50} height={50} className="  text-white" />
 						</div>
 						<div>
-							<CardContent className="flex items-center">
+							<div className="flex items-center">
 								<div>
-									<h1>Jumlah Komoditas</h1>
-									Jumlah Komoditas di Sulawesi Tengah
+									<h1 className="text-md font-bold">Kunjungan User</h1>
+									Jumlah Kunjungan User di Sulawesi Tengah
 								</div>
-								<h1 className="text-lg font-bold">30</h1>
-							</CardContent>
+							</div>
 						</div>
+						<h1 className="text-4xl font-bold">3928</h1>
 					</Card>
-					<Card className="flex items-center p-0">
-						<div className="bg-blue-400 rounded-lg">
+					<Card className="flex items-center p-4 rounded-xl gap-4">
+						<div className="bg-blue-400 p-2 rounded-md">
 							<PersonIcon width={50} height={50} className="  text-white" />
 						</div>
 						<div>
-							<CardContent className="flex items-center">
+							<div className="flex items-center">
 								<div>
-									<h1>Jumlah Komoditas</h1>
+									<h1 className="text-md font-bold">Jumlah Komoditas</h1>
 									Jumlah Komoditas di Sulawesi Tengah
 								</div>
-								<h1 className="text-lg font-bold">30</h1>
-							</CardContent>
+							</div>
 						</div>
+						<h1 className="text-4xl font-bold">30</h1>
 					</Card>
-					<Card className="flex items-center p-0">
-						<div className="bg-blue-400 rounded-lg">
+					<Card className="flex items-center p-4 rounded-xl gap-4">
+						<div className="bg-blue-400 p-2 rounded-md">
 							<PersonIcon width={50} height={50} className="  text-white" />
 						</div>
 						<div>
-							<CardContent className="flex items-center">
+							<div className="flex items-center">
 								<div>
-									<h1>Jumlah Komoditas</h1>
-									Jumlah Komoditas di Sulawesi Tengah
+									<h1 className="text-md font-bold">Jumlah Pasar</h1>
+									Jumlah Pasar di Sulawesi Tengah
 								</div>
-								<h1 className="text-lg font-bold">30</h1>
-							</CardContent>
+							</div>
 						</div>
+						<h1 className="text-4xl font-bold">60</h1>
 					</Card>
 				</div>
 				<Separator className="shadow-lg" />
