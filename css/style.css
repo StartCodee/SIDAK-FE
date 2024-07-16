@@ -11,6 +11,9 @@
 }
 
 @layer components {
+    .bg-whiten {
+        background-color: #F1F5F9;
+    }
 }
 
 @layer utilities {
@@ -111,10 +114,6 @@
 
 .flatpickr-calendar.arrowTop:after {
     @apply dark:!border-b-boxdark;
-}
-
-.flatpickr-calendar {
-    @apply !p-6 dark:!bg-boxdark dark:!text-bodydark dark:!shadow-8 2xsm:!w-auto;
 }
 
 .flatpickr-day {
