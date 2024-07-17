@@ -151,7 +151,7 @@ export default function Home() {
 		<main>
 			<Navbar />
 
-			<div className="relative h-72 flex items-center justify-center bg-[url('/bgg.png')]">
+			<div className="relative h-72 flex items-center justify-center bg-no-repeat bg-cover bg-[url('/bgg.png')]">
 				<div className="hidden lg:block">
 					<Image
 						src={vector1}
@@ -172,12 +172,12 @@ export default function Home() {
 				</div>
 
 				<div className="flex-col mx-auto z-50 items-center ">
-					<p className="text-xs sm:text-sm md:text-lg lg:text-xl xl:text-2xl 2xl:text-4xl text-white font-semibold">
+					<p className="text-lg text-center sm:text-2xl md:text-3xl lg:text-3xl  text-white font-semibold">
 						Sistem Informasi Komoditas : Harga dan Pasokan
 					</p>
 				</div>
 			</div>
-			<div className="relative mx-auto -mt-24 lg:-mt-12 z-20 shadow-xl w-[24rem] rounded-full p-4 flex bg-white">
+			<div className="relative mx-auto -mt-24 lg:-mt-12 z-1 shadow-xl w-[16rem] sm:w-[26rem] gap-2 rounded-full p-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
 				<div className="flex-col">
 					<h1 className="font-bold text-sm">Jenis Informasi</h1>
 					<DropdownMenu>
@@ -243,7 +243,7 @@ export default function Home() {
 					<div></div>
 				</div>
 				<div className="flex flex-col lg:flex-row justify-between items-center">
-					<div>
+					<div className='min-h-screen w-[6rem] lg:w-full'>
 						<Map />
 					</div>
 					<div className="lg:flex-col flex flex-wrap gap-4 lg:self-start">
@@ -271,23 +271,23 @@ export default function Home() {
 							</Card>
 						))}
 
-						<div className="self end">
-							<div className="text-4xl sm:text-md self-end md:text-2xl text-blue-900 font-bold flex items-center">
+						<div className="self-start sm:self-end">
+							<p className="text-sm sm:text-md self-end md:text-lg text-blue-900 font-bold flex items-center">
 								Data Selengkapnya
 								<ChevronRightIcon width={20} height={20} />
-							</div>
+							</p>
 						</div>
 					</div>
 				</div>
 			</section>
 
 			<section className="px-4 sm:px-8 md:px-20 pt-4">
-				<h1 className="text-lg sm:text-xl md:text-2xl">
+				<h1 className="text-sm sm:text-xl md:text-2xl">
 					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar
 				</h1>
 				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
 
-				<div className="  mx-auto -mt-10  z-50 shadow-xl w-[40rem] rounded-full p-4 flex bg-white">
+				<div className="  mx-auto -mt-10  z-50 shadow-xl w-[40rem] scale-75 md:scale-100 rounded-full p-4 flex bg-white">
 					<div className="flex-col ">
 						<h1 className="font-bold text-sm">Jenis Informasi</h1>
 						<DropdownMenu>
@@ -304,7 +304,7 @@ export default function Home() {
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
-					<div className="mx-4 border-l border-black h-auto self-stretch hidden sm:block" />
+					<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
 					<div className="flex-col">
 						<h1 className="font-bold text-sm">Komoditas</h1>
 						<DropdownMenu>
@@ -321,7 +321,7 @@ export default function Home() {
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
-					<div className="mx-4 border-l border-black h-auto self-stretch hidden sm:block" />
+					<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
 					<div className="flex-col">
 						<h1 className="font-bold text-sm">Pilih Kabupaten/Kota</h1>
 						<DropdownMenu>
@@ -338,7 +338,7 @@ export default function Home() {
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
-					<div className="mx-4 border-l border-black h-auto self-stretch hidden sm:block" />
+					<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
 					<div className="flex-col">
 						<h1 className="font-bold text-sm ">Bulan</h1>
 						<DropdownMenu>
@@ -353,11 +353,11 @@ export default function Home() {
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
-					<Button className="p-0 m-0 bg-blue-300 rounded-md ml-5">
+					<Button className="px-3 m-0 bg-blue-300 rounded-full  self-end ml-5">
 						<MagnifyingGlassIcon
-							className="text-white self-center  "
-							width={30}
-							height={30}
+							className="text-white self-center p-0 m-0 "
+							width={20}
+							height={20}
 						/>
 					</Button>
 				</div>

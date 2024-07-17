@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 
 export default function Map() {
 	return (
-		<div className="relative h-[100px] w-[100px] md:h-[800px] md:w-[800px]">
+		<div className="relative h-[6rem] -left-40 sm:-left-60 scale-50 sm:scale-75 lg:scale-100 md:-left-80  lg:left-0 w-[6rem] md:h-[50rem] md:w-[50rem]">
 			<HoverCard>
 				<HoverCardTrigger>
 					<div>
