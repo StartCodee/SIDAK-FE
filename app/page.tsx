@@ -148,14 +148,7 @@ export default function Home() {
 		<main>
 			<Navbar />
 
-			<div className="relative h-72 flex items-center justify-center">
-				<Image
-					src={Background}
-					alt="background"
-					layout="fill"
-					objectFit="cover"
-					className="z-0"
-				/>
+			<div className="relative h-72 flex items-center justify-center bg-[url('/bgg.png')]">
 				<div className="hidden lg:block">
 					<Image
 						src={vector1}
@@ -175,13 +168,13 @@ export default function Home() {
 					/>
 				</div>
 
-				<div className="flex-col mx-auto z-50  items-center ">
-					<p className="text-white text-4xl font-semibold">
+				<div className="flex-col mx-auto z-50 items-center ">
+					<p className="text-xs sm:text-sm md:text-lg lg:text-xl xl:text-2xl 2xl:text-4xl text-white font-semibold">
 						Sistem Informasi Komoditas : Harga dan Pasokan
 					</p>
 				</div>
 			</div>
-			<div className="relative mx-auto -mt-24 lg:-mt-12 z-20 shadow-xl w-full lg:w-[380px] rounded-full p-4 flex bg-white">
+			<div className="relative mx-auto -mt-24 lg:-mt-12 z-20 shadow-xl w-[24rem] rounded-full p-4 flex bg-white">
 				<div className="flex-col">
 					<h1 className="font-bold text-sm">Jenis Informasi</h1>
 					<DropdownMenu>
@@ -233,25 +226,28 @@ export default function Home() {
 			</div>
 
 			{/* content */}
-			<section className="px-20 pt-4 space-y-20">
-				<div className="flex justify-between pt-10">
+			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+				<div className="flex flex-col sm:flex-row justify-between pt-10">
 					<div className="flex-col">
-						<h1 className="text-4xl font-extrabold">PETA PERUBAHAN HARGA</h1>
-						<Badge className="bg-green-400 text-sm rounded-full text-white gap-2">
+						<h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold">
+							PETA PERUBAHAN HARGA
+						</h1>
+						<Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
 							<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal 15
 							April 2024
 						</Badge>
 					</div>
 					<div></div>
 				</div>
-				<div className="flex justify-between items-center">
-					<Map />
-
-					<div className="flex-col space-y-4 self-start">
+				<div className="flex flex-col lg:flex-row justify-between items-center">
+					<div>
+						<Map />
+					</div>
+					<div className="lg:flex-col flex flex-wrap gap-4 lg:self-start">
 						{CardContents.map((content, index) => (
 							<Card
 								key={index}
-								className="flex rounded-2xl space-x-8 justify-between placeholder-sky-400 py-4 px-8">
+								className="flex rounded-2xl space-x-2 sm:space-x-4 md:space-x-8 justify-between w-[18rem] h-[10rem] placeholder-sky-400 py-2 sm:py-4 md:py-8 px-2 sm:px-4 md:px-8">
 								<div>
 									<h1>{content.city}</h1>
 									<p>{content.price}</p>
@@ -260,8 +256,8 @@ export default function Home() {
 								<div className="flex justify-between">
 									<div
 										className={cn(
-											`p-4 rounded-md items-center flex text-white`,
-											content.color === 'red' && 'bg-red-500',
+											`p-2 sm:p-4 md:p-4 rounded-md items-center flex text-white`,
+											content.color === 'red' && 'bg-red',
 											content.color === 'yellow' && 'bg-yellow-500',
 											content.color === 'green' && 'bg-green-500',
 										)}>
@@ -272,44 +268,46 @@ export default function Home() {
 							</Card>
 						))}
 
-						<div className="flex justify-between pt-10 ">
-							<h1 className="text-2xl text-blue-500 font-bold flex items-center">
-								Data Selengkapnya <ChevronRightIcon width={30} height={30} />
-							</h1>
+						<div className="self end">
+							<div className="text-4xl sm:text-md self-end md:text-2xl text-blue-900 font-bold flex items-center">
+								Data Selengkapnya
+								<ChevronRightIcon width={20} height={20} />
+							</div>
 						</div>
 					</div>
 				</div>
 			</section>
 
-			<section className="px-20 pt-4">
-				<Separator className="shadow-lg" />
-				<h1>*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar</h1>
-				<div className=" mt-8 w-[700px] mx-auto shadow-xl space-x-4 rounded-full p-4 flex bg-white z-30">
+			<section className="px-4 sm:px-8 md:px-20 pt-4">
+				<h1 className="text-lg sm:text-xl md:text-2xl">
+					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar
+				</h1>
+				<div className=" mx-auto -mb-8 mt-5  z-50 shadow-xl w-[24rem] rounded-full p-4 flex bg-white">
 					<div className="flex-col">
-						<h1 className="font-bold text-sm">Jenis Pasar</h1>
+						<h1 className="font-bold text-sm">Jenis Informasi</h1>
 						<DropdownMenu>
 							<DropdownMenuTrigger className="flex items-center gap-6">
-								Pasar Tradisional <ChevronDownIcon />
+								BERAS <ChevronDownIcon />
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
-								<DropdownMenuLabel>Pilih Jenis Pasar</DropdownMenuLabel>
-								<DropdownMenuItem>Pasar Tradisional</DropdownMenuItem>
-								<DropdownMenuItem>Pasar Tradisional</DropdownMenuItem>
-								<DropdownMenuItem>Pasar Tradisional</DropdownMenuItem>
+								<DropdownMenuLabel>Pilih Kategori</DropdownMenuLabel>
+								<DropdownMenuItem>BERAS</DropdownMenuItem>
+								<DropdownMenuItem>BERAS</DropdownMenuItem>
+								<DropdownMenuItem>BERAS</DropdownMenuItem>
 								<DropdownMenuSeparator />
-								<DropdownMenuItem>Pasar Tradisional</DropdownMenuItem>
+								<DropdownMenuItem>BERAS</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
-					<Separator orientation="vertical" />
+					<Separator orientation="vertical" className="mx-4 border-black" />
 					<div className="flex-col">
-						<h1 className="font-bold text-sm">Kategori Komoditas</h1>
+						<h1 className="font-bold text-sm">Komoditas</h1>
 						<DropdownMenu>
 							<DropdownMenuTrigger className="flex items-center gap-6">
 								Beras <ChevronDownIcon />
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
-								<DropdownMenuLabel>Pilih Kategori Komoditas</DropdownMenuLabel>
+								<DropdownMenuLabel>Pilih Komoditas</DropdownMenuLabel>
 								<DropdownMenuItem>Beras</DropdownMenuItem>
 								<DropdownMenuItem>Beras</DropdownMenuItem>
 								<DropdownMenuItem>Beras</DropdownMenuItem>
@@ -319,23 +317,6 @@ export default function Home() {
 						</DropdownMenu>
 					</div>
 					<Separator orientation="vertical" className="mx-4" />
-					<div className="flex-col">
-						<h1 className="font-bold text-sm">Kabupaten/Kota</h1>
-						<DropdownMenu>
-							<DropdownMenuTrigger className="flex items-center gap-6">
-								Palu <ChevronDownIcon />
-							</DropdownMenuTrigger>
-							<DropdownMenuContent>
-								<DropdownMenuLabel>Pilih Kabupaten/Kota</DropdownMenuLabel>
-								<DropdownMenuItem>Palu</DropdownMenuItem>
-								<DropdownMenuItem>Palu</DropdownMenuItem>
-								<DropdownMenuItem>Palu</DropdownMenuItem>
-								<DropdownMenuSeparator />
-								<DropdownMenuItem>Palu</DropdownMenuItem>
-							</DropdownMenuContent>
-						</DropdownMenu>
-					</div>
-					<Separator orientation="vertical" className="mx-4 shadow-xl" />
 					<div className="flex-col">
 						<h1 className="font-bold text-sm ">Bulan</h1>
 						<DropdownMenu>
@@ -351,8 +332,10 @@ export default function Home() {
 						</DropdownMenu>
 					</div>
 				</div>
+				<Separator className="shadow-lg" />
+
 				<div>
-					<h1 className="text-center p-8 text-blue-800 text-2xl items-center">
+					<h1 className="text-center p-8 mt-10 text-blue-800 text-lg sm:text-xl md:text-2xl items-center">
 						Harga Konsumen Pangan Strategis Sulawesi Tengah
 					</h1>
 					<div className="flex justify-between flex-wrap gap-4 ">
@@ -383,7 +366,7 @@ export default function Home() {
 							</Card>
 						))}
 					</div>
-					<p className="text-center w-11/12 mx-auto m-8">
+					<p className="text-center w-full sm:w-11/12 mx-auto m-8">
 						Perubahan harga telah terjadi pada beberapa komoditas pangan
 						strategis di beberapa kota/kabupaten di Provinsi Sulawesi Tengah
 						sehingga mempengaruhi harga rata-rata pangan strategis Provinsi
@@ -395,10 +378,12 @@ export default function Home() {
 				</div>
 			</section>
 
-			<section className="px-20 pt-4 space-y-4">
-				<h1 className="text-4xl font-bold">Berita Hari Ini</h1>
-				<div className="flex justify-around">
-					<Card className="w-[350px]">
+			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4">
+				<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
+					Berita Hari Ini
+				</h1>
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+					<Card className="w-full">
 						<CardHeader>
 							<Image src={berita} alt="berita" width={350} height={200} />
 						</CardHeader>
@@ -412,7 +397,7 @@ export default function Home() {
 							<Button>Baca Selengkapnya</Button>
 						</CardFooter>
 					</Card>
-					<Card className="w-[350px]">
+					<Card className="w-full">
 						<CardHeader>
 							<Image src={berita} alt="berita" width={350} height={200} />
 						</CardHeader>
@@ -426,7 +411,7 @@ export default function Home() {
 							<Button>Baca Selengkapnya</Button>
 						</CardFooter>
 					</Card>
-					<Card className="w-[350px]">
+					<Card className="w-full">
 						<CardHeader>
 							<Image src={berita} alt="berita" width={350} height={200} />
 						</CardHeader>
@@ -442,48 +427,39 @@ export default function Home() {
 					</Card>
 				</div>
 			</section>
-
-			<section className="px-20 pt-4 space-y-4 gap-4">
-				<div className="flex justify-between gap-4">
-					<Card className="flex items-center p-4 rounded-xl gap-4 content-center justify-items-center">
+			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4">
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+					<Card className="flex items-center p-4 rounded-xl gap-4">
 						<div className="bg-blue-400 p-2 rounded-md">
-							<UserIcon width={30} height={30} className="  text-white" />
+							<UserIcon width={30} height={30} className="text-white" />
 						</div>
 						<div>
-							<div className="flex items-center">
-								<div>
-									<h1 className="text-md font-bold">Kunjungan User</h1>
-									Jumlah Kunjungan User di Sulawesi Tengah
-								</div>
-							</div>
+							<h1 className="text-md font-bold">Kunjungan User</h1>
+							<p>Jumlah Kunjungan User di Sulawesi Tengah</p>
 						</div>
 						<h1 className="text-4xl font-bold">3928</h1>
 					</Card>
 					<Card className="flex items-center p-4 rounded-xl gap-4">
 						<div className="bg-blue-400 p-2 rounded-md">
-							<ScaleIcon width={30} height={30} className="  text-white" />
+							<ScaleIcon width={30} height={30} className="text-white" />
 						</div>
 						<div>
-							<div className="flex items-center">
-								<div>
-									<h1 className="text-md font-bold">Jumlah Komoditas</h1>
-									Jumlah Komoditas di Sulawesi Tengah
-								</div>
-							</div>
+							<h1 className="text-md font-bold">Jumlah Komoditas</h1>
+							<p>Jumlah Komoditas di Sulawesi Tengah</p>
 						</div>
 						<h1 className="text-4xl font-bold">30</h1>
 					</Card>
 					<Card className="flex items-center p-4 rounded-xl gap-4">
 						<div className="bg-blue-400 p-2 rounded-md">
-							<BuildingLibraryIcon width={30} height={30} className="  text-white" />
+							<BuildingLibraryIcon
+								width={30}
+								height={30}
+								className="text-white"
+							/>
 						</div>
 						<div>
-							<div className="flex items-center">
-								<div>
-									<h1 className="text-md font-bold">Jumlah Pasar</h1>
-									Jumlah Pasar di Sulawesi Tengah
-								</div>
-							</div>
+							<h1 className="text-md font-bold">Jumlah Pasar</h1>
+							<p>Jumlah Pasar di Sulawesi Tengah</p>
 						</div>
 						<h1 className="text-4xl font-bold">60</h1>
 					</Card>
@@ -491,35 +467,35 @@ export default function Home() {
 				<Separator className="shadow-lg" />
 			</section>
 
-			<footer className=" mt-10 px-10 bg-no-repeat bg-cover bg-[url('/footer.png')] flex justify-between items-center text-white">
-				<div className="flex-col">
-					<div className="flex gap-4 ">
-						<div className="flex items-center">
+			<footer className="mt-10 px-4 sm:px-10 py-6 bg-no-repeat bg-cover bg-[url('/footer.png')] text-white">
+				<div className="flex flex-col md:flex-row justify-between items-center gap-6">
+					<div className="flex flex-col sm:flex-row gap-6 sm:gap-4">
+						<div className="flex items-center gap-4">
 							<Image src={bank} alt="bank" width={45} height={45} />
-							<div className="flex-col ">
-								<p className='text-sm'>Kantor Perwakilan</p>
-								<h1 className='text-lg p-0'>Bank Indonesia</h1>
-								<p className='text-sm'>Provinsi Sulawesi Tengah</p>
+							<div className="flex flex-col">
+								<p className="text-sm">Kantor Perwakilan</p>
+								<h1 className="text-lg">Bank Indonesia</h1>
+								<p className="text-sm">Provinsi Sulawesi Tengah</p>
 							</div>
 						</div>
-						<div className="flex items-center">
+						<div className="flex items-center gap-4">
 							<Image src={sulaw} alt="sulaw" width={30} height={30} />
 							<div>
-								<h1 className='text-lg'>Pemerintahan</h1>
-								<p className='text-sm'>Provinsi Sulawesi Tengah</p>
+								<h1 className="text-lg">Pemerintahan</h1>
+								<p className="text-sm">Provinsi Sulawesi Tengah</p>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div className="w-[644px] text-right">
-					<p className="font-bold text-lg">
-						SEKRETARIAT TPID SULAWESI TENGAH KANTOR PERWAKILAN BANK INDONESIA
-						PROVINSI SULAWESI TENGAH
-					</p>
-					<p>
-						Jl. Sam Ratulangi No.23 Besusu Barat, Kec. Palu Timur, Kota Palu,
-						Sulawesi Tengah 94118
-					</p>
+					<div className="text-center md:text-right w-full md:w-auto">
+						<p className="font-bold text-lg">
+							SEKRETARIAT TPID SULAWESI TENGAH KANTOR PERWAKILAN BANK INDONESIA
+							PROVINSI SULAWESI TENGAH
+						</p>
+						<p>
+							Jl. Sam Ratulangi No.23 Besusu Barat, Kec. Palu Timur, Kota Palu,
+							Sulawesi Tengah 94118
+						</p>
+					</div>
 				</div>
 			</footer>
 		</main>
