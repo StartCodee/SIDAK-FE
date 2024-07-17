@@ -2,7 +2,6 @@
 import dynamic from "next/dynamic";
 import React from "react";
 
-import ChatCard from "../Chat/ChatCard";
 import TableOne from "../Tables/TableOne";
 import CardDataStats from "../CardDataStats";
 import newsImg from "@/public/admin/images/cards/news.png";
