@@ -39,6 +39,12 @@ import DefaultLayout from "@/components/admin/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/admin/Breadcrumbs/Breadcrumb";
 import { useState } from "react";
 
+import CheckboxFive from "@/components/admin/Checkboxes/CheckboxFive";
+import CheckboxFour from "@/components/admin/Checkboxes/CheckboxFour";
+import CheckboxOne from "@/components/admin/Checkboxes/CheckboxOne";
+import CheckboxThree from "@/components/admin/Checkboxes/CheckboxThree";
+import CheckboxTwo from "@/components/admin/Checkboxes/CheckboxTwo";
+
 export type Commodity = {
     commodity: string;
     dates: Record<string, number>;
@@ -73,8 +79,11 @@ const data: Commodity[] = [
 
 
 
+
+export default function Home() {
+
 // Define columns based on the data structure
-export const columns: ColumnDef<Commodity>[] = [
+ const columns: ColumnDef<Commodity>[] = [
     {
         accessorKey: "commodity",
         header: "Komoditas",
@@ -104,8 +113,6 @@ export const columns: ColumnDef<Commodity>[] = [
         header: "15/02/2023",
     },
 ];
-
-export default function Home() {
     const [activeTab, setActiveTab] = useState('profile');
 
     const handleTabClick = (tab: string): void => {
@@ -174,26 +181,178 @@ export default function Home() {
                         <div>
                             <div id="default-tab-content">
                                 <div
-                                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'profile' ? '' : 'hidden'}`}
+                                    className={`mt-6 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'profile' ? '' : 'hidden'}`}
                                     id="profile"
                                     role="tabpanel"
                                     aria-labelledby="profile-tab"
                                 >
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                                        This is some placeholder content the <strong className="font-medium text-gray-800 dark:text-white">Profile tab associated content</strong>.
-                                        Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.
-                                    </p>
+                                    <div className=" bg-white rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
+                                        <div>
+                                            <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
+                                                Kabupaten/Kota
+                                            </label>
+                                            <select
+                                                id="location"
+                                                name="location"
+                                                defaultValue="Canada"
+                                                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            >
+                                                <option>United States</option>
+                                                <option>Canada</option>
+                                                <option>Mexico</option>
+                                            </select>
+
+                                        </div>
+                                        <div className="mt-5">
+                                            <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
+                                                Kabupaten/Kota
+                                            </label>
+                                            <select
+                                                id="location"
+                                                name="location"
+                                                defaultValue="Canada"
+                                                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            >
+                                                <option>United States</option>
+                                                <option>Canada</option>
+                                                <option>Mexico</option>
+                                            </select>
+
+                                        </div>
+                                        <div className="mt-5">
+                                            <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
+                                                Kabupaten/Kota
+                                            </label>
+                                            <select
+                                                id="location"
+                                                name="location"
+                                                defaultValue="Canada"
+                                                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            >
+                                                <option>United States</option>
+                                                <option>Canada</option>
+                                                <option>Mexico</option>
+                                            </select>
+
+                                        </div>
+                                        <div className="mt-5">
+                                            <div className="mt-2">
+                                                <CheckboxOne />
+
+                                            </div>
+                                            <div className="mt-2">
+                                                <CheckboxOne />
+
+                                            </div>
+                                            <div className="mt-2">
+                                                <CheckboxOne />
+
+                                            </div>
+                                            <div className="mt-2">
+                                                <CheckboxOne />
+
+                                            </div>
+                                            <div className="mt-2">
+                                                <CheckboxOne />
+
+                                            </div>
+                                            <div className="mt-2">
+                                                <CheckboxOne />
+
+                                            </div>
+                                        </div>
+
+                                        <button className="mt-5 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Submit
+                                        </button>
+                                    </div>
                                 </div>
                                 <div
-                                    className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'dashboard' ? '' : 'hidden'}`}
+                                    className={`mt-6 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'dashboard' ? '' : 'hidden'}`}
                                     id="dashboard"
                                     role="tabpanel"
                                     aria-labelledby="dashboard-tab"
                                 >
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                                        This is some placeholder content the <strong className="font-medium text-gray-800 dark:text-white">Dashboard tab associated content</strong>.
-                                        Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling.
-                                    </p>
+                                   <div className=" bg-white rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
+                                        <div>
+                                            <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
+                                                Kabupaten/Kota
+                                            </label>
+                                            <select
+                                                id="location"
+                                                name="location"
+                                                defaultValue="Canada"
+                                                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            >
+                                                <option>United States</option>
+                                                <option>Canada</option>
+                                                <option>Mexico</option>
+                                            </select>
+
+                                        </div>
+                                        <div className="mt-5">
+                                            <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
+                                                Kabupaten/Kota
+                                            </label>
+                                            <select
+                                                id="location"
+                                                name="location"
+                                                defaultValue="Canada"
+                                                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            >
+                                                <option>United States</option>
+                                                <option>Canada</option>
+                                                <option>Mexico</option>
+                                            </select>
+
+                                        </div>
+                                        <div className="mt-5">
+                                            <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
+                                                Kabupaten/Kota
+                                            </label>
+                                            <select
+                                                id="location"
+                                                name="location"
+                                                defaultValue="Canada"
+                                                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            >
+                                                <option>United States</option>
+                                                <option>Canada</option>
+                                                <option>Mexico</option>
+                                            </select>
+
+                                        </div>
+                                        <div className="mt-5">
+                                            <div className="mt-2">
+                                                <CheckboxOne />
+
+                                            </div>
+                                            <div className="mt-2">
+                                                <CheckboxOne />
+
+                                            </div>
+                                            <div className="mt-2">
+                                                <CheckboxOne />
+
+                                            </div>
+                                            <div className="mt-2">
+                                                <CheckboxOne />
+
+                                            </div>
+                                            <div className="mt-2">
+                                                <CheckboxOne />
+
+                                            </div>
+                                            <div className="mt-2">
+                                                <CheckboxOne />
+
+                                            </div>
+                                        </div>
+
+                                        <button className="mt-5 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Submit
+                                        </button>
+                                    </div>
                                 </div>
                                 <div
                                     className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'settings' ? '' : 'hidden'}`}

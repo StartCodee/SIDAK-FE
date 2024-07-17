@@ -123,15 +123,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       >
         {/* <!-- SIDEBAR HEADER --> */}
         <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-          <Link href="/">
+          <center>
+            <Link href="/">
             <Image
               width={176}
               height={32}
-              src={"/images/logo/logo.svg"}
+              src={"/admin/images/logo/logo.png"}
               alt="Logo"
               priority
             />
           </Link>
+          </center>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             aria-controls="sidebar"
@@ -156,7 +158,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
         <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
           {/* <!-- Sidebar Menu --> */}
-          <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
+          <nav className="px-4 py-4  lg:px-6">
             {menuGroups.map((group, groupIndex) => (
               <div key={groupIndex}>
                 <ul className="mb-6 flex flex-col gap-1.5">
