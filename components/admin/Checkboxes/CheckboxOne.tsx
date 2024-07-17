@@ -1,6 +1,11 @@
 import { useState } from "react";
 
-const CheckboxOne = () => {
+
+interface CheckboxOneProps {
+  text: string;
+}
+
+const CheckboxOne: React.FC<CheckboxOneProps> = ({ text }) => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
   return (
@@ -28,7 +33,7 @@ const CheckboxOne = () => {
             ></span>
           </div>
         </div>
-        Checkbox Text
+            {text}
       </label>
     </div>
   );

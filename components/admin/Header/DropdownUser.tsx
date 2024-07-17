@@ -20,11 +20,11 @@ const DropdownUser = () => {
           <span className="block text-xs">UX Designer</span>
         </span>
 
-        <span className="h-12 w-12 rounded-full">
+        <span className="h-12 w-12 rounded-full border">
           <Image
             width={112}
             height={112}
-            src={"/images/user/user-01.png"}
+            src={"/admin/images/user/profile.png"}
             style={{
               width: "auto",
               height: "auto",
