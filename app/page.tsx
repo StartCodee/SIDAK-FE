@@ -32,7 +32,8 @@ import {
 import {
 	UserIcon,
 	ScaleIcon,
-	BuildingLibraryIcon
+	BuildingLibraryIcon,
+	MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import user from '@/public/user.svg';
@@ -44,6 +45,8 @@ import sidakhitam from '@/public/sidakhitam.png';
 import bank from '@/public/bank.svg';
 import sulaw from '@/public/sulaw.svg';
 import berita from '@/public/berita.png';
+import berita2 from '@/public/berita 2.png';
+import berita3 from '@/public/berita 3.png';
 import Navbar from '@/components/ui/navbar';
 import { cn } from '@/lib/utils';
 import Footer from '@/public/footer.png';
@@ -282,8 +285,10 @@ export default function Home() {
 				<h1 className="text-lg sm:text-xl md:text-2xl">
 					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar
 				</h1>
-				<div className=" mx-auto -mb-8 mt-5  z-50 shadow-xl w-[24rem] rounded-full p-4 flex bg-white">
-					<div className="flex-col">
+				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
+
+				<div className="  mx-auto -mt-10  z-50 shadow-xl w-[40rem] rounded-full p-4 flex bg-white">
+					<div className="flex-col ">
 						<h1 className="font-bold text-sm">Jenis Informasi</h1>
 						<DropdownMenu>
 							<DropdownMenuTrigger className="flex items-center gap-6">
@@ -299,7 +304,7 @@ export default function Home() {
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
-					<Separator orientation="vertical" className="mx-4 border-black" />
+					<div className="mx-4 border-l border-black h-auto self-stretch hidden sm:block" />
 					<div className="flex-col">
 						<h1 className="font-bold text-sm">Komoditas</h1>
 						<DropdownMenu>
@@ -316,7 +321,24 @@ export default function Home() {
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
-					<Separator orientation="vertical" className="mx-4" />
+					<div className="mx-4 border-l border-black h-auto self-stretch hidden sm:block" />
+					<div className="flex-col">
+						<h1 className="font-bold text-sm">Pilih Kabupaten/Kota</h1>
+						<DropdownMenu>
+							<DropdownMenuTrigger className="flex items-center gap-6">
+								Beras <ChevronDownIcon />
+							</DropdownMenuTrigger>
+							<DropdownMenuContent>
+								<DropdownMenuLabel>Pilih Komoditas</DropdownMenuLabel>
+								<DropdownMenuItem>Beras</DropdownMenuItem>
+								<DropdownMenuItem>Beras</DropdownMenuItem>
+								<DropdownMenuItem>Beras</DropdownMenuItem>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem>Beras</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+					</div>
+					<div className="mx-4 border-l border-black h-auto self-stretch hidden sm:block" />
 					<div className="flex-col">
 						<h1 className="font-bold text-sm ">Bulan</h1>
 						<DropdownMenu>
@@ -331,11 +353,17 @@ export default function Home() {
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
+					<Button className="p-0 m-0 bg-blue-300 rounded-md ml-5">
+						<MagnifyingGlassIcon
+							className="text-white self-center  "
+							width={30}
+							height={30}
+						/>
+					</Button>
 				</div>
-				<Separator className="shadow-lg" />
 
 				<div>
-					<h1 className="text-center p-8 mt-10 text-blue-800 text-lg sm:text-xl md:text-2xl items-center">
+					<h1 className="text-center p-8 mt-5 text-blue-800 text-lg sm:text-xl md:text-2xl items-center">
 						Harga Konsumen Pangan Strategis Sulawesi Tengah
 					</h1>
 					<div className="flex justify-between flex-wrap gap-4 ">
@@ -385,7 +413,13 @@ export default function Home() {
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 					<Card className="w-full">
 						<CardHeader>
-							<Image src={berita} alt="berita" width={350} height={200} />
+							<Image
+								src={berita}
+								className="rounded-2xl"
+								alt="berita"
+								width={350}
+								height={200}
+							/>
 						</CardHeader>
 						<CardContent>
 							<CardDescription>
@@ -399,7 +433,13 @@ export default function Home() {
 					</Card>
 					<Card className="w-full">
 						<CardHeader>
-							<Image src={berita} alt="berita" width={350} height={200} />
+							<Image
+								src={berita2}
+								className="rounded-2xl"
+								alt="berita"
+								width={350}
+								height={200}
+							/>
 						</CardHeader>
 						<CardContent>
 							<CardDescription>
@@ -413,7 +453,13 @@ export default function Home() {
 					</Card>
 					<Card className="w-full">
 						<CardHeader>
-							<Image src={berita} alt="berita" width={350} height={200} />
+							<Image
+								src={berita3}
+								className="rounded-2xl"
+								alt="berita"
+								width={350}
+								height={200}
+							/>
 						</CardHeader>
 						<CardContent>
 							<CardDescription>
@@ -426,6 +472,7 @@ export default function Home() {
 						</CardFooter>
 					</Card>
 				</div>
+				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
 			</section>
 			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4">
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
