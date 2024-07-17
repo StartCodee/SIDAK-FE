@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 
 export default function Map() {
 	return (
-		<div className="relative h-[800px] w-[800px]">
+		<div className="relative h-[100px] w-[100px] md:h-[800px] md:w-[800px]">
 			<HoverCard>
 				<HoverCardTrigger>
 					<div>
@@ -331,7 +331,8 @@ export default function Map() {
 					</div>
 				</HoverCardTrigger>
 				<HoverCardContent className="absolute w-[18rem] top-[252.56px] left-[76.42px]">
-					Kab Poso<br />
+					Kab Poso
+					<br />
 					13.370/Kg <br />
 					<Badge>Available</Badge>
 				</HoverCardContent>
@@ -372,7 +373,8 @@ export default function Map() {
 					</div>
 				</HoverCardTrigger>
 				<HoverCardContent className="absolute top-[215.35px] w-[18rem] left-[8.71px]">
-					Kab Sigi<br />
+					Kab Sigi
+					<br />
 					13.370/Kg <br />
 					<Badge>Available</Badge>
 				</HoverCardContent>
@@ -413,13 +415,12 @@ export default function Map() {
 					</div>
 				</HoverCardTrigger>
 				<HoverCardContent className="absolute top-[34.91px] w-[18rem]">
-					Kab Donggala<br />
+					Kab Donggala
+					<br />
 					13.370/Kg <br />
 					<Badge className="bg-green-600">Tersedia</Badge>
 				</HoverCardContent>
 			</HoverCard>
-
-			
 
 			<HoverCard>
 				<HoverCardTrigger>
@@ -462,7 +463,8 @@ export default function Map() {
 					</div>
 				</HoverCardTrigger>
 				<HoverCardContent className="absolute top-[174.96px] left-[-65.19px]">
-					Kab Palu<br />
+					Kab Palu
+					<br />
 					13.370/Kg <br />
 					<Badge className="bg-green-600">Tersedia</Badge>
 				</HoverCardContent>
