@@ -39,7 +39,7 @@ export default function Page() {
 					className="hidden dark:block"
 				/>
 			</div>
-			<div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+			<div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-slate-50">
 				<div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
 					<div className="absolute inset-0 bg-gradient-to-bl from-slate-600 via-teal-600 to-blue-700" />
 					<div className="relative z-20 flex items-center text-lg font-medium">
@@ -56,30 +56,28 @@ export default function Page() {
 						</blockquote>
 					</div>
 				</div>
-				<div className="lg:p-8">
+				<div className="lg:p-8 ">
 					<div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
 						<Card className="w-[350px]">
 							<CardHeader>
 								<CardTitle>SIDAK</CardTitle>
 								<CardDescription>LOGIN</CardDescription>
 							</CardHeader>
-							<CardContent>
+							<CardContent >
 								<form>
-									<Label htmlFor="name">Name</Label>
-									<Input id="name" type="text" placeholder="John Doe" />
-									<Label htmlFor="email">Email</Label>
+									<Label htmlFor="username">Username</Label>
 									<Input
-										id="email"
-										type="email"
-										placeholder=" [email protected]"
+										id="username"
+										type="username"
+										placeholder=" Username"
+										className='mb-4'
 									/>
 									<Label htmlFor="password">Password</Label>
 									<Input id="password" type="password" placeholder="********" />
 								</form>
 							</CardContent>
-							<CardFooter className="flex justify-between">
-								<Button variant="outline">Cancel</Button>
-								<Button>Deploy</Button>
+							<CardFooter className="flex justify-end">
+								<Button>Login</Button>
 							</CardFooter>
 						</Card>
 					</div>

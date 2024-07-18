@@ -15,7 +15,7 @@ const navigation = [
 	{ name: 'Neraca Pangan', path: '/neraca-pangan' },
 	{ name: 'Pola Perdagangan', path: '/pola-perdagangan' },
 	{ name: 'Berita', path: '/berita' },
-	{ name: 'Kontak Kami', path: '/tentang' },
+	{ name: 'Kontak Kami', path: '/kontak' },
 ];
 
 export default function Navbar() {

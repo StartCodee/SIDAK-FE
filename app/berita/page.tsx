@@ -70,9 +70,11 @@ const BeritaPage: React.FC = () => {
 			</section>
 
 			<section>
-				<Card className="m-4 sm:m-6 lg:m-10">
+				<Card className="m-4 sm:m-6 lg:m-10 border-none">
 					<CardHeader>
-						<CardTitle>Berita Terbaru</CardTitle>
+						<h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold">
+							Berita Terbaru
+						</h1>
 					</CardHeader>
 					<CardContent className="flex flex-col gap-4">
 						{data.map((item) => (
@@ -95,9 +97,7 @@ const BeritaPage: React.FC = () => {
 											{item.title}
 										</h1>
 										<div className="my-4 border-b border-black w-full" />
-										<p className="text-lg lg:text-base ">
-											{item.content}
-										</p>
+										<p className="text-lg lg:text-base ">{item.content}</p>
 									</div>
 									<Button className="mt-4">Baca Selengkapnya</Button>
 								</CardContent>
