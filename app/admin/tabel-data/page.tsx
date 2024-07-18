@@ -211,10 +211,8 @@ export default function Home() {
         <>
             <DefaultLayout>
                 <Breadcrumb pageName="Tabel Data" />
-
-                <div className="flex gap-10">
+                <div className=" grid grid-cols-4 gap-4">
                     <div style={{ flex: 2 }} className=" ">
-
                         <div className="flex gap-4 justify-between">
                             <button
                                 className={`flex-1 inline-flex ${activeTab === 'profile' ? 'bg-[#37B5FE] text-white' : 'text-[#37B5FE] border-2 border-[#37B5FE]'}  justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md   hover:-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
@@ -239,9 +237,6 @@ export default function Home() {
                                 Neraca Pangan
                             </button>
                         </div>
-
-
-
                         <div>
                             <div id="default-tab-content">
                                 <div
@@ -258,12 +253,10 @@ export default function Home() {
                                             <select
                                                 id="location"
                                                 name="location"
-
                                                 className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                             >
                                                 <option>Kabupaten/Kota</option>
                                             </select>
-
                                         </div>
                                         <div className="mt-5">
                                             <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
@@ -272,13 +265,10 @@ export default function Home() {
                                             <select
                                                 id="location"
                                                 name="location"
-
                                                 className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                             >
                                                 <option>Kecamatan</option>
-
                                             </select>
-
                                         </div>
                                         <div className="mt-5">
                                             <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
@@ -292,7 +282,6 @@ export default function Home() {
                                             >
                                                 <option>Periode</option>
                                             </select>
-
                                         </div>
                                         <div className="mt-5">
                                             <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
@@ -300,18 +289,14 @@ export default function Home() {
                                             </label>
                                             <div className="mt-2">
                                                 <CheckboxOne text="Beras Premium" />
-
                                             </div>
                                             <div className="mt-2">
                                                 <CheckboxOne text="Daging Sapi" />
-
                                             </div>
                                             <div className="mt-2">
                                                 <CheckboxOne text="Daging Ayam" />
-
                                             </div>
                                         </div>
-
                                         <button className="mt-5 bg-[#37B5FE] w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white  hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                             Submit
                                         </button>
@@ -331,12 +316,10 @@ export default function Home() {
                                             <select
                                                 id="location"
                                                 name="location"
-
                                                 className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                             >
                                                 <option>Kabupaten/Kota</option>
                                             </select>
-
                                         </div>
                                         <div className="mt-5">
                                             <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
@@ -345,13 +328,10 @@ export default function Home() {
                                             <select
                                                 id="location"
                                                 name="location"
-
                                                 className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                             >
                                                 <option>Kecamatan</option>
-
                                             </select>
-
                                         </div>
                                         <div className="mt-5">
                                             <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
@@ -365,7 +345,6 @@ export default function Home() {
                                             >
                                                 <option>Periode</option>
                                             </select>
-
                                         </div>
                                         <div className="mt-5">
                                             <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
@@ -373,15 +352,12 @@ export default function Home() {
                                             </label>
                                             <div className="mt-2">
                                                 <CheckboxOne text="Beras Premium" />
-
                                             </div>
                                             <div className="mt-2">
                                                 <CheckboxOne text="Daging Sapi" />
-
                                             </div>
                                             <div className="mt-2">
                                                 <CheckboxOne text="Daging Ayam" />
-
                                             </div>
                                         </div>
                                         <hr className="w-full h-1 mx-auto my-4 bg-slate-500 border-0 rounded md:my-10 dark:bg-gray-700" />
@@ -391,15 +367,12 @@ export default function Home() {
                                             </label>
                                             <div className="mt-2">
                                                 <CheckboxOne text="Kebutuhan" />
-
                                             </div>
                                             <div className="mt-2">
                                                 <CheckboxOne text="Ketersediaan" />
-
                                             </div>
                                             <div className="mt-2">
                                                 <CheckboxOne text="Defisit" />
-
                                             </div>
                                         </div>
                                         <button className="mt-5 bg-[#37B5FE] w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white  hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -410,10 +383,9 @@ export default function Home() {
                             </div>
                         </div>
                     </div>
-                    <div style={{ flex: 6 }} className=" bg-white rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
+                    <div  className="col-span-3 bg-white rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
                         <div className={`w-full  ${activeTab === 'profile' ? '' : 'hidden'}`}>
-                        <h1 className="text-2xl font-bold">Harga Pangan</h1>
-                          
+                            <h1 className="text-2xl font-bold">Harga Pangan</h1>
                             <div className="flex items-center py-4">
                                 <Input
                                     placeholder="Filter commodities..."
@@ -511,10 +483,8 @@ export default function Home() {
                                 </div>
                             </div>
                         </div>
-
                         <div className={`w-full  ${activeTab === 'dashboard' ? '' : 'hidden'}`}>
-                        <h1 className="text-2xl font-bold">Neraca Pangan</h1>
-
+                            <h1 className="text-2xl font-bold">Neraca Pangan</h1>
                             <div className="flex items-center py-4">
                                 <Input
                                     placeholder="Filter commodities..."
@@ -557,7 +527,6 @@ export default function Home() {
                                                     {headerGroup.headers.map((header) => (
                                                         <TableHead style={{ border: '1px solid black' }} key={header.id} colSpan={3} className="text-center">
                                                             {header.column.columnDef.header as string}
-
                                                         </TableHead>
                                                     ))}
                                                 </TableRow>
@@ -612,7 +581,6 @@ export default function Home() {
                                             </TableRow>
                                         )}
                                     </TableBody>
-
                                     {/* <TableBody>
                                         {table.getRowModel().rows?.length ? (
                                             table.getRowModel().rows.map((row) => (
@@ -667,7 +635,6 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
-
             </DefaultLayout>
         </>
     );

@@ -11,9 +11,11 @@ import Link from 'next/link';
 
 const navigation = [
 	{ name: 'Home', path: '/' },
-	{ name: 'Data Produksi Komoditas', path: '/produksi' },
+	{ name: 'Harga Pangan', path: '/harga-pangan' },
+	{ name: 'Neraca Pangan', path: '/neraca-pangan' },
+	{ name: 'Pola Perdagangan', path: '/pola-perdagangan' },
 	{ name: 'Berita', path: '/berita' },
-	{ name: 'Tentang Kami', path: '/tentang' },
+	{ name: 'Kontak Kami', path: '/tentang' },
 ];
 
 export default function Navbar() {
