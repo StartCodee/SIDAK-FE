@@ -144,7 +144,13 @@ export default function Home() {
 			volatilitas: '90%',
 			hari: '92',
 		},
-		
+		{
+			komoditas: 'Beras',
+			jenis: 'Premium',
+			harga: 'Rp. 12.000',
+			volatilitas: '90%',
+			hari: '92',
+		},
 	]
 
 	return (
