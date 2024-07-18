@@ -2,7 +2,7 @@ import Navbar from "@/components/ui/navbar"
 import Image from "next/image";
 import vector1 from "@/public/vect1.svg";
 import vector2 from "@/public/vect2.svg";
-import cs from "@/public/cs 1.png";
+import cs from "@/public/cs1.png";
 import bank from '@/public/bank.svg';
 import sulaw from '@/public/sulaw.svg';
 
