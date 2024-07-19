@@ -256,7 +256,7 @@ export default function Home() {
 						{CardContents.map((content, index) => (
 							<Card
 								key={index}
-								className="flex rounded-2xl p-2 space-x-4 w-[290px]  justify-between placeholder-sky-400 ">
+								className="flex rounded-2xl px-4 py-2 space-x-4 w-[290px]  justify-between placeholder-sky-400 ">
 								<div>
 									<h1 className="text-md">{content.city}</h1>
 									<p className="text-2xl font-bold">{content.price}</p>
@@ -266,7 +266,7 @@ export default function Home() {
 									<div
 										className={cn(
 											`rounded-md p-0 px-1 m-0 items-center flex text-white`,
-											content.color === 'red' && 'bg-red',
+											content.color === 'red' && 'bg-red-500',
 											content.color === 'yellow' && 'bg-yellow-500',
 											content.color === 'green' && 'bg-green-500',
 										)}>
@@ -293,7 +293,7 @@ export default function Home() {
 				</h1>
 				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
 
-				<div className="  mx-auto -mt-50 pl-8 pr-0 -ml-40 sm:-ml-50 md:mx-auto  z-50 shadow-xl w-[42rem] scale-50 md:scale-100 rounded-full py-2 flex bg-white">
+				<div className="  mx-auto -mt-10 pl-8 pr-0 -ml-40 sm:-ml-50 md:mx-auto  z-50 shadow-xl w-[42rem] scale-50 md:scale-100 rounded-full py-2 flex bg-white">
 					<div className="flex-col ">
 						<h1 className="font-bold text-sm">Jenis Informasi</h1>
 						<DropdownMenu>
