@@ -345,6 +345,16 @@ const FlowChart: React.FC = () => {
         	top: 0;
         	left: 0;
         }
+
+		@media screen and (max-width: 600px) {
+				#container canvas {
+					height: 500px !important;
+				}
+
+				#container svg {
+					height: 500px !important;
+				}
+			}
     `}</style>
 			<Navbar />
 			<div className="relative h-72 flex items-center justify-center bg-no-repeat bg-cover bg-[url('/bgg.png')]">
@@ -389,12 +399,7 @@ const FlowChart: React.FC = () => {
 					<div></div>
 				</div>
 			</section>
-			<br />
-			<br />
-			<br />
-			<br />
-			<br />
-			<br />
+		
 			<center>
 				<div className="container" id="container" ref={containerRef} style={{ position: 'relative' }}>
 					<canvas id="myCanvas" ref={canvasRef}></canvas>
