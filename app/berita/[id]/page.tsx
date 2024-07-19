@@ -140,9 +140,9 @@ const BeritaPage: React.FC = () => {
                 dan konsumen, yang merasa lebih tenang dengan jaminan
                 ketersediaan beras. Seorang pedagang di Pasar Induk Palu
                 menyatakan bahwa kepastian pasokan beras penting untuk menjaga
-                harga tetap stabil dan terjangkau bagi konsumen. "Jika stok
+                harga tetap stabil dan terjangkau bagi konsumen. Jika stok
                 beras cukup, kami sebagai pedagang juga tidak khawatir dengan
-                fluktuasi harga yang bisa merugikan," katanya.
+                fluktuasi harga yang bisa merugikan, katanya.
                 <br /> <br />
                 Diharapkan, dengan langkah preventif ini, harga beras di
                 Sulawesi Tengah tetap stabil, tidak membebani masyarakat, dan
