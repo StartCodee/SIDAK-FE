@@ -18,7 +18,7 @@ export default function Map() {
 			}
 			
 			// add location to the path
-			paths.forEach((path, index) => {
+			paths.forEach((path: Element & { location?: string }, index) => {
 				path.location =
 					index === 0
 						? 'Kota Gorontalo'
@@ -82,7 +82,7 @@ export default function Map() {
 					card.style.top = `${pathTop}px`;
 					card.style.left = `${pathLeft}px`;
 					card.innerHTML = `
-						<h1 class='text-lg font-semibold'> ${path.location}</h1>
+						<h1 class='text-lg font-semibold'> ${(path as any).location}</h1>
 						<p class='text-sm'>25.000/Kg</p>
 						<p class='text-red'>Turun Rp 5.000</p>
 					`;
