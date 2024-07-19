@@ -235,7 +235,7 @@ export default function Home() {
 			</div>
 
 			{/* content */}
-			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+			<section className="px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col sm:flex-row justify-between pt-10">
 					<div className="flex-col">
 						<h1 className="text-2xl sm:text-3xl md:text-4xl mb-8 font-extrabold">
