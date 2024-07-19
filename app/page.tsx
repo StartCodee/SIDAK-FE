@@ -177,7 +177,7 @@ export default function Home() {
 					/>
 				</div>
 
-				<div className="flex-col mx-auto z-50 items-center ">
+				<div className="flex-col mx-auto z-1 items-center ">
 					<p className="text-lg text-center sm:text-2xl md:text-3xl lg:text-3xl  text-white font-semibold">
 						Sistem Informasi Komoditas : Harga dan Pasokan
 					</p>
@@ -293,7 +293,7 @@ export default function Home() {
 				</h1>
 				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
 
-				<div className="  mx-auto -mt-10 pl-8 pr-0  z-50 shadow-xl w-[42rem] scale-50 md:scale-100 rounded-full py-2 flex bg-white">
+				<div className="  mx-auto -mt-10 pl-8 pr-0 -ml-40 sm:-ml-5 md:mx-auto  z-50 shadow-xl w-[42rem] scale-50 md:scale-100 rounded-full py-2 flex bg-white">
 					<div className="flex-col ">
 						<h1 className="font-bold text-sm">Jenis Informasi</h1>
 						<DropdownMenu>

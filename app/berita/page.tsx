@@ -57,7 +57,7 @@ const BeritaPage: React.FC = () => {
 				<h1 className="z-10 text-white text-2xl font-semibold">
 					Halaman Berita
 				</h1>
-				<div className="absolute -bottom-8 lg:-bottom-6 z-20 shadow-xl w-[16rem] lg:w-[24rem] rounded-full p-4 flex bg-white">
+				<div className="absolute -bottom-8 lg:-bottom-6 z-1 shadow-xl w-[16rem] lg:w-[24rem] rounded-full p-4 flex bg-white">
 					<input
 						type="text"
 						placeholder="Cari Berita"
