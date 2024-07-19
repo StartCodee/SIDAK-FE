@@ -2,6 +2,8 @@ import React from 'react';
 import Navbar from '@/components/ui/navbar';
 import Image from 'next/image';
 import Background from '@/public/bgg.png';
+import vector1 from '@/public/vect1.svg';
+import vector2 from '@/public/vect2.svg';
 import {
 	Card,
 	CardHeader,
@@ -54,6 +56,24 @@ const BeritaPage: React.FC = () => {
 			<Navbar />
 
 			<section className="relative h-72 bg-[url('/bgg.png')] bg-no-repeat bg-cover flex items-center justify-center">
+				<div className="hidden lg:block">
+					<Image
+						src={vector1}
+						alt="vector1"
+						width={440}
+						height={440}
+						objectFit="cover"
+						className="absolute opacity-60 right-0 top-0"
+					/>
+					<Image
+						src={vector2}
+						alt="vector2"
+						width={440}
+						height={440}
+						objectFit="cover"
+						className="absolute drop-shadow-md opacity-25 right-0 top-0"
+					/>
+				</div>
 				<h1 className="z-10 text-white text-2xl font-semibold">
 					Halaman Berita
 				</h1>

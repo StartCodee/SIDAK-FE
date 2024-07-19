@@ -97,7 +97,7 @@ export default function Map() {
 
 	return (
 		<>
-			<div id='container' className="relative w-full h-full lg:w-[50rem] lg:h-[50rem] ">
+			<div id='container' className="relative w-full h-full  ">
 				<svg
 					className="w-full h-full"
 					viewBox="0 0 601 593"
