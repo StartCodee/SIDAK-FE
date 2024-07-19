@@ -30,21 +30,21 @@ export default function Kontak(){
 						/>
 					</div>
 
-					<div className="flex-col mx-auto z-50 items-center ">
+					<div className="flex-col mx-auto z-1 items-center ">
 						<p className="text-lg text-center sm:text-2xl md:text-3xl lg:text-3xl  text-white font-semibold">
 							Sistem Informasi Komoditas : Harga dan Pasokan
 						</p>
 					</div>
 				</div>
 				<div className="relative bg-white">
-					<div className="lg:absolute lg:inset-0 lg:left-1/2 left-0 p-10">
+					<div className="lg:absolute lg:inset-0 lg:left-1/2  p-10">
 						<Image
 							src={cs}
 							alt="cs"
 							width={500}
 							height={500}
 							objectFit="cover"
-							className="mt-40 ml-20"
+							className="sm:mt-40 sm:ml-20"
 						/>
 					</div>
 					<div className="pb-24 pt-16 sm:pb-32 sm:pt-24 lg:mx-auto lg:grid lg:max-w-7xl lg:grid-cols-2 lg:pt-32">

@@ -177,7 +177,7 @@ export default function Home() {
 					/>
 				</div>
 
-				<div className="flex-col mx-auto z-50 items-center ">
+				<div className="flex-col mx-auto z-1 items-center ">
 					<p className="text-lg text-center sm:text-2xl md:text-3xl lg:text-3xl  text-white font-semibold">
 						Sistem Informasi Komoditas : Harga dan Pasokan
 					</p>
@@ -235,7 +235,7 @@ export default function Home() {
 			</div>
 
 			{/* content */}
-			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+			<section className="px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col sm:flex-row justify-between pt-10">
 					<div className="flex-col">
 						<h1 className="text-2xl sm:text-3xl md:text-4xl mb-8 font-extrabold">
@@ -258,8 +258,8 @@ export default function Home() {
 								key={index}
 								className="flex rounded-2xl p-2 space-x-4 w-[290px]  justify-between placeholder-sky-400 ">
 								<div>
-									<h1 className='text-md'>{content.city}</h1>
-									<p className='text-2xl font-bold'>{content.price}</p>
+									<h1 className="text-md">{content.city}</h1>
+									<p className="text-2xl font-bold">{content.price}</p>
 								</div>
 
 								<div className="flex justify-between">
@@ -287,13 +287,13 @@ export default function Home() {
 				</div>
 			</section>
 
-			<section className="px-4 sm:px-8 md:px-20 pt-4">
+			<section className=" px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<h1 className="text-sm sm:text-xl md:text-2xl">
 					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar
 				</h1>
 				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
 
-				<div className="  mx-auto -mt-10 pl-8 pr-0  z-50 shadow-xl w-[42rem] scale-50 md:scale-100 rounded-full py-2 flex bg-white">
+				<div className="  mx-auto -mt-50 pl-8 pr-0 -ml-40 sm:-ml-50 md:mx-auto  z-50 shadow-xl w-[42rem] scale-50 md:scale-100 rounded-full py-2 flex bg-white">
 					<div className="flex-col ">
 						<h1 className="font-bold text-sm">Jenis Informasi</h1>
 						<DropdownMenu>
@@ -374,7 +374,7 @@ export default function Home() {
 					</h1>
 					<div className="flex justify-center items-start self-center  flex-wrap gap-4 ">
 						{konsumenPangan.map((content, index) => (
-							<Card key={index} className="flex-col  w-[18rem] p-4">
+							<Card key={index} className="flex-col  w-[18rem] p-4 shadow-xl">
 								<div className="flex items-center justify-between">
 									<div>
 										<Image
