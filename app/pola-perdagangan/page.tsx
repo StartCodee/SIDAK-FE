@@ -408,9 +408,6 @@ const FlowChart: React.FC = () => {
 			const path = new Path2D();
 			if (externalFlow.includes(startLabel) || externalFlow.includes(endLabel)) {
 
-				if (externalFlow.includes(startLabel)) document.getElementById(startLabel)?.classList.remove('hidden')
-				if (externalFlow.includes(endLabel)) document.getElementById(endLabel)?.classList.remove('hidden')
-
 				// Draw straight line if start or end is in the externalFlow list
 				path.moveTo(startX, startY);
 				path.lineTo(endX, endY);
@@ -457,25 +454,20 @@ const FlowChart: React.FC = () => {
 			ctx.fill();
 		}
 
+		
 		container.addEventListener('scroll', draw);
 		window.addEventListener('resize', draw); // Add resize event listener
 
-		// ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-		// externalFlow.forEach((el) => {
-
-		// 	const containerRect = container.getBoundingClientRect();
-		// 	const offsetX = container.scrollLeft - containerRect.left;
-		// 	const offsetY = container.scrollTop - containerRect.top;
-		// 	const el1 = document.getElementById(el);
-		// 	const rect = el1?.getBoundingClientRect();
-		// 	if (!rect) return;
-
-		// 	const startX = offsetX + (rect.left + rect.width / 2);
-		// 	const startY = offsetY + (rect.top + rect.height / 2);
-
-		// 	drawDot(ctx, startX, startY);
-		// });
+	
+		// check is flow are include externalFlow and then remove hidden class
+		externalFlow.forEach((el) => {
+			if (flow.some((e) => e.start === el || e.end === el)) {
+				const el1 = document.getElementById(el);
+				if (el1) {
+					el1.classList.remove('hidden');
+				}
+			}
+		});
 
 		draw();
 
