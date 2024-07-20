@@ -561,7 +561,7 @@ const FlowChart: React.FC = () => {
 					<div className="flex flex-col sm:flex-row justify-between pt-10">
 						<div className="flex-col mb-3">
 							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-3 font-extrabold">
-								NERACA PANGAN
+								COMMODITY FLOW
 							</h1>
 							<Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
 								<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal 15
