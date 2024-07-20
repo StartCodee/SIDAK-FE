@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Background from '@/public/bgg.png';
 import vector1 from '@/public/vect1.svg';
 import vector2 from '@/public/vect2.svg';
+import Link from 'next/link';
 import {
 	Card,
 	CardHeader,
@@ -119,7 +120,11 @@ const BeritaPage: React.FC = () => {
 										<div className="my-4 border-b border-black w-full" />
 										<p className="text-lg lg:text-base ">{item.content}</p>
 									</div>
-									<Button className="mt-4">Baca Selengkapnya</Button>
+									<Button asChild className="mt-4">
+										<Link href='/berita/1'>
+										
+										Baca Selengkapnya
+										</Link></Button>
 								</CardContent>
 							</Card>
 						))}

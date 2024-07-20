@@ -68,8 +68,8 @@ export default function Home() {
 									</div>
 								</div>
 
-								<div className="flex flex-col gap-9 mt-8">
-									<div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+								<div className="flex flex-col sm:flex-row gap-9 mt-8">
+									<div className="rounded-sm border border-stroke w-2/3 bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
 										<div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
 											<h2 className="text-lg font-semibold text-black dark:text-white">
 												User Information
@@ -102,39 +102,39 @@ export default function Home() {
 											</div>
 										</div>
 									</div>
-									<div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+									<div className="rounded-sm border border-stroke w-full bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
 										<div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
 											<h2 className="text-lg font-semibold text-black dark:text-white">
 												Change Password
 											</h2>
 										</div>
-										<div className="p-6.5">
-											<form>
-												<div className="mb-4.5">
-													<label className="mb-1 text-sm font-medium text-black dark:text-white">
+										<div className="p-6.5 w-10/12 mx-auto">
+											<form >
+												<div className="mb-4.5 text-left">
+													<label className="mb-1 text-sm  font-medium text-black dark:text-white">
 														Current Password
 													</label>
 													<input
 														type="password"
-														className="text-base text-gray-600 dark:text-gray-300 w-full"
+														className="text-base mt-3  text-gray-600 dark:text-gray-300 w-full"
 													/>
 												</div>
-												<div className="mb-4.5">
-													<label className="mb-1 text-sm font-medium text-black dark:text-white">
+												<div className="mb-4.5 text-left">
+													<label className="mb-1 text-sm  font-medium text-black dark:text-white">
 														New Password
 													</label>
 													<input
 														type="password"
-														className="text-base text-gray-600 dark:text-gray-300 w-full"
+														className="text-base mt-3 text-gray-600 dark:text-gray-300 w-full"
 													/>
 												</div>
-												<div className="mb-4.5">
-													<label className="mb-1 text-sm font-medium text-black dark:text-white">
+												<div className="mb-4.5 text-left">
+													<label className="mb-1 text-sm  font-medium text-black dark:text-white">
 														Confirm New Password
 													</label>
 													<input
 														type="password"
-														className="text-base text-gray-600 dark:text-gray-300 w-full"
+														className="text-base mt-3 text-gray-600 dark:text-gray-300 w-full"
 													/>
 												</div>
 												<button

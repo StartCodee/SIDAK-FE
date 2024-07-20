@@ -34,6 +34,7 @@ import {
 	ScaleIcon,
 	BuildingLibraryIcon,
 	MagnifyingGlassIcon,
+	Bell,
 } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import user from '@/public/user.svg';
@@ -85,73 +86,93 @@ export default function Home() {
 			komoditas: 'Beras',
 			jenis: 'Premium',
 			harga: 'Rp. 12.000',
-			volatilitas: '90%',
+			volatility: '90%',
 			hari: '92',
+			image: '/konsumen-pangan/rice.png',
 		},
 		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
+			komoditas: 'Ayam',
+			jenis: 'Broiler',
+			harga: 'Rp. 30.000',
+			volatility: '85%',
+			hari: '30',
+			image: '/konsumen-pangan/ayam.png',
 		},
 		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
+			komoditas: 'Bawang',
+			jenis: 'Putih',
+			harga: 'Rp. 25.000',
+			volatility: '75%',
+			hari: '40',
+			image: '/konsumen-pangan/bawangmerah.png',
 		},
 		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
+			komoditas: 'Bawang',
+			jenis: 'Merah',
+			harga: 'Rp. 20.000',
+			volatility: '70%',
+			hari: '50',
+			image: '/konsumen-pangan/bawangungu.png',
 		},
 		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
+			komoditas: 'Cabe',
+			jenis: 'Merah',
+			harga: 'Rp. 50.000',
+			volatility: '60%',
+			hari: '20',
+			image: '/konsumen-pangan/cabe.png',
 		},
 		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
+			komoditas: 'Gula',
+			jenis: 'Pasir',
+			harga: 'Rp. 15.000',
+			volatility: '80%',
+			hari: '70',
+			image: '/konsumen-pangan/gula.png',
 		},
 		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
+			komoditas: 'Ikan',
+			jenis: 'Tuna',
+			harga: 'Rp. 40.000',
+			volatility: '65%',
+			hari: '60',
+			image: '/konsumen-pangan/ikan.png',
 		},
 		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
+			komoditas: 'Minyak',
+			jenis: 'Goreng',
+			harga: 'Rp. 22.000',
+			volatility: '50%',
+			hari: '45',
+			image: '/konsumen-pangan/minyak.png',
 		},
 		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
+			komoditas: 'Rawit',
+			jenis: 'Hijau',
+			harga: 'Rp. 45.000',
+			volatility: '95%',
+			hari: '25',
+			image: '/konsumen-pangan/rawit.png',
 		},
 		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
+			komoditas: 'Sapi',
+			jenis: 'Daging',
+			harga: 'Rp. 120.000',
+			volatility: '55%',
+			hari: '15',
+			image: '/konsumen-pangan/sapi.png',
 		},
-	]
+		{
+			komoditas: 'Telor',
+			jenis: 'Ayam',
+			harga: 'Rp. 24.000',
+			volatility: '45%',
+			hari: '35',
+			image: '/konsumen-pangan/telor.png',
+		},
+	];
+
+
 
 	return (
 		<main>
@@ -256,7 +277,7 @@ export default function Home() {
 						{CardContents.map((content, index) => (
 							<Card
 								key={index}
-								className="flex rounded-2xl px-4 py-2 space-x-4 w-[290px]  justify-between placeholder-sky-400 ">
+								className="flex rounded-2xl px-6 py-4 space-x-4 w-[290px]  justify-between placeholder-sky-400 ">
 								<div>
 									<h1 className="text-md">{content.city}</h1>
 									<p className="text-2xl font-bold">{content.price}</p>
@@ -288,16 +309,18 @@ export default function Home() {
 			</section>
 
 			<section className=" px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
-				<h1 className="text-sm sm:text-xl md:text-2xl">
+				<h1 className="text-sm sm:text-xl md:text-2xl mb-20">
 					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar
 				</h1>
 				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
 
-				<div className="  mx-auto -mt-10 pl-8 pr-0 -ml-40 sm:-ml-50 md:mx-auto  z-50 shadow-xl w-[42rem] scale-50 md:scale-100 rounded-full py-2 flex bg-white">
-					<div className="flex-col ">
-						<h1 className="font-bold text-sm">Jenis Informasi</h1>
+				<div
+					style={{ marginTop: '-40px' }}
+					className="mx-auto px-4 py-4 sm:py-2 sm:px-8 shadow-xl w-[20rem] sm:w-[42rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
+					<div className="flex flex-col items-center sm:items-start">
+						<h1 className="font-bold text-sm mb-2 sm:mb-0">Jenis Informasi</h1>
 						<DropdownMenu>
-							<DropdownMenuTrigger className="flex items-center gap-6">
+							<DropdownMenuTrigger className="flex items-center gap-2 sm:gap-6">
 								BERAS <ChevronDownIcon />
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
@@ -310,11 +333,11 @@ export default function Home() {
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
-					<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
-					<div className="flex-col">
-						<h1 className="font-bold text-sm">Komoditas</h1>
+					<div className="hidden sm:block border-l border-black h-auto self-stretch" />
+					<div className="flex flex-col items-center sm:items-start">
+						<h1 className="font-bold text-sm mb-2 sm:mb-0">Komoditas</h1>
 						<DropdownMenu>
-							<DropdownMenuTrigger className="flex items-center gap-6">
+							<DropdownMenuTrigger className="flex items-center gap-2 sm:gap-6">
 								Beras <ChevronDownIcon />
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
@@ -327,11 +350,13 @@ export default function Home() {
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
-					<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
-					<div className="flex-col">
-						<h1 className="font-bold text-sm">Pilih Kabupaten/Kota</h1>
+					<div className="hidden sm:block border-l border-black h-auto self-stretch" />
+					<div className="flex flex-col items-center sm:items-start">
+						<h1 className="font-bold text-sm mb-2 sm:mb-0">
+							Pilih Kabupaten/Kota
+						</h1>
 						<DropdownMenu>
-							<DropdownMenuTrigger className="flex items-center gap-6">
+							<DropdownMenuTrigger className="flex items-center gap-2 sm:gap-6">
 								Beras <ChevronDownIcon />
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
@@ -344,11 +369,11 @@ export default function Home() {
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
-					<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
-					<div className="flex-col">
-						<h1 className="font-bold text-sm ">Bulan</h1>
+					<div className="hidden sm:block border-l border-black h-auto self-stretch" />
+					<div className="flex flex-col items-center sm:items-start">
+						<h1 className="font-bold text-sm mb-2 sm:mb-0">Bulan</h1>
 						<DropdownMenu>
-							<DropdownMenuTrigger className="flex items-center gap-6">
+							<DropdownMenuTrigger className="flex items-center gap-2 sm:gap-6">
 								APRIL <ChevronDownIcon />
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
@@ -359,11 +384,11 @@ export default function Home() {
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
-					<Button className=" m-0 bg-blue-300 rounded-full px-1 py-0 self-end ml-5">
+					<Button className="bg-blue-300 rounded-full p-2">
 						<MagnifyingGlassIcon
-							className="text-white self-center p-0 m-0 "
-							width={30}
-							height={30}
+							className="text-white"
+							width={24}
+							height={24}
 						/>
 					</Button>
 				</div>
@@ -378,7 +403,7 @@ export default function Home() {
 								<div className="flex items-center justify-between">
 									<div>
 										<Image
-											src={user}
+											src={content.image}
 											alt="user"
 											width={50}
 											height={50}
@@ -390,12 +415,24 @@ export default function Home() {
 										<p>{content.jenis}</p>
 										<p className="font-bold">{content.harga}</p>
 									</div>
-									<div>{content.komoditas}</div>
+									<div>{content.volatility}</div>
 								</div>
-								<div className="h-1 rounded-lg bg-black/10"></div>
-								<div className="flex justify-between">
-									<p>{content.komoditas}</p>
-									<p>DAY IN HIGH VOLATILITY</p>
+								<div className="h-1 rounded-lg bg-black/10 my-2"></div>
+								<div className="flex justify-between items-center">
+									<p>{content.volatility}</p>
+									<p className="text-xs font-thin">DAY IN HIGH VOLATILITY</p>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 24 24"
+										fill="currentColor"
+										className="size-4 fill-red-500">
+										{' '}
+										<path
+											fillRule="evenodd"
+											d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
+											clipRule="evenodd"
+										/>{' '}
+									</svg>
 								</div>
 							</Card>
 						))}
@@ -434,7 +471,9 @@ export default function Home() {
 							</CardDescription>
 						</CardContent>
 						<CardFooter className="flex justify-between">
-							<Button>Baca Selengkapnya</Button>
+							<Button asChild>
+								<Link href="/berita/1">Baca Selengkapnya</Link>
+							</Button>
 						</CardFooter>
 					</Card>
 					<Card className="w-full">
@@ -454,7 +493,9 @@ export default function Home() {
 							</CardDescription>
 						</CardContent>
 						<CardFooter className="flex justify-between">
-							<Button>Baca Selengkapnya</Button>
+							<Button asChild>
+								<Link href="/berita/1">Baca Selengkapnya</Link>
+							</Button>
 						</CardFooter>
 					</Card>
 					<Card className="w-full">
@@ -474,7 +515,9 @@ export default function Home() {
 							</CardDescription>
 						</CardContent>
 						<CardFooter className="flex justify-between">
-							<Button>Baca Selengkapnya</Button>
+							<Button asChild>
+								<Link href="/berita/1">Baca Selengkapnya</Link>
+							</Button>
 						</CardFooter>
 					</Card>
 				</div>
@@ -482,41 +525,50 @@ export default function Home() {
 			</section>
 			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4">
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-					<Card className="flex items-center p-4 rounded-xl gap-4">
-						<div className="bg-blue-400 p-2 rounded-md">
-							<UserIcon width={30} height={30} className="text-white" />
-						</div>
-						<div>
-							<h1 className="text-md font-bold">Kunjungan User</h1>
-							<p>Jumlah Kunjungan User di Sulawesi Tengah</p>
+					<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
+						<div className="flex items-center gap-4">
+							<div className="bg-blue-400 p-2 rounded-md">
+								<UserIcon width={30} height={30} className="text-white" />
+							</div>
+							<div>
+								<h1 className="text-md font-bold">Kunjungan User</h1>
+								<p>Jumlah Kunjungan User di Sulawesi Tengah</p>
+							</div>
 						</div>
 						<h1 className="text-4xl font-bold">3928</h1>
 					</Card>
-					<Card className="flex items-center p-4 rounded-xl gap-4">
-						<div className="bg-blue-400 p-2 rounded-md">
-							<ScaleIcon width={30} height={30} className="text-white" />
-						</div>
-						<div>
-							<h1 className="text-md font-bold">Jumlah Komoditas</h1>
-							<p>Jumlah Komoditas di Sulawesi Tengah</p>
+
+					<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
+						<div className="flex items-center gap-4">
+							<div className="bg-blue-400 p-2 rounded-md">
+								<ScaleIcon width={30} height={30} className="text-white" />
+							</div>
+							<div>
+								<h1 className="text-md font-bold">Jumlah Komoditas</h1>
+								<p>Jumlah Komoditas di Sulawesi Tengah</p>
+							</div>
 						</div>
 						<h1 className="text-4xl font-bold">30</h1>
 					</Card>
-					<Card className="flex items-center p-4 rounded-xl gap-4">
-						<div className="bg-blue-400 p-2 rounded-md">
-							<BuildingLibraryIcon
-								width={30}
-								height={30}
-								className="text-white"
-							/>
-						</div>
-						<div>
-							<h1 className="text-md font-bold">Jumlah Pasar</h1>
-							<p>Jumlah Pasar di Sulawesi Tengah</p>
+
+					<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
+						<div className="flex items-center gap-4">
+							<div className="bg-blue-400 p-2 rounded-md">
+								<BuildingLibraryIcon
+									width={30}
+									height={30}
+									className="text-white"
+								/>
+							</div>
+							<div>
+								<h1 className="text-md font-bold">Jumlah Pasar</h1>
+								<p>Jumlah Pasar di Sulawesi Tengah</p>
+							</div>
 						</div>
 						<h1 className="text-4xl font-bold">60</h1>
 					</Card>
 				</div>
+
 				<Separator className="shadow-lg" />
 			</section>
 
