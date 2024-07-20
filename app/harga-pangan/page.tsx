@@ -22,6 +22,17 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select"
+
 import Map from '@/components/ui/map';
 import {
 	CounterClockwiseClockIcon,
@@ -56,18 +67,8 @@ import { cn } from '@/lib/utils';
 export default function Home() {
 	// foreach month in year
 	const months = [
-		'JANUARI',
-		'FEBRUARI',
-		'MARET',
-		'APRIL',
-		'MEI',
 		'JUNI',
 		'JULI',
-		'AGUSTUS',
-		'SEPTEMBER',
-		'OKTOBER',
-		'NOVEMBER',
-		'DESEMBER',
 	];
 	const CardContents = [
 		{ city: 'Kota Palu', price: '15.000/kg', color: 'red', change: 'RP.298' },
@@ -244,36 +245,40 @@ export default function Home() {
 				</div>
 			</div>
 			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[18rem] gap-2 rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
-				<div className="flex-col">
+				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm">Komoditas</h1>
-					<DropdownMenu>
-						<DropdownMenuTrigger className="flex items-center gap-6">
-							Beras <ChevronDownIcon />
-						</DropdownMenuTrigger>
-						<DropdownMenuContent>
-							<DropdownMenuLabel>Pilih Komoditas</DropdownMenuLabel>
-							<DropdownMenuItem>Beras</DropdownMenuItem>
-							<DropdownMenuItem>Beras</DropdownMenuItem>
-							<DropdownMenuItem>Beras</DropdownMenuItem>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem>Beras</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
+					<Select>
+						<SelectTrigger className="">
+							<SelectValue placeholder="Select a fruit" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectGroup>
+								<SelectLabel>Fruits</SelectLabel>
+								<SelectItem value="apple">Apple</SelectItem>
+								<SelectItem value="banana">Banana</SelectItem>
+								<SelectItem value="blueberry">Blueberry</SelectItem>
+								<SelectItem value="grapes">Grapes</SelectItem>
+								<SelectItem value="pineapple">Pineapple</SelectItem>
+							</SelectGroup>
+						</SelectContent>
+					</Select>
 				</div>
 				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
-				<div className="flex-col ">
+				<div className="flex-col flex-1" >
 					<h1 className="font-bold text-sm ">Bulan</h1>
-					<DropdownMenu>
-						<DropdownMenuTrigger className="flex p-0 items-center gap-6">
-							APRIL <ChevronDownIcon />
-						</DropdownMenuTrigger>
-						<DropdownMenuContent>
-							<DropdownMenuLabel>Pilih Bulan</DropdownMenuLabel>
-							{months.map((month, index) => (
-								<DropdownMenuItem key={index}>{month}</DropdownMenuItem>
-							))}
-						</DropdownMenuContent>
-					</DropdownMenu>
+					<Select>
+						<SelectTrigger className="">
+							<SelectValue placeholder="Bulan" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectGroup>
+								<SelectLabel>Fruits</SelectLabel>
+								{months.map((month, index) => (
+									<SelectItem value={month} key={index}>{month} 2024</SelectItem>
+								))}
+							</SelectGroup>
+						</SelectContent>
+					</Select>
 				</div>
 			</div>
 
@@ -314,13 +319,12 @@ export default function Home() {
 									<h1 className="text-md font-light">{content.city}</h1>
 									<p className="font-bold text-2xl">{content.price}</p>
 									<div
-										className={`rounded-md p-2 flex items-center justify-center text-white ${
-											content.color === 'red'
-												? 'bg-red-500'
-												: content.color === 'yellow'
+										className={`rounded-md p-2 flex items-center justify-center text-white ${content.color === 'red'
+											? 'bg-red-500'
+											: content.color === 'yellow'
 												? 'bg-yellow-500'
 												: 'bg-green-500'
-										}`}>
+											}`}>
 										<ArrowUpIcon className="text-white w-4 h-4 mr-1" />
 										Naik {content.change}
 									</div>
