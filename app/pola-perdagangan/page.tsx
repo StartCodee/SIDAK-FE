@@ -3,12 +3,9 @@
 import { useEffect, useRef } from 'react';
 import Navbar from '@/components/ui/navbar';
 import Image from 'next/image';
-import user from '@/public/user.svg';
-import Background from '@/public/bgg.png';
 import vector1 from '@/public/vect1.svg';
 import vector2 from '@/public/vect2.svg';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 
 import bank from '@/public/bank.svg';
 import sulaw from '@/public/sulaw.svg';
@@ -21,6 +18,23 @@ import {
 	ArrowUpIcon,
 	EnvelopeClosedIcon,
 } from '@radix-ui/react-icons';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
+
+const months = [
+	'JANUARI',
+	'FEBRUARI',
+	'MARET',
+	'APRIL',
+	'MEI',
+	'JUNI',
+	'JULI',
+	'AGUSTUS',
+	'SEPTEMBER',
+	'OKTOBER',
+	'NOVEMBER',
+	'DESEMBER',
+];
 
 const FlowChart: React.FC = () => {
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -41,7 +55,6 @@ const FlowChart: React.FC = () => {
 			{ start: 'Palu', end: 'Banggai-Laut' },
 			{ start: 'Palu', end: 'Banggai-Kepulauan' },
 			{ 'start': 'Buol', 'end': 'gorontalo' },
-
 		];
 
 		const externalFlow = [
@@ -73,7 +86,6 @@ const FlowChart: React.FC = () => {
 			, "aceh"
 			, "bengkulu"
 		];
-
 
 		canvas.width = container.scrollWidth;
 		canvas.height = container.scrollHeight;
@@ -381,8 +393,6 @@ const FlowChart: React.FC = () => {
 			return [startX, startY];
 		}
 
-
-
 		function draw() {
 			if (!ctx || !canvas || !container) return; // Add null check for ctx and canvas
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -407,12 +417,9 @@ const FlowChart: React.FC = () => {
 		function drawBentDashedLine(ctx: CanvasRenderingContext2D, startX: number, startY: number, endX: number, endY: number, controlX: number, controlY: number, startLabel: string, endLabel: string) {
 			const path = new Path2D();
 			if (externalFlow.includes(startLabel) || externalFlow.includes(endLabel)) {
-
-				// Draw straight line if start or end is in the externalFlow list
 				path.moveTo(startX, startY);
 				path.lineTo(endX, endY);
 			} else {
-				// Draw bent dashed line otherwise
 				path.moveTo(startX, startY);
 				path.quadraticCurveTo(controlX, controlY, endX, endY);
 			}
@@ -420,9 +427,6 @@ const FlowChart: React.FC = () => {
 			ctx.lineWidth = 3;
 			ctx.strokeStyle = '#01518B';
 			ctx.stroke(path);
-			// drawDot(ctx, startX, startY, '#01518B');
-
-
 			drawIcon(ctx, startX, startY, bank);
 			drawDot(ctx, endX, endY, 'yellow');
 		}
@@ -454,12 +458,8 @@ const FlowChart: React.FC = () => {
 			ctx.fill();
 		}
 
-		
 		container.addEventListener('scroll', draw);
 		window.addEventListener('resize', draw); // Add resize event listener
-
-	
-		// check is flow are include externalFlow and then remove hidden class
 		externalFlow.forEach((el) => {
 			if (flow.some((e) => e.start === el || e.end === el)) {
 				const el1 = document.getElementById(el);
@@ -468,30 +468,25 @@ const FlowChart: React.FC = () => {
 				}
 			}
 		});
-
 		draw();
-
 		return () => {
 			container.removeEventListener('scroll', draw);
 			window.removeEventListener('resize', draw);
 		};
 	}, []);
 
-
 	return (
 		<div style={{ 'overflowX': 'hidden' }}>
 			<style jsx>{`
         #myCanvas {
-        	position: absolute;
-        	top: 0;
-        	left: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
         }
-
 		@media screen and (max-width: 600px) {
 				#container canvas {
 					height: 500px !important;
 				}
-
 				#container svg {
 					height: 500px !important;
 				}
@@ -526,21 +521,72 @@ const FlowChart: React.FC = () => {
 				</div>
 			</div>
 
-			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
-
-				<div className="flex flex-col sm:flex-row justify-between pt-10">
-					<div className="flex-col">
-						<h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold">
-							COMMODITY FLOW
-						</h1>
-						<Badge className="bg-green-400 mt-2 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
-							<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal 15
-							April 2024
-						</Badge>
-					</div>
-					<div></div>
+			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[18rem] gap-2 rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
+				<div className="flex-col">
+					<h1 className="font-bold text-sm">Komoditas</h1>
+					<DropdownMenu>
+						<DropdownMenuTrigger className="flex items-center gap-6">
+							Beras <ChevronDownIcon />
+						</DropdownMenuTrigger>
+						<DropdownMenuContent>
+							<DropdownMenuLabel>Pilih Komoditas</DropdownMenuLabel>
+							<DropdownMenuItem>Beras</DropdownMenuItem>
+							<DropdownMenuItem>Beras</DropdownMenuItem>
+							<DropdownMenuItem>Beras</DropdownMenuItem>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem>Beras</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
 				</div>
-			</section>
+				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
+				<div className="flex-col ">
+					<h1 className="font-bold text-sm ">Bulan</h1>
+					<DropdownMenu>
+						<DropdownMenuTrigger className="flex p-0 items-center gap-6">
+							APRIL <ChevronDownIcon />
+						</DropdownMenuTrigger>
+						<DropdownMenuContent>
+							<DropdownMenuLabel>Pilih Bulan</DropdownMenuLabel>
+							{months.map((month, index) => (
+								<DropdownMenuItem key={index}>{month}</DropdownMenuItem>
+							))}
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</div>
+			</div>
+
+			{/* content */}
+			<Tabs defaultValue="table">
+				<section className="px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+					<div className="flex flex-col sm:flex-row justify-between pt-10">
+						<div className="flex-col mb-3">
+							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-3 font-extrabold">
+								NERACA PANGAN
+							</h1>
+							<Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
+								<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal 15
+								April 2024
+							</Badge>
+						</div>
+						<TabsList className="rounded-full w-max text-black">
+							<TabsTrigger className="rounded-full" value="table">
+								All
+							</TabsTrigger>
+							<TabsTrigger className="rounded-full" value="grafik">
+								In
+							</TabsTrigger>
+
+							<TabsTrigger className="rounded-full" value="grafik">
+								Intra
+							</TabsTrigger>
+
+							<TabsTrigger className="rounded-full" value="grafik">
+								Out
+							</TabsTrigger>
+						</TabsList>
+					</div>
+				</section>
+			</Tabs>
 
 			<center>
 				<div className="container" id="container" ref={containerRef} style={{ position: 'relative' }}>
@@ -835,6 +881,7 @@ const FlowChart: React.FC = () => {
 
 				</div>
 			</center>
+			
 			<br />
 			<footer className="mt-10 px-4 sm:px-10 py-6 bg-no-repeat bg-cover bg-[url('/footer.png')] text-white">
 				<div className="flex flex-col md:flex-row justify-between items-center gap-6">
