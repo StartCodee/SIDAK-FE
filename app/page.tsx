@@ -19,6 +19,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Map from '@/components/ui/map';
 import {
 	CounterClockwiseClockIcon,
@@ -74,7 +75,7 @@ export default function Home() {
 			price: '14.100/kg',
 			color: 'yellow',
 			change: 'RP.298',
-		},
+		}, 
 		{ city: 'Kabupaten Sigi', price: '13.370/kg', color: 'green', change: 'RP.298' },
 		{ city: 'Kabupaten Donggala', price: '12.000/kg', color: 'red', change: 'RP.298' },
 		{ city: 'Kabupaten Morowali', price: '11.000/kg', color: 'yellow', change: 'RP.298' },
@@ -203,54 +204,62 @@ export default function Home() {
 					</p>
 				</div>
 			</div>
-			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[28rem] gap-2 rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
-				<div className="flex-col">
+			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[38rem] gap-2 rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
+				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm">Jenis Informasi</h1>
-					<DropdownMenu>
-						<DropdownMenuTrigger className="flex items-center gap-6">
-							BERAS <ChevronDownIcon />
-						</DropdownMenuTrigger>
-						<DropdownMenuContent>
-							<DropdownMenuLabel>Pilih Kategori</DropdownMenuLabel>
-							<DropdownMenuItem>BERAS</DropdownMenuItem>
-							<DropdownMenuItem>BERAS</DropdownMenuItem>
-							<DropdownMenuItem>BERAS</DropdownMenuItem>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem>BERAS</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
+					<Select>
+						<SelectTrigger className="border-none">
+							<SelectValue placeholder="Harga Pangan" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectGroup>
+								<SelectLabel>Jenis Informasi</SelectLabel>
+								<SelectItem value="harga-pangan">Harga Pangan</SelectItem>
+								<SelectItem value="neraca-pangan">Neraca Pangan</SelectItem>
+								<SelectItem value="perdagangan-pangan">
+									Pola Perdagangan Pangan
+								</SelectItem>
+							</SelectGroup>
+						</SelectContent>
+					</Select>
 				</div>
 				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
-				<div className="flex-col">
+				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm">Komoditas</h1>
-					<DropdownMenu>
-						<DropdownMenuTrigger className="flex items-center gap-6">
-							Beras <ChevronDownIcon />
-						</DropdownMenuTrigger>
-						<DropdownMenuContent>
-							<DropdownMenuLabel>Pilih Komoditas</DropdownMenuLabel>
-							<DropdownMenuItem>Beras</DropdownMenuItem>
-							<DropdownMenuItem>Beras</DropdownMenuItem>
-							<DropdownMenuItem>Beras</DropdownMenuItem>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem>Beras</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
+					<Select>
+						<SelectTrigger className="border-none">
+							<SelectValue placeholder="Beras" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectGroup>
+								<SelectLabel>Komoditas</SelectLabel>
+								<SelectItem value="beras">Beras</SelectItem>
+								<SelectItem value="minyak">Minyak</SelectItem>
+								<SelectItem value="gula">Gula</SelectItem>
+								<SelectItem value="daging">Daging</SelectItem>
+								<SelectItem value="telur">Telur</SelectItem>
+							</SelectGroup>
+						</SelectContent>
+					</Select>
 				</div>
 				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
-				<div className="flex-col ">
+				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm ">Bulan</h1>
-					<DropdownMenu>
-						<DropdownMenuTrigger className="flex p-0 items-center gap-6">
-							APRIL <ChevronDownIcon />
-						</DropdownMenuTrigger>
-						<DropdownMenuContent>
-							<DropdownMenuLabel>Pilih Bulan</DropdownMenuLabel>
-							{months.map((month, index) => (
-								<DropdownMenuItem key={index}>{month}</DropdownMenuItem>
-							))}
-						</DropdownMenuContent>
-					</DropdownMenu>
+					<Select>
+						<SelectTrigger className="border-none">
+							<SelectValue placeholder="Bulan" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectGroup>
+								<SelectLabel>Bulan</SelectLabel>
+								{months.map((month, index) => (
+									<SelectItem value={month} key={index}>
+										{month} 2024
+									</SelectItem>
+								))}
+							</SelectGroup>
+						</SelectContent>
+					</Select>
 				</div>
 			</div>
 

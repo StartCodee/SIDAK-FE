@@ -3,6 +3,87 @@
 
 import { useEffect } from 'react';
 
+const CardContents = [
+	{ city: 'Kota Palu', price: '15.000/kg', color: 'red', change: 'RP.298', id: 'element1' },
+	{
+		city: 'Kabupaten Boul',
+		price: '14.100/kg',
+		color: 'yellow',
+		change: 'Rp. 298',
+		id: 'element2',
+	},
+	{
+		city: 'Kabupaten Sigi',
+		price: '13.370/kg',
+		color: 'green',
+		change: 'Rp. 298',
+		id: 'element3',
+	},
+	{
+		city: 'Kabupaten Donggala',
+		price: '12.000/kg',
+		color: 'red',
+		change: 'Rp. 298',
+		id: 'element4',
+	},
+	{
+		city: 'Kabupaten Morowali',
+		price: '11.000/kg',
+		color: 'yellow',
+		change: 'Rp. 298',
+		id: 'element5',
+	},
+	{
+		city: 'Kabupaten Parigi Moutong',
+		price: '10.500/kg',
+		color: 'green',
+		change: 'Rp. 298',
+		id: 'element6',
+	},
+	{
+		city: 'Kabupaten Toli-Toli',
+		price: '10.000/kg',
+		color: 'red',
+		change: 'Rp. 298',
+		id: 'element7',
+	},
+	{
+		city: 'Kabupaten Poso',
+		price: '9.800/kg',
+		color: 'yellow',
+		change: 'Rp. 298',
+		id: 'element8',
+	},
+	{
+		city: 'Kabupaten Banggai',
+		price: '9.500/kg',
+		color: 'green',
+		change: 'Rp. 298',
+		id: 'element9',
+	},
+	{
+		city: 'Kabupaten Tojo Una-Una',
+		price: '9.200/kg',
+		color: 'red',
+		change: 'Rp. 298',
+		id: 'element10',
+	},
+	{
+		city: 'Kabupaten Banggai Kepulauan',
+		price: '9.000/kg',
+		color: 'yellow',
+		change: 'Rp. 298',
+		id: 'element11',
+	},
+	{
+		city: 'Kabupaten Banggai Kepulauan',
+		price: '9.000/kg',
+		color: 'yellow',
+		change: 'Rp. 298',
+		id: 'element12',
+	},
+];
+
 export default function Map() {
 
 
@@ -21,50 +102,37 @@ export default function Map() {
 			paths.forEach((path: Element & { location?: string }, index) => {
 				path.location =
 					index === 0
-						? 'Kota Gorontalo'
+						// index 1 to 13 kabupaten buol to banggai kepulauan
+						? 'Kabupaten Buol'
 						: index === 1
-						? 'Kabupaten Bantaeng'
+						? 'Kabupaten Banggai'
 						: index === 2
-						? 'Kabupaten Barru'
+						? 'Kabupaten Morowali'
 						: index === 3
-						? 'Kabupaten Bone'
+						? 'Kabupaten Poso'
 						: index === 4
-						? 'Kabupaten Bulukumba'
+						? 'Kabupaten Tojo Una-Una'
 						: index === 5
-						? 'Kabupaten Enrekang'
+						? 'Kabupaten Parigi Moutong'
 						: index === 6
-						? 'Kabupaten Gowa'
+						? 'Kabupaten Toli-Toli'
 						: index === 7
-						? 'Kabupaten Jeneponto'
+						? 'Kabupaten Donggala'
 						: index === 8
-						? 'Kabupaten Kepulauan Selayar'
+						? 'Kabupaten Sigi'
 						: index === 9
-						? 'Kabupaten Kolaka'
+						? 'Kabupaten Banggai Laut'
 						: index === 10
-						? 'Kabupaten Konawe'
+						? 'Kabupaten Morowali Utara'
 						: index === 11
-						? 'Kabupaten Luwu'
+						? 'Kabupaten Morowali Barat'
 						: index === 12
-						? 'Kabupaten Mamuju'
+						? 'Kabupaten Tojo Una-Una'
 						: index === 13
-						? 'Kabupaten Maros'
-						: index === 14
-						? 'Kabupaten Palopo'
-						: index === 15
-						? 'Kabupaten Pangkajene Dan Kepulauan'
-						: index === 16
-						? 'Kabupaten Parepare'
-						: index === 17
-						? 'Kabupaten Pinrang'
-						: index === 18
-						? 'Kabupaten Sidenreng Rappang'
-						: index === 19
-						? 'Kabupaten Sinjai'
-						: index === 20
-						? 'Kabupaten Soppeng'
-						: index === 21
-						? 'Kabupaten Takalar'
-						: 'Kabupaten Tana Toraja';
+						? 'Banggai Kepulauan' : 'Kabupaten Banggai Kepulauan';
+
+				
+
 			});
 
 			
@@ -72,7 +140,7 @@ export default function Map() {
 			// show card when hover on the path
 			paths.forEach((path) => {
 				path.addEventListener('mouseenter', () => {
-					console.log('hovered');
+					const content = CardContents.find((card) => card.id === path.id);
 					const pathRect = path.getBoundingClientRect();
 					const pathTop = pathRect.top + window.scrollY; // Account for vertical scroll
        				 const pathLeft = pathRect.left + window.scrollX;
@@ -83,8 +151,11 @@ export default function Map() {
 					card.style.left = `${pathLeft}px`;
 					card.innerHTML = `
 						<h1 class='text-lg font-semibold'> ${(path as any).location}</h1>
-						<p class='text-sm'>25.000/Kg</p>
-						<p class='text-red'>Turun Rp 5.000</p>
+						<p class='text-xl font-bold'>${content?.price}</p>
+						
+						 <span class="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+<p class='text-sm '>Naik ${content?.change}</p>
+      </span>
 					`;
 					document.body.appendChild(card);
 

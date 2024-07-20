@@ -248,33 +248,35 @@ export default function Home() {
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm">Komoditas</h1>
 					<Select>
-						<SelectTrigger className="">
-							<SelectValue placeholder="Select a fruit" />
+						<SelectTrigger className="border-none">
+							<SelectValue placeholder="Beras" />
 						</SelectTrigger>
 						<SelectContent>
 							<SelectGroup>
-								<SelectLabel>Fruits</SelectLabel>
-								<SelectItem value="apple">Apple</SelectItem>
-								<SelectItem value="banana">Banana</SelectItem>
-								<SelectItem value="blueberry">Blueberry</SelectItem>
-								<SelectItem value="grapes">Grapes</SelectItem>
-								<SelectItem value="pineapple">Pineapple</SelectItem>
+								<SelectLabel>Komoditas</SelectLabel>
+								<SelectItem value="beras">Beras</SelectItem>
+								<SelectItem value="minyak">Minyak</SelectItem>
+								<SelectItem value="gula">Gula</SelectItem>
+								<SelectItem value="daging">Daging</SelectItem>
+								<SelectItem value="telur">Telur</SelectItem>
 							</SelectGroup>
 						</SelectContent>
 					</Select>
 				</div>
 				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
-				<div className="flex-col flex-1" >
+				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm ">Bulan</h1>
 					<Select>
-						<SelectTrigger className="">
+						<SelectTrigger className="border-none">
 							<SelectValue placeholder="Bulan" />
 						</SelectTrigger>
 						<SelectContent>
 							<SelectGroup>
-								<SelectLabel>Fruits</SelectLabel>
+								<SelectLabel>Bulan</SelectLabel>
 								{months.map((month, index) => (
-									<SelectItem value={month} key={index}>{month} 2024</SelectItem>
+									<SelectItem value={month} key={index}>
+										{month} 2024
+									</SelectItem>
 								))}
 							</SelectGroup>
 						</SelectContent>
@@ -319,12 +321,13 @@ export default function Home() {
 									<h1 className="text-md font-light">{content.city}</h1>
 									<p className="font-bold text-2xl">{content.price}</p>
 									<div
-										className={`rounded-md p-2 flex items-center justify-center text-white ${content.color === 'red'
-											? 'bg-red-500'
-											: content.color === 'yellow'
+										className={`rounded-md p-2 flex items-center justify-center text-white ${
+											content.color === 'red'
+												? 'bg-red-500'
+												: content.color === 'yellow'
 												? 'bg-yellow-500'
 												: 'bg-green-500'
-											}`}>
+										}`}>
 										<ArrowUpIcon className="text-white w-4 h-4 mr-1" />
 										Naik {content.change}
 									</div>
