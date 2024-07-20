@@ -306,7 +306,7 @@ export default function Home() {
 												<td className="text-right">{content.kebutuhan}</td>
 											</tr>
 											<tr>
-												<td colSpan="2">
+												<td colSpan={2}>
 													<hr className="my-1" />
 												</td>
 											</tr>

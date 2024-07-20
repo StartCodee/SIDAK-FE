@@ -104,7 +104,7 @@ const BeritaPage: React.FC = () => {
     <CardContent className="flex flex-col gap-4 px-4 sm:px-10 md:px-30 lg:px-50 pb-20">
         <div className="flex flex-col lg:flex-row mb-5 ">
             <Image
-                src={data[0].Image}
+                src={berita}
                 alt={data[0].title}
                 width={1000}
                 height={300}
