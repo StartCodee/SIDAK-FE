@@ -1,12 +1,18 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Navbar from '@/components/ui/navbar';
 import Image from 'next/image';
 import vector1 from '@/public/vect1.svg';
 import vector2 from '@/public/vect2.svg';
 import { Badge } from '@/components/ui/badge';
-
+import { Button } from '@/components/ui/button';
+import {
+	UserIcon,
+	ScaleIcon,
+	BuildingLibraryIcon,
+	MagnifyingGlassIcon,
+} from '@heroicons/react/24/outline';
 import bank from '@/public/bank.svg';
 import sulaw from '@/public/sulaw.svg';
 import {
@@ -22,23 +28,72 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
 
 const months = [
-	'JANUARI',
-	'FEBRUARI',
-	'MARET',
-	'APRIL',
-	'MEI',
 	'JUNI',
 	'JULI',
-	'AGUSTUS',
-	'SEPTEMBER',
-	'OKTOBER',
-	'NOVEMBER',
-	'DESEMBER',
 ];
 
+
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select"
+
 const FlowChart: React.FC = () => {
+
+
+	const [flow, setFlow] = useState<any>([
+		{ start: 'Buol', end: 'Tolitoli' },
+		{ start: 'Parigi', end: 'Morowali' },
+		{ start: 'Banggai', end: 'Morowali-Utara' },
+		{ start: 'Touna', end: 'Poso' },
+		{ start: 'Sigi', end: 'Donggala' },
+		{ start: 'Palu', end: 'Banggai-Laut' },
+		{ start: 'Palu', end: 'Banggai-Kepulauan' },
+		{ start: 'Buol', end: 'gorontalo' },
+	]);
+
+
 	const containerRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
+
+
+	const changeTab = (tab: string) => {
+		if (tab === 'all') {
+			setFlow([
+				{ start: 'Buol', end: 'Tolitoli' },
+				{ start: 'Parigi', end: 'Morowali' },
+				{ start: 'Banggai', end: 'Morowali-Utara' },
+				{ start: 'Touna', end: 'Poso' },
+				{ start: 'Sigi', end: 'Donggala' },
+				{ start: 'Palu', end: 'Banggai-Laut' },
+				{ start: 'Palu', end: 'Banggai-Kepulauan' },
+				{ start: 'Buol', end: 'gorontalo' },
+			]);
+		} else if (tab === 'in') {
+			setFlow([
+				{ start: 'Sigi', end: 'Donggala' },
+				{ start: 'Palu', end: 'Banggai-Laut' },
+				{ start: 'Palu', end: 'Banggai-Kepulauan' },
+			]);
+		} else if (tab === 'intra') {
+			setFlow([
+				{ start: 'Buol', end: 'Tolitoli' },
+				{ start: 'Parigi', end: 'sumsel' },
+			]);
+		}
+		else if (tab === 'out') {
+			setFlow([
+				{ start: 'Buol', end: 'gorontalo' },
+			]);
+		}
+	}
+
+
 	useEffect(() => {
 		const container = containerRef.current;
 		const canvas = canvasRef.current;
@@ -46,16 +101,6 @@ const FlowChart: React.FC = () => {
 		const ctx = canvas.getContext('2d');
 		if (!ctx) return;
 
-		const flow = [
-			{ start: 'Buol', end: 'Tolitoli' },
-			{ start: 'Parigi', end: 'Morowali' },
-			{ start: 'Banggai', end: 'Morowali-Utara' },
-			{ start: 'Touna', end: 'Poso' },
-			{ start: 'Sigi', end: 'Donggala' },
-			{ start: 'Palu', end: 'Banggai-Laut' },
-			{ start: 'Palu', end: 'Banggai-Kepulauan' },
-			{ 'start': 'Buol', 'end': 'gorontalo' },
-		];
 
 		const externalFlow = [
 			"gorontalo"
@@ -394,9 +439,10 @@ const FlowChart: React.FC = () => {
 		}
 
 		function draw() {
+
 			if (!ctx || !canvas || !container) return; // Add null check for ctx and canvas
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			flow.forEach((el) => {
+			flow.forEach((el : any) => {
 				const containerRect = container.getBoundingClientRect();
 				const offsetX = container.scrollLeft - containerRect.left;
 				const offsetY = container.scrollTop - containerRect.top;
@@ -448,7 +494,7 @@ const FlowChart: React.FC = () => {
 
 		function drawIcon(ctx: CanvasRenderingContext2D, x: number, y: number, img: HTMLImageElement) {
 			const iconSize = 30; // Ukuran ikon
-			ctx.drawImage(document.getElementById('location') as CanvasImageSource , x - iconSize / 2, y - iconSize / 2, iconSize, iconSize);
+			ctx.drawImage(document.getElementById('location') as CanvasImageSource, x - iconSize / 2, y - iconSize / 2, iconSize, iconSize);
 		}
 
 		function drawDot(ctx: CanvasRenderingContext2D, x: number, y: number, color: string) {
@@ -461,7 +507,7 @@ const FlowChart: React.FC = () => {
 		container.addEventListener('scroll', draw);
 		window.addEventListener('resize', draw); // Add resize event listener
 		externalFlow.forEach((el) => {
-			if (flow.some((e) => e.start === el || e.end === el)) {
+			if (flow.some((e : any) => e.start === el || e.end === el)) {
 				const el1 = document.getElementById(el);
 				if (el1) {
 					el1.classList.remove('hidden');
@@ -473,7 +519,7 @@ const FlowChart: React.FC = () => {
 			container.removeEventListener('scroll', draw);
 			window.removeEventListener('resize', draw);
 		};
-	}, []);
+	}, [flow]);
 
 	return (
 		<div style={{ 'overflowX': 'hidden' }}>
@@ -521,42 +567,58 @@ const FlowChart: React.FC = () => {
 				</div>
 			</div>
 
-			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[18rem] gap-2 rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
+			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[24rem] justify-between gap-2 rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
 				<div className="flex-col">
 					<h1 className="font-bold text-sm">Komoditas</h1>
-					<DropdownMenu>
-						<DropdownMenuTrigger className="flex items-center gap-6">
-							Beras <ChevronDownIcon />
-						</DropdownMenuTrigger>
-						<DropdownMenuContent>
-							<DropdownMenuLabel>Pilih Komoditas</DropdownMenuLabel>
-							<DropdownMenuItem>Beras</DropdownMenuItem>
-							<DropdownMenuItem>Beras</DropdownMenuItem>
-							<DropdownMenuItem>Beras</DropdownMenuItem>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem>Beras</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
+					<Select>
+						<SelectTrigger className="border-none w-[6rem]">
+							<SelectValue placeholder="Beras" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectGroup>
+								<SelectLabel>Komoditas</SelectLabel>
+								<SelectItem value="beras">Beras</SelectItem>
+								<SelectItem value="minyak">Minyak</SelectItem>
+								<SelectItem value="gula">Gula</SelectItem>
+								<SelectItem value="daging">Daging Ayam</SelectItem>
+								<SelectItem value="telur">Telur</SelectItem>
+							</SelectGroup>
+						</SelectContent>
+					</Select>
 				</div>
 				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
 				<div className="flex-col ">
 					<h1 className="font-bold text-sm ">Bulan</h1>
-					<DropdownMenu>
-						<DropdownMenuTrigger className="flex p-0 items-center gap-6">
-							APRIL <ChevronDownIcon />
-						</DropdownMenuTrigger>
-						<DropdownMenuContent>
-							<DropdownMenuLabel>Pilih Bulan</DropdownMenuLabel>
-							{months.map((month, index) => (
-								<DropdownMenuItem key={index}>{month}</DropdownMenuItem>
-							))}
-						</DropdownMenuContent>
-					</DropdownMenu>
+					<Select>
+						<SelectTrigger className="border-none w-[6rem]">
+							<SelectValue placeholder="Bulan" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectGroup>
+								<SelectLabel>Bulan</SelectLabel>
+								{months.map((month, index) => (
+									<SelectItem value={month} key={index}>
+										{month} 2024
+									</SelectItem>
+								))}
+							</SelectGroup>
+						</SelectContent>
+					</Select>
+
+
 				</div>
+				<Button className="bg-blue-300 rounded-full p-2">
+					<MagnifyingGlassIcon
+						className="text-white"
+						width={28}
+						height={28}
+					/>
+				</Button>
+
 			</div>
 
 			{/* content */}
-			<Tabs defaultValue="table">
+			<Tabs defaultValue="all">
 				<section className="px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 					<div className="flex flex-col sm:flex-row justify-between pt-10">
 						<div className="flex-col mb-3">
@@ -569,20 +631,37 @@ const FlowChart: React.FC = () => {
 							</Badge>
 						</div>
 						<TabsList className="rounded-full w-max text-black">
-							<TabsTrigger className="rounded-full" value="table">
-								All
-							</TabsTrigger>
-							<TabsTrigger className="rounded-full" value="grafik">
-								In
-							</TabsTrigger>
+							<div onClick={() => {
+								changeTab('all');
+							}}>
+								<TabsTrigger className="rounded-full" value="all">
+									All
+								</TabsTrigger>
+							</div>
+							<div onClick={() => {
+								changeTab('in');
 
-							<TabsTrigger className="rounded-full" value="grafik">
-								Intra
-							</TabsTrigger>
+							}}>
+								<TabsTrigger className="rounded-full" value="in">
+									In
+								</TabsTrigger>
+							</div>
+							<div onClick={() => {
+								changeTab('intra');
 
-							<TabsTrigger className="rounded-full" value="grafik">
-								Out
-							</TabsTrigger>
+							}}>
+								<TabsTrigger className="rounded-full" value="intra">
+									Intra
+								</TabsTrigger>
+							</div>
+
+							<div onClick={() => {
+								changeTab('out');
+							}}>
+								<TabsTrigger className="rounded-full" value="out">
+									Out
+								</TabsTrigger>
+							</div>
 						</TabsList>
 					</div>
 				</section>
@@ -881,7 +960,7 @@ const FlowChart: React.FC = () => {
 
 				</div>
 			</center>
-			
+
 			<br />
 			<footer className="mt-10 px-4 sm:px-10 py-6 bg-no-repeat bg-cover bg-[url('/footer.png')] text-white">
 				<div className="flex flex-col md:flex-row justify-between items-center gap-6">
