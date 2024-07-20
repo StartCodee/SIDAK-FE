@@ -8,6 +8,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
 import Footer from '@/components/ui/footer';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
@@ -352,67 +354,97 @@ export default function Home() {
 
 				<div className="h-1 rounded-lg bg-black/10"></div>
 			</section>
-
-			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4">
-				<div className="flex flex-col sm:flex-row justify-between items-center">
-					<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
-						Monitoring Volatilitas
-					</h1>
-					<div className="flex gap-4 mt-4 sm:mt-0">
-						<p>Table</p>
-						<Switch />
-						<p>Grafik</p>
+			<Tabs defaultValue="table">
+				<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4">
+					<div className="flex flex-col space-y-4 sm:flex-row justify-between items-center">
+						<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
+							Monitoring Volatilitas
+						</h1>
+						<div className="flex gap-4 mt-4 sm:mt-0">
+							<TabsList className="rounded-full text-black">
+								<TabsTrigger className="rounded-full" value="table">
+									Table
+								</TabsTrigger>
+								<TabsTrigger className="rounded-full" value="grafik">
+									Grafik
+								</TabsTrigger>
+							</TabsList>
+						</div>
 					</div>
-				</div>
-				<div className="overflow-x-auto">
-					<table className="min-w-full divide-y divide-gray-200">
-						<thead className="bg-gray-50">
-							<tr>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Komoditas
-								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									1 Bulan Terakhir
-								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									3 Bulan Terakhir
-								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									12 Bulan Terakhir
-								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Keterangan
-								</th>
-							</tr>
-						</thead>
-						<tbody className="bg-white divide-y divide-gray-200">
-							<tr>
-								<td className="px-6 py-4 whitespace-nowrap text-lg font-bold text-gray-900">
-									Beras
-								</td>
-								<td className="px-6 py-4 whitespace-nowrap">
-									<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
-								</td>
-								<td className="px-6 py-4 whitespace-nowrap">
-									<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
-								</td>
-								<td className="px-6 py-4 whitespace-nowrap">
-									<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
-								</td>
-								<td className="px-6 py-4 whitespace-normal text-sm text-gray-500">
-									Harga beras tetap sangat berfluktuasi sepanjang bulan Mei,
-									dengan harga awalnya..... dipengaruhi oleh produksi di
-									negara-negara kunci untuk tahun 2024/25, meskipun ada
-									tantangan yang sedang berlangsung seperti...
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+					<TabsContent value="table">
+						<div className="overflow-x-auto">
+							<table className="min-w-full divide-y divide-gray-200">
+								<thead className="bg-gray-50">
+									<tr>
+										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+											Komoditas
+										</th>
+										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+											1 Bulan Terakhir
+										</th>
+										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+											3 Bulan Terakhir
+										</th>
+										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+											12 Bulan Terakhir
+										</th>
+										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+											Keterangan
+										</th>
+									</tr>
+								</thead>
+								<tbody className="bg-white divide-y divide-gray-200">
+									<tr>
+										<td className="px-6 py-4 whitespace-nowrap text-lg font-bold text-gray-900">
+											Beras
+										</td>
+										<td className="px-6 py-4 whitespace-nowrap">
+											<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
+										</td>
+										<td className="px-6 py-4 whitespace-nowrap">
+											<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
+										</td>
+										<td className="px-6 py-4 whitespace-nowrap">
+											<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
+										</td>
+										<td className="px-6 py-4 whitespace-normal text-sm text-gray-500">
+											Harga beras tetap sangat berfluktuasi sepanjang bulan Mei,
+											dengan harga awalnya..... dipengaruhi oleh produksi di
+											negara-negara kunci untuk tahun 2024/25, meskipun ada
+											tantangan yang sedang berlangsung seperti...
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</TabsContent>
+					<TabsContent value="grafik">
+						<div className="overflow-x-auto">
+							<table className="min-w-full divide-y divide-gray-200">
+								<thead className="bg-gray-50">
+									<tr>
+										<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+											Komoditas
+										</th>
+									</tr>
+								</thead>
+								<tbody className="bg-white divide-y divide-gray-200">
+									<tr>
+										<td className="px-6 py-4 whitespace-nowrap text-lg font-bold text-gray-900">
+											Beras
+										</td>
+										<td className="w-full">
+											<div className="h-20 w-full bg-gradient-to-r from-red-500 via-green-600 to-red-700 rounded-md"></div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</TabsContent>
 
-				<div className="h-1 rounded-lg mt-10 bg-black/10"></div>
-			</section>
-
+					<div className="h-1 rounded-lg mt-10 bg-black/10"></div>
+				</section>
+			</Tabs>
 			<Footer />
 		</main>
 	);
