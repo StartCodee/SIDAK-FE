@@ -261,6 +261,9 @@ export default function Home() {
 						</SelectContent>
 					</Select>
 				</div>
+				<Button className="bg-blue-300 rounded-full p-2">
+					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
+				</Button>
 			</div>
 
 			{/* content */}
@@ -325,72 +328,61 @@ export default function Home() {
 				<div
 					style={{ marginTop: '-40px' }}
 					className="mx-auto px-4 py-4 sm:py-2 sm:px-8 shadow-xl w-[20rem] sm:w-[42rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
-					<div className="flex flex-col items-center sm:items-start">
-						<h1 className="font-bold text-sm mb-2 sm:mb-0">Jenis Informasi</h1>
-						<DropdownMenu>
-							<DropdownMenuTrigger className="flex items-center gap-2 sm:gap-6">
-								BERAS <ChevronDownIcon />
-							</DropdownMenuTrigger>
-							<DropdownMenuContent>
-								<DropdownMenuLabel>Pilih Kategori</DropdownMenuLabel>
-								<DropdownMenuItem>BERAS</DropdownMenuItem>
-								<DropdownMenuItem>BERAS</DropdownMenuItem>
-								<DropdownMenuItem>BERAS</DropdownMenuItem>
-								<DropdownMenuSeparator />
-								<DropdownMenuItem>BERAS</DropdownMenuItem>
-							</DropdownMenuContent>
-						</DropdownMenu>
+					<div className="flex-col flex-1">
+						<h1 className="font-bold text-sm">Jenis Informasi</h1>
+						<Select>
+							<SelectTrigger className="border-none">
+								<SelectValue placeholder="Harga Pangan" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectGroup>
+									<SelectLabel>Jenis Informasi</SelectLabel>
+									<SelectItem value="harga-pangan">Harga Pangan</SelectItem>
+									<SelectItem value="neraca-pangan">Neraca Pangan</SelectItem>
+									<SelectItem value="perdagangan-pangan">
+										Pola Perdagangan Pangan
+									</SelectItem>
+								</SelectGroup>
+							</SelectContent>
+						</Select>
 					</div>
-					<div className="hidden sm:block border-l border-black h-auto self-stretch" />
-					<div className="flex flex-col items-center sm:items-start">
-						<h1 className="font-bold text-sm mb-2 sm:mb-0">Komoditas</h1>
-						<DropdownMenu>
-							<DropdownMenuTrigger className="flex items-center gap-2 sm:gap-6">
-								Beras <ChevronDownIcon />
-							</DropdownMenuTrigger>
-							<DropdownMenuContent>
-								<DropdownMenuLabel>Pilih Komoditas</DropdownMenuLabel>
-								<DropdownMenuItem>Beras</DropdownMenuItem>
-								<DropdownMenuItem>Beras</DropdownMenuItem>
-								<DropdownMenuItem>Beras</DropdownMenuItem>
-								<DropdownMenuSeparator />
-								<DropdownMenuItem>Beras</DropdownMenuItem>
-							</DropdownMenuContent>
-						</DropdownMenu>
+					<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
+					<div className="flex-col flex-1">
+						<h1 className="font-bold text-sm">Komoditas</h1>
+						<Select>
+							<SelectTrigger className="border-none">
+								<SelectValue placeholder="Beras" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectGroup>
+									<SelectLabel>Komoditas</SelectLabel>
+									<SelectItem value="beras">Beras</SelectItem>
+									<SelectItem value="minyak">Minyak</SelectItem>
+									<SelectItem value="gula">Gula</SelectItem>
+									<SelectItem value="daging">Daging</SelectItem>
+									<SelectItem value="telur">Telur</SelectItem>
+								</SelectGroup>
+							</SelectContent>
+						</Select>
 					</div>
-					<div className="hidden sm:block border-l border-black h-auto self-stretch" />
-					<div className="flex flex-col items-center sm:items-start">
-						<h1 className="font-bold text-sm mb-2 sm:mb-0">
-							Pilih Kabupaten/Kota
-						</h1>
-						<DropdownMenu>
-							<DropdownMenuTrigger className="flex items-center gap-2 sm:gap-6">
-								Beras <ChevronDownIcon />
-							</DropdownMenuTrigger>
-							<DropdownMenuContent>
-								<DropdownMenuLabel>Pilih Komoditas</DropdownMenuLabel>
-								<DropdownMenuItem>Beras</DropdownMenuItem>
-								<DropdownMenuItem>Beras</DropdownMenuItem>
-								<DropdownMenuItem>Beras</DropdownMenuItem>
-								<DropdownMenuSeparator />
-								<DropdownMenuItem>Beras</DropdownMenuItem>
-							</DropdownMenuContent>
-						</DropdownMenu>
-					</div>
-					<div className="hidden sm:block border-l border-black h-auto self-stretch" />
-					<div className="flex flex-col items-center sm:items-start">
-						<h1 className="font-bold text-sm mb-2 sm:mb-0">Bulan</h1>
-						<DropdownMenu>
-							<DropdownMenuTrigger className="flex items-center gap-2 sm:gap-6">
-								APRIL <ChevronDownIcon />
-							</DropdownMenuTrigger>
-							<DropdownMenuContent>
-								<DropdownMenuLabel>Pilih Bulan</DropdownMenuLabel>
-								{months.map((month, index) => (
-									<DropdownMenuItem key={index}>{month}</DropdownMenuItem>
-								))}
-							</DropdownMenuContent>
-						</DropdownMenu>
+					<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
+					<div className="flex-col flex-1">
+						<h1 className="font-bold text-sm ">Kabupaten/Kota</h1>
+						<Select>
+							<SelectTrigger className="border-none">
+								<SelectValue placeholder="Bulan" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectGroup>
+									<SelectLabel>Bulan</SelectLabel>
+									{months.map((month, index) => (
+										<SelectItem value={month} key={index}>
+											{month} 2024
+										</SelectItem>
+									))}
+								</SelectGroup>
+							</SelectContent>
+						</Select>
 					</div>
 					<Button className="bg-blue-300 rounded-full p-2">
 						<MagnifyingGlassIcon

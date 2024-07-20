@@ -195,7 +195,7 @@ export default function Home() {
 					</p>
 				</div>
 			</div>
-			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[18rem] gap-2 rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
+			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[22rem] gap-2 rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm">Komoditas</h1>
 					<Select>
@@ -219,7 +219,7 @@ export default function Home() {
 					<h1 className="font-bold text-sm ">Bulan</h1>
 					<Select>
 						<SelectTrigger className="border-none">
-							<SelectValue  placeholder="Bulan" />
+							<SelectValue placeholder="Bulan" />
 						</SelectTrigger>
 						<SelectContent>
 							<SelectGroup>
@@ -233,6 +233,9 @@ export default function Home() {
 						</SelectContent>
 					</Select>
 				</div>
+				<Button className="bg-blue-300 rounded-full p-2">
+					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
+				</Button>
 			</div>
 
 			{/* content */}
