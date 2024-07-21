@@ -215,7 +215,7 @@ export default function Home() {
 					</p>
 				</div>
 			</div>
-			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[38rem] gap-2 rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
+			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[38rem] gap-2 rounded-lg sm:rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm">Jenis Informasi</h1>
 					<Select onValueChange={handleValueChange}>

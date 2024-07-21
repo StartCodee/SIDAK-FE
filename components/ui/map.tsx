@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import Dialog from './modal-harga';
+import { Button } from './button';
 
 const CardContents = [
 	{ city: 'Kota Palu', price: '15.000/kg', color: 'red', change: 'RP.298', id: 'element1' },
@@ -261,9 +262,11 @@ export default function Map() {
 									<h1 className="font-bold">Beras</h1>
 								</div>
 							</div>
+							<Button className='hover:bg-green-200 rounded-full cursor-pointer' asChild>
 							<span className="self-end inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
 								Export
 							</span>
+							</Button>
 						</div>
 						<div className="h-1 rounded-lg my-10 bg-black/10 z-0"></div>
 						<div className="flex flex-col ">
