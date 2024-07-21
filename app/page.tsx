@@ -13,6 +13,7 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { DatePickerDemo } from '@/components/ui/datepicker';
 import { Separator } from '@/components/ui/separator';
 import {
 	DropdownMenu,
@@ -59,7 +60,6 @@ import MapPola from '@/components/ui/map-pola';
 
 
 export default function Home() {
-
 	  const [selectedValue, setSelectedValue] = useState<string>('harga-pangan');
 
 		const handleValueChange = (value: string) => {
@@ -80,6 +80,16 @@ export default function Home() {
 		'NOVEMBER',
 		'DESEMBER',
 	];
+
+	const kabupaten = [
+		'Kota Palu',
+		'Kabupaten Boul',
+		'Kabupaten Sigi',
+		'Kabupaten Donggala',
+		'Kabupaten Morowali',
+		'Kabupaten Morowali',
+	];
+
 	const CardContents = [
 		{ city: 'Kota Palu', price: '15.000/kg', color: 'red', change: 'RP.298' },
 		{
@@ -395,12 +405,12 @@ export default function Home() {
 						<h1 className="font-bold text-sm ">Kabupaten/Kota</h1>
 						<Select>
 							<SelectTrigger className="border-none">
-								<SelectValue placeholder="Bulan" />
+								<SelectValue placeholder="Kabupaten/Kota" />
 							</SelectTrigger>
 							<SelectContent>
 								<SelectGroup>
-									<SelectLabel>Bulan</SelectLabel>
-									{months.map((month, index) => (
+									<SelectLabel>Kabupaten/Kota</SelectLabel>
+									{kabupaten.map((month, index) => (
 										<SelectItem value={month} key={index}>
 											{month} 2024
 										</SelectItem>
