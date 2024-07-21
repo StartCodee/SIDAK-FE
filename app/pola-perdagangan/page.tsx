@@ -42,6 +42,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select"
+import { isExternal } from 'util/types';
 
 const FlowChart: React.FC = () => {
 
@@ -72,7 +73,7 @@ const FlowChart: React.FC = () => {
 				{ start: 'Sigi', end: 'Donggala' },
 				{ start: 'Palu', end: 'Banggai-Laut' },
 				{ start: 'Palu', end: 'Banggai-Kepulauan' },
-				{ start: 'Buol', end: 'gorontalo' },
+				{ start: 'gorontalo', end: 'Buol' },
 			]);
 		} else if (tab === 'in') {
 			setFlow([
@@ -439,10 +440,9 @@ const FlowChart: React.FC = () => {
 		}
 
 		function draw() {
-
 			if (!ctx || !canvas || !container) return; // Add null check for ctx and canvas
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			flow.forEach((el : any) => {
+			flow.forEach((el: any) => {
 				const containerRect = container.getBoundingClientRect();
 				const offsetX = container.scrollLeft - containerRect.left;
 				const offsetY = container.scrollTop - containerRect.top;
@@ -456,11 +456,13 @@ const FlowChart: React.FC = () => {
 				const ender = getCoordinate(rect2, el.end, offsetX, offsetY);
 				const controlX = (starter[0] + ender[0]) / 2;
 				const controlY = starter[1] - 100;
-				drawBentDashedLine(ctx, starter[0], starter[1], ender[0], ender[1], controlX, controlY, el.start, el.end);
+				const isExternalFlowStart = externalFlow.includes(el.start);
+				const isExternalFlowEnd = externalFlow.includes(el.end);
+				drawBentDashedLine(isExternalFlowStart, isExternalFlowEnd, ctx, starter[0], starter[1], ender[0], ender[1], controlX, controlY, el.start, el.end);
 			});
 		}
 
-		function drawBentDashedLine(ctx: CanvasRenderingContext2D, startX: number, startY: number, endX: number, endY: number, controlX: number, controlY: number, startLabel: string, endLabel: string) {
+		function drawBentDashedLine(isExternalFlowStart: boolean, isExternalFlowEnd: boolean, ctx: CanvasRenderingContext2D, startX: number, startY: number, endX: number, endY: number, controlX: number, controlY: number, startLabel: string, endLabel: string) {
 			const path = new Path2D();
 			if (externalFlow.includes(startLabel) || externalFlow.includes(endLabel)) {
 				path.moveTo(startX, startY);
@@ -473,27 +475,34 @@ const FlowChart: React.FC = () => {
 			ctx.lineWidth = 3;
 			ctx.strokeStyle = '#01518B';
 			ctx.stroke(path);
+			// drawDot(ctx, startX, startY, '#01518B');
 			drawIcon(ctx, startX, startY, bank);
-			drawDot(ctx, endX, endY, 'yellow');
+			if (isExternalFlowEnd) {
+				drawDot(ctx, endX, endY, 'yellow');
+			} else {
+				drawArrow(ctx, endX, endY, startX, startY, controlX, controlY);
+			}
 		}
 
-		function drawArrow(ctx: CanvasRenderingContext2D, fromX: number, fromY: number, toX: number, toY: number) {
-			const headlen = 10; // panjang kepala panah
-			const dx = toX - fromX;
-			const dy = toY - fromY;
+
+		function drawArrow(ctx: CanvasRenderingContext2D, endX: number, endY: number, startX: number, startY: number, controlX: number, controlY: number) {
+			const headlen = 15; // panjang kepala panah
+			const dx = endX - controlX;
+			const dy = endY - controlY;
 			const angle = Math.atan2(dy, dx);
 			ctx.beginPath();
-			ctx.moveTo(toX, toY);
-			ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
-			ctx.moveTo(toX, toY);
-			ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
+			ctx.moveTo(endX, endY);
+			ctx.lineTo(endX - headlen * Math.cos(angle - Math.PI / 6), endY - headlen * Math.sin(angle - Math.PI / 6));
+			ctx.moveTo(endX, endY);
+			ctx.lineTo(endX - headlen * Math.cos(angle + Math.PI / 6), endY - headlen * Math.sin(angle + Math.PI / 6));
 			ctx.strokeStyle = '#01518B';
 			ctx.lineWidth = 3;
 			ctx.stroke();
 		}
 
+
 		function drawIcon(ctx: CanvasRenderingContext2D, x: number, y: number, img: HTMLImageElement) {
-			const iconSize = 30; // Ukuran ikon
+			const iconSize = 20; // Ukuran ikon
 			ctx.drawImage(document.getElementById('location') as CanvasImageSource, x - iconSize / 2, y - iconSize / 2, iconSize, iconSize);
 		}
 
@@ -507,7 +516,7 @@ const FlowChart: React.FC = () => {
 		container.addEventListener('scroll', draw);
 		window.addEventListener('resize', draw); // Add resize event listener
 		externalFlow.forEach((el) => {
-			if (flow.some((e : any) => e.start === el || e.end === el)) {
+			if (flow.some((e: any) => e.start === el || e.end === el)) {
 				const el1 = document.getElementById(el);
 				if (el1) {
 					el1.classList.remove('hidden');
