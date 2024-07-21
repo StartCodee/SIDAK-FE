@@ -1,5 +1,8 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
+import { useState } from 'react';
 import Link from 'next/link';
 import {
 	Card,
@@ -51,8 +54,17 @@ import berita3 from '@/public/berita 3.png';
 import Navbar from '@/components/ui/navbar';
 import { cn } from '@/lib/utils';
 import Footer from '@/public/footer.png';
+import MapNeraca from '@/components/ui/map-neraca';
+import MapPola from '@/components/ui/map-pola';
+
 
 export default function Home() {
+
+	  const [selectedValue, setSelectedValue] = useState<string>('harga-pangan');
+
+		const handleValueChange = (value: string) => {
+			setSelectedValue(value);
+		};
 	// foreach month in year
 	const months = [
 		'JANUARI',
@@ -177,7 +189,6 @@ export default function Home() {
 	return (
 		<main>
 			<Navbar />
-
 			<div className="relative h-72 flex items-center justify-center bg-no-repeat bg-cover bg-[url('/bgg.png')]">
 				<div className="hidden lg:block">
 					<Image
@@ -207,7 +218,7 @@ export default function Home() {
 			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[38rem] gap-2 rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm">Jenis Informasi</h1>
-					<Select>
+					<Select onValueChange={handleValueChange}>
 						<SelectTrigger className="border-none">
 							<SelectValue placeholder="Harga Pangan" />
 						</SelectTrigger>
@@ -265,60 +276,74 @@ export default function Home() {
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 				</Button>
 			</div>
-
 			{/* content */}
-			<section className="px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
-				<div className="flex flex-col sm:flex-row justify-between pt-10">
-					<div className="flex-col">
-						<h1 className="text-2xl sm:text-3xl md:text-4xl mb-8 font-extrabold">
-							PETA PERUBAHAN HARGA
-						</h1>
-						<Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
-							<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal 15
-							April 2024
-						</Badge>
+			{selectedValue === 'harga-pangan' && (
+				<section className="px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+					<div className="flex flex-col sm:flex-row justify-between pt-10">
+						<div className="flex-col">
+							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-8 font-extrabold">
+								PETA PERUBAHAN HARGA
+							</h1>
+							<Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
+								<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal 15
+								April 2024
+							</Badge>
+						</div>
+						<div></div>
 					</div>
-					<div></div>
-				</div>
-				<div className="flex flex-col lg:flex-row justify-around items-center">
-					<div className="h-full w-full ">
-						<Map />
-					</div>
-					<div className="lg:flex-col flex-col self-center flex flex-wrap gap-4 lg:self-start">
-						{CardContents.map((content, index) => (
-							<Card
-								key={index}
-								className="flex rounded-2xl px-6 py-4 space-x-4 w-[290px]  justify-between placeholder-sky-400 ">
-								<div>
-									<h1 className="text-md">{content.city}</h1>
-									<p className="text-2xl font-bold">{content.price}</p>
-								</div>
-
-								<div className="flex justify-between">
-									<div
-										className={cn(
-											`rounded-md p-0 px-1 m-0 items-center flex text-white`,
-											content.color === 'red' && 'bg-red-500',
-											content.color === 'yellow' && 'bg-yellow-500',
-											content.color === 'green' && 'bg-green-500',
-										)}>
-										<ArrowUpIcon className="text-white" />
-										{content.change}
+					<div className="flex flex-col lg:flex-row justify-around items-center">
+						<div className="h-full w-full ">
+							<Map />
+						</div>
+						<div className="lg:flex-col flex-col self-center flex flex-wrap gap-4 lg:self-start">
+							{CardContents.map((content, index) => (
+								<Card
+									key={index}
+									className="flex rounded-2xl px-6 py-4 space-x-4 w-[290px]  justify-between placeholder-sky-400 ">
+									<div>
+										<h1 className="text-md">{content.city}</h1>
+										<p className="text-2xl font-bold">{content.price}</p>
 									</div>
-								</div>
-							</Card>
-						))}
 
-						<Link href="/pola-perdagangan" className="self-start sm:self-end">
-							<p className="text-xs sm:text-sm self-end md:text-md text-blue-900 font-bold flex items-center">
-								Data Selengkapnya
-								<ChevronRightIcon width={20} height={20} />
-							</p>
-						</Link>
+									<div className="flex justify-between">
+										<div
+											className={cn(
+												`rounded-md p-0 px-1 m-0 items-center flex text-white`,
+												content.color === 'red' && 'bg-red-500',
+												content.color === 'yellow' && 'bg-yellow-500',
+												content.color === 'green' && 'bg-green-500',
+											)}>
+											<ArrowUpIcon className="text-white" />
+											{content.change}
+										</div>
+									</div>
+								</Card>
+							))}
+
+							<Link href="/pola-perdagangan" className="self-start sm:self-end">
+								<p className="text-xs sm:text-sm self-end md:text-md text-blue-900 font-bold flex items-center">
+									Data Selengkapnya
+									<ChevronRightIcon width={20} height={20} />
+								</p>
+							</Link>
+						</div>
 					</div>
-				</div>
-			</section>
+				</section>
+			)}
 
+			{selectedValue === 'neraca-pangan' && (
+				<>
+				<MapNeraca />
+				</>
+			)}
+
+			{selectedValue === 'perdagangan-pangan' && (
+				<>
+				<MapPola />
+				</>
+			)}
+
+			
 			<section className=" px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<h1 className="text-sm sm:text-xl md:text-2xl mb-20">
 					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar
@@ -448,7 +473,6 @@ export default function Home() {
 					</p>
 				</div>
 			</section>
-
 			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4">
 				<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
 					Berita Hari Ini
@@ -571,7 +595,6 @@ export default function Home() {
 
 				<Separator className="shadow-lg" />
 			</section>
-
 			<footer className="mt-10 px-4 sm:px-10 py-6 bg-no-repeat bg-cover bg-[url('/footer.png')] text-white">
 				<div className="flex flex-col md:flex-row justify-between items-center gap-6">
 					<div className="flex flex-col sm:flex-row gap-6 sm:gap-4">
