@@ -452,17 +452,17 @@ export default function Home() {
 											background: content.color,
 										}}>
 										{content.color === '#bf7070' ? (
-											<div>
+											<div className='flex gap-2'>
 												<ArrowUpIcon width={20} height={20} />
 												Naik {content.change}
 											</div>
 										) : content.color === '#f1be5b' ? (
-											<div>
+											<div className='flex gap-2'>
 												<ArrowDownIcon width={20} height={20} />
 												Turun {content.change}
 											</div>
 										) : (
-											<div>
+											<div className='flex gap-2'>
 												<SymbolIcon width={20} height={20} />
 												Stabil
 											</div>
