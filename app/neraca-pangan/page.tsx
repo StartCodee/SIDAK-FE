@@ -30,6 +30,7 @@ import Dialog from '@/components/ui/modal-harga';
 import { DatePicker } from '@/components/ui/datepicker';
 import React from 'react';
 import { format } from 'date-fns';
+import Hero from '@/components/ui/hero';
 
 
 export default function Home() {
@@ -483,32 +484,7 @@ export default function Home() {
 		<main>
 			<Navbar />
 
-			<div className="relative h-72 flex items-center justify-center bg-no-repeat bg-cover bg-[url('/bgg.png')]">
-				<div className="hidden lg:block">
-					<Image
-						src={vector1}
-						alt="vector1"
-						width={440}
-						height={440}
-						objectFit="cover"
-						className="absolute opacity-60 right-0 top-0"
-					/>
-					<Image
-						src={vector2}
-						alt="vector2"
-						width={440}
-						height={440}
-						objectFit="cover"
-						className="absolute drop-shadow-md opacity-25 right-0 top-0"
-					/>
-				</div>
-
-				<div className="flex-col mx-auto z-1 items-center ">
-					<p className="text-lg text-center sm:text-2xl md:text-3xl lg:text-3xl  text-white font-semibold">
-						Sistem Informasi Komoditas : Harga dan Pasokan
-					</p>
-				</div>
-			</div>
+			<Hero />
 			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[24rem] gap-2 rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm">Komoditas</h1>
@@ -567,11 +543,11 @@ export default function Home() {
 								April 2024
 							</Badge>
 						</div>
-						<TabsList className="rounded-full w-max text-black">
-							<TabsTrigger className="rounded-full" value="table">
+						<TabsList className="rounded-full w-max p-4 py-8 text-black">
+							<TabsTrigger className="rounded-full text-lg" value="table">
 								Map
 							</TabsTrigger>
-							<TabsTrigger className="rounded-full" value="grafik">
+							<TabsTrigger className="rounded-full text-lg" value="grafik">
 								Grafik
 							</TabsTrigger>
 						</TabsList>
@@ -1232,6 +1208,16 @@ export default function Home() {
 									</svg>
 								</div>
 							</div>
+							<div className='flex gap-8'> 
+							<div className='flex gap-2'>
+							<div className='w-5 h-5 rounded-sm bg-red-500'></div>
+							<p>Defisit</p>
+							</div>
+							<div className='flex gap-2'>
+							<div className='w-5 h-5 rounded-sm bg-green-500'></div>
+							<p>Surplus</p>
+							</div>
+							</div>
 						</TabsContent>
 						<TabsContent value="grafik">
 							<div className="h-full w-full ">
@@ -1245,13 +1231,13 @@ export default function Home() {
 
 			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col items-center space-y-8">
-					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full ">
+					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 px-20 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full ">
 						{cardContents.map((content, index) => (
 							<div
 								key={index}
-								className="border border-gray-200 p-4 rounded-lg shadow-md flex items-center">
+								className="border border-gray-200 p-2 rounded-lg shadow-md flex items-center">
 								<div
-									className={`h-full w-20 rounded-r-none rounded-md  text-white mr-4 flex-shrink-0 `}
+									className={` w-10 rounded-r-none rounded-md  text-white mr-4 flex-shrink-0 `}
 									style={{
 										background: content.color,
 									}}>
@@ -1259,7 +1245,7 @@ export default function Home() {
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 24 24"
 										fill="currentColor"
-										className="size-20 mx-auto mt-5">
+										className="size-10 mx-auto my-5">
 										<path
 											fillRule="evenodd"
 											d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
@@ -1268,9 +1254,9 @@ export default function Home() {
 									</svg>
 								</div>
 								<div className="flex-1">
-									<h1 className="text-md  font-bold">{content.city}</h1>
+									<h1 className="text-sm  font-bold">{content.city}</h1>
 									<table className="w-full mt-2">
-										<tbody className="text-sm">
+										<tbody className="text-xs">
 											<tr>
 												<td className="pr-2">Ketersediaan:</td>
 												<td className="text-right">{content.ketersediaan}</td>

@@ -20,6 +20,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import berita from '@/public/berita.png';
 import berita2 from '@/public/berita 2.png';
 import berita3 from '@/public/berita 3.png';
+import Hero from '@/components/ui/hero';
 
 const BeritaPage: React.FC = () => {
 	const data = [
@@ -60,39 +61,7 @@ const BeritaPage: React.FC = () => {
 		<>
 			<Navbar />
 
-			<section className="relative h-72 bg-[url('/bgg.png')] bg-no-repeat bg-cover flex items-center justify-center">
-				<div className="hidden lg:block">
-					<Image
-						src={vector1}
-						alt="vector1"
-						width={440}
-						height={440}
-						objectFit="cover"
-						className="absolute opacity-60 right-0 top-0"
-					/>
-					<Image
-						src={vector2}
-						alt="vector2"
-						width={440}
-						height={440}
-						objectFit="cover"
-						className="absolute drop-shadow-md opacity-25 right-0 top-0"
-					/>
-				</div>
-				<h1 className="z-10 text-white text-2xl font-semibold">
-					Halaman Berita
-				</h1>
-				<div className="absolute -bottom-8 lg:-bottom-6 z-1 shadow-xl w-[16rem] lg:w-[24rem] rounded-full p-4 flex bg-white">
-					<input
-						type="text"
-						placeholder="Cari Berita"
-						className="w-full outline-none rounded-full"
-					/>
-					<Button className="ml-2 bg-blue-600">
-						<MagnifyingGlassIcon className="h-6 w-6" />
-					</Button>
-				</div>
-			</section>
+			<Hero />
 
 			<section>
 <Card className="m-4 sm:m-6 lg:m-10 shadow-xl border-t-0 pb-10">

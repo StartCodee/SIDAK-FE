@@ -27,10 +27,10 @@ export default function Navbar() {
 			<header className="bg-white">
 				<nav
 					aria-label="Global"
-					className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
-					<a href="#" className="-m-1.5 p-1.5">
+					className="mx-auto flex max-w-7xl items-center justify-between p-2 lg:px-8">
+					<a href="#" className=" ">
 						<span className="sr-only">SIDAK</span>
-						<Image src={logo} alt="" width={120} height={40} />
+						<Image src={logo} alt="" width={250} height={120} />
 					</a>
 					<div className="flex lg:hidden">
 						<button
@@ -41,12 +41,12 @@ export default function Navbar() {
 							<Bars3Icon aria-hidden="true" className="h-6 w-6" />
 						</button>
 					</div>
-					<div className="hidden lg:flex lg:gap-x-12">
+					<div className="hidden lg:flex lg:gap-x-6">
 						{navigation.map((item) => (
 							<Link
 								key={item.name}
 								href={item.path}
-								className={`text-sm font-semibold leading-6 ${
+								className={`text-md font-semibold leading-6 ${
 									pathname === item.path ? 'text-blue-500' : 'text-gray-900'
 								}`}>
 								{item.name}
@@ -54,7 +54,7 @@ export default function Navbar() {
 						))}
 						<Link
 							href="/auth"
-							className={`text-sm font-semibold leading-6 ${
+							className={`text-md font-semibold leading-6 ${
 								pathname === '/auth' ? 'text-blue-500' : 'text-gray-900'
 							}`}>
 							Log in

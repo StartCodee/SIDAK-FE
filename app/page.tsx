@@ -56,11 +56,13 @@ import berita2 from '@/public/berita 2.png';
 import berita3 from '@/public/berita 3.png';
 import Navbar from '@/components/ui/navbar';
 import { cn } from '@/lib/utils';
-import Footer from '@/public/footer.png';
+import Footer from '@/components/ui/footer';
 import MapNeraca from '@/components/ui/map-neraca';
 import MapPola from '@/components/ui/map-pola';
 import { Calendar } from '@/components/ui/calendar';
 import React from 'react';
+import Hero from '@/components/ui/hero';
+import MonthPicker from '@/components/ui/monthpicker';
 
 
 export default function Home() {
@@ -110,7 +112,7 @@ export default function Home() {
 			komoditas: 'Beras',
 			jenis: 'Premium',
 			harga: 'Rp. 12.000',
-			volatility: '90%',
+			volatility: '90',
 			hari: '92',
 			image: '/konsumen-pangan/rice.png',
 		},
@@ -118,7 +120,7 @@ export default function Home() {
 			komoditas: 'Ayam',
 			jenis: 'Broiler',
 			harga: 'Rp. 30.000',
-			volatility: '85%',
+			volatility: '85',
 			hari: '30',
 			image: '/konsumen-pangan/ayam.png',
 		},
@@ -126,7 +128,7 @@ export default function Home() {
 			komoditas: 'Bawang',
 			jenis: 'Putih',
 			harga: 'Rp. 25.000',
-			volatility: '75%',
+			volatility: '75',
 			hari: '40',
 			image: '/konsumen-pangan/bawangmerah.png',
 		},
@@ -134,7 +136,7 @@ export default function Home() {
 			komoditas: 'Bawang',
 			jenis: 'Merah',
 			harga: 'Rp. 20.000',
-			volatility: '70%',
+			volatility: '70',
 			hari: '50',
 			image: '/konsumen-pangan/bawangungu.png',
 		},
@@ -142,7 +144,7 @@ export default function Home() {
 			komoditas: 'Cabe',
 			jenis: 'Merah',
 			harga: 'Rp. 50.000',
-			volatility: '60%',
+			volatility: '60',
 			hari: '20',
 			image: '/konsumen-pangan/cabe.png',
 		},
@@ -150,7 +152,7 @@ export default function Home() {
 			komoditas: 'Gula',
 			jenis: 'Pasir',
 			harga: 'Rp. 15.000',
-			volatility: '80%',
+			volatility: '80',
 			hari: '70',
 			image: '/konsumen-pangan/gula.png',
 		},
@@ -158,7 +160,7 @@ export default function Home() {
 			komoditas: 'Ikan',
 			jenis: 'Tuna',
 			harga: 'Rp. 40.000',
-			volatility: '65%',
+			volatility: '65',
 			hari: '60',
 			image: '/konsumen-pangan/ikan.png',
 		},
@@ -166,7 +168,7 @@ export default function Home() {
 			komoditas: 'Minyak',
 			jenis: 'Goreng',
 			harga: 'Rp. 22.000',
-			volatility: '50%',
+			volatility: '50',
 			hari: '45',
 			image: '/konsumen-pangan/minyak.png',
 		},
@@ -174,7 +176,7 @@ export default function Home() {
 			komoditas: 'Rawit',
 			jenis: 'Hijau',
 			harga: 'Rp. 45.000',
-			volatility: '95%',
+			volatility: '95',
 			hari: '25',
 			image: '/konsumen-pangan/rawit.png',
 		},
@@ -182,7 +184,7 @@ export default function Home() {
 			komoditas: 'Sapi',
 			jenis: 'Daging',
 			harga: 'Rp. 120.000',
-			volatility: '55%',
+			volatility: '55',
 			hari: '15',
 			image: '/konsumen-pangan/sapi.png',
 		},
@@ -190,7 +192,7 @@ export default function Home() {
 			komoditas: 'Telor',
 			jenis: 'Ayam',
 			harga: 'Rp. 24.000',
-			volatility: '45%',
+			volatility: '45',
 			hari: '35',
 			image: '/konsumen-pangan/telor.png',
 		},
@@ -746,33 +748,8 @@ export default function Home() {
 	return (
 		<main>
 			<Navbar />
-			<div className="relative h-72 flex items-center justify-center bg-no-repeat bg-cover bg-[url('/bgg.png')]">
-				<div className="hidden lg:block">
-					<Image
-						src={vector1}
-						alt="vector1"
-						width={440}
-						height={440}
-						objectFit="cover"
-						className="absolute opacity-60 right-0 top-0"
-					/>
-					<Image
-						src={vector2}
-						alt="vector2"
-						width={440}
-						height={440}
-						objectFit="cover"
-						className="absolute drop-shadow-md opacity-25 right-0 top-0"
-					/>
-				</div>
-
-				<div className="flex-col mx-auto z-1 items-center ">
-					<p className="text-lg text-center sm:text-2xl md:text-3xl lg:text-3xl  text-white font-semibold">
-						Sistem Informasi Komoditas : Harga dan Pasokan
-					</p>
-				</div>
-			</div>
-			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[18rem] sm:w-[40rem] gap-2 rounded-lg sm:rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
+			<Hero />
+			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[18rem] sm:w-[40rem] h-20 gap-2  rounded-lg sm:rounded-full py-4 flex flex-col items-start sm:flex-row flex-wrap  bg-white">
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm">Jenis Informasi</h1>
 					<Select onValueChange={handleValueChange}>
@@ -791,7 +768,7 @@ export default function Home() {
 						</SelectContent>
 					</Select>
 				</div>
-				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
+				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm">Komoditas</h1>
 					<Select>
@@ -810,10 +787,11 @@ export default function Home() {
 						</SelectContent>
 					</Select>
 				</div>
-				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
+				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm ">Bulan</h1>
-					<DatePicker date={selectedDate} setDate={setSelectedDate} />
+					<MonthPicker date={selectedDate} setDate={setSelectedDate} />
+					{/* <DatePicker date={selectedDate} setDate={setSelectedDate} /> */}
 				</div>
 				<Button
 					onClick={handleChangeMonth}
@@ -844,7 +822,6 @@ export default function Home() {
 							{cardContents.slice(0, 5).map((content, index) => (
 								<Card
 									key={index}
-
 									className="flex rounded-2xl px-6 py-4 space-x-4 w-[330px]  justify-between placeholder-sky-400 ">
 									<div style={{ flex: 1 }}>
 										<h1 className="text-md">{content.city}</h1>
@@ -853,8 +830,8 @@ export default function Home() {
 
 									<div style={{ flex: 1 }} className="flex justify-end">
 										<div
-											className={
-												`rounded-md p-0 px-1 m-0 items-center flex text-white`} style={{ background: content.color }}>
+											className={`rounded-md p-0 px-1 m-0 items-center flex text-white`}
+											style={{ background: content.color }}>
 											<ArrowUpIcon className="text-white" />
 											{content.change}
 										</div>
@@ -912,7 +889,7 @@ export default function Home() {
 							</SelectContent>
 						</Select>
 					</div>
-					<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
+					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm">Komoditas</h1>
 						<Select>
@@ -931,7 +908,7 @@ export default function Home() {
 							</SelectContent>
 						</Select>
 					</div>
-					<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
+					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm ">Kabupaten/Kota</h1>
 						<Select>
@@ -950,12 +927,12 @@ export default function Home() {
 							</SelectContent>
 						</Select>
 					</div>
-				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
+					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 
 					<div className="flex-col flex-1">
-					<h1 className="font-bold text-sm ">Bulan</h1>
-					<DatePicker date={selectedDate} setDate={setSelectedDate} />
-				</div>
+						<h1 className="font-bold text-sm ">Bulan</h1>
+						<DatePicker date={selectedDate} setDate={setSelectedDate} />
+					</div>
 					<Button className="bg-blue-300 rounded-full p-2">
 						<MagnifyingGlassIcon
 							className="text-white"
@@ -972,7 +949,7 @@ export default function Home() {
 					<div className="flex justify-center items-start self-center  flex-wrap gap-4 ">
 						{konsumenPangan.map((content, index) => (
 							<Card key={index} className="flex-col  w-[18rem] p-4 shadow-xl">
-								<div className="flex items-center justify-between">
+								<div className="flex items-center space-x-4">
 									<div>
 										<Image
 											src={content.image}
@@ -982,12 +959,12 @@ export default function Home() {
 											className="rounded-full"
 										/>
 									</div>
-									<div>
+									<div className="">
 										<h1 className="font-bold text-lg">{content.komoditas}</h1>
 										<p>{content.jenis}</p>
 										<p className="font-bold">{content.harga}</p>
 									</div>
-									<div>{content.volatility}</div>
+									<div></div>
 								</div>
 								<div className="h-1 rounded-lg bg-black/10 my-2"></div>
 								<div className="flex justify-between items-center">
@@ -1024,14 +1001,14 @@ export default function Home() {
 				<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
 					Berita Hari Ini
 				</h1>
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-					<Card className="w-full">
+				<div className="grid grid-cols-1 sm:grid-cols-2 px-20 lg:grid-cols-3 gap-2">
+					<Card className="max-w-[80%]">
 						<CardHeader>
 							<Image
 								src={berita}
 								className="rounded-2xl"
 								alt="berita"
-								width={900}
+								width={300}
 								height={200}
 							/>
 						</CardHeader>
@@ -1047,13 +1024,13 @@ export default function Home() {
 							</Button>
 						</CardFooter>
 					</Card>
-					<Card className="w-full">
+					<Card className="max-w-[80%]">
 						<CardHeader>
 							<Image
 								src={berita2}
 								className="rounded-2xl"
 								alt="berita"
-								width={900}
+								width={300}
 								height={200}
 							/>
 						</CardHeader>
@@ -1069,13 +1046,13 @@ export default function Home() {
 							</Button>
 						</CardFooter>
 					</Card>
-					<Card className="w-full">
+					<Card className="max-w-[80%]">
 						<CardHeader>
 							<Image
 								src={berita3}
 								className="rounded-2xl"
 								alt="berita"
-								width={900}
+								width={300}
 								height={200}
 							/>
 						</CardHeader>
@@ -1142,37 +1119,7 @@ export default function Home() {
 
 				<Separator className="shadow-lg" />
 			</section>
-			<footer className="mt-10 px-4 sm:px-10 py-6 bg-no-repeat bg-cover bg-[url('/footer.png')] text-white">
-				<div className="flex flex-col md:flex-row justify-between items-center gap-6">
-					<div className="flex flex-col sm:flex-row gap-6 sm:gap-4">
-						<div className="flex items-center gap-4">
-							<Image src={bank} alt="bank" width={45} height={45} />
-							<div className="flex flex-col">
-								<p className="text-sm">Kantor Perwakilan</p>
-								<h1 className="text-lg">Bank Indonesia</h1>
-								<p className="text-sm">Provinsi Sulawesi Tengah</p>
-							</div>
-						</div>
-						<div className="flex items-center gap-4">
-							<Image src={sulaw} alt="sulaw" width={30} height={30} />
-							<div>
-								<h1 className="text-lg">Pemerintahan</h1>
-								<p className="text-sm">Provinsi Sulawesi Tengah</p>
-							</div>
-						</div>
-					</div>
-					<div className="text-center md:text-right w-full md:w-auto">
-						<p className="font-bold text-lg">
-							SEKRETARIAT TPID SULAWESI TENGAH KANTOR PERWAKILAN BANK INDONESIA
-							PROVINSI SULAWESI TENGAH
-						</p>
-						<p>
-							Jl. Sam Ratulangi No.23 Besusu Barat, Kec. Palu Timur, Kota Palu,
-							Sulawesi Tengah 94118
-						</p>
-					</div>
-				</div>
-			</footer>
+			<Footer />
 		</main>
 	);
 }

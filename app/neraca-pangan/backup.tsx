@@ -470,7 +470,7 @@ export default function Home() {
 
 				<div className="flex-col mx-auto z-1 items-center ">
 					<p className="text-lg text-center sm:text-2xl md:text-3xl lg:text-3xl  text-white font-semibold">
-						Sistem Informasi Komoditas : Harga dan Pasokan
+						Sistem Informasi Pengendalian Harga dan Pasokan
 					</p>
 				</div>
 			</div>

@@ -46,6 +46,7 @@ import { isExternal } from 'util/types';
 import { DatePicker } from '@/components/ui/datepicker';
 import React from 'react';
 import { format } from 'date-fns';
+import Hero from '@/components/ui/hero';
 
 const FlowChart: React.FC = () => {
 
@@ -568,32 +569,7 @@ const FlowChart: React.FC = () => {
 			`}</style>
 			<Navbar />
 			<img src="/location.svg" id="location" className="hidden" alt="" />
-			<div className="relative h-72 flex items-center justify-center bg-no-repeat bg-cover bg-[url('/bgg.png')]">
-				<div className="hidden lg:block">
-					<Image
-						src={vector1}
-						alt="vector1"
-						width={440}
-						height={440}
-						objectFit="cover"
-						className="absolute opacity-60 right-0 top-0"
-					/>
-					<Image
-						src={vector2}
-						alt="vector2"
-						width={440}
-						height={440}
-						objectFit="cover"
-						className="absolute drop-shadow-md opacity-25 right-0 top-0"
-					/>
-				</div>
-
-				<div className="flex-col mx-auto z-1 items-center ">
-					<p className="text-lg text-center sm:text-2xl md:text-3xl lg:text-3xl  text-white font-semibold">
-						Sistem Informasi Komoditas : Harga dan Pasokan
-					</p>
-				</div>
-			</div>
+			<Hero />
 
 			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[24rem] justify-between gap-2 rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
 				<div className="flex-col">
