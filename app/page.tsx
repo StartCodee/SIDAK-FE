@@ -90,11 +90,19 @@ export default function Home() {
 	];
 
 	const kabupaten = [
-		'Kota Palu',
-		'Kabupaten Boul',
-		'Kabupaten Sigi',
-		'Kabupaten Donggala',
-		'Kabupaten Morowali',
+		"Kabupaten Banggai",
+		"Kabupaten Banggai Kepulauan",
+		"Kabupaten Banggai Laut",
+		"Kabupaten Buol",
+		"Kabupaten Donggala",
+		"Kabupaten Morowali",
+		"Kabupaten Morowali Utara",
+		"Kabupaten Parigi Moutong",
+		"Kabupaten Poso",
+		"Kabupaten Sigi",
+		"Kabupaten Tojo Una-Una",
+		"Kabupaten Tolitoli",
+		"Kota Palu"
 	];
 
 	const konsumenPangan = [
