@@ -97,7 +97,7 @@ export default function Map({ cardContents }: MapProps) {
 									<h1 className="font-bold">Beras</h1>
 								</div>
 							</div>
-							<Button className='hover:bg-green-200 rounded-full cursor-pointer' asChild>
+							<Button className='bg-[#f0fdf4] text-[#228848] hover:bg-green-200 rounded-full cursor-pointer' asChild>
 								<span className="self-end inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
 									Export
 								</span>

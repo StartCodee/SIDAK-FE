@@ -95,7 +95,6 @@ export default function Home() {
 		'Kabupaten Sigi',
 		'Kabupaten Donggala',
 		'Kabupaten Morowali',
-		'Kabupaten Morowali',
 	];
 
 	const konsumenPangan = [
@@ -886,7 +885,7 @@ export default function Home() {
 
 				<div
 					style={{ marginTop: '-40px' }}
-					className="mx-auto px-4 py-4 sm:py-2 sm:px-8 shadow-xl w-[20rem] sm:w-[42rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
+					className="mx-auto px-4 py-4 sm:py-2 sm:px-8 shadow-xl w-[20rem] sm:w-[44rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm">Jenis Informasi</h1>
 						<Select>
@@ -936,13 +935,19 @@ export default function Home() {
 									<SelectLabel>Kabupaten/Kota</SelectLabel>
 									{kabupaten.map((month, index) => (
 										<SelectItem value={month} key={index}>
-											{month} 2024
+											{month}
 										</SelectItem>
 									))}
 								</SelectGroup>
 							</SelectContent>
 						</Select>
 					</div>
+				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
+
+					<div className="flex-col flex-1">
+					<h1 className="font-bold text-sm ">Bulan</h1>
+					<DatePicker date={selectedDate} setDate={setSelectedDate} />
+				</div>
 					<Button className="bg-blue-300 rounded-full p-2">
 						<MagnifyingGlassIcon
 							className="text-white"
