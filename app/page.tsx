@@ -46,7 +46,7 @@ export default function Home() {
 	const [selectedDate, setSelectedDate] = React.useState<Date>();
 	const [selectedMonth, setSelectedMonth] = useState('');
 
-	const handleValueChange = (e : any) => {
+	const handleValueChange = (e: any) => {
 		console.log(e)
 		setSelectedValue(e.value);
 	};
@@ -820,14 +820,13 @@ export default function Home() {
 						/>
 					</Button>
 				</div>
-				<div>
-					<h1 className="text-center p-8 mt-5 text-blue-800 text-lg sm:text-xl md:text-2xl items-center">
+				<div style={{marginTop:'60px'}}>
+					<h1 className="text-center px-8 mt-1 mb-10 text-blue-800 text-lg sm:text-xl md:text-2xl items-center">
 						Harga Konsumen Pangan Strategis Sulawesi Tengah
 					</h1>
-					<br />
-					<div className="flex justify-center items-start self-center  flex-wrap gap-4 ">
+					<div className="flex justify-start items-start self-center  flex-wrap gap-10 ">
 						{konsumenPangan.map((content, index) => (
-							<Card key={index} className="flex-col  w-[18rem] p-4 shadow-xl">
+							<Card key={index} className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl">
 								<div className="flex items-center space-x-4">
 									<div>
 										<Image
@@ -864,6 +863,15 @@ export default function Home() {
 								</div>
 							</Card>
 						))}
+					</div>
+
+					<div className='w-full mt-3 flex justify-end mb-10'>
+						<div className='flex gap-1'>
+
+							<div className='w-[24px] h-[24px] bg-[#76bf70]'></div>
+							<div className='w-[24px] h-[24px] bg-[#f1be5b]'></div>
+							<div className='w-[24px] h-[24px] bg-red-500'></div>
+						</div>
 					</div>
 					<p className="text-center w-full sm:w-11/12 mx-auto m-8">
 						Perubahan harga telah terjadi pada beberapa komoditas pangan

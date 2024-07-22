@@ -588,12 +588,13 @@ const FlowChart: React.FC = () => {
 								April 2024
 							</Badge>
 						</div>
-						<TabsList className="rounded-full w-max text-black">
+						
+						<TabsList className="rounded-full  w-max p-4 py-6 w-max text-black">
 							<div
 								onClick={() => {
 									changeTab('all');
 								}}>
-								<TabsTrigger className="rounded-full" value="all">
+								<TabsTrigger className="rounded-full text-md font-bold" value="all">
 									All
 								</TabsTrigger>
 							</div>
@@ -601,7 +602,7 @@ const FlowChart: React.FC = () => {
 								onClick={() => {
 									changeTab('in');
 								}}>
-								<TabsTrigger className="rounded-full" value="in">
+								<TabsTrigger className="rounded-full text-md font-bold" value="in">
 									In
 								</TabsTrigger>
 							</div>
@@ -609,7 +610,7 @@ const FlowChart: React.FC = () => {
 								onClick={() => {
 									changeTab('intra');
 								}}>
-								<TabsTrigger className="rounded-full" value="intra">
+								<TabsTrigger className="rounded-full text-md font-bold" value="intra">
 									Intra
 								</TabsTrigger>
 							</div>
@@ -618,7 +619,7 @@ const FlowChart: React.FC = () => {
 								onClick={() => {
 									changeTab('out');
 								}}>
-								<TabsTrigger className="rounded-full" value="out">
+								<TabsTrigger className="rounded-full text-md font-bold" value="out">
 									Out
 								</TabsTrigger>
 							</div>

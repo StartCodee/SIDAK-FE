@@ -171,11 +171,15 @@ export default function MapNeraca({ cardContents }: MapProps) {
 								15 April 2024
 							</Badge>
 						</div>
-						<TabsList className="rounded-full w-max text-black">
-							<TabsTrigger className="rounded-full" value="table">
-								Map
+						<TabsList className="rounded-full w-max p-4 py-6 text-black">
+							<TabsTrigger
+								className="rounded-full text-md font-bold"
+								value="table">
+								Peta
 							</TabsTrigger>
-							<TabsTrigger className="rounded-full" value="grafik">
+							<TabsTrigger
+								className="rounded-full text-md font-bold"
+								value="grafik">
 								Grafik
 							</TabsTrigger>
 						</TabsList>

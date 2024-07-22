@@ -501,41 +501,41 @@ export default function MapPola({ flow }: MapProps) {
 									tanggal 15 April 2024
 								</Badge>
 							</div>
-							<TabsList className="rounded-full w-max text-black">
-								<div
-									onClick={() => {
-										changeTab('all');
-									}}>
-									<TabsTrigger className="rounded-full" value="all">
-										All
-									</TabsTrigger>
-								</div>
-								<div
-									onClick={() => {
-										changeTab('in');
-									}}>
-									<TabsTrigger className="rounded-full" value="in">
-										In
-									</TabsTrigger>
-								</div>
-								<div
-									onClick={() => {
-										changeTab('intra');
-									}}>
-									<TabsTrigger className="rounded-full" value="intra">
-										Intra
-									</TabsTrigger>
-								</div>
+							<TabsList className="rounded-full  w-max p-4 py-6 w-max text-black">
+							<div
+								onClick={() => {
+									changeTab('all');
+								}}>
+								<TabsTrigger className="rounded-full text-md font-bold" value="all">
+									All
+								</TabsTrigger>
+							</div>
+							<div
+								onClick={() => {
+									changeTab('in');
+								}}>
+								<TabsTrigger className="rounded-full text-md font-bold" value="in">
+									In
+								</TabsTrigger>
+							</div>
+							<div
+								onClick={() => {
+									changeTab('intra');
+								}}>
+								<TabsTrigger className="rounded-full text-md font-bold" value="intra">
+									Intra
+								</TabsTrigger>
+							</div>
 
-								<div
-									onClick={() => {
-										changeTab('out');
-									}}>
-									<TabsTrigger className="rounded-full" value="out">
-										Out
-									</TabsTrigger>
-								</div>
-							</TabsList>
+							<div
+								onClick={() => {
+									changeTab('out');
+								}}>
+								<TabsTrigger className="rounded-full text-md font-bold" value="out">
+									Out
+								</TabsTrigger>
+							</div>
+						</TabsList>
 						</div>
 					</section>
 				</Tabs>
