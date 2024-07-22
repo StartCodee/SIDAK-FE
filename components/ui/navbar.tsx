@@ -41,12 +41,12 @@ export default function Navbar() {
 							<Bars3Icon aria-hidden="true" className="h-6 w-6" />
 						</button>
 					</div>
-					<div className="hidden lg:flex lg:gap-x-6">
+					<div className="hidden lg:flex gap-7">
 						{navigation.map((item) => (
 							<Link
 								key={item.name}
 								href={item.path}
-								className={`text-[17px] font-bold leading-6 ${
+								className={`text-[16px] font-bold leading-6 ${
 									pathname === item.path ? 'text-blue-500' : 'text-gray-900'
 								}`}>
 								{item.name}
@@ -54,7 +54,7 @@ export default function Navbar() {
 						))}
 						<Link
 							href="/auth"
-							className={`text-[17px] font-bold leading-6 ${
+							className={`text-[16px] font-bold leading-6 ${
 								pathname === '/auth' ? 'text-blue-500' : 'text-gray-900'
 							}`}>
 							Log in

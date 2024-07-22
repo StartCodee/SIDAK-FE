@@ -19,7 +19,11 @@ import { format } from 'date-fns';
 import {
 	CounterClockwiseClockIcon,
 	ChevronRightIcon,
+	ArrowDownIcon,
+	RotateCounterClockwiseIcon,
+	ReloadIcon,
 	ArrowUpIcon,
+	SymbolIcon
 } from '@radix-ui/react-icons';
 import {
 	UserIcon,
@@ -189,7 +193,7 @@ export default function Home() {
 		{
 			city: 'Kabupaten Morowali',
 			price: '14.100/kg',
-			color: '#f1be5b',
+			color: '#bf7070',
 			change: 'Rp. 298',
 			id: 'Morowali'
 		},
@@ -758,13 +762,21 @@ export default function Home() {
 										<div
 											className={`rounded-md p-0 px-1 m-0 items-center flex text-white`}
 											style={{ background: content.color }}>
-											<ArrowUpIcon className="text-white" />
+											{content.color === '#bf7070' ? (
+												<ArrowUpIcon width={20} height={20} />
+											) : content.color === '#f1be5b' ? (
+												<ArrowDownIcon width={20} height={20} />
+											) : (
+												<SymbolIcon width={20} height={20} />
+
+												
+												)}
 											{content.change}
 										</div>
 									</div>
 								</Card>
 							))}
-							<Link href="/pola-perdagangan" className="self-start sm:self-end">
+							<Link href="/harga-pangan" className="self-start sm:self-end">
 								<p className="text-xs sm:text-sm self-end md:text-md text-blue-900 font-bold flex items-center">
 									Data Selengkapnya
 									<ChevronRightIcon width={20} height={20} />
@@ -820,7 +832,7 @@ export default function Home() {
 						/>
 					</Button>
 				</div>
-				<div style={{marginTop:'60px'}}>
+				<div style={{ marginTop: '60px' }}>
 					<h1 className="text-center px-8 mt-1 mb-10 text-blue-800 text-lg sm:text-xl md:text-2xl items-center">
 						Harga Konsumen Pangan Strategis Sulawesi Tengah
 					</h1>
