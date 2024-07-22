@@ -1312,9 +1312,9 @@ export default function Home() {
 			<Dialog isOpen={isDialogOpen} onClose={closeDialog}>
 				<div className="mt-2 overflow-y-auto max-h-132.5 md:max-h-full">
 					<div className="shadow-lg overflow-hidden px-4 sm:px-10 rounded-lg p-4">
-						<div className="flex flex-col space-y-4">
+						<div className="flex flex-col space-y-10">
 							<h1 className="text-2xl font-bold">{detailHarga?.city}</h1>
-							<div className="flex flex-col sm:flex-row justify-around space-y-4 sm:space-y-0">
+							<div className="flex flex-col sm:flex-row justify-around space-y-4 sm:space-y-0 gap-5">
 								<div className="shadow-lg w-full sm:w-[20rem] p-4 text-lg flex flex-col rounded-lg">
 									<p>Harga rata - rata {detailHarga?.city}: </p>
 									<h1 className="font-bold">{detailHarga?.price}</h1>
