@@ -438,9 +438,11 @@ export default function Home() {
 						{cardContents.map((content, index) => (
 							<div
 								key={index}
-								className="border border-gray-200 p-4 rounded-lg shadow-md">
-								<div className="flex flex-col items-center space-y-2">
-									<h1 className="text-md font-light">{content.city}</h1>
+								style={{alignContent:'center'}}
+								// style={{display: flex;align-content: center;flex-direction: column;justify-content: space-between;}}
+								className="border border-gray-200 p-4 flex flex-col justify-between rounded-lg shadow-md">
+								<div className="flex flex-col items-center justify-between space-y-2" style={{flex:1}}>
+									<h1 className="text-md font-light text-center">{content.city}</h1>
 									<p className="font-bold text-2xl">{content.price}</p>
 									<div
 										className={`rounded-md p-2 flex items-center justify-center text-white`}
@@ -451,7 +453,7 @@ export default function Home() {
 										Naik {content.change}
 									</div>
 								</div>
-								<div className="flex flex-col mt-4">
+								<div className="flex flex-col mt-6" >
 									<p className="text-md font-semibold">{content.price}</p>
 									<p className="text-xs font-thin">DAY IN HIGH VOLATILITY</p>
 								</div>
