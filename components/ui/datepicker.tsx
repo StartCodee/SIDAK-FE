@@ -36,7 +36,7 @@ export function DatePicker({ date, setDate }: DatePickerProps) {
 					mode="single"
 					captionLayout="dropdown-buttons"
 					selected={date}
-					onSelect={(selected) =>
+					onSelect={(selected : any) =>
 						setDate(selected ? new Date(selected) : undefined)
 					}
 					fromYear={1960}

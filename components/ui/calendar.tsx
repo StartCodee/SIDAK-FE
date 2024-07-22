@@ -22,7 +22,7 @@ function Calendar({
 	classNames,
 	showOutsideDays = true,
 	...props
-}: CalendarProps) {
+}: any) {
 	const [month, setMonth] = React.useState<number>(new Date().getMonth());
 	const [year, setYear] = React.useState<number>(new Date().getFullYear());
 
