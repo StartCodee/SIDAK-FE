@@ -13,6 +13,7 @@ import {
 import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { DayPicker, DropdownProps } from 'react-day-picker';
+import { format } from 'date-fns';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
@@ -22,6 +23,19 @@ function Calendar({
 	showOutsideDays = true,
 	...props
 }: CalendarProps) {
+	const [month, setMonth] = React.useState<number>(new Date().getMonth());
+	const [year, setYear] = React.useState<number>(new Date().getFullYear());
+
+	// Function to update the selected date
+	const updateSelectedDate = () => {
+		const newDate = new Date(year, month);
+		props.onSelect?.(newDate);
+	};
+
+	React.useEffect(() => {
+		updateSelectedDate();
+	}, [month, year]);
+
 	return (
 		<DayPicker
 			showOutsideDays={showOutsideDays}
@@ -33,13 +47,10 @@ function Calendar({
 				caption_label: 'text-sm font-medium',
 				caption_dropdowns: 'flex justify-center gap-1',
 				nav: 'space-x-1 flex items-center',
-				nav_button: cn(
-					buttonVariants({ variant: 'outline' }),
-					'hidden',
-				),
+				nav_button: cn(buttonVariants({ variant: 'outline' }), 'hidden'),
 				nav_button_previous: 'absolute left-1',
 				nav_button_next: 'absolute right-1',
-				table: 'hidden',
+				table: 'hidden', // Hide days table
 				head_row: 'flex',
 				head_cell:
 					'text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]',
@@ -97,10 +108,17 @@ function Calendar({
 				IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
 				IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
 			}}
+			month={new Date(year, month)}
+			onMonthChange={(date) => {
+				setMonth(date.getMonth());
+				setYear(date.getFullYear());
+			}}
+			onSelect={props.onSelect}
 			{...props}
 		/>
 	);
 }
+
 Calendar.displayName = 'Calendar';
 
 export { Calendar };

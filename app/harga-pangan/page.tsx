@@ -26,6 +26,7 @@ import {
 	ArrowUpIcon,
 } from '@radix-ui/react-icons';
 import Image from 'next/image';
+import { DatePicker } from '@/components/ui/datepicker';
 
 export default function Home() {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -487,21 +488,7 @@ export default function Home() {
 				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm ">Bulan</h1>
-					<Select onValueChange={handleChangeMonth}>
-						<SelectTrigger className="border-none">
-							<SelectValue placeholder="Bulan" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectGroup>
-								<SelectLabel>Bulan</SelectLabel>
-								{months.map((month, index) => (
-									<SelectItem value={month} key={index}>
-										{month} 2024
-									</SelectItem>
-								))}
-							</SelectGroup>
-						</SelectContent>
-					</Select>
+					<DatePicker />
 				</div>
 				<Button className="bg-blue-300 rounded-full p-2">
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />

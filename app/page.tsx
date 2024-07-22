@@ -61,11 +61,14 @@ import { Calendar } from '@/components/ui/calendar';
 
 
 export default function Home() {
-	  const [selectedValue, setSelectedValue] = useState<string>('harga-pangan');
 
-		const handleValueChange = (value: string) => {
-			setSelectedValue(value);
-		};
+	const [selectedValue, setSelectedValue] = useState<string>('harga-pangan');
+	
+	 const [selectedMonth, setSelectedMonth] = useState('');
+
+	const handleValueChange = (value: string) => {
+		setSelectedValue(value);
+	};
 	// foreach month in year
 	const months = [
 		'JANUARI',
@@ -91,18 +94,7 @@ export default function Home() {
 		'Kabupaten Morowali',
 	];
 
-	const CardContents = [
-		{ city: 'Kota Palu', price: '15.000/kg', color: 'red', change: 'RP.298' },
-		{
-			city: 'Kabupaten Boul',
-			price: '14.100/kg',
-			color: 'yellow',
-			change: 'RP.298',
-		}, 
-		{ city: 'Kabupaten Sigi', price: '13.370/kg', color: 'green', change: 'RP.298' },
-		{ city: 'Kabupaten Donggala', price: '12.000/kg', color: 'red', change: 'RP.298' },
-		{ city: 'Kabupaten Morowali', price: '11.000/kg', color: 'yellow', change: 'RP.298' },
-	];
+	
 
 	const konsumenPangan = [
 		{
@@ -196,6 +188,37 @@ export default function Home() {
 	];
 
 
+	const CardContents = [
+		{ city: 'Kota Palu', price: '15.000/kg', color: 'red', change: 'RP.298' },
+		{
+			city: 'Kabupaten Boul',
+			price: '14.100/kg',
+			color: 'yellow',
+			change: 'RP.298',
+		},
+		{
+			city: 'Kabupaten Sigi',
+			price: '13.370/kg',
+			color: 'green',
+			change: 'RP.298',
+		},
+		{
+			city: 'Kabupaten Donggala',
+			price: '12.000/kg',
+			color: 'red',
+			change: 'RP.298',
+		},
+		{
+			city: 'Kabupaten Morowali',
+			price: '11.000/kg',
+			color: 'yellow',
+			change: 'RP.298',
+		},
+	];
+
+	
+	
+
 
 	return (
 		<main>
@@ -267,9 +290,11 @@ export default function Home() {
 				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm ">Bulan</h1>
-					<DatePicker />
+					<DatePicker  />
 				</div>
-				<Button className="bg-blue-300 rounded-full p-2">
+				<Button
+					
+					className="bg-blue-300 rounded-full p-2">
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 				</Button>
 			</div>
@@ -330,17 +355,16 @@ export default function Home() {
 
 			{selectedValue === 'neraca-pangan' && (
 				<>
-				<MapNeraca />
+					<MapNeraca />
 				</>
 			)}
 
 			{selectedValue === 'perdagangan-pangan' && (
 				<>
-				<MapPola />
+					<MapPola />
 				</>
 			)}
 
-			
 			<section className=" px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<h1 className="text-sm sm:text-xl md:text-2xl mb-20">
 					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar

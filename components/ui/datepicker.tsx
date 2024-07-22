@@ -24,7 +24,7 @@ export function DatePicker() {
 						'w-[100px] justify-between text-left p-0 m-0 font-normal border-none',
 						!date && 'text-black',
 					)}>
-					{date ? format(date, 'PPP') : <span>Bulan</span>}
+					{date ? format(date, 'MMMM yyyy') : <span>Bulan</span>}
 					<ChevronDown className="h-4 w-4 opacity-50" />
 				</Button>
 			</PopoverTrigger>
@@ -33,7 +33,9 @@ export function DatePicker() {
 					mode="single"
 					captionLayout="dropdown-buttons"
 					selected={date}
-					onSelect={setDate}
+					onSelect={(selected) =>
+						setDate(selected ? new Date(selected) : undefined)
+					}
 					fromYear={1960}
 					toYear={2030}
 				/>
