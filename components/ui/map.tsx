@@ -78,7 +78,15 @@ export default function Map({ cardContents }: MapProps) {
 				<div className="mt-2 overflow-y-auto max-h-132.5 md:max-h-full">
 					<div className="shadow-lg overflow-hidden px-4 sm:px-10 rounded-lg p-4">
 						<div className="flex flex-col space-y-10">
-							<h1 className="text-2xl font-bold">{detailHarga?.city}</h1>
+						<div className="flex justify-between">
+								<h1 className="text-2xl font-bold">{detailHarga?.city}</h1>
+								<button
+									className=" text-black text-4xl hover:text-gray-700"
+									onClick={closeDialog}
+								>
+									×
+								</button>
+							</div>
 							<div className="flex flex-col sm:flex-row justify-around space-y-4 sm:space-y-0 gap-5">
 								<div className="shadow-lg w-full sm:w-[20rem] p-4 text-lg flex flex-col rounded-lg">
 									<p>Harga rata - rata {detailHarga?.city}: </p>
@@ -146,13 +154,13 @@ export default function Map({ cardContents }: MapProps) {
 						</div>
 					</div>
 				</div>
-				<div className="flex justify-end w-full">
+				{/* <div className="flex justify-end w-full">
 					<button
 						className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg"
 						onClick={closeDialog}>
 						Close
 					</button>
-				</div>
+				</div> */}
 			</Dialog>
 			<div id="container" className="relative w-full h-full  ">
 				<svg
