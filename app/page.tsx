@@ -13,7 +13,7 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { DatePickerDemo } from '@/components/ui/datepicker';
+import { DatePicker } from '@/components/ui/datepicker';
 import { Separator } from '@/components/ui/separator';
 import {
 	DropdownMenu,
@@ -57,6 +57,7 @@ import { cn } from '@/lib/utils';
 import Footer from '@/public/footer.png';
 import MapNeraca from '@/components/ui/map-neraca';
 import MapPola from '@/components/ui/map-pola';
+import { Calendar } from '@/components/ui/calendar';
 
 
 export default function Home() {
@@ -225,7 +226,7 @@ export default function Home() {
 					</p>
 				</div>
 			</div>
-			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[18rem] sm:w-[38rem] gap-2 rounded-lg sm:rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
+			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[18rem] sm:w-[40rem] gap-2 rounded-lg sm:rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm">Jenis Informasi</h1>
 					<Select onValueChange={handleValueChange}>
@@ -266,21 +267,7 @@ export default function Home() {
 				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm ">Bulan</h1>
-					<Select>
-						<SelectTrigger className="border-none">
-							<SelectValue placeholder="Bulan" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectGroup>
-								<SelectLabel>Bulan</SelectLabel>
-								{months.map((month, index) => (
-									<SelectItem value={month} key={index}>
-										{month} 2024
-									</SelectItem>
-								))}
-							</SelectGroup>
-						</SelectContent>
-					</Select>
+					<DatePicker />
 				</div>
 				<Button className="bg-blue-300 rounded-full p-2">
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
