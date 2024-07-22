@@ -893,7 +893,7 @@ export default function Home() {
 
 				<div
 					style={{ marginTop: '-40px' }}
-					className="mx-auto px-4 py-4 sm:py-2 sm:px-8 shadow-xl w-[20rem] sm:w-[44rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
+					className="mx-auto px-4 py-4 sm:py-2 sm:px-8 shadow-xl w-[20rem] sm:w-[50rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm">Jenis Informasi</h1>
 						<Select>
