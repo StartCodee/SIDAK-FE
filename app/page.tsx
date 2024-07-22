@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
 import { useState } from 'react';
 import Link from 'next/link';
 import {
@@ -10,31 +9,17 @@ import {
 	CardDescription,
 	CardFooter,
 	CardHeader,
-	CardTitle,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { DatePicker } from '@/components/ui/datepicker';
 import { Separator } from '@/components/ui/separator';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+
 import Map from '@/components/ui/map';
 import { format } from 'date-fns';
 
 import {
 	CounterClockwiseClockIcon,
-	ChevronDownIcon,
 	ChevronRightIcon,
-	SewingPinFilledIcon,
-	PersonIcon,
 	ArrowUpIcon,
-	EnvelopeClosedIcon,
 } from '@radix-ui/react-icons';
 import {
 	UserIcon,
@@ -43,68 +28,63 @@ import {
 	MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
 import Image from 'next/image';
-import user from '@/public/user.svg';
-import Background from '@/public/bgg.png';
-import vector1 from '@/public/vect1.svg';
-import vector2 from '@/public/vect2.svg';
-import sidak from '@/public/sida.png';
-import sidakhitam from '@/public/sidakhitam.png';
-import bank from '@/public/bank.svg';
-import sulaw from '@/public/sulaw.svg';
 import berita from '@/public/berita.png';
 import berita2 from '@/public/berita 2.png';
 import berita3 from '@/public/berita 3.png';
 import Navbar from '@/components/ui/navbar';
-import { cn } from '@/lib/utils';
 import Footer from '@/components/ui/footer';
 import MapNeraca from '@/components/ui/map-neraca';
 import MapPola from '@/components/ui/map-pola';
-import { Calendar } from '@/components/ui/calendar';
 import React from 'react';
 import Hero from '@/components/ui/hero';
 import MonthPicker from '@/components/ui/monthpicker';
+import Select from 'react-select';
 
 
 export default function Home() {
-
 	const [selectedValue, setSelectedValue] = useState<string>('harga-pangan');
 	const [selectedDate, setSelectedDate] = React.useState<Date>();
-
 	const [selectedMonth, setSelectedMonth] = useState('');
 
-	const handleValueChange = (value: string) => {
-		setSelectedValue(value);
+	const handleValueChange = (e : any) => {
+		console.log(e)
+		setSelectedValue(e.value);
 	};
-	// foreach month in year
-	const months = [
-		'JANUARI',
-		'FEBRUARI',
-		'MARET',
-		'APRIL',
-		'MEI',
-		'JUNI',
-		'JULI',
-		'AGUSTUS',
-		'SEPTEMBER',
-		'OKTOBER',
-		'NOVEMBER',
-		'DESEMBER',
-	];
+
+	const options = [
+		{ value: '1', label: 'Beras Premium' },
+		{ value: '2', label: 'Daging Ayam' },
+		{ value: '3', label: 'Daging Sapi' },
+		{ value: '4', label: 'Minyak Goreng' },
+		{ value: '5', label: 'Bawang Merah' },
+		{ value: '6', label: 'Bawang Putih' },
+		{ value: '7', label: 'Telur Ayam' },
+		{ value: '8', label: 'Gula Pasir' },
+		{ value: '9', label: 'Cabe Merah' },
+		{ value: '10', label: 'Cabe Rawit' },
+		{ value: '11', label: 'Ikan' },
+	]
 
 	const kabupaten = [
-		"Kabupaten Banggai",
-		"Kabupaten Banggai Kepulauan",
-		"Kabupaten Banggai Laut",
-		"Kabupaten Buol",
-		"Kabupaten Donggala",
-		"Kabupaten Morowali",
-		"Kabupaten Morowali Utara",
-		"Kabupaten Parigi Moutong",
-		"Kabupaten Poso",
-		"Kabupaten Sigi",
-		"Kabupaten Tojo Una-Una",
-		"Kabupaten Tolitoli",
-		"Kota Palu"
+		{ value: 'Banggai', label: 'Kabupaten Banggai' },
+		{ value: 'BanggaiKepulauan', label: 'Kabupaten Banggai Kepulauan' },
+		{ value: 'BanggaiLaut', label: 'Kabupaten Banggai Laut' },
+		{ value: 'Buol', label: 'Kabupaten Buol' },
+		{ value: 'Donggala', label: 'Kabupaten Donggala' },
+		{ value: 'Morowali', label: 'Kabupaten Morowali' },
+		{ value: 'MorowaliUtara', label: 'Kabupaten Morowali Utara' },
+		{ value: 'Parigi', label: 'Kabupaten Parigi Moutong' },
+		{ value: 'Poso', label: 'Kabupaten Poso' },
+		{ value: 'Sigi', label: 'Kabupaten Sigi' },
+		{ value: 'Touna', label: 'Kabupaten Tojo Una-Una' },
+		{ value: 'Tolitoli', label: 'Kabupaten Tolitoli' },
+		{ value: 'Palu', label: 'Kota Palu' },
+	];
+
+	const jenisInformasi = [
+		{ value: 'harga-pangan', label: 'Harga Pangan' },
+		{ value: 'neraca-pangan', label: 'Neraca Pangan' },
+		{ value: 'perdagangan-pangan', label: 'Pola Perdagangan Pangan' },
 	];
 
 	const konsumenPangan = [
@@ -198,119 +178,118 @@ export default function Home() {
 		},
 	];
 
-
 	const [cardContents, setCardContents] = useState([
 		{
-			city: 'Kota Palu',
+			city: 'Kota Buol',
 			price: '20.000/kg',
 			color: '#f1be5b',
 			change: 'RP.200',
-			id: 'element1'
+			id: 'Buol'
 		},
 		{
-			city: 'Kabupaten Boul',
+			city: 'Kabupaten Morowali',
 			price: '14.100/kg',
 			color: '#f1be5b',
 			change: 'Rp. 298',
-			id: 'element2',
+			id: 'Morowali'
 		},
 		{
 			city: 'Kabupaten Sigi',
 			price: '13.370/kg',
 			color: '#76bf70',
 			change: 'Rp. 298',
-			id: 'element3',
+			id: 'Sigi'
 		},
 		{
 			city: 'Kabupaten Donggala',
 			price: '12.000/kg',
 			color: '#f1be5b',
 			change: 'Rp. 298',
-			id: 'element4',
+			id: 'Donggala'
 		},
 		{
-			city: 'Kabupaten Morowali',
+			city: 'Kabupaten Morowali Utara',
 			price: '11.000/kg',
 			color: '#f1be5b',
 			change: 'Rp. 298',
-			id: 'element5',
+			id: 'MorowaliUtara'
 		},
+
 		{
 			city: 'Kabupaten Parigi Moutong',
 			price: '10.500/kg',
 			color: '#76bf70',
 			change: 'Rp. 298',
-			id: 'element6',
+			id: 'Parigi'
 		},
 		{
 			city: 'Kabupaten Toli-Toli',
 			price: '10.000/kg',
 			color: '#f1be5b',
 			change: 'Rp. 298',
-			id: 'element7',
+			id: 'Tolitoli'
 		},
 		{
 			city: 'Kabupaten Poso',
 			price: '9.800/kg',
 			color: '#f1be5b',
 			change: 'Rp. 298',
-			id: 'element8',
+			id: 'Poso'
 		},
 		{
 			city: 'Kabupaten Banggai',
 			price: '9.500/kg',
 			color: '#76bf70',
 			change: 'Rp. 298',
-			id: 'element9',
+			id: 'Banggai'
 		},
 		{
 			city: 'Kabupaten Tojo Una-Una',
 			price: '9.200/kg',
 			color: '#f1be5b',
 			change: 'Rp. 298',
-			id: 'element10',
+			id: 'Touna'
 		},
 		{
 			city: 'Kabupaten Banggai Kepulauan',
 			price: '9.000/kg',
 			color: '#f1be5b',
 			change: 'Rp. 298',
-			id: 'element11',
+			id: 'BanggaiKepulauan'
 		},
 		{
-			city: 'Kabupaten d Kepulauan',
+			city: 'Palu',
 			price: '9.000/kg',
 			color: '#f1be5b',
 			change: 'Rp. 298',
-			id: 'element12',
+			id: 'Palu'
 		},
 		{
 			city: 'Kabupaten Banggai Laut',
 			price: '9.000/kg',
 			color: '#f1be5b',
 			change: 'Rp. 298',
-			id: 'element13',
+			id: 'BanggaiLaut'
 		},
+
 	]);
 
 	const [cardContentsNeraca, setCardContentsNeraca] = useState([
 		{
-			city: 'Kota Palu',
+			city: 'Kota Buol',
 			ketersediaan: '1000 ton',
 			kebutuhan: '800 ton',
 			neraca: '200 ton',
 			color: '#bf7070',
-			id: 'element1',
-
+			id: 'Buol'
 		},
 		{
-			city: 'Kabupaten Boul',
+			city: 'Kabupaten Morowali',
 			ketersediaan: '900 ton',
 			kebutuhan: '700 ton',
 			neraca: '200 ton',
-			color: '#f1be5b',
-			id: 'element2',
-
+			color: '#bf7070',
+			id: 'Morowali'
 		},
 		{
 			city: 'Kabupaten Sigi',
@@ -318,25 +297,23 @@ export default function Home() {
 			kebutuhan: '950 ton',
 			neraca: '150 ton',
 			color: '#76bf70',
-			id: 'element3',
-
+			id: 'Sigi'
 		},
 		{
 			city: 'Kabupaten Donggala',
 			ketersediaan: '1200 ton',
 			kebutuhan: '1000 ton',
 			neraca: '200 ton',
-			id: 'element4',
+			id: 'Donggala',
 			color: '#bf7070'
 		},
 		{
-			city: 'Kabupaten Morowali',
+			city: 'Kabupaten Morowali Utara',
 			ketersediaan: '800 ton',
 			kebutuhan: '600 ton',
 			neraca: '200 ton',
-			color: '#f1be5b',
-			id: 'element5',
-
+			color: '#bf7070',
+			id: 'MorowaliUtara'
 		},
 		{
 			city: 'Kabupaten Parigi Moutong',
@@ -344,8 +321,7 @@ export default function Home() {
 			kebutuhan: '850 ton',
 			neraca: '200 ton',
 			color: '#76bf70',
-			id: 'element6',
-
+			id: 'Parigi'
 		},
 		{
 			city: 'Kabupaten Toli-Toli',
@@ -353,17 +329,15 @@ export default function Home() {
 			kebutuhan: '750 ton',
 			neraca: '250 ton',
 			color: '#bf7070',
-			id: 'element7',
-
+			id: 'Tolitoli'
 		},
 		{
 			city: 'Kabupaten Poso',
 			ketersediaan: '950 ton',
 			kebutuhan: '700 ton',
 			neraca: '250 ton',
-			color: '#f1be5b',
-			id: 'element8',
-
+			color: '#76bf70',
+			id: 'Poso'
 		},
 		{
 			city: 'Kabupaten Banggai',
@@ -371,8 +345,7 @@ export default function Home() {
 			kebutuhan: '600 ton',
 			neraca: '250 ton',
 			color: '#76bf70',
-			id: 'element9',
-
+			id: 'Banggai'
 		},
 		{
 			city: 'Kabupaten Tojo Una-Una',
@@ -380,35 +353,31 @@ export default function Home() {
 			kebutuhan: '780 ton',
 			neraca: '200 ton',
 			color: '#bf7070',
-			id: 'element10',
-
+			id: 'Touna'
 		},
 		{
 			city: 'Kabupaten Banggai Kepulauan',
 			ketersediaan: '920 ton',
 			kebutuhan: '720 ton',
 			neraca: '200 ton',
-			color: '#f1be5b',
-			id: 'element11',
-
+			color: '#76bf70',
+			id: 'BanggaiKepulauan'
 		},
 		{
-			city: 'Kabupaten Banggai Kepulauan',
+			city: 'Palu',
 			ketersediaan: '930 ton',
 			kebutuhan: '730 ton',
 			neraca: '200 ton',
-			color: '#f1be5b',
-			id: 'element12',
-
+			color: '#76bf70',
+			id: 'Palu'
 		},
 		{
-			city: 'Banggai Laut',
+			city: 'Kabupaten Banggai Laut',
 			ketersediaan: '930 ton',
 			kebutuhan: '730 ton',
 			neraca: '200 ton',
-			color: '#f1be5b',
-			id: 'element13',
-
+			color: '#76bf70',
+			id: 'BanggaiLaut'
 		},
 	]);
 
@@ -529,7 +498,6 @@ export default function Home() {
 						neraca: '200 ton',
 						color: '#f1be5b',
 						id: 'element1',
-
 					},
 					{
 						city: 'Kabupaten Boul',
@@ -538,7 +506,6 @@ export default function Home() {
 						neraca: '200 ton',
 						color: '#f1be5b',
 						id: 'element2',
-
 					},
 					{
 						city: 'Kabupaten Sigi',
@@ -547,7 +514,6 @@ export default function Home() {
 						neraca: '150 ton',
 						color: '#76bf70',
 						id: 'element3',
-
 					},
 					{
 						city: 'Kabupaten Donggala',
@@ -564,7 +530,6 @@ export default function Home() {
 						neraca: '200 ton',
 						color: '#f1be5b',
 						id: 'element5',
-
 					},
 					{
 						city: 'Kabupaten Parigi Moutong',
@@ -573,7 +538,6 @@ export default function Home() {
 						neraca: '200 ton',
 						color: '#76bf70',
 						id: 'element6',
-
 					},
 					{
 						city: 'Kabupaten Toli-Toli',
@@ -582,7 +546,6 @@ export default function Home() {
 						neraca: '250 ton',
 						color: '#bf7070',
 						id: 'element7',
-
 					},
 					{
 						city: 'Kabupaten Poso',
@@ -591,7 +554,6 @@ export default function Home() {
 						neraca: '250 ton',
 						color: '#f1be5b',
 						id: 'element8',
-
 					},
 					{
 						city: 'Kabupaten Banggai',
@@ -600,7 +562,6 @@ export default function Home() {
 						neraca: '250 ton',
 						color: '#76bf70',
 						id: 'element9',
-
 					},
 					{
 						city: 'Kabupaten Tojo Una-Una',
@@ -609,7 +570,6 @@ export default function Home() {
 						neraca: '200 ton',
 						color: '#bf7070',
 						id: 'element10',
-
 					},
 					{
 						city: 'Kabupaten Banggai Kepulauan',
@@ -618,7 +578,6 @@ export default function Home() {
 						neraca: '200 ton',
 						color: '#f1be5b',
 						id: 'element11',
-
 					},
 					{
 						city: 'Kabupaten Banggai Kepulauan',
@@ -627,7 +586,6 @@ export default function Home() {
 						neraca: '200 ton',
 						color: '#f1be5b',
 						id: 'element12',
-
 					},
 					{
 						city: 'Banggai Laut',
@@ -636,7 +594,6 @@ export default function Home() {
 						neraca: '200 ton',
 						color: '#f1be5b',
 						id: 'element13',
-
 					},
 				]);
 				setFlow([
@@ -742,56 +699,26 @@ export default function Home() {
 		} else {
 			console.log('No date selected');
 		}
-
 	}
 
 	return (
 		<main>
 			<Navbar />
 			<Hero />
-			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[18rem] sm:w-[40rem] h-20 gap-2  rounded-lg sm:rounded-full py-4 flex flex-col items-start sm:flex-row flex-wrap  bg-white">
+			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[18rem] sm:w-[44rem] h-20 gap-2  rounded-lg sm:rounded-full py-[0.4rem] flex flex-col items-center sm:flex-row flex-wrap  bg-white">
 				<div className="flex-col flex-1">
-					<h1 className="font-bold text-sm">Jenis Informasi</h1>
-					<Select onValueChange={handleValueChange}>
-						<SelectTrigger className="border-none">
-							<SelectValue placeholder="Harga Pangan" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectGroup>
-								<SelectLabel>Jenis Informasi</SelectLabel>
-								<SelectItem value="harga-pangan">Harga Pangan</SelectItem>
-								<SelectItem value="neraca-pangan">Neraca Pangan</SelectItem>
-								<SelectItem value="perdagangan-pangan">
-									Pola Perdagangan Pangan
-								</SelectItem>
-							</SelectGroup>
-						</SelectContent>
-					</Select>
+					<h1 className="font-bold text-sm mb-1">Jenis Informasi</h1>
+					<Select onChange={(e) => handleValueChange(e)} className=" basic-single w-[170px] border-none" options={jenisInformasi} />
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
-					<h1 className="font-bold text-sm">Komoditas</h1>
-					<Select>
-						<SelectTrigger className="border-none">
-							<SelectValue placeholder="Beras" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectGroup>
-								<SelectLabel>Komoditas</SelectLabel>
-								<SelectItem value="beras">Beras</SelectItem>
-								<SelectItem value="minyak">Minyak</SelectItem>
-								<SelectItem value="gula">Gula</SelectItem>
-								<SelectItem value="daging">Daging</SelectItem>
-								<SelectItem value="telur">Telur</SelectItem>
-							</SelectGroup>
-						</SelectContent>
-					</Select>
+					<h1 className="font-bold text-sm mb-1">Komoditas</h1>
+					<Select className=" basic-single w-[170px] border-none" options={options} />
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
-					<h1 className="font-bold text-sm ">Bulan</h1>
+					<h1 className="font-bold text-sm mb-1 ">Bulan</h1>
 					<MonthPicker date={selectedDate} setDate={setSelectedDate} />
-					{/* <DatePicker date={selectedDate} setDate={setSelectedDate} /> */}
 				</div>
 				<Button
 					onClick={handleChangeMonth}
@@ -804,12 +731,12 @@ export default function Home() {
 				<section className="px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 					<div className="flex flex-col sm:flex-row justify-between pt-10">
 						<div className="flex-col">
-							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-8 font-extrabold">
+							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-1 font-extrabold">
 								PETA PERUBAHAN HARGA
 							</h1>
 							<Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
-								<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal 15
-								April 2024
+								<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal 22
+								Juli 2024
 							</Badge>
 						</div>
 						<div></div>
@@ -822,12 +749,11 @@ export default function Home() {
 							{cardContents.slice(0, 5).map((content, index) => (
 								<Card
 									key={index}
-									className="flex rounded-2xl px-6 py-4 space-x-4 w-[330px]  justify-between placeholder-sky-400 ">
-									<div style={{ flex: 1 }}>
-										<h1 className="text-md">{content.city}</h1>
+									className="flex rounded-2xl px-6 py-4 space-x-4 w-[350px]  justify-between placeholder-sky-400 ">
+									<div style={{ flex: 2 }}>
+										<h1 className="text-xs">{content.city}</h1>
 										<p className="text-2xl font-bold">{content.price}</p>
 									</div>
-
 									<div style={{ flex: 1 }} className="flex justify-end">
 										<div
 											className={`rounded-md p-0 px-1 m-0 items-center flex text-white`}
@@ -838,7 +764,6 @@ export default function Home() {
 									</div>
 								</Card>
 							))}
-
 							<Link href="/pola-perdagangan" className="self-start sm:self-end">
 								<p className="text-xs sm:text-sm self-end md:text-md text-blue-900 font-bold flex items-center">
 									Data Selengkapnya
@@ -849,89 +774,43 @@ export default function Home() {
 					</div>
 				</section>
 			)}
-
 			{selectedValue === 'neraca-pangan' && (
 				<>
 					<MapNeraca cardContents={cardContentsNeraca} />
 				</>
 			)}
-
 			{selectedValue === 'perdagangan-pangan' && (
 				<>
 					<MapPola flow={flow} />
 				</>
 			)}
-
 			<section className=" px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
-				<h1 className="text-sm sm:text-xl md:text-2xl mb-20">
+				<br />
+				<h1 className="text-sm m-0 p-0 sm:text-sm md:text-md">
 					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar
 				</h1>
 				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
-
 				<div
 					style={{ marginTop: '-40px' }}
-					className="mx-auto px-4 py-4 sm:py-2 sm:px-8 shadow-xl w-[20rem] sm:w-[50rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
+					className="mx-auto px-4 py-4 sm:py-2 sm:px-8 shadow-xl w-[20rem] sm:w-[55rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
 					<div className="flex-col flex-1">
-						<h1 className="font-bold text-sm">Jenis Informasi</h1>
-						<Select>
-							<SelectTrigger className="border-none">
-								<SelectValue placeholder="Harga Pangan" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectGroup>
-									<SelectLabel>Jenis Informasi</SelectLabel>
-									<SelectItem value="harga-pangan">Harga Pangan</SelectItem>
-									<SelectItem value="neraca-pangan">Neraca Pangan</SelectItem>
-									<SelectItem value="perdagangan-pangan">
-										Pola Perdagangan Pangan
-									</SelectItem>
-								</SelectGroup>
-							</SelectContent>
-						</Select>
+						<h1 className="font-bold text-sm mb-1">Jenis Informasi</h1>
+						<Select className=" basic-single w-[170px] border-none" options={jenisInformasi} />
 					</div>
 					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 					<div className="flex-col flex-1">
-						<h1 className="font-bold text-sm">Komoditas</h1>
-						<Select>
-							<SelectTrigger className="border-none">
-								<SelectValue placeholder="Beras" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectGroup>
-									<SelectLabel>Komoditas</SelectLabel>
-									<SelectItem value="beras">Beras</SelectItem>
-									<SelectItem value="minyak">Minyak</SelectItem>
-									<SelectItem value="gula">Gula</SelectItem>
-									<SelectItem value="daging">Daging</SelectItem>
-									<SelectItem value="telur">Telur</SelectItem>
-								</SelectGroup>
-							</SelectContent>
-						</Select>
+						<h1 className="font-bold text-sm mb-1">Komoditas</h1>
+						<Select className=" basic-single w-[170px] border-none" options={options} />
 					</div>
 					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 					<div className="flex-col flex-1">
-						<h1 className="font-bold text-sm ">Kabupaten/Kota</h1>
-						<Select>
-							<SelectTrigger className="border-none">
-								<SelectValue placeholder="Kabupaten/Kota" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectGroup>
-									<SelectLabel>Kabupaten/Kota</SelectLabel>
-									{kabupaten.map((month, index) => (
-										<SelectItem value={month} key={index}>
-											{month}
-										</SelectItem>
-									))}
-								</SelectGroup>
-							</SelectContent>
-						</Select>
+						<h1 className="font-bold text-sm mb-1 ">Kabupaten/Kota</h1>
+						<Select className=" basic-single w-[170px] border-none" options={kabupaten} />
 					</div>
 					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
-
 					<div className="flex-col flex-1">
-						<h1 className="font-bold text-sm ">Bulan</h1>
-						<DatePicker date={selectedDate} setDate={setSelectedDate} />
+						<h1 className="font-bold text-sm mb-1 ">Bulan</h1>
+						<MonthPicker date={selectedDate} setDate={setSelectedDate} />
 					</div>
 					<Button className="bg-blue-300 rounded-full p-2">
 						<MagnifyingGlassIcon
@@ -941,11 +820,11 @@ export default function Home() {
 						/>
 					</Button>
 				</div>
-
 				<div>
 					<h1 className="text-center p-8 mt-5 text-blue-800 text-lg sm:text-xl md:text-2xl items-center">
 						Harga Konsumen Pangan Strategis Sulawesi Tengah
 					</h1>
+					<br />
 					<div className="flex justify-center items-start self-center  flex-wrap gap-4 ">
 						{konsumenPangan.map((content, index) => (
 							<Card key={index} className="flex-col  w-[18rem] p-4 shadow-xl">
@@ -1001,8 +880,8 @@ export default function Home() {
 				<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
 					Berita Hari Ini
 				</h1>
-				<div className="grid grid-cols-1 sm:grid-cols-2 px-20 lg:grid-cols-3 gap-2">
-					<Card className="max-w-[80%]">
+				<div className="flex flex-wrap justify-center gap-24 p-8">
+					<Card className="w-[23rem]">
 						<CardHeader>
 							<Image
 								src={berita}
@@ -1024,7 +903,7 @@ export default function Home() {
 							</Button>
 						</CardFooter>
 					</Card>
-					<Card className="max-w-[80%]">
+					<Card className="w-[23rem]">
 						<CardHeader>
 							<Image
 								src={berita2}
@@ -1046,7 +925,7 @@ export default function Home() {
 							</Button>
 						</CardFooter>
 					</Card>
-					<Card className="max-w-[80%]">
+					<Card className="w-[23rem]">
 						<CardHeader>
 							<Image
 								src={berita3}
@@ -1085,7 +964,6 @@ export default function Home() {
 						</div>
 						<h1 className="text-4xl font-bold">3928</h1>
 					</Card>
-
 					<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
 						<div className="flex items-center gap-4">
 							<div className="bg-blue-400 p-2 rounded-md">
@@ -1098,7 +976,6 @@ export default function Home() {
 						</div>
 						<h1 className="text-4xl font-bold">30</h1>
 					</Card>
-
 					<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
 						<div className="flex items-center gap-4">
 							<div className="bg-blue-400 p-2 rounded-md">
@@ -1116,7 +993,6 @@ export default function Home() {
 						<h1 className="text-4xl font-bold">60</h1>
 					</Card>
 				</div>
-
 				<Separator className="shadow-lg" />
 			</section>
 			<Footer />

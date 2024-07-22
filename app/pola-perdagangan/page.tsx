@@ -3,54 +3,41 @@
 import { useEffect, useRef, useState } from 'react';
 import Navbar from '@/components/ui/navbar';
 import Image from 'next/image';
-import vector1 from '@/public/vect1.svg';
-import vector2 from '@/public/vect2.svg';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-	UserIcon,
-	ScaleIcon,
-	BuildingLibraryIcon,
 	MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
 import bank from '@/public/bank.svg';
 import sulaw from '@/public/sulaw.svg';
 import {
 	CounterClockwiseClockIcon,
-	ChevronDownIcon,
-	ChevronRightIcon,
-	SewingPinFilledIcon,
-	PersonIcon,
-	ArrowUpIcon,
-	EnvelopeClosedIcon,
 } from '@radix-ui/react-icons';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
-
-const months = [
-	'JUNI',
-	'JULI',
-];
-
-
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectLabel,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select"
-import { isExternal } from 'util/types';
-import { DatePicker } from '@/components/ui/datepicker';
+import Select from 'react-select';
 import React from 'react';
 import { format } from 'date-fns';
 import Hero from '@/components/ui/hero';
+import MonthPicker from '@/components/ui/monthpicker';
+import Footer from '@/components/ui/footer';
 
 const FlowChart: React.FC = () => {
 
 	const [selectedDate, setSelectedDate] = React.useState<Date>();
+
+	const options = [
+		{ value: '1', label: 'Beras Premium' },
+		{ value: '2', label: 'Daging Ayam' },
+		{ value: '3', label: 'Daging Sapi' },
+		{ value: '4', label: 'Minyak Goreng' },
+		{ value: '5', label: 'Bawang Merah' },
+		{ value: '6', label: 'Bawang Putih' },
+		{ value: '7', label: 'Telur Ayam' },
+		{ value: '8', label: 'Gula Pasir' },
+		{ value: '9', label: 'Cabe Merah' },
+		{ value: '10', label: 'Cabe Rawit' },
+		{ value: '11', label: 'Ikan' },
+	]
 
 	const [flow, setFlow] = useState<any>([
 		{ start: 'Buol', end: 'Tolitoli' },
@@ -114,6 +101,7 @@ const FlowChart: React.FC = () => {
 		}
 	}
 
+	
 
 	useEffect(() => {
 		const container = containerRef.current;
@@ -570,34 +558,20 @@ const FlowChart: React.FC = () => {
 			<Navbar />
 			<img src="/location.svg" id="location" className="hidden" alt="" />
 			<Hero />
-
-			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[24rem] justify-between gap-2 rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
-				<div className="flex-col">
-					<h1 className="font-bold text-sm">Komoditas</h1>
-					<Select>
-						<SelectTrigger className="border-none w-[6rem]">
-							<SelectValue placeholder="Beras" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectGroup>
-								<SelectLabel>Komoditas</SelectLabel>
-								<SelectItem value="beras">Beras</SelectItem>
-								<SelectItem value="minyak">Minyak</SelectItem>
-								<SelectItem value="gula">Gula</SelectItem>
-								<SelectItem value="daging">Daging Ayam</SelectItem>
-								<SelectItem value="telur">Telur</SelectItem>
-							</SelectGroup>
-						</SelectContent>
-					</Select>
+			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[30rem] gap-2 rounded-full py-2 flex flex-col items-center sm:flex-row flex-wrap  bg-white">
+				<div className="flex-col flex-1">
+					<h1 className="font-bold text-sm mb-1">Komoditas</h1>
+					<Select className=" basic-single w-[170px] border-none" options={options} />
 				</div>
-				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
-				<div className="flex-col ">
+				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
+				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm ">Bulan</h1>
-					<DatePicker date={selectedDate} setDate={setSelectedDate} />
-
+					<MonthPicker date={selectedDate} setDate={setSelectedDate} />
 				</div>
-				<Button className="bg-blue-300 rounded-full p-2" onClick={handleChangeMonth}>
-					<MagnifyingGlassIcon className="text-white" width={28} height={28} />
+				<Button
+					className="bg-blue-300 rounded-full p-2"
+					onClick={handleChangeMonth}>
+					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 				</Button>
 			</div>
 
@@ -606,7 +580,7 @@ const FlowChart: React.FC = () => {
 				<section className="px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 					<div className="flex flex-col sm:flex-row justify-between pt-10">
 						<div className="flex-col mb-3">
-							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-3 font-extrabold">
+							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-1 font-extrabold">
 								COMMODITY FLOW
 							</h1>
 							<Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
@@ -1923,37 +1897,8 @@ const FlowChart: React.FC = () => {
 			</center>
 
 			<br />
-			<footer className="mt-10 px-4 sm:px-10 py-6 bg-no-repeat bg-cover bg-[url('/footer.png')] text-white">
-				<div className="flex flex-col md:flex-row justify-between items-center gap-6">
-					<div className="flex flex-col sm:flex-row gap-6 sm:gap-4">
-						<div className="flex items-center gap-4">
-							<Image src={bank} alt="bank" width={45} height={45} />
-							<div className="flex flex-col">
-								<p className="text-sm">Kantor Perwakilan</p>
-								<h1 className="text-lg">Bank Indonesia</h1>
-								<p className="text-sm">Provinsi Sulawesi Tengah</p>
-							</div>
-						</div>
-						<div className="flex items-center gap-4">
-							<Image src={sulaw} alt="sulaw" width={30} height={30} />
-							<div>
-								<h1 className="text-lg">Pemerintahan</h1>
-								<p className="text-sm">Provinsi Sulawesi Tengah</p>
-							</div>
-						</div>
-					</div>
-					<div className="text-center md:text-right w-full md:w-auto">
-						<p className="font-bold text-lg">
-							SEKRETARIAT TPID SULAWESI TENGAH KANTOR PERWAKILAN BANK INDONESIA
-							PROVINSI SULAWESI TENGAH
-						</p>
-						<p>
-							Jl. Sam Ratulangi No.23 Besusu Barat, Kec. Palu Timur, Kota Palu,
-							Sulawesi Tengah 94118
-						</p>
-					</div>
-				</div>
-			</footer>
+			<Footer />
+
 		</div>
 	);
 };

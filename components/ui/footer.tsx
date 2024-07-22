@@ -26,13 +26,15 @@ export default function Footer() {
 							</div>
 						</div>
 						<div className="text-center md:text-right w-full md:w-1000">
-							<p className="font-bold text-sm">
-								SEKRETARIAT TPID SULAWESI TENGAH <br />KANTOR PERWAKILAN BANK
-								INDONESIA PROVINSI SULAWESI TENGAH
-							</p>
-							<p className="text-sm">
-								Jl. Sam Ratulangi No.23 Besusu Barat, Kec. Palu Timur, Kota
-								Palu, Sulawesi Tengah 94118
+							<span className="font-bold text-[10px]">
+								<p className="mb-1">SEKRETARIAT TPID SULAWESI TENGAH</p>
+								<p className="mb-1">
+									KANTOR PERWAKILAN BANK INDONESIA PROVINSI SULAWESI TENGAH
+								</p>
+							</span>
+							<p className="text-[10px]">
+								Jl. Sam Ratulangi <br /> No.23 <br /> Besusu Barat, Kec. Palu
+								Timur, <br /> Kota Palu, Sulawesi Tengah <br /> 94118
 							</p>
 						</div>
 					</div>
