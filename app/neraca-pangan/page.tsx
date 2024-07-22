@@ -3,7 +3,6 @@
 import { Button } from '@/components/ui/button';
 import { Chart } from '@/app/neraca-pangan/chart';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Footer from '@/components/ui/footer';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -31,14 +30,25 @@ import { DatePicker } from '@/components/ui/datepicker';
 import React from 'react';
 import { format } from 'date-fns';
 import Hero from '@/components/ui/hero';
+import Select from 'react-select';
 
 
 export default function Home() {
-	// foreach month in year
-	const months = [
-		'JUNI',
-		'JULI',
-	];
+
+	const options = [
+		{ value: '1', label: 'Beras Premium' },
+		{ value: '2', label: 'Daging Ayam' },
+		{ value: '3', label: 'Daging Sapi' },
+		{ value: '4', label: 'Minyak Goreng' },
+		{ value: '5', label: 'Bawang Merah' },
+		{ value: '6', label: 'Bawang Putih' },
+		{ value: '7', label: 'Telur Ayam' },
+		{ value: '8', label: 'Gula Pasir' },
+		{ value: '9', label: 'Cabe Merah' },
+		{ value: '10', label: 'Cabe Rawit' },
+		{ value: '11', label: 'Ikan' },
+	]
+	
 	const [detailHarga, setDetailHarga] = useState({} as { city: string; ketersediaan: string; kebutuhan: string; neraca: string; color: string; id: string; } | undefined);
 	const [selectedDate, setSelectedDate] = React.useState<Date>();
 
@@ -485,51 +495,20 @@ export default function Home() {
 			<Navbar />
 
 			<Hero />
-			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[24rem] gap-2 rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap overflow-hidden bg-white">
+			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[30rem] gap-2 rounded-full py-4 flex flex-col items-center sm:flex-row flex-wrap  bg-white">
 				<div className="flex-col flex-1">
-					<h1 className="font-bold text-sm">Komoditas</h1>
-					<Select>
-						<SelectTrigger className="border-none">
-							<SelectValue placeholder="Beras" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectGroup>
-								<SelectLabel>Komoditas</SelectLabel>
-								<SelectItem value="beras">Beras</SelectItem>
-								<SelectItem value="minyak">Minyak</SelectItem>
-								<SelectItem value="gula">Gula</SelectItem>
-								<SelectItem value="daging">Daging</SelectItem>
-								<SelectItem value="telur">Telur</SelectItem>
-							</SelectGroup>
-						</SelectContent>
-					</Select>
+					<h1 className="font-bold text-sm mb-1">Komoditas</h1>
+					<Select  className=" basic-single w-[170px] border-none" options={options} />
 				</div>
 				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
-					<h1 className="font-bold text-sm ">Bulan</h1>
-					{/* <Select onValueChange={handleChangeMonth}>
-						<SelectTrigger className="border-none">
-							<SelectValue placeholder="Bulan" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectGroup>
-								<SelectLabel>Bulan</SelectLabel>
-								{months.map((month, index) => (
-									<SelectItem value={month} key={index}>
-										{month} 2024
-									</SelectItem>
-								))}
-							</SelectGroup>
-						</SelectContent>
-					</Select> */}
+					<h1 className="font-bold text-sm mb-1">Bulan</h1>
 					<DatePicker date={selectedDate} setDate={setSelectedDate} />
-
 				</div>
-				<Button className="bg-blue-300 rounded-full p-2" onClick={handleChangeMonth}>
-					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
+				<Button onClick={handleChangeMonth} className="bg-blue-300 rounded-full p-2">
+					<MagnifyingGlassIcon className="text-white" width={28} height={28} />
 				</Button>
 			</div>
-
 			{/* content */}
 			<Tabs defaultValue="table">
 				<section className="px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
