@@ -25,6 +25,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Map from '@/components/ui/map';
+import { format } from 'date-fns';
+
 import {
 	CounterClockwiseClockIcon,
 	ChevronDownIcon,
@@ -58,13 +60,15 @@ import Footer from '@/public/footer.png';
 import MapNeraca from '@/components/ui/map-neraca';
 import MapPola from '@/components/ui/map-pola';
 import { Calendar } from '@/components/ui/calendar';
+import React from 'react';
 
 
 export default function Home() {
 
 	const [selectedValue, setSelectedValue] = useState<string>('harga-pangan');
-	
-	 const [selectedMonth, setSelectedMonth] = useState('');
+	const [selectedDate, setSelectedDate] = React.useState<Date>();
+
+	const [selectedMonth, setSelectedMonth] = useState('');
 
 	const handleValueChange = (value: string) => {
 		setSelectedValue(value);
@@ -93,8 +97,6 @@ export default function Home() {
 		'Kabupaten Morowali',
 		'Kabupaten Morowali',
 	];
-
-	
 
 	const konsumenPangan = [
 		{
@@ -188,37 +190,551 @@ export default function Home() {
 	];
 
 
-	const CardContents = [
-		{ city: 'Kota Palu', price: '15.000/kg', color: 'red', change: 'RP.298' },
+	const [cardContents, setCardContents] = useState([
+		{
+			city: 'Kota Palu',
+			price: '20.000/kg',
+			color: '#f1be5b',
+			change: 'RP.200',
+			id: 'element1'
+		},
 		{
 			city: 'Kabupaten Boul',
 			price: '14.100/kg',
-			color: 'yellow',
-			change: 'RP.298',
+			color: '#f1be5b',
+			change: 'Rp. 298',
+			id: 'element2',
 		},
 		{
 			city: 'Kabupaten Sigi',
 			price: '13.370/kg',
-			color: 'green',
-			change: 'RP.298',
+			color: '#76bf70',
+			change: 'Rp. 298',
+			id: 'element3',
 		},
 		{
 			city: 'Kabupaten Donggala',
 			price: '12.000/kg',
-			color: 'red',
-			change: 'RP.298',
+			color: '#f1be5b',
+			change: 'Rp. 298',
+			id: 'element4',
 		},
 		{
 			city: 'Kabupaten Morowali',
 			price: '11.000/kg',
-			color: 'yellow',
-			change: 'RP.298',
+			color: '#f1be5b',
+			change: 'Rp. 298',
+			id: 'element5',
 		},
-	];
+		{
+			city: 'Kabupaten Parigi Moutong',
+			price: '10.500/kg',
+			color: '#76bf70',
+			change: 'Rp. 298',
+			id: 'element6',
+		},
+		{
+			city: 'Kabupaten Toli-Toli',
+			price: '10.000/kg',
+			color: '#f1be5b',
+			change: 'Rp. 298',
+			id: 'element7',
+		},
+		{
+			city: 'Kabupaten Poso',
+			price: '9.800/kg',
+			color: '#f1be5b',
+			change: 'Rp. 298',
+			id: 'element8',
+		},
+		{
+			city: 'Kabupaten Banggai',
+			price: '9.500/kg',
+			color: '#76bf70',
+			change: 'Rp. 298',
+			id: 'element9',
+		},
+		{
+			city: 'Kabupaten Tojo Una-Una',
+			price: '9.200/kg',
+			color: '#f1be5b',
+			change: 'Rp. 298',
+			id: 'element10',
+		},
+		{
+			city: 'Kabupaten Banggai Kepulauan',
+			price: '9.000/kg',
+			color: '#f1be5b',
+			change: 'Rp. 298',
+			id: 'element11',
+		},
+		{
+			city: 'Kabupaten d Kepulauan',
+			price: '9.000/kg',
+			color: '#f1be5b',
+			change: 'Rp. 298',
+			id: 'element12',
+		},
+		{
+			city: 'Kabupaten Banggai Laut',
+			price: '9.000/kg',
+			color: '#f1be5b',
+			change: 'Rp. 298',
+			id: 'element13',
+		},
+	]);
 
-	
-	
+	const [cardContentsNeraca, setCardContentsNeraca] = useState([
+		{
+			city: 'Kota Palu',
+			ketersediaan: '1000 ton',
+			kebutuhan: '800 ton',
+			neraca: '200 ton',
+			color: '#bf7070',
+			id: 'element1',
 
+		},
+		{
+			city: 'Kabupaten Boul',
+			ketersediaan: '900 ton',
+			kebutuhan: '700 ton',
+			neraca: '200 ton',
+			color: '#f1be5b',
+			id: 'element2',
+
+		},
+		{
+			city: 'Kabupaten Sigi',
+			ketersediaan: '1100 ton',
+			kebutuhan: '950 ton',
+			neraca: '150 ton',
+			color: '#76bf70',
+			id: 'element3',
+
+		},
+		{
+			city: 'Kabupaten Donggala',
+			ketersediaan: '1200 ton',
+			kebutuhan: '1000 ton',
+			neraca: '200 ton',
+			id: 'element4',
+			color: '#bf7070'
+		},
+		{
+			city: 'Kabupaten Morowali',
+			ketersediaan: '800 ton',
+			kebutuhan: '600 ton',
+			neraca: '200 ton',
+			color: '#f1be5b',
+			id: 'element5',
+
+		},
+		{
+			city: 'Kabupaten Parigi Moutong',
+			ketersediaan: '1050 ton',
+			kebutuhan: '850 ton',
+			neraca: '200 ton',
+			color: '#76bf70',
+			id: 'element6',
+
+		},
+		{
+			city: 'Kabupaten Toli-Toli',
+			ketersediaan: '1000 ton',
+			kebutuhan: '750 ton',
+			neraca: '250 ton',
+			color: '#bf7070',
+			id: 'element7',
+
+		},
+		{
+			city: 'Kabupaten Poso',
+			ketersediaan: '950 ton',
+			kebutuhan: '700 ton',
+			neraca: '250 ton',
+			color: '#f1be5b',
+			id: 'element8',
+
+		},
+		{
+			city: 'Kabupaten Banggai',
+			ketersediaan: '850 ton',
+			kebutuhan: '600 ton',
+			neraca: '250 ton',
+			color: '#76bf70',
+			id: 'element9',
+
+		},
+		{
+			city: 'Kabupaten Tojo Una-Una',
+			ketersediaan: '980 ton',
+			kebutuhan: '780 ton',
+			neraca: '200 ton',
+			color: '#bf7070',
+			id: 'element10',
+
+		},
+		{
+			city: 'Kabupaten Banggai Kepulauan',
+			ketersediaan: '920 ton',
+			kebutuhan: '720 ton',
+			neraca: '200 ton',
+			color: '#f1be5b',
+			id: 'element11',
+
+		},
+		{
+			city: 'Kabupaten Banggai Kepulauan',
+			ketersediaan: '930 ton',
+			kebutuhan: '730 ton',
+			neraca: '200 ton',
+			color: '#f1be5b',
+			id: 'element12',
+
+		},
+		{
+			city: 'Banggai Laut',
+			ketersediaan: '930 ton',
+			kebutuhan: '730 ton',
+			neraca: '200 ton',
+			color: '#f1be5b',
+			id: 'element13',
+
+		},
+	]);
+
+	const [flow, setFlow] = useState<any>([
+		{ start: 'Buol', end: 'Tolitoli' },
+		{ start: 'Parigi', end: 'Morowali' },
+		{ start: 'Banggai', end: 'Morowali-Utara' },
+		{ start: 'Touna', end: 'Poso' },
+		{ start: 'Sigi', end: 'Donggala' },
+		{ start: 'Palu', end: 'Banggai-Laut' },
+		{ start: 'Palu', end: 'Banggai-Kepulauan' },
+		{ start: 'Buol', end: 'gorontalo' },
+	]);
+
+	const handleChangeMonth = () => {
+		if (selectedDate) {
+			let val = format(selectedDate, 'yyyy-MM');
+			console.log(val);
+			if (val === '2024-06') {
+				setCardContents([
+					{
+						city: 'Kota Palu',
+						price: '20.000/kg',
+						color: '#bf7070',
+						change: 'RP.200',
+						id: 'element1'
+					},
+					{
+						city: 'Kabupaten Boul',
+						price: '14.100/kg',
+						color: '#bf7070',
+						change: 'Rp. 298',
+						id: 'element2',
+					},
+					{
+						city: 'Kabupaten Sigi',
+						price: '13.370/kg',
+						color: '#bf7070',
+						change: 'Rp. 298',
+						id: 'element3',
+					},
+					{
+						city: 'Kabupaten Donggala',
+						price: '12.000/kg',
+						color: '#bf7070',
+						change: 'Rp. 298',
+						id: 'element4',
+					},
+					{
+						city: 'Kabupaten Morowali',
+						price: '11.000/kg',
+						color: '#bf7070',
+						change: 'Rp. 298',
+						id: 'element5',
+					},
+					{
+						city: 'Kabupaten Parigi Moutong',
+						price: '10.500/kg',
+						color: '#76bf70',
+						change: 'Rp. 298',
+						id: 'element6',
+					},
+					{
+						city: 'Kabupaten Toli-Toli',
+						price: '10.000/kg',
+						color: '#bf7070',
+						change: 'Rp. 298',
+						id: 'element7',
+					},
+					{
+						city: 'Kabupaten Poso',
+						price: '9.800/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element8',
+					},
+					{
+						city: 'Kabupaten Banggai',
+						price: '9.500/kg',
+						color: '#76bf70',
+						change: 'Rp. 298',
+						id: 'element9',
+					},
+					{
+						city: 'Kabupaten Tojo Una-Una',
+						price: '9.200/kg',
+						color: '#bf7070',
+						change: 'Rp. 298',
+						id: 'element10',
+					},
+					{
+						city: 'Kabupaten Banggai Kepulauan',
+						price: '9.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element11',
+					},
+					{
+						city: 'Kabupaten Banggai Kepulauan',
+						price: '9.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element12',
+					},
+					{
+						city: 'Kabupaten Banggai Laut',
+						price: '9.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element13',
+					},
+				]);
+				setCardContentsNeraca([
+					{
+						city: 'Kota Palu',
+						ketersediaan: '1000 ton',
+						kebutuhan: '800 ton',
+						neraca: '200 ton',
+						color: '#f1be5b',
+						id: 'element1',
+
+					},
+					{
+						city: 'Kabupaten Boul',
+						ketersediaan: '900 ton',
+						kebutuhan: '700 ton',
+						neraca: '200 ton',
+						color: '#f1be5b',
+						id: 'element2',
+
+					},
+					{
+						city: 'Kabupaten Sigi',
+						ketersediaan: '1100 ton',
+						kebutuhan: '950 ton',
+						neraca: '150 ton',
+						color: '#76bf70',
+						id: 'element3',
+
+					},
+					{
+						city: 'Kabupaten Donggala',
+						ketersediaan: '1200 ton',
+						kebutuhan: '1000 ton',
+						neraca: '200 ton',
+						id: 'element4',
+						color: '#bf7070'
+					},
+					{
+						city: 'Kabupaten Morowali',
+						ketersediaan: '800 ton',
+						kebutuhan: '600 ton',
+						neraca: '200 ton',
+						color: '#f1be5b',
+						id: 'element5',
+
+					},
+					{
+						city: 'Kabupaten Parigi Moutong',
+						ketersediaan: '1050 ton',
+						kebutuhan: '850 ton',
+						neraca: '200 ton',
+						color: '#76bf70',
+						id: 'element6',
+
+					},
+					{
+						city: 'Kabupaten Toli-Toli',
+						ketersediaan: '1000 ton',
+						kebutuhan: '750 ton',
+						neraca: '250 ton',
+						color: '#bf7070',
+						id: 'element7',
+
+					},
+					{
+						city: 'Kabupaten Poso',
+						ketersediaan: '950 ton',
+						kebutuhan: '700 ton',
+						neraca: '250 ton',
+						color: '#f1be5b',
+						id: 'element8',
+
+					},
+					{
+						city: 'Kabupaten Banggai',
+						ketersediaan: '850 ton',
+						kebutuhan: '600 ton',
+						neraca: '250 ton',
+						color: '#76bf70',
+						id: 'element9',
+
+					},
+					{
+						city: 'Kabupaten Tojo Una-Una',
+						ketersediaan: '980 ton',
+						kebutuhan: '780 ton',
+						neraca: '200 ton',
+						color: '#bf7070',
+						id: 'element10',
+
+					},
+					{
+						city: 'Kabupaten Banggai Kepulauan',
+						ketersediaan: '920 ton',
+						kebutuhan: '720 ton',
+						neraca: '200 ton',
+						color: '#f1be5b',
+						id: 'element11',
+
+					},
+					{
+						city: 'Kabupaten Banggai Kepulauan',
+						ketersediaan: '930 ton',
+						kebutuhan: '730 ton',
+						neraca: '200 ton',
+						color: '#f1be5b',
+						id: 'element12',
+
+					},
+					{
+						city: 'Banggai Laut',
+						ketersediaan: '930 ton',
+						kebutuhan: '730 ton',
+						neraca: '200 ton',
+						color: '#f1be5b',
+						id: 'element13',
+
+					},
+				]);
+				setFlow([
+					{ start: 'Sigi', end: 'Donggala' },
+					{ start: 'Palu', end: 'Banggai-Laut' },
+					{ start: 'Palu', end: 'Banggai-Kepulauan' },
+				]);
+			} else {
+				setCardContents([
+					{
+						city: 'Kota Palu',
+						price: '20.000/kg',
+						color: '#f1be5b',
+						change: 'RP.200',
+						id: 'element1'
+					},
+					{
+						city: 'Kabupaten Boul',
+						price: '14.100/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element2',
+					},
+					{
+						city: 'Kabupaten Sigi',
+						price: '13.370/kg',
+						color: '#76bf70',
+						change: 'Rp. 298',
+						id: 'element3',
+					},
+					{
+						city: 'Kabupaten Donggala',
+						price: '12.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element4',
+					},
+					{
+						city: 'Kabupaten Morowali',
+						price: '11.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element5',
+					},
+					{
+						city: 'Kabupaten Parigi Moutong',
+						price: '10.500/kg',
+						color: '#76bf70',
+						change: 'Rp. 298',
+						id: 'element6',
+					},
+					{
+						city: 'Kabupaten Toli-Toli',
+						price: '10.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element7',
+					},
+					{
+						city: 'Kabupaten Poso',
+						price: '9.800/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element8',
+					},
+					{
+						city: 'Kabupaten Banggai',
+						price: '9.500/kg',
+						color: '#76bf70',
+						change: 'Rp. 298',
+						id: 'element9',
+					},
+					{
+						city: 'Kabupaten Tojo Una-Una',
+						price: '9.200/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element10',
+					},
+					{
+						city: 'Kabupaten Banggai Kepulauan',
+						price: '9.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element11',
+					},
+					{
+						city: 'Kabupaten Banggai Kepulauan',
+						price: '9.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element12',
+					},
+					{
+						city: 'Kabupaten Banggai Laut',
+						price: '9.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element13',
+					},
+				]);
+			}
+		} else {
+			console.log('No date selected');
+		}
+
+	}
 
 	return (
 		<main>
@@ -290,10 +806,10 @@ export default function Home() {
 				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm ">Bulan</h1>
-					<DatePicker  />
+					<DatePicker date={selectedDate} setDate={setSelectedDate} />
 				</div>
 				<Button
-					
+					onClick={handleChangeMonth}
 					className="bg-blue-300 rounded-full p-2">
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 				</Button>
@@ -313,28 +829,25 @@ export default function Home() {
 						</div>
 						<div></div>
 					</div>
-					<div className="flex flex-col lg:flex-row justify-around items-center">
+					<div className="flex gap-10 flex-col lg:flex-row justify-around items-center">
 						<div className="h-full w-full ">
-							<Map />
+							<Map cardContents={cardContents} />
 						</div>
-						<div className="lg:flex-col flex-col self-center flex flex-wrap gap-4 lg:self-start">
-							{CardContents.map((content, index) => (
+						<div className="lg:flex-col  flex-col self-center flex flex-wrap gap-4 lg:self-start">
+							{cardContents.slice(0, 5).map((content, index) => (
 								<Card
 									key={index}
-									className="flex rounded-2xl px-6 py-4 space-x-4 w-[290px]  justify-between placeholder-sky-400 ">
-									<div>
+
+									className="flex rounded-2xl px-6 py-4 space-x-4 w-[330px]  justify-between placeholder-sky-400 ">
+									<div style={{ flex: 1 }}>
 										<h1 className="text-md">{content.city}</h1>
 										<p className="text-2xl font-bold">{content.price}</p>
 									</div>
 
-									<div className="flex justify-between">
+									<div style={{ flex: 1 }} className="flex justify-end">
 										<div
-											className={cn(
-												`rounded-md p-0 px-1 m-0 items-center flex text-white`,
-												content.color === 'red' && 'bg-red-500',
-												content.color === 'yellow' && 'bg-yellow-500',
-												content.color === 'green' && 'bg-green-500',
-											)}>
+											className={
+												`rounded-md p-0 px-1 m-0 items-center flex text-white`} style={{ background: content.color }}>
 											<ArrowUpIcon className="text-white" />
 											{content.change}
 										</div>
@@ -355,13 +868,13 @@ export default function Home() {
 
 			{selectedValue === 'neraca-pangan' && (
 				<>
-					<MapNeraca />
+					<MapNeraca cardContents={cardContentsNeraca} />
 				</>
 			)}
 
 			{selectedValue === 'perdagangan-pangan' && (
 				<>
-					<MapPola />
+					<MapPola flow={flow} />
 				</>
 			)}
 

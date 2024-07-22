@@ -28,6 +28,8 @@ import Navbar from '@/components/ui/navbar';
 import { useState } from 'react';
 import Dialog from '@/components/ui/modal-harga';
 import { DatePicker } from '@/components/ui/datepicker';
+import React from 'react';
+import { format } from 'date-fns';
 
 
 export default function Home() {
@@ -37,6 +39,7 @@ export default function Home() {
 		'JULI',
 	];
 	const [detailHarga, setDetailHarga] = useState({} as { city: string; ketersediaan: string; kebutuhan: string; neraca: string; color: string; id: string; } | undefined);
+	const [selectedDate, setSelectedDate] = React.useState<Date>();
 
 
 	const [cardContents, setCardContents] = useState([
@@ -221,247 +224,253 @@ export default function Home() {
 			card.remove();
 		}
 	}
+	const handleChangeMonth = () => {
+		if (selectedDate) {
+			let val = format(selectedDate, 'yyyy-MM');
+			if (val === '2024-06') {
+				setCardContents([
+					{
+						city: 'Kota Palu',
+						ketersediaan: '1000 ton',
+						kebutuhan: '800 ton',
+						neraca: '200 ton',
+						color: '#f1be5b',
+						id: 'element1',
 
-	const handleChangeMonth = (value: string) => {
-		if (value === 'JUNI') {
-			setCardContents([
-				{
-					city: 'Kota Palu',
-					ketersediaan: '1000 ton',
-					kebutuhan: '800 ton',
-					neraca: '200 ton',
-					color: '#f1be5b',
-					id: 'element1',
+					},
+					{
+						city: 'Kabupaten Boul',
+						ketersediaan: '900 ton',
+						kebutuhan: '700 ton',
+						neraca: '200 ton',
+						color: '#f1be5b',
+						id: 'element2',
 
-				},
-				{
-					city: 'Kabupaten Boul',
-					ketersediaan: '900 ton',
-					kebutuhan: '700 ton',
-					neraca: '200 ton',
-					color: '#f1be5b',
-					id: 'element2',
+					},
+					{
+						city: 'Kabupaten Sigi',
+						ketersediaan: '1100 ton',
+						kebutuhan: '950 ton',
+						neraca: '150 ton',
+						color: '#76bf70',
+						id: 'element3',
 
-				},
-				{
-					city: 'Kabupaten Sigi',
-					ketersediaan: '1100 ton',
-					kebutuhan: '950 ton',
-					neraca: '150 ton',
-					color: '#76bf70',
-					id: 'element3',
+					},
+					{
+						city: 'Kabupaten Donggala',
+						ketersediaan: '1200 ton',
+						kebutuhan: '1000 ton',
+						neraca: '200 ton',
+						id: 'element4',
+						color: '#bf7070'
+					},
+					{
+						city: 'Kabupaten Morowali',
+						ketersediaan: '800 ton',
+						kebutuhan: '600 ton',
+						neraca: '200 ton',
+						color: '#f1be5b',
+						id: 'element5',
 
-				},
-				{
-					city: 'Kabupaten Donggala',
-					ketersediaan: '1200 ton',
-					kebutuhan: '1000 ton',
-					neraca: '200 ton',
-					id: 'element4',
-					color: '#bf7070'
-				},
-				{
-					city: 'Kabupaten Morowali',
-					ketersediaan: '800 ton',
-					kebutuhan: '600 ton',
-					neraca: '200 ton',
-					color: '#f1be5b',
-					id: 'element5',
+					},
+					{
+						city: 'Kabupaten Parigi Moutong',
+						ketersediaan: '1050 ton',
+						kebutuhan: '850 ton',
+						neraca: '200 ton',
+						color: '#76bf70',
+						id: 'element6',
 
-				},
-				{
-					city: 'Kabupaten Parigi Moutong',
-					ketersediaan: '1050 ton',
-					kebutuhan: '850 ton',
-					neraca: '200 ton',
-					color: '#76bf70',
-					id: 'element6',
+					},
+					{
+						city: 'Kabupaten Toli-Toli',
+						ketersediaan: '1000 ton',
+						kebutuhan: '750 ton',
+						neraca: '250 ton',
+						color: '#bf7070',
+						id: 'element7',
 
-				},
-				{
-					city: 'Kabupaten Toli-Toli',
-					ketersediaan: '1000 ton',
-					kebutuhan: '750 ton',
-					neraca: '250 ton',
-					color: '#bf7070',
-					id: 'element7',
+					},
+					{
+						city: 'Kabupaten Poso',
+						ketersediaan: '950 ton',
+						kebutuhan: '700 ton',
+						neraca: '250 ton',
+						color: '#f1be5b',
+						id: 'element8',
 
-				},
-				{
-					city: 'Kabupaten Poso',
-					ketersediaan: '950 ton',
-					kebutuhan: '700 ton',
-					neraca: '250 ton',
-					color: '#f1be5b',
-					id: 'element8',
+					},
+					{
+						city: 'Kabupaten Banggai',
+						ketersediaan: '850 ton',
+						kebutuhan: '600 ton',
+						neraca: '250 ton',
+						color: '#76bf70',
+						id: 'element9',
 
-				},
-				{
-					city: 'Kabupaten Banggai',
-					ketersediaan: '850 ton',
-					kebutuhan: '600 ton',
-					neraca: '250 ton',
-					color: '#76bf70',
-					id: 'element9',
+					},
+					{
+						city: 'Kabupaten Tojo Una-Una',
+						ketersediaan: '980 ton',
+						kebutuhan: '780 ton',
+						neraca: '200 ton',
+						color: '#bf7070',
+						id: 'element10',
 
-				},
-				{
-					city: 'Kabupaten Tojo Una-Una',
-					ketersediaan: '980 ton',
-					kebutuhan: '780 ton',
-					neraca: '200 ton',
-					color: '#bf7070',
-					id: 'element10',
+					},
+					{
+						city: 'Kabupaten Banggai Kepulauan',
+						ketersediaan: '920 ton',
+						kebutuhan: '720 ton',
+						neraca: '200 ton',
+						color: '#f1be5b',
+						id: 'element11',
 
-				},
-				{
-					city: 'Kabupaten Banggai Kepulauan',
-					ketersediaan: '920 ton',
-					kebutuhan: '720 ton',
-					neraca: '200 ton',
-					color: '#f1be5b',
-					id: 'element11',
+					},
+					{
+						city: 'Kabupaten Banggai Kepulauan',
+						ketersediaan: '930 ton',
+						kebutuhan: '730 ton',
+						neraca: '200 ton',
+						color: '#f1be5b',
+						id: 'element12',
 
-				},
-				{
-					city: 'Kabupaten Banggai Kepulauan',
-					ketersediaan: '930 ton',
-					kebutuhan: '730 ton',
-					neraca: '200 ton',
-					color: '#f1be5b',
-					id: 'element12',
+					},
+					{
+						city: 'Banggai Laut',
+						ketersediaan: '930 ton',
+						kebutuhan: '730 ton',
+						neraca: '200 ton',
+						color: '#f1be5b',
+						id: 'element13',
 
-				},
-				{
-					city: 'Banggai Laut',
-					ketersediaan: '930 ton',
-					kebutuhan: '730 ton',
-					neraca: '200 ton',
-					color: '#f1be5b',
-					id: 'element13',
+					},
+				]);
+			} else {
+				setCardContents([
+					{
+						city: 'Kota Palu',
+						ketersediaan: '1000 ton',
+						kebutuhan: '800 ton',
+						neraca: '200 ton',
+						color: '#bf7070',
+						id: 'element1',
 
-				},
-			]);
+					},
+					{
+						city: 'Kabupaten Boul',
+						ketersediaan: '900 ton',
+						kebutuhan: '700 ton',
+						neraca: '200 ton',
+						color: '#f1be5b',
+						id: 'element2',
+
+					},
+					{
+						city: 'Kabupaten Sigi',
+						ketersediaan: '1100 ton',
+						kebutuhan: '950 ton',
+						neraca: '150 ton',
+						color: '#76bf70',
+						id: 'element3',
+
+					},
+					{
+						city: 'Kabupaten Donggala',
+						ketersediaan: '1200 ton',
+						kebutuhan: '1000 ton',
+						neraca: '200 ton',
+						id: 'element4',
+						color: '#bf7070'
+					},
+					{
+						city: 'Kabupaten Morowali',
+						ketersediaan: '800 ton',
+						kebutuhan: '600 ton',
+						neraca: '200 ton',
+						color: '#f1be5b',
+						id: 'element5',
+
+					},
+					{
+						city: 'Kabupaten Parigi Moutong',
+						ketersediaan: '1050 ton',
+						kebutuhan: '850 ton',
+						neraca: '200 ton',
+						color: '#76bf70',
+						id: 'element6',
+
+					},
+					{
+						city: 'Kabupaten Toli-Toli',
+						ketersediaan: '1000 ton',
+						kebutuhan: '750 ton',
+						neraca: '250 ton',
+						color: '#bf7070',
+						id: 'element7',
+
+					},
+					{
+						city: 'Kabupaten Poso',
+						ketersediaan: '950 ton',
+						kebutuhan: '700 ton',
+						neraca: '250 ton',
+						color: '#f1be5b',
+						id: 'element8',
+
+					},
+					{
+						city: 'Kabupaten Banggai',
+						ketersediaan: '850 ton',
+						kebutuhan: '600 ton',
+						neraca: '250 ton',
+						color: '#76bf70',
+						id: 'element9',
+
+					},
+					{
+						city: 'Kabupaten Tojo Una-Una',
+						ketersediaan: '980 ton',
+						kebutuhan: '780 ton',
+						neraca: '200 ton',
+						color: '#bf7070',
+						id: 'element10',
+
+					},
+					{
+						city: 'Kabupaten Banggai Kepulauan',
+						ketersediaan: '920 ton',
+						kebutuhan: '720 ton',
+						neraca: '200 ton',
+						color: '#f1be5b',
+						id: 'element11',
+
+					},
+					{
+						city: 'Kabupaten Banggai Kepulauan',
+						ketersediaan: '930 ton',
+						kebutuhan: '730 ton',
+						neraca: '200 ton',
+						color: '#f1be5b',
+						id: 'element12',
+
+					},
+					{
+						city: 'Banggai Laut',
+						ketersediaan: '930 ton',
+						kebutuhan: '730 ton',
+						neraca: '200 ton',
+						color: '#f1be5b',
+						id: 'element13',
+
+					},
+				]);
+			}
+
 		} else {
-			setCardContents([
-				{
-					city: 'Kota Palu',
-					ketersediaan: '1000 ton',
-					kebutuhan: '800 ton',
-					neraca: '200 ton',
-					color: '#bf7070',
-					id: 'element1',
-
-				},
-				{
-					city: 'Kabupaten Boul',
-					ketersediaan: '900 ton',
-					kebutuhan: '700 ton',
-					neraca: '200 ton',
-					color: '#f1be5b',
-					id: 'element2',
-
-				},
-				{
-					city: 'Kabupaten Sigi',
-					ketersediaan: '1100 ton',
-					kebutuhan: '950 ton',
-					neraca: '150 ton',
-					color: '#76bf70',
-					id: 'element3',
-
-				},
-				{
-					city: 'Kabupaten Donggala',
-					ketersediaan: '1200 ton',
-					kebutuhan: '1000 ton',
-					neraca: '200 ton',
-					id: 'element4',
-					color: '#bf7070'
-				},
-				{
-					city: 'Kabupaten Morowali',
-					ketersediaan: '800 ton',
-					kebutuhan: '600 ton',
-					neraca: '200 ton',
-					color: '#f1be5b',
-					id: 'element5',
-
-				},
-				{
-					city: 'Kabupaten Parigi Moutong',
-					ketersediaan: '1050 ton',
-					kebutuhan: '850 ton',
-					neraca: '200 ton',
-					color: '#76bf70',
-					id: 'element6',
-
-				},
-				{
-					city: 'Kabupaten Toli-Toli',
-					ketersediaan: '1000 ton',
-					kebutuhan: '750 ton',
-					neraca: '250 ton',
-					color: '#bf7070',
-					id: 'element7',
-
-				},
-				{
-					city: 'Kabupaten Poso',
-					ketersediaan: '950 ton',
-					kebutuhan: '700 ton',
-					neraca: '250 ton',
-					color: '#f1be5b',
-					id: 'element8',
-
-				},
-				{
-					city: 'Kabupaten Banggai',
-					ketersediaan: '850 ton',
-					kebutuhan: '600 ton',
-					neraca: '250 ton',
-					color: '#76bf70',
-					id: 'element9',
-
-				},
-				{
-					city: 'Kabupaten Tojo Una-Una',
-					ketersediaan: '980 ton',
-					kebutuhan: '780 ton',
-					neraca: '200 ton',
-					color: '#bf7070',
-					id: 'element10',
-
-				},
-				{
-					city: 'Kabupaten Banggai Kepulauan',
-					ketersediaan: '920 ton',
-					kebutuhan: '720 ton',
-					neraca: '200 ton',
-					color: '#f1be5b',
-					id: 'element11',
-
-				},
-				{
-					city: 'Kabupaten Banggai Kepulauan',
-					ketersediaan: '930 ton',
-					kebutuhan: '730 ton',
-					neraca: '200 ton',
-					color: '#f1be5b',
-					id: 'element12',
-
-				},
-				{
-					city: 'Banggai Laut',
-					ketersediaan: '930 ton',
-					kebutuhan: '730 ton',
-					neraca: '200 ton',
-					color: '#f1be5b',
-					id: 'element13',
-
-				},
-			]);
+			console.log('No date selected');
 		}
+
 	}
 
 	const getColorByCity = (cityName: string) => {
@@ -537,9 +546,10 @@ export default function Home() {
 							</SelectGroup>
 						</SelectContent>
 					</Select> */}
-					<DatePicker />
+					<DatePicker date={selectedDate} setDate={setSelectedDate} />
+
 				</div>
-				<Button className="bg-blue-300 rounded-full p-2">
+				<Button className="bg-blue-300 rounded-full p-2" onClick={handleChangeMonth}>
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 				</Button>
 			</div>

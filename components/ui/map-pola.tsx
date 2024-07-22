@@ -6,48 +6,25 @@ import { Badge } from './badge';
 import { CounterClockwiseClockIcon } from '@radix-ui/react-icons';
 import bank from '@/public/bank.svg';
 
-export default function MapPola() {
 
-	const [flow, setFlow] = useState<any>([
-		{ start: 'Buol', end: 'Tolitoli' },
-		{ start: 'Parigi', end: 'Morowali' },
-		{ start: 'Banggai', end: 'Morowali-Utara' },
-		{ start: 'Touna', end: 'Poso' },
-		{ start: 'Sigi', end: 'Donggala' },
-		{ start: 'Palu', end: 'Banggai-Laut' },
-		{ start: 'Palu', end: 'Banggai-Kepulauan' },
-		{ start: 'Buol', end: 'gorontalo' },
-	]);
+interface Flow {
+	start: string;
+	end: string;
+	
+}
+
+interface MapProps {
+	flow: Flow[];
+}
+
+export default function MapPola({ flow }: MapProps) {
+
 
 	const containerRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
 	const changeTab = (tab: string) => {
-		if (tab === 'all') {
-			setFlow([
-				{ start: 'Buol', end: 'Tolitoli' },
-				{ start: 'Parigi', end: 'Morowali' },
-				{ start: 'Banggai', end: 'Morowali-Utara' },
-				{ start: 'Touna', end: 'Poso' },
-				{ start: 'Sigi', end: 'Donggala' },
-				{ start: 'Palu', end: 'Banggai-Laut' },
-				{ start: 'Palu', end: 'Banggai-Kepulauan' },
-				{ start: 'Buol', end: 'gorontalo' },
-			]);
-		} else if (tab === 'in') {
-			setFlow([
-				{ start: 'Sigi', end: 'Donggala' },
-				{ start: 'Palu', end: 'Banggai-Laut' },
-				{ start: 'Palu', end: 'Banggai-Kepulauan' },
-			]);
-		} else if (tab === 'intra') {
-			setFlow([
-				{ start: 'Buol', end: 'Tolitoli' },
-				{ start: 'Parigi', end: 'sumsel' },
-			]);
-		} else if (tab === 'out') {
-			setFlow([{ start: 'Buol', end: 'gorontalo' }]);
-		}
+		console.log('masuk')
 	};
 
 	useEffect(() => {

@@ -12,6 +12,7 @@ import {
 	MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import { format } from 'date-fns';
 import {
 	Select,
 	SelectContent,
@@ -27,11 +28,12 @@ import {
 } from '@radix-ui/react-icons';
 import Image from 'next/image';
 import { DatePicker } from '@/components/ui/datepicker';
+import React from 'react';
 
 export default function Home() {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [detailHarga, setDetailHarga] = useState({} as { city: string; price: string; color: string; change: string; id: string; } | undefined);
-
+	const [selectedDate, setSelectedDate] = React.useState<Date>();
 	const closeDialog = () => setIsDialogOpen(false);
 
 	const [cardContents, setCardContents] = useState([
@@ -128,196 +130,203 @@ export default function Home() {
 		},
 	]);
 
-	const handleChangeMonth = (value: string) => {
-		if (value === 'JUNI') {
-			setCardContents([
-				{
-					city: 'Kota Palu',
-					price: '20.000/kg',
-					color: '#bf7070',
-					change: 'RP.200',
-					id: 'element1'
-				},
-				{
-					city: 'Kabupaten Boul',
-					price: '14.100/kg',
-					color: '#bf7070',
-					change: 'Rp. 298',
-					id: 'element2',
-				},
-				{
-					city: 'Kabupaten Sigi',
-					price: '13.370/kg',
-					color: '#bf7070',
-					change: 'Rp. 298',
-					id: 'element3',
-				},
-				{
-					city: 'Kabupaten Donggala',
-					price: '12.000/kg',
-					color: '#bf7070',
-					change: 'Rp. 298',
-					id: 'element4',
-				},
-				{
-					city: 'Kabupaten Morowali',
-					price: '11.000/kg',
-					color: '#bf7070',
-					change: 'Rp. 298',
-					id: 'element5',
-				},
-				{
-					city: 'Kabupaten Parigi Moutong',
-					price: '10.500/kg',
-					color: '#76bf70',
-					change: 'Rp. 298',
-					id: 'element6',
-				},
-				{
-					city: 'Kabupaten Toli-Toli',
-					price: '10.000/kg',
-					color: '#bf7070',
-					change: 'Rp. 298',
-					id: 'element7',
-				},
-				{
-					city: 'Kabupaten Poso',
-					price: '9.800/kg',
-					color: '#f1be5b',
-					change: 'Rp. 298',
-					id: 'element8',
-				},
-				{
-					city: 'Kabupaten Banggai',
-					price: '9.500/kg',
-					color: '#76bf70',
-					change: 'Rp. 298',
-					id: 'element9',
-				},
-				{
-					city: 'Kabupaten Tojo Una-Una',
-					price: '9.200/kg',
-					color: '#bf7070',
-					change: 'Rp. 298',
-					id: 'element10',
-				},
-				{
-					city: 'Kabupaten Banggai Kepulauan',
-					price: '9.000/kg',
-					color: '#f1be5b',
-					change: 'Rp. 298',
-					id: 'element11',
-				},
-				{
-					city: 'Kabupaten Banggai Kepulauan',
-					price: '9.000/kg',
-					color: '#f1be5b',
-					change: 'Rp. 298',
-					id: 'element12',
-				},
-				{
-					city: 'Kabupaten Banggai Laut',
-					price: '9.000/kg',
-					color: '#f1be5b',
-					change: 'Rp. 298',
-					id: 'element13',
-				},
-			]);
+	const handleChangeMonth = () => {
+		if (selectedDate) {
+			let val = format(selectedDate, 'yyyy-MM');
+			console.log(val);
+			if (val === '2024-06') {
+				setCardContents([
+					{
+						city: 'Kota Palu',
+						price: '20.000/kg',
+						color: '#bf7070',
+						change: 'RP.200',
+						id: 'element1'
+					},
+					{
+						city: 'Kabupaten Boul',
+						price: '14.100/kg',
+						color: '#bf7070',
+						change: 'Rp. 298',
+						id: 'element2',
+					},
+					{
+						city: 'Kabupaten Sigi',
+						price: '13.370/kg',
+						color: '#bf7070',
+						change: 'Rp. 298',
+						id: 'element3',
+					},
+					{
+						city: 'Kabupaten Donggala',
+						price: '12.000/kg',
+						color: '#bf7070',
+						change: 'Rp. 298',
+						id: 'element4',
+					},
+					{
+						city: 'Kabupaten Morowali',
+						price: '11.000/kg',
+						color: '#bf7070',
+						change: 'Rp. 298',
+						id: 'element5',
+					},
+					{
+						city: 'Kabupaten Parigi Moutong',
+						price: '10.500/kg',
+						color: '#76bf70',
+						change: 'Rp. 298',
+						id: 'element6',
+					},
+					{
+						city: 'Kabupaten Toli-Toli',
+						price: '10.000/kg',
+						color: '#bf7070',
+						change: 'Rp. 298',
+						id: 'element7',
+					},
+					{
+						city: 'Kabupaten Poso',
+						price: '9.800/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element8',
+					},
+					{
+						city: 'Kabupaten Banggai',
+						price: '9.500/kg',
+						color: '#76bf70',
+						change: 'Rp. 298',
+						id: 'element9',
+					},
+					{
+						city: 'Kabupaten Tojo Una-Una',
+						price: '9.200/kg',
+						color: '#bf7070',
+						change: 'Rp. 298',
+						id: 'element10',
+					},
+					{
+						city: 'Kabupaten Banggai Kepulauan',
+						price: '9.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element11',
+					},
+					{
+						city: 'Kabupaten Banggai Kepulauan',
+						price: '9.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element12',
+					},
+					{
+						city: 'Kabupaten Banggai Laut',
+						price: '9.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element13',
+					},
+				]);
+			} else {
+				setCardContents([
+					{
+						city: 'Kota Palu',
+						price: '20.000/kg',
+						color: '#f1be5b',
+						change: 'RP.200',
+						id: 'element1'
+					},
+					{
+						city: 'Kabupaten Boul',
+						price: '14.100/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element2',
+					},
+					{
+						city: 'Kabupaten Sigi',
+						price: '13.370/kg',
+						color: '#76bf70',
+						change: 'Rp. 298',
+						id: 'element3',
+					},
+					{
+						city: 'Kabupaten Donggala',
+						price: '12.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element4',
+					},
+					{
+						city: 'Kabupaten Morowali',
+						price: '11.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element5',
+					},
+					{
+						city: 'Kabupaten Parigi Moutong',
+						price: '10.500/kg',
+						color: '#76bf70',
+						change: 'Rp. 298',
+						id: 'element6',
+					},
+					{
+						city: 'Kabupaten Toli-Toli',
+						price: '10.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element7',
+					},
+					{
+						city: 'Kabupaten Poso',
+						price: '9.800/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element8',
+					},
+					{
+						city: 'Kabupaten Banggai',
+						price: '9.500/kg',
+						color: '#76bf70',
+						change: 'Rp. 298',
+						id: 'element9',
+					},
+					{
+						city: 'Kabupaten Tojo Una-Una',
+						price: '9.200/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element10',
+					},
+					{
+						city: 'Kabupaten Banggai Kepulauan',
+						price: '9.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element11',
+					},
+					{
+						city: 'Kabupaten Banggai Kepulauan',
+						price: '9.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element12',
+					},
+					{
+						city: 'Kabupaten Banggai Laut',
+						price: '9.000/kg',
+						color: '#f1be5b',
+						change: 'Rp. 298',
+						id: 'element13',
+					},
+				]);
+			}
 		} else {
-			setCardContents([
-				{
-					city: 'Kota Palu',
-					price: '20.000/kg',
-					color: '#f1be5b',
-					change: 'RP.200',
-					id: 'element1'
-				},
-				{
-					city: 'Kabupaten Boul',
-					price: '14.100/kg',
-					color: '#f1be5b',
-					change: 'Rp. 298',
-					id: 'element2',
-				},
-				{
-					city: 'Kabupaten Sigi',
-					price: '13.370/kg',
-					color: '#76bf70',
-					change: 'Rp. 298',
-					id: 'element3',
-				},
-				{
-					city: 'Kabupaten Donggala',
-					price: '12.000/kg',
-					color: '#f1be5b',
-					change: 'Rp. 298',
-					id: 'element4',
-				},
-				{
-					city: 'Kabupaten Morowali',
-					price: '11.000/kg',
-					color: '#f1be5b',
-					change: 'Rp. 298',
-					id: 'element5',
-				},
-				{
-					city: 'Kabupaten Parigi Moutong',
-					price: '10.500/kg',
-					color: '#76bf70',
-					change: 'Rp. 298',
-					id: 'element6',
-				},
-				{
-					city: 'Kabupaten Toli-Toli',
-					price: '10.000/kg',
-					color: '#f1be5b',
-					change: 'Rp. 298',
-					id: 'element7',
-				},
-				{
-					city: 'Kabupaten Poso',
-					price: '9.800/kg',
-					color: '#f1be5b',
-					change: 'Rp. 298',
-					id: 'element8',
-				},
-				{
-					city: 'Kabupaten Banggai',
-					price: '9.500/kg',
-					color: '#76bf70',
-					change: 'Rp. 298',
-					id: 'element9',
-				},
-				{
-					city: 'Kabupaten Tojo Una-Una',
-					price: '9.200/kg',
-					color: '#f1be5b',
-					change: 'Rp. 298',
-					id: 'element10',
-				},
-				{
-					city: 'Kabupaten Banggai Kepulauan',
-					price: '9.000/kg',
-					color: '#f1be5b',
-					change: 'Rp. 298',
-					id: 'element11',
-				},
-				{
-					city: 'Kabupaten Banggai Kepulauan',
-					price: '9.000/kg',
-					color: '#f1be5b',
-					change: 'Rp. 298',
-					id: 'element12',
-				},
-				{
-					city: 'Kabupaten Banggai Laut',
-					price: '9.000/kg',
-					color: '#f1be5b',
-					change: 'Rp. 298',
-					id: 'element13',
-				},
-			]);
+			console.log('No date selected');
 		}
+
 	}
 
 	const getColorByCity = (cityName: string) => {
@@ -330,84 +339,6 @@ export default function Home() {
 		setDetailHarga(cardContents.find((card) => card.id === el));
 		setIsDialogOpen(true);
 	};
-
-	const months = [
-		'JUNI',
-		'JULI',
-	];
-
-	const konsumenPangan = [
-		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
-		},
-		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
-		},
-		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
-		},
-		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
-		},
-		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
-		},
-		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
-		},
-		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
-		},
-		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
-		},
-		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
-		},
-		{
-			komoditas: 'Beras',
-			jenis: 'Premium',
-			harga: 'Rp. 12.000',
-			volatilitas: '90%',
-			hari: '92',
-		},
-	];
 
 	const showCardArea = (city: string, id: string) => {
 		const content = cardContents.find((card) => card.id === id);
@@ -488,9 +419,9 @@ export default function Home() {
 				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm ">Bulan</h1>
-					<DatePicker />
+					<DatePicker date={selectedDate} setDate={setSelectedDate} />
 				</div>
-				<Button className="bg-blue-300 rounded-full p-2">
+				<Button onClick={handleChangeMonth} className="bg-blue-300 rounded-full p-2">
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 				</Button>
 			</div>

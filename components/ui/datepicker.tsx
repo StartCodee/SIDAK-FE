@@ -12,9 +12,12 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { ChevronDown } from 'lucide-react';
 
-export function DatePicker() {
-	const [date, setDate] = React.useState<Date>();
+interface DatePickerProps {
+	date: Date | undefined;
+	setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+}
 
+export function DatePicker({ date, setDate }: DatePickerProps) {
 	return (
 		<Popover>
 			<PopoverTrigger asChild>

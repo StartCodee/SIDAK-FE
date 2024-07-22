@@ -44,9 +44,12 @@ import {
 } from "@/components/ui/select"
 import { isExternal } from 'util/types';
 import { DatePicker } from '@/components/ui/datepicker';
+import React from 'react';
+import { format } from 'date-fns';
 
 const FlowChart: React.FC = () => {
 
+	const [selectedDate, setSelectedDate] = React.useState<Date>();
 
 	const [flow, setFlow] = useState<any>([
 		{ start: 'Buol', end: 'Tolitoli' },
@@ -59,6 +62,21 @@ const FlowChart: React.FC = () => {
 		{ start: 'Buol', end: 'gorontalo' },
 	]);
 
+
+	const handleChangeMonth = () => {
+		if (selectedDate) {
+			let val = format(selectedDate, 'yyyy-MM');
+			if (val === '2024-06') {
+				setFlow([
+					{ start: 'Palu', end: 'Banggai-Laut' },
+					{ start: 'Palu', end: 'Banggai-Kepulauan' },
+					{ start: 'gorontalo', end: 'Buol' },
+				]);
+			}
+		} else {
+			console.log('No date selected');
+		}
+	}
 
 	const containerRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -478,7 +496,7 @@ const FlowChart: React.FC = () => {
 			ctx.stroke(path);
 			// drawDot(ctx, startX, startY, '#01518B');
 			drawIcon(ctx, startX, startY, bank);
-			if (isExternalFlowEnd) {
+			if (isExternalFlowEnd || isExternalFlowStart) {
 				drawDot(ctx, endX, endY, 'yellow');
 			} else {
 				drawArrow(ctx, endX, endY, startX, startY, controlX, controlY);
@@ -599,9 +617,10 @@ const FlowChart: React.FC = () => {
 				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
 				<div className="flex-col ">
 					<h1 className="font-bold text-sm ">Bulan</h1>
-					<DatePicker />
+					<DatePicker date={selectedDate} setDate={setSelectedDate} />
+
 				</div>
-				<Button className="bg-blue-300 rounded-full p-2">
+				<Button className="bg-blue-300 rounded-full p-2" onClick={handleChangeMonth}>
 					<MagnifyingGlassIcon className="text-white" width={28} height={28} />
 				</Button>
 			</div>

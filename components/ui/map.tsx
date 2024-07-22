@@ -5,200 +5,37 @@ import { useEffect, useState } from 'react';
 import Dialog from './modal-harga';
 import { Button } from './button';
 
-const CardContents = [
-	{ city: 'Kota Palu', price: '15.000/kg', color: 'red', change: 'RP.298', id: 'element1' },
-	{
-		city: 'Kabupaten Boul',
-		price: '14.100/kg',
-		color: 'yellow',
-		change: 'Rp. 298',
-		id: 'element2',
-	},
-	{
-		city: 'Kabupaten Sigi',
-		price: '13.370/kg',
-		color: 'green',
-		change: 'Rp. 298',
-		id: 'element3',
-	},
-	{
-		city: 'Kabupaten Donggala',
-		price: '12.000/kg',
-		color: 'red',
-		change: 'Rp. 298',
-		id: 'element4',
-	},
-	{
-		city: 'Kabupaten Morowali',
-		price: '11.000/kg',
-		color: 'yellow',
-		change: 'Rp. 298',
-		id: 'element5',
-	},
-	{
-		city: 'Kabupaten Parigi Moutong',
-		price: '10.500/kg',
-		color: 'green',
-		change: 'Rp. 298',
-		id: 'element6',
-	},
-	{
-		city: 'Kabupaten Toli-Toli',
-		price: '10.000/kg',
-		color: 'red',
-		change: 'Rp. 298',
-		id: 'element7',
-	},
-	{
-		city: 'Kabupaten Poso',
-		price: '9.800/kg',
-		color: 'yellow',
-		change: 'Rp. 298',
-		id: 'element8',
-	},
-	{
-		city: 'Kabupaten Banggai',
-		price: '9.500/kg',
-		color: 'green',
-		change: 'Rp. 298',
-		id: 'element9',
-	},
-	{
-		city: 'Kabupaten Tojo Una-Una',
-		price: '9.200/kg',
-		color: 'red',
-		change: 'Rp. 298',
-		id: 'element10',
-	},
-	{
-		city: 'Kabupaten Banggai Kepulauan',
-		price: '9.000/kg',
-		color: 'yellow',
-		change: 'Rp. 298',
-		id: 'element11',
-	},
-	{
-		city: 'Kabupaten Banggai Kepulauan',
-		price: '9.000/kg',
-		color: 'yellow',
-		change: 'Rp. 298',
-		id: 'element12',
-	},
-];
+interface CardContent {
+	city: string;
+	price: string;
+	color: string;
+	change: string;
+	id: string;
+  }
+  
+  interface MapProps {
+	cardContents: CardContent[];
+  }
 
-export default function Map() {
+export default function Map({ cardContents }: MapProps) {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [detailHarga, setDetailHarga] = useState(
 		{} as
-			| {
-					city: string;
-					price: string;
-					color: string;
-					change: string;
-					id: string;
-			  }
-			| undefined,
+		| {
+			city: string;
+			price: string;
+			color: string;
+			change: string;
+			id: string;
+		}
+		| undefined,
 	);
 
 	const closeDialog = () => setIsDialogOpen(false);
-		const openDialog = (el: string) => {
-			setDetailHarga(cardContents.find((card) => card.id === el));
-			setIsDialogOpen(true);
-		};
-
-	const [cardContents, setCardContents] = useState([
-		{
-			city: 'Kota Palu',
-			price: '20.000/kg',
-			color: '#f1be5b',
-			change: 'RP.200',
-			id: 'element1',
-		},
-		{
-			city: 'Kabupaten Boul',
-			price: '14.100/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'element2',
-		},
-		{
-			city: 'Kabupaten Sigi',
-			price: '13.370/kg',
-			color: '#76bf70',
-			change: 'Rp. 298',
-			id: 'element3',
-		},
-		{
-			city: 'Kabupaten Donggala',
-			price: '12.000/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'element4',
-		},
-		{
-			city: 'Kabupaten Morowali',
-			price: '11.000/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'element5',
-		},
-		{
-			city: 'Kabupaten Parigi Moutong',
-			price: '10.500/kg',
-			color: '#76bf70',
-			change: 'Rp. 298',
-			id: 'element6',
-		},
-		{
-			city: 'Kabupaten Toli-Toli',
-			price: '10.000/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'element7',
-		},
-		{
-			city: 'Kabupaten Poso',
-			price: '9.800/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'element8',
-		},
-		{
-			city: 'Kabupaten Banggai',
-			price: '9.500/kg',
-			color: '#76bf70',
-			change: 'Rp. 298',
-			id: 'element9',
-		},
-		{
-			city: 'Kabupaten Tojo Una-Una',
-			price: '9.200/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'element10',
-		},
-		{
-			city: 'Kabupaten Banggai Kepulauan',
-			price: '9.000/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'element11',
-		},
-		{
-			city: 'Kabupaten d Kepulauan',
-			price: '9.000/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'element12',
-		},
-		{
-			city: 'Kabupaten Banggai Laut',
-			price: '9.000/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'element13',
-		},
-	]);
+	const openDialog = (el: string) => {
+		setDetailHarga(cardContents.find((card) => card.id === el));
+		setIsDialogOpen(true);
+	};
 
 	const showCardArea = (city: string, id: string) => {
 		const content = cardContents.find((card) => card.id === id);
@@ -235,8 +72,6 @@ export default function Map() {
 		return cityData ? cityData.color : undefined;
 	};
 
-
-
 	return (
 		<>
 			<Dialog isOpen={isDialogOpen} onClose={closeDialog}>
@@ -263,9 +98,9 @@ export default function Map() {
 								</div>
 							</div>
 							<Button className='hover:bg-green-200 rounded-full cursor-pointer' asChild>
-							<span className="self-end inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-								Export
-							</span>
+								<span className="self-end inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+									Export
+								</span>
 							</Button>
 						</div>
 						<div className="h-1 rounded-lg my-10 bg-black/10 z-0"></div>
