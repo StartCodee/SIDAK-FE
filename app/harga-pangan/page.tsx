@@ -17,6 +17,8 @@ import { format } from 'date-fns';
 import {
 	CounterClockwiseClockIcon,
 	ArrowUpIcon,
+	ArrowDownIcon,
+	SymbolIcon,
 } from '@radix-ui/react-icons';
 import Image from 'next/image';
 import { DatePicker } from '@/components/ui/datepicker';
@@ -438,10 +440,10 @@ export default function Home() {
 						{cardContents.map((content, index) => (
 							<div
 								key={index}
-								style={{alignContent:'center'}}
+								style={{ alignContent: 'center' }}
 								// style={{display: flex;align-content: center;flex-direction: column;justify-content: space-between;}}
 								className="border border-gray-200 p-4 flex flex-col justify-between rounded-lg shadow-md">
-								<div className="flex flex-col items-center justify-between space-y-2" style={{flex:1}}>
+								<div className="flex flex-col items-center justify-between space-y-2" style={{ flex: 1 }}>
 									<h1 className="text-md font-light text-center">{content.city}</h1>
 									<p className="font-bold text-2xl">{content.price}</p>
 									<div
@@ -449,8 +451,22 @@ export default function Home() {
 										style={{
 											background: content.color,
 										}}>
-										<ArrowUpIcon className="text-white w-4 h-4 mr-1" />
-										Naik {content.change}
+										{content.color === '#bf7070' ? (
+											<div>
+												<ArrowUpIcon width={20} height={20} />
+												Naik {content.change}
+											</div>
+										) : content.color === '#f1be5b' ? (
+											<div>
+												<ArrowDownIcon width={20} height={20} />
+												Turun {content.change}
+											</div>
+										) : (
+											<div>
+												<SymbolIcon width={20} height={20} />
+												Stabil
+											</div>
+										)}
 									</div>
 								</div>
 								<div className="flex flex-col mt-6" >
