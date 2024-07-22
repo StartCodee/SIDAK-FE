@@ -5,21 +5,21 @@ import vector2 from '@/public/vect2.svg';
 export default function Hero () {
     return (
 			<>
-				<div className="relative h-56 flex items-center bg-blend-multiply bg-slate-500 justify-center bg-no-repeat bg-cover bg-[url('/bgg.png')]">
+				<div className="relative h-[12rem] flex items-center bg-blend-multiply bg-slate-500 justify-center bg-no-repeat bg-cover bg-[url('/bgg.png')]">
 					<div className="hidden lg:block">
 						<Image
 							src={vector1}
 							alt="vector1"
-							width={340}
-							height={340}
+							width={300}
+							height={300}
 							objectFit="cover"
 							className="absolute opacity-60 right-0 top-0"
 						/>
 						<Image
 							src={vector2}
 							alt="vector2"
-							width={340}
-							height={340}
+							width={300}
+							height={300}
 							objectFit="cover"
 							className="absolute drop-shadow-md opacity-25 right-0 top-0"
 						/>

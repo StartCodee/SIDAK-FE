@@ -30,7 +30,7 @@ export default function Navbar() {
 					className="mx-auto flex max-w-7xl items-center justify-between p-2 lg:px-8">
 					<a href="#" className=" ">
 						<span className="sr-only">SIDAK</span>
-						<Image src={logo} alt="" width={250} height={120} />
+						<Image src={logo} alt="" width={250} height={110} />
 					</a>
 					<div className="flex lg:hidden">
 						<button
@@ -46,7 +46,7 @@ export default function Navbar() {
 							<Link
 								key={item.name}
 								href={item.path}
-								className={`text-md font-semibold leading-6 ${
+								className={`text-[17px] font-bold leading-6 ${
 									pathname === item.path ? 'text-blue-500' : 'text-gray-900'
 								}`}>
 								{item.name}
@@ -54,7 +54,7 @@ export default function Navbar() {
 						))}
 						<Link
 							href="/auth"
-							className={`text-md font-semibold leading-6 ${
+							className={`text-[17px] font-bold leading-6 ${
 								pathname === '/auth' ? 'text-blue-500' : 'text-gray-900'
 							}`}>
 							Log in

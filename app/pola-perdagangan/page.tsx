@@ -47,6 +47,7 @@ import { DatePicker } from '@/components/ui/datepicker';
 import React from 'react';
 import { format } from 'date-fns';
 import Hero from '@/components/ui/hero';
+import MonthPicker from '@/components/ui/monthpicker';
 
 const FlowChart: React.FC = () => {
 
@@ -593,10 +594,11 @@ const FlowChart: React.FC = () => {
 				<div className="mx-4 border-l border-black h-auto self-stretch  sm:block" />
 				<div className="flex-col ">
 					<h1 className="font-bold text-sm ">Bulan</h1>
-					<DatePicker date={selectedDate} setDate={setSelectedDate} />
-
+					<MonthPicker date={selectedDate} setDate={setSelectedDate} />
 				</div>
-				<Button className="bg-blue-300 rounded-full p-2" onClick={handleChangeMonth}>
+				<Button
+					className="bg-blue-300 rounded-full p-2"
+					onClick={handleChangeMonth}>
 					<MagnifyingGlassIcon className="text-white" width={28} height={28} />
 				</Button>
 			</div>

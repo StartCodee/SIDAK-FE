@@ -749,7 +749,7 @@ export default function Home() {
 		<main>
 			<Navbar />
 			<Hero />
-			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[18rem] sm:w-[40rem] h-20 gap-2  rounded-lg sm:rounded-full py-4 flex flex-col items-start sm:flex-row flex-wrap  bg-white">
+			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[18rem] sm:w-[40rem] h-18 gap-2  rounded-lg sm:rounded-full py-[0.4rem] flex flex-col items-center sm:flex-row flex-wrap  bg-white">
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm">Jenis Informasi</h1>
 					<Select onValueChange={handleValueChange}>
@@ -931,7 +931,7 @@ export default function Home() {
 
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm ">Bulan</h1>
-						<DatePicker date={selectedDate} setDate={setSelectedDate} />
+						<MonthPicker date={selectedDate} setDate={setSelectedDate} />
 					</div>
 					<Button className="bg-blue-300 rounded-full p-2">
 						<MagnifyingGlassIcon
@@ -1001,8 +1001,8 @@ export default function Home() {
 				<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
 					Berita Hari Ini
 				</h1>
-				<div className="grid grid-cols-1 sm:grid-cols-2 px-20 lg:grid-cols-3 gap-2">
-					<Card className="max-w-[80%]">
+				<div className="flex flex-wrap justify-center gap-24 p-8">
+					<Card className="w-[300px]">
 						<CardHeader>
 							<Image
 								src={berita}
@@ -1024,7 +1024,7 @@ export default function Home() {
 							</Button>
 						</CardFooter>
 					</Card>
-					<Card className="max-w-[80%]">
+					<Card className="w-[300px]">
 						<CardHeader>
 							<Image
 								src={berita2}
@@ -1046,7 +1046,7 @@ export default function Home() {
 							</Button>
 						</CardFooter>
 					</Card>
-					<Card className="max-w-[80%]">
+					<Card className="w-[300px]">
 						<CardHeader>
 							<Image
 								src={berita3}
@@ -1069,6 +1069,7 @@ export default function Home() {
 						</CardFooter>
 					</Card>
 				</div>
+
 				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
 			</section>
 			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4">
