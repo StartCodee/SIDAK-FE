@@ -739,9 +739,9 @@ export default function Home() {
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 				</Button>
 			</div>
-			{/* content */}
+
 			{selectedValue === 'harga-pangan' && (
-				<section className="px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+				<section className="px-4 sm:px-8 md:px-10 lg:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 					<div className="flex flex-col sm:flex-row justify-between pt-10">
 						<div className="flex-col">
 							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-1 font-extrabold">
@@ -803,15 +803,13 @@ export default function Home() {
 					<MapPola flow={flow} />
 				</>
 			)}
-			<section className=" px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+			<section className=" px-4 sm:px-8 md:px-10 lg:px-50 pt-4 ">
 				<br />
-				<h1 className="text-sm m-0 p-0 sm:text-sm md:text-md">
+				<h1 className="text-sm pb-10 p-0 sm:text-sm md:text-md">
 					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar
 				</h1>
-				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
-				<div
-					style={{ marginTop: '-40px' }}
-					className="mx-auto px-4 py-4 sm:py-2 sm:px-8 shadow-xl w-[20rem] sm:w-[55rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
+				<div className="h-1 rounded-lg  my-10 bg-black/10 z-0"></div>
+				<div className="mx-auto -mt-[80px] px-4   py-4 sm:py-2 sm:px-8 shadow-xl w-[20rem] md:w-[55rem] rounded-xl md:rounded-full flex flex-col md:flex-row items-center md:justify-between bg-white space-y-4 md:space-y-0 md:space-x-4">
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm mb-1">Jenis Informasi</h1>
 						<Select
@@ -853,7 +851,7 @@ export default function Home() {
 						Harga Konsumen Pangan Strategis Sulawesi Tengah
 					</h1>
 					<center>
-						<div className="flex justify-start items-start self-center  flex-wrap gap-10 ">
+						<div className="flex lg:justify-start justify-center items-start self-center  flex-wrap gap-10 ">
 							{konsumenPangan.map((content, index) => (
 								<Card
 									key={index}
