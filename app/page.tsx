@@ -2793,6 +2793,8 @@ export default function Home() {
 			const filteredData = mockData.filter(data =>
 				data.item.includes(selectedCommodity) && data.bulan === val
 			);
+			console.log('ini val',val);
+			console.log('ini commodity',commodity);
 			setCardContents(filteredData);
 		} else {
 			console.log('No date selected');
@@ -2825,6 +2827,7 @@ export default function Home() {
 					<h1 className="font-bold text-sm mb-1">Komoditas</h1>
 					<Select
 						className=" basic-single w-[170px] border-none"
+						onChange={(option) => setSelectedCommodity(option!.value)}
 						options={options}
 					/>
 				</div>

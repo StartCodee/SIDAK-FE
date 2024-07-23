@@ -38,7 +38,7 @@ export default function Map({ cardContents }: MapProps) {
 	};
 
 	const showCardArea = (id: string) => {
-		console.log(id);
+		// console.log(id);
 		const content = cardContents.find((card) => card.id === id);
 		const path = document.getElementById(id);
 		if (!path) return;
@@ -85,7 +85,7 @@ export default function Map({ cardContents }: MapProps) {
 
 	const getColorByCity = (cityName: string) => {
 		const cityData = cardContents.find((item) => item.id === cityName);
-		console.log(cityData, cityName);
+		// console.log(cityData, cityName);
 		return cityData ? cityData.color : undefined;
 	};
 
