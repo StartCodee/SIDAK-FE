@@ -11,7 +11,7 @@ import vector2 from '@/public/vect2.svg';
 import {
 	MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 
 import {
@@ -29,646 +29,2527 @@ import Map from '@/components/ui/map';
 
 import MonthPicker from '@/components/ui/monthpicker';
 
+interface cardContents {
+	city: string;
+	item: string;
+	price: string;
+	color: string;
+	change: string;
+	bulan: string;
+	id: string;
+}
+
 export default function Home() {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const [selectedCommodity, setSelectedCommodity] = useState('');
 	const [detailHarga, setDetailHarga] = useState({} as { city: string; price: string; color: string; change: string; id: string; } | undefined);
 	const [selectedDate, setSelectedDate] = React.useState<Date>();
 	const closeDialog = () => setIsDialogOpen(false);
 
 	const options = [
-		{ value: '1', label: 'Beras Premium' },
-		{ value: '2', label: 'Daging Ayam' },
-		{ value: '3', label: 'Daging Sapi' },
-		{ value: '4', label: 'Minyak Goreng' },
-		{ value: '5', label: 'Bawang Merah' },
-		{ value: '6', label: 'Bawang Putih' },
-		{ value: '7', label: 'Telur Ayam' },
-		{ value: '8', label: 'Gula Pasir' },
-		{ value: '9', label: 'Cabe Merah' },
-		{ value: '10', label: 'Cabe Rawit' },
-		{ value: '11', label: 'Ikan' },
+		{ value: 'Beras Premium', label: 'Beras Premium' },
+		{ value: 'Cabai Merah Besar', label: 'Cabai Merah Besar' },
+		{ value: 'Cabai Rawit Merah', label: 'Cabai Rawit Merah' },
+		{ value: 'Bawang Merah', label: 'Bawang Merah' },
+		{ value: 'Gula Pasir Kemasan', label: 'Gula Pasir Kemasan' },
+		{ value: 'Minyak Goreng', label: 'Minyak Goreng' },
+		{ value: 'Daging Ayam Ras', label: 'Daging Ayam Ras' },
+		{ value: 'Telur Ayam Ras', label: 'Telur Ayam Ras' },
+		{ value: 'Daging Sapi', label: 'Daging Sapi' },
+		{ value: 'Ikan Tongkol', label: 'Ikan Tongkol' },
+		{ value: 'Bawang Putih', label: 'Bawang Putih' },
+		{ value: 'Gula Pasir', label: 'Gula Pasir' },
 	]
 
-	const [cardContents, setCardContents] = useState([
-		// {
-		// 	"city": "Kota Palu",
-		// 	"item": "Beras Premium",
-		// 	"price": "15,167",
-		// 	"color": "Green",
-		// 	"change": "-8.7%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Kota Palu",
-		// 	"item": "Cabai Merah Besar",
-		// 	"price": "27,083",
-		// 	"color": "Green",
-		// 	"change": "-33.2%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Kota Palu",
-		// 	"item": "Cabai Rawit Merah",
-		// 	"price": "57,778",
-		// 	"color": "Red",
-		// 	"change": "14.5%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Kota Palu",
-		// 	"item": "Bawang Merah",
-		// 	"price": "50,833",
-		// 	"color": "Red",
-		// 	"change": "12.7%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Kota Palu",
-		// 	"item": "Gula Pasir Kemasan",
-		// 	"price": "18,500",
-		// 	"color": "Red",
-		// 	"change": "0.7%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Kota Palu",
-		// 	"item": "Minyak Goreng Sawit Kemasan Premium",
-		// 	"price": "18,694",
-		// 	"color": "Red",
-		// 	"change": "1.2%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Kota Palu",
-		// 	"item": "Daging Ayam Ras",
-		// 	"price": "41,944",
-		// 	"color": "Green",
-		// 	"change": "-3.6%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Kota Palu",
-		// 	"item": "Telur Ayam Ras",
-		// 	"price": "32,000",
-		// 	"color": "Red",
-		// 	"change": "1.3%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Kota Palu",
-		// 	"item": "Daging Sapi Paha Belakang",
-		// 	"price": "130,000",
-		// 	"color": "Green",
-		// 	"change": "-2.6%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Kota Palu",
-		// 	"item": "Ikan Tongkol",
-		// 	"price": "35,000",
-		// 	"color": "Green",
-		// 	"change": "-3.1%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Kota Palu",
-		// 	"item": "Bawang Putih Honan",
-		// 	"price": "49,222",
-		// 	"color": "Green",
-		// 	"change": "-0.4%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Luwuk",
-		// 	"item": "Beras Premium",
-		// 	"price": "13,300",
-		// 	"color": "Green",
-		// 	"change": "-3.7%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Luwuk",
-		// 	"item": "Cabai Merah Besar",
-		// 	"price": "49,000",
-		// 	"color": "Red",
-		// 	"change": "39.9%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Luwuk",
-		// 	"item": "Cabai Rawit Merah",
-		// 	"price": "51,574",
-		// 	"color": "Red",
-		// 	"change": "6.2%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Luwuk",
-		// 	"item": "Bawang Merah",
-		// 	"price": "43,842",
-		// 	"color": "Green",
-		// 	"change": "-5.8%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Luwuk",
-		// 	"item": "Gula Pasir Kemasan",
-		// 	"price": "20,833",
-		// 	"color": "Green",
-		// 	"change": "-0.6%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Luwuk",
-		// 	"item": "Minyak Goreng Sawit Kemasan Premium",
-		// 	"price": "18,704",
-		// 	"color": "Green",
-		// 	"change": "-0.4%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Luwuk",
-		// 	"item": "Daging Ayam Ras",
-		// 	"price": "32,593",
-		// 	"color": "Green",
-		// 	"change": "-7.5%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Luwuk",
-		// 	"item": "Telur Ayam Ras",
-		// 	"price": "33,150",
-		// 	"color": "Green",
-		// 	"change": "-5.8%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Luwuk",
-		// 	"item": "Daging Sapi Paha Belakang",
-		// 	"price": "140,000",
-		// 	"color": "Red",
-		// 	"change": "0.1%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Luwuk",
-		// 	"item": "Ikan Tongkol",
-		// 	"price": "24,815",
-		// 	"color": "Red",
-		// 	"change": "10.1%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Luwuk",
-		// 	"item": "Bawang Putih Honan",
-		// 	"price": "47,472",
-		// 	"color": "Green",
-		// 	"change": "-3.9%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Tolitoli",
-		// 	"item": "Beras Premium",
-		// 	"price": "15,889",
-		// 	"color": "Green",
-		// 	"change": "-2.8%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Tolitoli",
-		// 	"item": "Cabai Merah Besar",
-		// 	"price": "47,500",
-		// 	"color": "Red",
-		// 	"change": "56.8%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Tolitoli",
-		// 	"item": "Cabai Rawit Merah",
-		// 	"price": "61,944",
-		// 	"color": "Red",
-		// 	"change": "25.4%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Tolitoli",
-		// 	"item": "Bawang Merah",
-		// 	"price": "46,389",
-		// 	"color": "Green",
-		// 	"change": "-1.4%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Tolitoli",
-		// 	"item": "Gula Pasir Kemasan",
-		// 	"price": "18,000",
-		// 	"color": "Green",
-		// 	"change": "-2.2%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Tolitoli",
-		// 	"item": "Minyak Goreng Sawit Kemasan Premium",
-		// 	"price": "18,111",
-		// 	"color": "Red",
-		// 	"change": "0.6%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Tolitoli",
-		// 	"item": "Daging Ayam Ras",
-		// 	"price": "34,000",
-		// 	"color": "Red",
-		// 	"change": "0.0%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Tolitoli",
-		// 	"item": "Telur Ayam Ras",
-		// 	"price": "33,789",
-		// 	"color": "Green",
-		// 	"change": "-12.4%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Tolitoli",
-		// 	"item": "Daging Sapi Paha Belakang",
-		// 	"price": "130,000",
-		// 	"color": "Red",
-		// 	"change": "0.0%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Tolitoli",
-		// 	"item": "Ikan Tongkol",
-		// 	"price": "28,611",
-		// 	"color": "Red",
-		// 	"change": "18.6%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Tolitoli",
-		// 	"item": "Bawang Putih Honan",
-		// 	"price": "48,056",
-		// 	"color": "Red",
-		// 	"change": "2.8%",
-		// 	"bulan": "2024-06"
-		// },
-		// {
-		// 	"city": "Morowali",
-		// 	"item": "Beras Premium",
-		// 	"price": "15,944",
-		// 	"color": "Green",
-		// 	"change": "-1.1%",
-		// 	"bulan": "2024-06"
-		// },
-
-
-
-
-
-
-
-
-
-
-		
-
-
-
+	const mockData = [
 		{
-			city: 'Kota Buol',
-			price: '20.000/kg',
-			color: '#f1be5b',
-			change: 'RP.200',
-			id: 'Buol'
+			"city": "Kota palu",
+			"item": "Beras Premium",
+			"price": "15,167",
+			"color": "#76bf70",
+			"change": "-8.75%",
+			"bulan": "2024-06",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Cabai Merah Besar",
+			"price": "27,083",
+			"color": "#76bf70",
+			"change": "-33.24%",
+			"bulan": "2024-06",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Cabai Rawit Merah",
+			"price": "57,778",
+			"color": "#bf7070",
+			"change": "14.51%",
+			"bulan": "2024-06",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Bawang Merah",
+			"price": "50,833",
+			"color": "#bf7070",
+			"change": "12.68%",
+			"bulan": "2024-06",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Gula Pasir Kemasan",
+			"price": "18,500",
+			"color": "#bf7070",
+			"change": "0.74%",
+			"bulan": "2024-06",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Minyak Goreng",
+			"price": "18,694",
+			"color": "#bf7070",
+			"change": "1.18%",
+			"bulan": "2024-06",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Daging Ayam Ras",
+			"price": "41,944",
+			"color": "#76bf70",
+			"change": "-3.63%",
+			"bulan": "2024-06",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Telur Ayam Ras",
+			"price": "32,000",
+			"color": "#bf7070",
+			"change": "1.31%",
+			"bulan": "2024-06",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Daging Sapi",
+			"price": "130,000",
+			"color": "#76bf70",
+			"change": "-2.64%",
+			"bulan": "2024-06",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Ikan Tongkol",
+			"price": "35,000",
+			"color": "#76bf70",
+			"change": "-3.14%",
+			"bulan": "2024-06",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Bawang Putih",
+			"price": "49,222",
+			"color": "#76bf70",
+			"change": "-0.38%",
+			"bulan": "2024-06",
+			"id": "Palu"
+		}, {
+			"city": "Luwuk",
+			"item": "Beras Premium",
+			"price": "13,300",
+			"color": "#76bf70",
+			"change": "-3.72%",
+			"bulan": "2024-06",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Cabai Merah Besar",
+			"price": "49,000",
+			"color": "#bf7070",
+			"change": "39.94%",
+			"bulan": "2024-06",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Cabai Rawit Merah",
+			"price": "51,574",
+			"color": "#bf7070",
+			"change": "6.20%",
+			"bulan": "2024-06",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Bawang Merah",
+			"price": "43,842",
+			"color": "#76bf70",
+			"change": "-5.78%",
+			"bulan": "2024-06",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Gula Pasir Kemasan",
+			"price": "20,833",
+			"color": "#76bf70",
+			"change": "-0.56%",
+			"bulan": "2024-06",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Minyak Goreng",
+			"price": "18,704",
+			"color": "#76bf70",
+			"change": "-0.45%",
+			"bulan": "2024-06",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Daging Ayam Ras",
+			"price": "32,593",
+			"color": "#76bf70",
+			"change": "-7.53%",
+			"bulan": "2024-06",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Telur Ayam Ras",
+			"price": "33,150",
+			"color": "#76bf70",
+			"change": "-5.76%",
+			"bulan": "2024-06",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Daging Sapi",
+			"price": "140,000",
+			"color": "#bf7070",
+			"change": "0.05%",
+			"bulan": "2024-06",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Ikan Tongkol",
+			"price": "24,815",
+			"color": "#bf7070",
+			"change": "10.10%",
+			"bulan": "2024-06",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Bawang Putih",
+			"price": "47,472",
+			"color": "#76bf70",
+			"change": "-3.94%",
+			"bulan": "2024-06",
+			"id": "Banggai"
+		}, {
+			"city": "Tolitoli",
+			"item": "Beras Premium",
+			"price": "15,889",
+			"color": "#76bf70",
+			"change": "-2.84%",
+			"bulan": "2024-06",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Cabai Merah Besar",
+			"price": "47,500",
+			"color": "#bf7070",
+			"change": "56.80%",
+			"bulan": "2024-06",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Cabai Rawit Merah",
+			"price": "61,944",
+			"color": "#bf7070",
+			"change": "25.36%",
+			"bulan": "2024-06",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Bawang Merah",
+			"price": "46,389",
+			"color": "#76bf70",
+			"change": "-1.42%",
+			"bulan": "2024-06",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Gula Pasir Kemasan",
+			"price": "18,000",
+			"color": "#76bf70",
+			"change": "-2.24%",
+			"bulan": "2024-06",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Minyak Goreng",
+			"price": "18,111",
+			"color": "#bf7070",
+			"change": "0.62%",
+			"bulan": "2024-06",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Daging Ayam Ras",
+			"price": "34,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Telur Ayam Ras",
+			"price": "33,789",
+			"color": "#76bf70",
+			"change": "-12.41%",
+			"bulan": "2024-06",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Daging Sapi",
+			"price": "130,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Ikan Tongkol",
+			"price": "28,611",
+			"color": "#bf7070",
+			"change": "18.63%",
+			"bulan": "2024-06",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Bawang Putih",
+			"price": "48,056",
+			"color": "#bf7070",
+			"change": "2.76%",
+			"bulan": "2024-06",
+			"id": "Tolitoli"
+		}, {
+			"city": "Morowali",
+			"item": "Beras Premium",
+			"price": "15,944",
+			"color": "#76bf70",
+			"change": "-1.12%",
+			"bulan": "2024-06",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Cabai Merah Besar",
+			"price": "51,667",
+			"color": "#bf7070",
+			"change": "10.22%",
+			"bulan": "2024-06",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Cabai Rawit Merah",
+			"price": "65,000",
+			"color": "#bf7070",
+			"change": "5.05%",
+			"bulan": "2024-06",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Bawang Merah",
+			"price": "49,167",
+			"color": "#76bf70",
+			"change": "-19.73%",
+			"bulan": "2024-06",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Gula Pasir Kemasan",
+			"price": "20,000",
+			"color": "#bf7070",
+			"change": "3.56%",
+			"bulan": "2024-06",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Minyak Goreng",
+			"price": "22,000",
+			"color": "#bf7070",
+			"change": "10.00%",
+			"bulan": "2024-06",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Daging Ayam Ras",
+			"price": "30,000",
+			"color": "#76bf70",
+			"change": "-14.29%",
+			"bulan": "2024-06",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Telur Ayam Ras",
+			"price": "28,333",
+			"color": "#76bf70",
+			"change": "-4.56%",
+			"bulan": "2024-06",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Daging Sapi",
+			"price": "151,667",
+			"color": "#bf7070",
+			"change": "1.11%",
+			"bulan": "2024-06",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Ikan Tongkol",
+			"price": "34,167",
+			"color": "#bf7070",
+			"change": "12.71%",
+			"bulan": "2024-06",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Bawang Putih",
+			"price": "50,278",
+			"color": "#bf7070",
+			"change": "0.56%",
+			"bulan": "2024-06",
+			"id": "Morowali"
+		}, {
+			"city": "Poso",
+			"item": "Beras Premium",
+			"price": "14,417",
+			"color": "#76bf70",
+			"change": "-6.65%",
+			"bulan": "2024-06",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Cabai Merah Besar",
+			"price": "56,944",
+			"color": "#bf7070",
+			"change": "3.01%",
+			"bulan": "2024-06",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Cabai Rawit Merah",
+			"price": "62,389",
+			"color": "#bf7070",
+			"change": "4.17%",
+			"bulan": "2024-06",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Bawang Merah",
+			"price": "40,611",
+			"color": "#76bf70",
+			"change": "-15.69%",
+			"bulan": "2024-06",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Gula Pasir Kemasan",
+			"price": "18,639",
+			"color": "#76bf70",
+			"change": "-1.90%",
+			"bulan": "2024-06",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Minyak Goreng",
+			"price": "20,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Daging Ayam Ras",
+			"price": "31,778",
+			"color": "#76bf70",
+			"change": "-6.38%",
+			"bulan": "2024-06",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Telur Ayam Ras",
+			"price": "29,750",
+			"color": "#bf7070",
+			"change": "0.47%",
+			"bulan": "2024-06",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Daging Sapi",
+			"price": "140,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Ikan Tongkol",
+			"price": "37,778",
+			"color": "#bf7070",
+			"change": "18.26%",
+			"bulan": "2024-06",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Bawang Putih",
+			"price": "45,000",
+			"color": "#bf7070",
+			"change": "2.53%",
+			"bulan": "2024-06",
+			"id": "Poso"
+		}, {
+			"city": "Donggala",
+			"item": "Beras Premium",
+			"price": "14,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Cabai Merah Besar",
+			"price": "54,537",
+			"color": "#bf7070",
+			"change": "55.08%",
+			"bulan": "2024-06",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Cabai Rawit Merah",
+			"price": "64,593",
+			"color": "#bf7070",
+			"change": "21.74%",
+			"bulan": "2024-06",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Bawang Merah",
+			"price": "39,944",
+			"color": "#76bf70",
+			"change": "-11.24%",
+			"bulan": "2024-06",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Gula Pasir Kemasan",
+			"price": "18,278",
+			"color": "#bf7070",
+			"change": "1.23%",
+			"bulan": "2024-06",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Minyak Goreng",
+			"price": "25,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Daging Ayam Ras",
+			"price": "31,972",
+			"color": "#bf7070",
+			"change": "0.23%",
+			"bulan": "2024-06",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Telur Ayam Ras",
+			"price": "31,694",
+			"color": "#bf7070",
+			"change": "5.65%",
+			"bulan": "2024-06",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Daging Sapi",
+			"price": "130,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Ikan Tongkol",
+			"price": "23,389",
+			"color": "#bf7070",
+			"change": "7.31%",
+			"bulan": "2024-06",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Bawang Putih",
+			"price": "44,833",
+			"color": "#76bf70",
+			"change": "-0.82%",
+			"bulan": "2024-06",
+			"id": "Donggala"
+		}, {
+			"city": "Buol",
+			"item": "Beras Premium",
+			"price": "15,000",
+			"color": "#76bf70",
+			"change": "-0.73%",
+			"bulan": "2024-06",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Cabai Merah Besar",
+			"price": "51,296",
+			"color": "#bf7070",
+			"change": "56.50%",
+			"bulan": "2024-06",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Cabai Rawit Merah",
+			"price": "70,926",
+			"color": "#bf7070",
+			"change": "15.36%",
+			"bulan": "2024-06",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Bawang Merah",
+			"price": "40,278",
+			"color": "#76bf70",
+			"change": "-13.35%",
+			"bulan": "2024-06",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Gula Pasir Kemasan",
+			"price": "18,889",
+			"color": "#76bf70",
+			"change": "-1.31%",
+			"bulan": "2024-06",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Minyak Goreng",
+			"price": "20,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Daging Ayam Ras",
+			"price": "31,573",
+			"color": "#76bf70",
+			"change": "-3.42%",
+			"bulan": "2024-06",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Telur Ayam Ras",
+			"price": "31,842",
+			"color": "#76bf70",
+			"change": "-7.41%",
+			"bulan": "2024-06",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Daging Sapi",
+			"price": "120,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Ikan Tongkol",
+			"price": "25,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Bawang Putih",
+			"price": "46,204",
+			"color": "#76bf70",
+			"change": "-7.08%",
+			"bulan": "2024-06",
+			"id": "Buol"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Beras Premium",
+			"price": "17,292",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Cabai Merah Besar",
+			"price": "64,815",
+			"color": "#bf7070",
+			"change": "45.84%",
+			"bulan": "2024-06",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Cabai Rawit Merah",
+			"price": "50,000",
+			"color": "#76bf70",
+			"change": "-18.80%",
+			"bulan": "2024-06",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Bawang Merah",
+			"price": "53,148",
+			"color": "#bf7070",
+			"change": "1.77%",
+			"bulan": "2024-06",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Gula Pasir Kemasan",
+			"price": "19,667",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Minyak Goreng",
+			"price": "20,667",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Daging Ayam Ras",
+			"price": "36,522",
+			"color": "#76bf70",
+			"change": "-4.88%",
+			"bulan": "2024-06",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Telur Ayam Ras",
+			"price": "33,126",
+			"color": "#76bf70",
+			"change": "-2.39%",
+			"bulan": "2024-06",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Daging Sapi",
+			"price": "140,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Ikan Tongkol",
+			"price": "30,000",
+			"color": "#bf7070",
+			"change": "10.20%",
+			"bulan": "2024-06",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Bawang Putih",
+			"price": "60,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Beras Premium",
+			"price": "14,111",
+			"color": "#76bf70",
+			"change": "-1.68%",
+			"bulan": "2024-06",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Cabai Merah Besar",
+			"price": "55,741",
+			"color": "#bf7070",
+			"change": "43.33%",
+			"bulan": "2024-06",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Cabai Rawit Merah",
+			"price": "67,870",
+			"color": "#bf7070",
+			"change": "7.32%",
+			"bulan": "2024-06",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Bawang Merah",
+			"price": "43,426",
+			"color": "#76bf70",
+			"change": "-5.44%",
+			"bulan": "2024-06",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Gula Pasir Kemasan",
+			"price": "19,000",
+			"color": "#76bf70",
+			"change": "-3.12%",
+			"bulan": "2024-06",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Minyak Goreng",
+			"price": "20,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Daging Ayam Ras",
+			"price": "36,880",
+			"color": "#76bf70",
+			"change": "-2.38%",
+			"bulan": "2024-06",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Telur Ayam Ras",
+			"price": "30,889",
+			"color": "#76bf70",
+			"change": "-1.65%",
+			"bulan": "2024-06",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Daging Sapi",
+			"price": "140,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Ikan Tongkol",
+			"price": "26,296",
+			"color": "#bf7070",
+			"change": "3.27%",
+			"bulan": "2024-06",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Bawang Putih",
+			"price": "50,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Parigi"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Beras Premium",
+			"price": "14,111",
+			"color": "#76bf70",
+			"change": "-1.68%",
+			"bulan": "2024-06",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Cabai Merah Besar",
+			"price": "55,278",
+			"color": "#bf7070",
+			"change": "31.50%",
+			"bulan": "2024-06",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Cabai Rawit Merah",
+			"price": "55,648",
+			"color": "#bf7070",
+			"change": "15.35%",
+			"bulan": "2024-06",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Bawang Merah",
+			"price": "43,981",
+			"color": "#76bf70",
+			"change": "-5.94%",
+			"bulan": "2024-06",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Gula Pasir Kemasan",
+			"price": "20,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Minyak Goreng",
+			"price": "20,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Daging Ayam Ras",
+			"price": "32,500",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Telur Ayam Ras",
+			"price": "32,148",
+			"color": "#76bf70",
+			"change": "-7.31%",
+			"bulan": "2024-06",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Daging Sapi",
+			"price": "130,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Ikan Tongkol",
+			"price": "40,000",
+			"color": "#bf7070",
+			"change": "6.93%",
+			"bulan": "2024-06",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Bawang Putih",
+			"price": "49,056",
+			"color": "#76bf70",
+			"change": "-1.89%",
+			"bulan": "2024-06",
+			"id": "Touna"
+		}, {
+			"city": "Sigi",
+			"item": "Beras Premium",
+			"price": "16,000",
+			"color": "#76bf70",
+			"change": "-0.69%",
+			"bulan": "2024-06",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Cabai Merah Besar",
+			"price": "53,889",
+			"color": "#bf7070",
+			"change": "51.17%",
+			"bulan": "2024-06",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Cabai Rawit Merah",
+			"price": "64,259",
+			"color": "#bf7070",
+			"change": "24.60%",
+			"bulan": "2024-06",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Bawang Merah",
+			"price": "38,741",
+			"color": "#76bf70",
+			"change": "-5.34%",
+			"bulan": "2024-06",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Gula Pasir Kemasan",
+			"price": "18,463",
+			"color": "#76bf70",
+			"change": "-1.96%",
+			"bulan": "2024-06",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Minyak Goreng",
+			"price": "19,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Daging Ayam Ras",
+			"price": "35,296",
+			"color": "#bf7070",
+			"change": "1.25%",
+			"bulan": "2024-06",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Telur Ayam Ras",
+			"price": "28,000",
+			"color": "#76bf70",
+			"change": "-2.51%",
+			"bulan": "2024-06",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Daging Sapi",
+			"price": "125,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Ikan Tongkol",
+			"price": "38,333",
+			"color": "#bf7070",
+			"change": "6.70%",
+			"bulan": "2024-06",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Bawang Putih",
+			"price": "44,574",
+			"color": "#76bf70",
+			"change": "-0.95%",
+			"bulan": "2024-06",
+			"id": "Sigi"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Beras Premium",
+			"price": "14,667",
+			"color": "#76bf70",
+			"change": "-2.22%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Cabai Merah Besar",
+			"price": "57,222",
+			"color": "#bf7070",
+			"change": "9.96%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Cabai Rawit Merah",
+			"price": "56,667",
+			"color": "#bf7070",
+			"change": "13.33%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Bawang Merah",
+			"price": "49,722",
+			"color": "#76bf70",
+			"change": "-4.79%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Gula Pasir",
+			"price": "22,000",
+			"color": "#76bf70",
+			"change": "-3.42%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Minyak Goreng",
+			"price": "20,000",
+			"color": "#bf7070",
+			"change": "4.25%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Daging Ayam Ras",
+			"price": "45,000",
+			"color": "#bf7070",
+			"change": "8.92%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Telur Ayam Ras",
+			"price": "32,711",
+			"color": "#76bf70",
+			"change": "-1.77%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Daging Sapi",
+			"price": "138,889",
+			"color": "#bf7070",
+			"change": "3.73%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Ikan Tongkol",
+			"price": "26,722",
+			"color": "#bf7070",
+			"change": "6.18%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Bawang Putih",
+			"price": "49,167",
+			"color": "#bf7070",
+			"change": "2.31%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Beras Premium",
+			"price": "18,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Cabai Merah Besar",
+			"price": "56,667",
+			"color": "#bf7070",
+			"change": "25.93%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Cabai Rawit Merah",
+			"price": "63,889",
+			"color": "#bf7070",
+			"change": "30.68%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Bawang Merah",
+			"price": "50,000",
+			"color": "#76bf70",
+			"change": "-6.25%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Gula Pasir",
+			"price": "22,000",
+			"color": "#bf7070",
+			"change": "1.02%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Minyak Goreng",
+			"price": "22,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Daging Ayam Ras",
+			"price": "45,833",
+			"color": "#bf7070",
+			"change": "1.85%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Telur Ayam Ras",
+			"price": "37,500",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Daging Sapi",
+			"price": "130,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Ikan Tongkol",
+			"price": "30,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Bawang Putih",
+			"price": "50,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Beras Premium",
+			"price": "18,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Cabai Merah Besar",
+			"price": "56,667",
+			"color": "#bf7070",
+			"change": "25.93%",
+			"bulan": "2024-06",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Cabai Rawit Merah",
+			"price": "63,889",
+			"color": "#bf7070",
+			"change": "30.68%",
+			"bulan": "2024-06",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Bawang Merah",
+			"price": "50,000",
+			"color": "#76bf70",
+			"change": "-6.25%",
+			"bulan": "2024-06",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Gula Pasir",
+			"price": "22,000",
+			"color": "#bf7070",
+			"change": "1.02%",
+			"bulan": "2024-06",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Minyak Goreng",
+			"price": "22,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Daging Ayam Ras",
+			"price": "45,833",
+			"color": "#bf7070",
+			"change": "1.85%",
+			"bulan": "2024-06",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Telur Ayam Ras",
+			"price": "37,500",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Daging Sapi",
+			"price": "130,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Ikan Tongkol",
+			"price": "30,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Bawang Putih",
+			"price": "50,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-06",
+			"id": "MorowaliUtara"
 		},
 		{
-			city: 'Kabupaten Morowali',
-			price: '14.100/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'Morowali'
-		},
-		{
-			city: 'Kabupaten Sigi',
-			price: '13.370/kg',
-			color: '#76bf70',
-			change: 'Rp. 298',
-			id: 'Sigi'
-		},
-		{
-			city: 'Kabupaten Donggala',
-			price: '12.000/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'Donggala'
-		},
-		{
-			city: 'Kabupaten Morowali Utara',
-			price: '11.000/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'MorowaliUtara'
-		},
+			"city": "Kota palu",
+			"item": "Beras Premium",
+			"price": "15,000",
+			"color": "#76bf70",
+			"change": "-1.10%",
+			"bulan": "2024-07",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Cabai Merah Besar",
+			"price": "23,438",
+			"color": "#76bf70",
+			"change": "-13.46%",
+			"bulan": "2024-07",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Cabai Rawit Merah",
+			"price": "40,625",
+			"color": "#76bf70",
+			"change": "-29.69%",
+			"bulan": "2024-07",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Bawang Merah",
+			"price": "39,719",
+			"color": "#76bf70",
+			"change": "-21.86%",
+			"bulan": "2024-07",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Gula Pasir Kemasan",
+			"price": "17,344",
+			"color": "#76bf70",
+			"change": "-6.25%",
+			"bulan": "2024-07",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Minyak Goreng",
+			"price": "17,813",
+			"color": "#76bf70",
+			"change": "-4.72%",
+			"bulan": "2024-07",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Daging Ayam Ras",
+			"price": "42,188",
+			"color": "#bf7070",
+			"change": "0.58%",
+			"bulan": "2024-07",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Telur Ayam Ras",
+			"price": "30,000",
+			"color": "#76bf70",
+			"change": "-6.25%",
+			"bulan": "2024-07",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Daging Sapi",
+			"price": "121,875",
+			"color": "#76bf70",
+			"change": "-6.25%",
+			"bulan": "2024-07",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Ikan Tongkol",
+			"price": "32,656",
+			"color": "#76bf70",
+			"change": "-6.70%",
+			"bulan": "2024-07",
+			"id": "Palu"
+		}, {
+			"city": "Kota palu",
+			"item": "Bawang Putih",
+			"price": "43,500",
+			"color": "#76bf70",
+			"change": "-11.63%",
+			"bulan": "2024-07",
+			"id": "Palu"
+		}, {
+			"city": "Luwuk",
+			"item": "Beras Premium",
+			"price": "12,454",
+			"color": "#76bf70",
+			"change": "-6.36%",
+			"bulan": "2024-07",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Cabai Merah Besar",
+			"price": "45,625",
+			"color": "#76bf70",
+			"change": "-6.89%",
+			"bulan": "2024-07",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Cabai Rawit Merah",
+			"price": "55,052",
+			"color": "#bf7070",
+			"change": "6.74%",
+			"bulan": "2024-07",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Bawang Merah",
+			"price": "40,156",
+			"color": "#76bf70",
+			"change": "-8.41%",
+			"bulan": "2024-07",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Gula Pasir Kemasan",
+			"price": "19,406",
+			"color": "#76bf70",
+			"change": "-6.85%",
+			"bulan": "2024-07",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Minyak Goreng",
+			"price": "17,448",
+			"color": "#76bf70",
+			"change": "-6.71%",
+			"bulan": "2024-07",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Daging Ayam Ras",
+			"price": "30,755",
+			"color": "#76bf70",
+			"change": "-5.64%",
+			"bulan": "2024-07",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Telur Ayam Ras",
+			"price": "30,973",
+			"color": "#76bf70",
+			"change": "-6.57%",
+			"bulan": "2024-07",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Daging Sapi",
+			"price": "131,250",
+			"color": "#76bf70",
+			"change": "-6.25%",
+			"bulan": "2024-07",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Ikan Tongkol",
+			"price": "24,063",
+			"color": "#76bf70",
+			"change": "-3.03%",
+			"bulan": "2024-07",
+			"id": "Banggai"
+		}, {
+			"city": "Luwuk",
+			"item": "Bawang Putih",
+			"price": "45,469",
+			"color": "#76bf70",
+			"change": "-4.22%",
+			"bulan": "2024-07",
+			"id": "Banggai"
+		}, {
+			"city": "Tolitoli",
+			"item": "Beras Premium",
+			"price": "14,750",
+			"color": "#76bf70",
+			"change": "-7.17%",
+			"bulan": "2024-07",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Cabai Merah Besar",
+			"price": "42,500",
+			"color": "#76bf70",
+			"change": "-10.53%",
+			"bulan": "2024-07",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Cabai Rawit Merah",
+			"price": "49,375",
+			"color": "#76bf70",
+			"change": "-20.29%",
+			"bulan": "2024-07",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Bawang Merah",
+			"price": "41,250",
+			"color": "#76bf70",
+			"change": "-11.08%",
+			"bulan": "2024-07",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Gula Pasir Kemasan",
+			"price": "16,875",
+			"color": "#76bf70",
+			"change": "-6.25%",
+			"bulan": "2024-07",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Minyak Goreng",
+			"price": "17,813",
+			"color": "#76bf70",
+			"change": "-1.65%",
+			"bulan": "2024-07",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Daging Ayam Ras",
+			"price": "31,875",
+			"color": "#76bf70",
+			"change": "-6.25%",
+			"bulan": "2024-07",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Telur Ayam Ras",
+			"price": "32,194",
+			"color": "#76bf70",
+			"change": "-4.72%",
+			"bulan": "2024-07",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Daging Sapi",
+			"price": "121,875",
+			"color": "#76bf70",
+			"change": "-6.25%",
+			"bulan": "2024-07",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Ikan Tongkol",
+			"price": "28,125",
+			"color": "#76bf70",
+			"change": "-1.70%",
+			"bulan": "2024-07",
+			"id": "Tolitoli"
+		}, {
+			"city": "Tolitoli",
+			"item": "Bawang Putih",
+			"price": "45,000",
+			"color": "#76bf70",
+			"change": "-6.36%",
+			"bulan": "2024-07",
+			"id": "Tolitoli"
+		}, {
+			"city": "Morowali",
+			"item": "Beras Premium",
+			"price": "14,375",
+			"color": "#76bf70",
+			"change": "-9.84%",
+			"bulan": "2024-07",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Cabai Merah Besar",
+			"price": "48,125",
+			"color": "#76bf70",
+			"change": "-6.85%",
+			"bulan": "2024-07",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Cabai Rawit Merah",
+			"price": "51,250",
+			"color": "#76bf70",
+			"change": "-21.15%",
+			"bulan": "2024-07",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Bawang Merah",
+			"price": "37,500",
+			"color": "#76bf70",
+			"change": "-23.73%",
+			"bulan": "2024-07",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Gula Pasir Kemasan",
+			"price": "18,750",
+			"color": "#76bf70",
+			"change": "-6.25%",
+			"bulan": "2024-07",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Minyak Goreng",
+			"price": "18,875",
+			"color": "#76bf70",
+			"change": "-14.20%",
+			"bulan": "2024-07",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Daging Ayam Ras",
+			"price": "32,500",
+			"color": "#bf7070",
+			"change": "8.33%",
+			"bulan": "2024-07",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Telur Ayam Ras",
+			"price": "24,688",
+			"color": "#76bf70",
+			"change": "-12.87%",
+			"bulan": "2024-07",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Daging Sapi",
+			"price": "140,625",
+			"color": "#76bf70",
+			"change": "-7.28%",
+			"bulan": "2024-07",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Ikan Tongkol",
+			"price": "33,438",
+			"color": "#76bf70",
+			"change": "-2.13%",
+			"bulan": "2024-07",
+			"id": "Morowali"
+		}, {
+			"city": "Morowali",
+			"item": "Bawang Putih",
+			"price": "37,917",
+			"color": "#76bf70",
+			"change": "-24.59%",
+			"bulan": "2024-07",
+			"id": "Morowali"
+		}, {
+			"city": "Poso",
+			"item": "Beras Premium",
+			"price": "14,500",
+			"color": "#bf7070",
+			"change": "0.58%",
+			"bulan": "2024-07",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Cabai Merah Besar",
+			"price": "50,133",
+			"color": "#76bf70",
+			"change": "-11.96%",
+			"bulan": "2024-07",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Cabai Rawit Merah",
+			"price": "51,933",
+			"color": "#76bf70",
+			"change": "-16.76%",
+			"bulan": "2024-07",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Bawang Merah",
+			"price": "34,667",
+			"color": "#76bf70",
+			"change": "-14.64%",
+			"bulan": "2024-07",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Gula Pasir Kemasan",
+			"price": "18,500",
+			"color": "#76bf70",
+			"change": "-0.75%",
+			"bulan": "2024-07",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Minyak Goreng",
+			"price": "20,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Daging Ayam Ras",
+			"price": "29,467",
+			"color": "#76bf70",
+			"change": "-7.27%",
+			"bulan": "2024-07",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Telur Ayam Ras",
+			"price": "29,467",
+			"color": "#76bf70",
+			"change": "-0.95%",
+			"bulan": "2024-07",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Daging Sapi",
+			"price": "140,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Ikan Tongkol",
+			"price": "30,000",
+			"color": "#76bf70",
+			"change": "-20.59%",
+			"bulan": "2024-07",
+			"id": "Poso"
+		}, {
+			"city": "Poso",
+			"item": "Bawang Putih",
+			"price": "45,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "Poso"
+		}, {
+			"city": "Donggala",
+			"item": "Beras Premium",
+			"price": "13,973",
+			"color": "#76bf70",
+			"change": "-0.19%",
+			"bulan": "2024-07",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Cabai Merah Besar",
+			"price": "38,667",
+			"color": "#76bf70",
+			"change": "-29.10%",
+			"bulan": "2024-07",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Cabai Rawit Merah",
+			"price": "54,333",
+			"color": "#76bf70",
+			"change": "-15.88%",
+			"bulan": "2024-07",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Bawang Merah",
+			"price": "29,667",
+			"color": "#76bf70",
+			"change": "-25.73%",
+			"bulan": "2024-07",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Gula Pasir Kemasan",
+			"price": "19,000",
+			"color": "#bf7070",
+			"change": "3.95%",
+			"bulan": "2024-07",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Minyak Goreng",
+			"price": "25,044",
+			"color": "#bf7070",
+			"change": "0.18%",
+			"bulan": "2024-07",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Daging Ayam Ras",
+			"price": "30,067",
+			"color": "#76bf70",
+			"change": "-5.96%",
+			"bulan": "2024-07",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Telur Ayam Ras",
+			"price": "32,600",
+			"color": "#bf7070",
+			"change": "2.86%",
+			"bulan": "2024-07",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Daging Sapi",
+			"price": "130,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Ikan Tongkol",
+			"price": "34,222",
+			"color": "#bf7070",
+			"change": "46.32%",
+			"bulan": "2024-07",
+			"id": "Donggala"
+		}, {
+			"city": "Donggala",
+			"item": "Bawang Putih",
+			"price": "42,667",
+			"color": "#76bf70",
+			"change": "-4.83%",
+			"bulan": "2024-07",
+			"id": "Donggala"
+		}, {
+			"city": "Buol",
+			"item": "Beras Premium",
+			"price": "15,367",
+			"color": "#bf7070",
+			"change": "2.45%",
+			"bulan": "2024-07",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Cabai Merah Besar",
+			"price": "49,889",
+			"color": "#76bf70",
+			"change": "-2.74%",
+			"bulan": "2024-07",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Cabai Rawit Merah",
+			"price": "48,222",
+			"color": "#76bf70",
+			"change": "-32.01%",
+			"bulan": "2024-07",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Bawang Merah",
+			"price": "35,111",
+			"color": "#76bf70",
+			"change": "-12.83%",
+			"bulan": "2024-07",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Gula Pasir Kemasan",
+			"price": "18,067",
+			"color": "#76bf70",
+			"change": "-4.35%",
+			"bulan": "2024-07",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Minyak Goreng",
+			"price": "20,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Daging Ayam Ras",
+			"price": "33,722",
+			"color": "#bf7070",
+			"change": "6.81%",
+			"bulan": "2024-07",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Telur Ayam Ras",
+			"price": "31,028",
+			"color": "#76bf70",
+			"change": "-2.56%",
+			"bulan": "2024-07",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Daging Sapi",
+			"price": "120,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Ikan Tongkol",
+			"price": "25,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "Buol"
+		}, {
+			"city": "Buol",
+			"item": "Bawang Putih",
+			"price": "44,000",
+			"color": "#76bf70",
+			"change": "-4.77%",
+			"bulan": "2024-07",
+			"id": "Buol"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Beras Premium",
+			"price": "17,292",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Cabai Merah Besar",
+			"price": "63,667",
+			"color": "#76bf70",
+			"change": "-1.77%",
+			"bulan": "2024-07",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Cabai Rawit Merah",
+			"price": "74,444",
+			"color": "#bf7070",
+			"change": "48.89%",
+			"bulan": "2024-07",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Bawang Merah",
+			"price": "43,222",
+			"color": "#76bf70",
+			"change": "-18.68%",
+			"bulan": "2024-07",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Gula Pasir Kemasan",
+			"price": "19,667",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Minyak Goreng",
+			"price": "20,667",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Daging Ayam Ras",
+			"price": "37,304",
+			"color": "#bf7070",
+			"change": "2.14%",
+			"bulan": "2024-07",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Telur Ayam Ras",
+			"price": "31,238",
+			"color": "#76bf70",
+			"change": "-5.70%",
+			"bulan": "2024-07",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Daging Sapi",
+			"price": "140,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Ikan Tongkol",
+			"price": "30,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Banggai Kepulauan",
+			"item": "Bawang Putih",
+			"price": "57,556",
+			"color": "#76bf70",
+			"change": "-4.07%",
+			"bulan": "2024-07",
+			"id": "BanggaiKepulauan"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Beras Premium",
+			"price": "15,000",
+			"color": "#bf7070",
+			"change": "6.30%",
+			"bulan": "2024-07",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Cabai Merah Besar",
+			"price": "40,000",
+			"color": "#76bf70",
+			"change": "-28.24%",
+			"bulan": "2024-07",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Cabai Rawit Merah",
+			"price": "59,333",
+			"color": "#76bf70",
+			"change": "-12.58%",
+			"bulan": "2024-07",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Bawang Merah",
+			"price": "37,778",
+			"color": "#76bf70",
+			"change": "-13.01%",
+			"bulan": "2024-07",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Gula Pasir Kemasan",
+			"price": "18,956",
+			"color": "#76bf70",
+			"change": "-0.23%",
+			"bulan": "2024-07",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Minyak Goreng",
+			"price": "20,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Daging Ayam Ras",
+			"price": "35,733",
+			"color": "#76bf70",
+			"change": "-3.11%",
+			"bulan": "2024-07",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Telur Ayam Ras",
+			"price": "29,867",
+			"color": "#76bf70",
+			"change": "-3.31%",
+			"bulan": "2024-07",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Daging Sapi",
+			"price": "140,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Ikan Tongkol",
+			"price": "24,500",
+			"color": "#76bf70",
+			"change": "-6.83%",
+			"bulan": "2024-07",
+			"id": "Parigi"
+		}, {
+			"city": "Parigi Moutong",
+			"item": "Bawang Putih",
+			"price": "47,133",
+			"color": "#76bf70",
+			"change": "-5.73%",
+			"bulan": "2024-07",
+			"id": "Parigi"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Beras Premium",
+			"price": "15,000",
+			"color": "#bf7070",
+			"change": "6.30%",
+			"bulan": "2024-07",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Cabai Merah Besar",
+			"price": "57,556",
+			"color": "#bf7070",
+			"change": "4.12%",
+			"bulan": "2024-07",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Cabai Rawit Merah",
+			"price": "57,000",
+			"color": "#bf7070",
+			"change": "2.43%",
+			"bulan": "2024-07",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Bawang Merah",
+			"price": "34,333",
+			"color": "#76bf70",
+			"change": "-21.94%",
+			"bulan": "2024-07",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Gula Pasir Kemasan",
+			"price": "20,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Minyak Goreng",
+			"price": "20,178",
+			"color": "#bf7070",
+			"change": "0.89%",
+			"bulan": "2024-07",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Daging Ayam Ras",
+			"price": "31,667",
+			"color": "#76bf70",
+			"change": "-2.56%",
+			"bulan": "2024-07",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Telur Ayam Ras",
+			"price": "32,000",
+			"color": "#76bf70",
+			"change": "-0.46%",
+			"bulan": "2024-07",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Daging Sapi",
+			"price": "130,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Ikan Tongkol",
+			"price": "39,000",
+			"color": "#76bf70",
+			"change": "-2.50%",
+			"bulan": "2024-07",
+			"id": "Touna"
+		}, {
+			"city": "Tojo Una-Una",
+			"item": "Bawang Putih",
+			"price": "46,222",
+			"color": "#76bf70",
+			"change": "-5.78%",
+			"bulan": "2024-07",
+			"id": "Touna"
+		}, {
+			"city": "Sigi",
+			"item": "Beras Premium",
+			"price": "16,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Cabai Merah Besar",
+			"price": "37,289",
+			"color": "#76bf70",
+			"change": "-30.80%",
+			"bulan": "2024-07",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Cabai Rawit Merah",
+			"price": "50,200",
+			"color": "#76bf70",
+			"change": "-21.88%",
+			"bulan": "2024-07",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Bawang Merah",
+			"price": "33,111",
+			"color": "#76bf70",
+			"change": "-14.53%",
+			"bulan": "2024-07",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Gula Pasir Kemasan",
+			"price": "18,000",
+			"color": "#76bf70",
+			"change": "-2.51%",
+			"bulan": "2024-07",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Minyak Goreng",
+			"price": "19,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Daging Ayam Ras",
+			"price": "34,767",
+			"color": "#76bf70",
+			"change": "-1.50%",
+			"bulan": "2024-07",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Telur Ayam Ras",
+			"price": "27,000",
+			"color": "#76bf70",
+			"change": "-3.57%",
+			"bulan": "2024-07",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Daging Sapi",
+			"price": "125,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Ikan Tongkol",
+			"price": "38,333",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "Sigi"
+		}, {
+			"city": "Sigi",
+			"item": "Bawang Putih",
+			"price": "41,311",
+			"color": "#76bf70",
+			"change": "-7.32%",
+			"bulan": "2024-07",
+			"id": "Sigi"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Beras Premium",
+			"price": "14,378",
+			"color": "#76bf70",
+			"change": "-1.97%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Cabai Merah Besar",
+			"price": "62,667",
+			"color": "#bf7070",
+			"change": "9.52%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Cabai Rawit Merah",
+			"price": "54,400",
+			"color": "#76bf70",
+			"change": "-4.00%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Bawang Merah",
+			"price": "43,000",
+			"color": "#76bf70",
+			"change": "-13.52%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Gula Pasir",
+			"price": "22,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Minyak Goreng",
+			"price": "20,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Daging Ayam Ras",
+			"price": "44,800",
+			"color": "#76bf70",
+			"change": "-0.44%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Telur Ayam Ras",
+			"price": "33,600",
+			"color": "#bf7070",
+			"change": "2.72%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Daging Sapi",
+			"price": "137,333",
+			"color": "#76bf70",
+			"change": "-1.12%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Ikan Tongkol",
+			"price": "30,000",
+			"color": "#bf7070",
+			"change": "12.27%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Bawang Putih",
+			"price": "50,000",
+			"color": "#bf7070",
+			"change": "1.69%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Beras Premium",
+			"price": "17,467",
+			"color": "#76bf70",
+			"change": "-2.96%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Cabai Merah Besar",
+			"price": "52,667",
+			"color": "#76bf70",
+			"change": "-7.06%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Cabai Rawit Merah",
+			"price": "53,000",
+			"color": "#76bf70",
+			"change": "-17.04%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Bawang Merah",
+			"price": "50,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Gula Pasir",
+			"price": "22,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Minyak Goreng",
+			"price": "22,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Daging Ayam Ras",
+			"price": "50,000",
+			"color": "#bf7070",
+			"change": "9.09%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Telur Ayam Ras",
+			"price": "37,500",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Daging Sapi",
+			"price": "130,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Ikan Tongkol",
+			"price": "30,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Banggai Laut",
+			"item": "Bawang Putih",
+			"price": "50,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "BanggaiLaut"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Beras Premium",
+			"price": "17,467",
+			"color": "#76bf70",
+			"change": "-2.96%",
+			"bulan": "2024-07",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Cabai Merah Besar",
+			"price": "52,667",
+			"color": "#76bf70",
+			"change": "-7.06%",
+			"bulan": "2024-07",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Cabai Rawit Merah",
+			"price": "53,000",
+			"color": "#76bf70",
+			"change": "-17.04%",
+			"bulan": "2024-07",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Bawang Merah",
+			"price": "50,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Gula Pasir",
+			"price": "22,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Minyak Goreng",
+			"price": "22,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Daging Ayam Ras",
+			"price": "50,000",
+			"color": "#bf7070",
+			"change": "9.09%",
+			"bulan": "2024-07",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Telur Ayam Ras",
+			"price": "37,500",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Daging Sapi",
+			"price": "130,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Ikan Tongkol",
+			"price": "30,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "MorowaliUtara"
+		}, {
+			"city": "Morowali Utara",
+			"item": "Bawang Putih",
+			"price": "50,000",
+			"color": "#bf7070",
+			"change": "0.00%",
+			"bulan": "2024-07",
+			"id": "MorowaliUtara"
+		}
+	];
 
-		{
-			city: 'Kabupaten Parigi Moutong',
-			price: '10.500/kg',
-			color: '#76bf70',
-			change: 'Rp. 298',
-			id: 'Parigi'
-		},
-		{
-			city: 'Kabupaten Toli-Toli',
-			price: '10.000/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'Tolitoli'
-		},
-		{
-			city: 'Kabupaten Poso',
-			price: '9.800/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'Poso'
-		},
-		{
-			city: 'Kabupaten Banggai',
-			price: '9.500/kg',
-			color: '#76bf70',
-			change: 'Rp. 298',
-			id: 'Banggai'
-		},
-		{
-			city: 'Kabupaten Tojo Una-Una',
-			price: '9.200/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'Touna'
-		},
-		{
-			city: 'Kabupaten Banggai Kepulauan',
-			price: '9.000/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'BanggaiKepulauan'
-		},
-		{
-			city: 'Palu',
-			price: '9.000/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'Palu'
-		},
-		{
-			city: 'Kabupaten Banggai Laut',
-			price: '9.000/kg',
-			color: '#f1be5b',
-			change: 'Rp. 298',
-			id: 'BanggaiLaut'
-		},
-
-	]);
+	const [cardContents, setCardContents] = useState<cardContents[]>([]);
 
 	const handleChangeMonth = () => {
 		if (selectedDate) {
+			let commodity = selectedCommodity;
 			let val = format(selectedDate, 'yyyy-MM');
-			console.log(val);
-			if (val === '2024-06') {
-				setCardContents([
-					{
-						city: 'Kota Palu',
-						price: '20.000/kg',
-						color: '#bf7070',
-						change: 'RP.200',
-						id: 'element1'
-					},
-					{
-						city: 'Kabupaten Boul',
-						price: '14.100/kg',
-						color: '#bf7070',
-						change: 'Rp. 298',
-						id: 'element2',
-					},
-					{
-						city: 'Kabupaten Sigi',
-						price: '13.370/kg',
-						color: '#bf7070',
-						change: 'Rp. 298',
-						id: 'element3',
-					},
-					{
-						city: 'Kabupaten Donggala',
-						price: '12.000/kg',
-						color: '#bf7070',
-						change: 'Rp. 298',
-						id: 'element4',
-					},
-					{
-						city: 'Kabupaten Morowali',
-						price: '11.000/kg',
-						color: '#bf7070',
-						change: 'Rp. 298',
-						id: 'element5',
-					},
-					{
-						city: 'Kabupaten Parigi Moutong',
-						price: '10.500/kg',
-						color: '#76bf70',
-						change: 'Rp. 298',
-						id: 'element6',
-					},
-					{
-						city: 'Kabupaten Toli-Toli',
-						price: '10.000/kg',
-						color: '#bf7070',
-						change: 'Rp. 298',
-						id: 'element7',
-					},
-					{
-						city: 'Kabupaten Poso',
-						price: '9.800/kg',
-						color: '#f1be5b',
-						change: 'Rp. 298',
-						id: 'element8',
-					},
-					{
-						city: 'Kabupaten Banggai',
-						price: '9.500/kg',
-						color: '#76bf70',
-						change: 'Rp. 298',
-						id: 'element9',
-					},
-					{
-						city: 'Kabupaten Tojo Una-Una',
-						price: '9.200/kg',
-						color: '#bf7070',
-						change: 'Rp. 298',
-						id: 'element10',
-					},
-					{
-						city: 'Kabupaten Banggai Kepulauan',
-						price: '9.000/kg',
-						color: '#f1be5b',
-						change: 'Rp. 298',
-						id: 'element11',
-					},
-					{
-						city: 'Kabupaten Banggai Kepulauan',
-						price: '9.000/kg',
-						color: '#f1be5b',
-						change: 'Rp. 298',
-						id: 'element12',
-					},
-					{
-						city: 'Kabupaten Banggai Laut',
-						price: '9.000/kg',
-						color: '#f1be5b',
-						change: 'Rp. 298',
-						id: 'element13',
-					},
-				]);
-			} else {
-				setCardContents([
-					{
-						city: 'Kota Palu',
-						price: '20.000/kg',
-						color: '#f1be5b',
-						change: 'RP.200',
-						id: 'element1'
-					},
-					{
-						city: 'Kabupaten Boul',
-						price: '14.100/kg',
-						color: '#f1be5b',
-						change: 'Rp. 298',
-						id: 'element2',
-					},
-					{
-						city: 'Kabupaten Sigi',
-						price: '13.370/kg',
-						color: '#76bf70',
-						change: 'Rp. 298',
-						id: 'element3',
-					},
-					{
-						city: 'Kabupaten Donggala',
-						price: '12.000/kg',
-						color: '#f1be5b',
-						change: 'Rp. 298',
-						id: 'element4',
-					},
-					{
-						city: 'Kabupaten Morowali',
-						price: '11.000/kg',
-						color: '#f1be5b',
-						change: 'Rp. 298',
-						id: 'element5',
-					},
-					{
-						city: 'Kabupaten Parigi Moutong',
-						price: '10.500/kg',
-						color: '#76bf70',
-						change: 'Rp. 298',
-						id: 'element6',
-					},
-					{
-						city: 'Kabupaten Toli-Toli',
-						price: '10.000/kg',
-						color: '#f1be5b',
-						change: 'Rp. 298',
-						id: 'element7',
-					},
-					{
-						city: 'Kabupaten Poso',
-						price: '9.800/kg',
-						color: '#f1be5b',
-						change: 'Rp. 298',
-						id: 'element8',
-					},
-					{
-						city: 'Kabupaten Banggai',
-						price: '9.500/kg',
-						color: '#76bf70',
-						change: 'Rp. 298',
-						id: 'element9',
-					},
-					{
-						city: 'Kabupaten Tojo Una-Una',
-						price: '9.200/kg',
-						color: '#f1be5b',
-						change: 'Rp. 298',
-						id: 'element10',
-					},
-					{
-						city: 'Kabupaten Banggai Kepulauan',
-						price: '9.000/kg',
-						color: '#f1be5b',
-						change: 'Rp. 298',
-						id: 'element11',
-					},
-					{
-						city: 'Kabupaten Banggai Kepulauan',
-						price: '9.000/kg',
-						color: '#f1be5b',
-						change: 'Rp. 298',
-						id: 'element12',
-					},
-					{
-						city: 'Kabupaten Banggai Laut',
-						price: '9.000/kg',
-						color: '#f1be5b',
-						change: 'Rp. 298',
-						id: 'element13',
-					},
-				]);
-			}
+			const filteredData = mockData.filter(data =>
+				data.item.includes(selectedCommodity) && data.bulan === val
+			);
+			setCardContents(filteredData);
 		} else {
 			console.log('No date selected');
 		}
-
 	}
-
-	const getColorByCity = (cityName: string) => {
-		const cityData = cardContents.find(item => item.id === cityName);
-		console.log(cityData, cityName);
-		return cityData ? cityData.color : undefined;
-	}
-
-	const openDialog = (el: string) => {
-		setDetailHarga(cardContents.find((card) => card.id === el));
-		setIsDialogOpen(true);
-	};
-
-	const showCardArea = (city: string, id: string) => {
-		const content = cardContents.find((card) => card.id === id);
-		const path = document.getElementById(id);
-		if (!path) return;
-		const pathRect = path.getBoundingClientRect();
-		const pathTop = pathRect.top + window.scrollY + 100; // Account for vertical scroll
-		const pathLeft = pathRect.left + window.scrollX + 150;
-		const card = document.createElement('div');
-		card.id = 'card-' + id;
-		card.className = 'absolute z-50 bg-white p-4 rounded-md shadow-md';
-		card.style.top = `${pathTop}px`;
-		card.style.left = `${pathLeft}px`;
-		card.innerHTML = `
-						<h1 class='text-lg font-semibold'> ${(content?.city)}</h1>
-						<p class='text-xl font-bold'>${content?.price}</p>
-						<span class="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-						<p class='text-sm '>Naik ${content?.change}</p>
-						</span>
-					`;
-		document.body.appendChild(card);
-	}
-
-	const hideCardArea = (id: string) => {
-		const card = document.getElementById('card-' + id);
-		if (card) {
-			card.remove();
-		}
-	}
+	useEffect(() => {
+		const filteredData = mockData.filter(data =>
+			data.item.includes('Beras Premium') && data.bulan === "2024-06"
+		);
+		setCardContents(filteredData);
+	}, []);
 
 	return (
 		<main>
@@ -680,6 +2561,7 @@ export default function Home() {
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm mb-1">Komoditas</h1>
 					<Select
+						onChange={(option) => setSelectedCommodity(option!.value)}
 						className=" basic-single w-[170px] border-none"
 						options={options}
 					/>
