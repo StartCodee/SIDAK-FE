@@ -180,7 +180,7 @@ export default function Map({ cardContents }: MapProps) {
 				</div> */}
 			</Dialog>
 			<div id="container" className="relative w-full h-full  ">
-				<svg width="731" height="723" viewBox="0 0 731 723" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<svg  viewBox="0 0 731 723" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<rect width="731" height="723" fill="" />
 					<g id="Map_selengkapnya_beras" filter="url(#filter0_d_0_1)">
 						<g id="Map fix">
