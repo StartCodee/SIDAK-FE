@@ -41,12 +41,12 @@ export default function Navbar() {
 							<Bars3Icon aria-hidden="true" className="h-6 w-6" />
 						</button>
 					</div>
-					<div className="hidden lg:flex gap-7">
+					<div className="hidden lg:flex gap-4 lg:gap-7">
 						{navigation.map((item) => (
 							<Link
 								key={item.name}
 								href={item.path}
-								className={`text-[16px] font-bold leading-6 ${
+								className={`md:text-[16px] text-[10px] font-bold leading-6 ${
 									pathname === item.path ? 'text-blue-500' : 'text-gray-900'
 								}`}>
 								{item.name}

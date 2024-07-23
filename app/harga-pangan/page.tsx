@@ -674,10 +674,15 @@ export default function Home() {
 		<main>
 			<Navbar />
 			<Hero />
-			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[30rem] gap-2 rounded-full py-2 flex flex-col items-center sm:flex-row flex-wrap  bg-white">
+			<div
+				style={{ marginTop: '-40px' }}
+				className="mx-auto z-1 relative px-4 py-[0.4rem] sm:py-2 sm:px-8 shadow-xl w-[18rem] md:w-[30rem] sm:w-[30rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm mb-1">Komoditas</h1>
-					<Select className=" basic-single w-[170px] border-none" options={options} />
+					<Select
+						className=" basic-single w-[170px] border-none"
+						options={options}
+					/>
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 
@@ -720,7 +725,6 @@ export default function Home() {
 				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
 			</section>
 			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
-
 				<div className="flex flex-col items-center space-y-8">
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-6xl">
 						{cardContents.map((content, index) => (
@@ -729,8 +733,12 @@ export default function Home() {
 								style={{ alignContent: 'center' }}
 								// style={{display: flex;align-content: center;flex-direction: column;justify-content: space-between;}}
 								className="border border-gray-200 p-4 flex flex-col justify-between rounded-lg shadow-md">
-								<div className="flex flex-col items-center justify-between space-y-2" style={{ flex: 1 }}>
-									<h1 className="text-md font-light text-center">{content.city}</h1>
+								<div
+									className="flex flex-col items-center justify-between space-y-2"
+									style={{ flex: 1 }}>
+									<h1 className="text-md font-light text-center">
+										{content.city}
+									</h1>
 									<p className="font-bold text-2xl">{content.price}</p>
 									<div
 										className={`rounded-md p-2 flex items-center justify-center text-white`}
@@ -738,24 +746,24 @@ export default function Home() {
 											background: content.color,
 										}}>
 										{content.color === '#bf7070' ? (
-											<div className='flex gap-2'>
+											<div className="flex gap-2">
 												<ArrowUpIcon width={20} height={20} />
 												Naik {content.change}
 											</div>
 										) : content.color === '#f1be5b' ? (
-											<div className='flex gap-2'>
+											<div className="flex gap-2">
 												<ArrowDownIcon width={20} height={20} />
 												Turun {content.change}
 											</div>
 										) : (
-											<div className='flex gap-2'>
+											<div className="flex gap-2">
 												<SymbolIcon width={20} height={20} />
 												Stabil
 											</div>
 										)}
 									</div>
 								</div>
-								<div className="flex flex-col mt-6" >
+								<div className="flex flex-col mt-6">
 									<p className="text-md font-semibold">{content.price}</p>
 									<p className="text-xs font-thin">DAY IN HIGH VOLATILITY</p>
 								</div>

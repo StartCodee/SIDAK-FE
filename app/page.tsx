@@ -709,15 +709,24 @@ export default function Home() {
 		<main>
 			<Navbar />
 			<Hero />
-			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[18rem] sm:w-[44rem] h-20 gap-2  rounded-lg sm:rounded-full py-[0.4rem] flex flex-col items-center sm:flex-row flex-wrap  bg-white">
+			<div
+				style={{ marginTop: '-40px' }}
+				className="mx-auto z-1 relative px-4 py-[0.4rem] sm:py-2 sm:px-8 shadow-xl w-[18rem] md:w-[40rem] sm:w-[40rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm mb-1">Jenis Informasi</h1>
-					<Select onChange={(e) => handleValueChange(e)} className=" basic-single w-[170px] border-none" options={jenisInformasi} />
+					<Select
+						onChange={(e) => handleValueChange(e)}
+						className=" basic-single w-[170px] border-none"
+						options={jenisInformasi}
+					/>
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm mb-1">Komoditas</h1>
-					<Select className=" basic-single w-[170px] border-none" options={options} />
+					<Select
+						className=" basic-single w-[170px] border-none"
+						options={options}
+					/>
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
@@ -768,8 +777,6 @@ export default function Home() {
 												<ArrowDownIcon width={20} height={20} />
 											) : (
 												<SymbolIcon width={20} height={20} />
-
-
 											)}
 											{content.change}
 										</div>
@@ -807,17 +814,26 @@ export default function Home() {
 					className="mx-auto px-4 py-4 sm:py-2 sm:px-8 shadow-xl w-[20rem] sm:w-[55rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm mb-1">Jenis Informasi</h1>
-						<Select className=" basic-single w-[170px] border-none" options={jenisInformasi} />
+						<Select
+							className=" basic-single w-[170px] border-none"
+							options={jenisInformasi}
+						/>
 					</div>
 					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm mb-1">Komoditas</h1>
-						<Select className=" basic-single w-[170px] border-none" options={options} />
+						<Select
+							className=" basic-single w-[170px] border-none"
+							options={options}
+						/>
 					</div>
 					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm mb-1 ">Kabupaten/Kota</h1>
-						<Select className=" basic-single w-[170px] border-none" options={kabupaten} />
+						<Select
+							className=" basic-single w-[170px] border-none"
+							options={kabupaten}
+						/>
 					</div>
 					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 					<div className="flex-col flex-1">
@@ -839,7 +855,9 @@ export default function Home() {
 					<center>
 						<div className="flex justify-start items-start self-center  flex-wrap gap-10 ">
 							{konsumenPangan.map((content, index) => (
-								<Card key={index} className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl">
+								<Card
+									key={index}
+									className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl">
 									<div className="flex items-center space-x-4">
 										<div>
 											<Image
@@ -879,12 +897,11 @@ export default function Home() {
 						</div>
 					</center>
 
-					<div className='w-full mt-3 flex justify-end mb-10'>
-						<div className='flex gap-1'>
-
-							<div className='w-[24px] h-[24px] bg-[#76bf70]'></div>
-							<div className='w-[24px] h-[24px] bg-[#f1be5b]'></div>
-							<div className='w-[24px] h-[24px] bg-red-500'></div>
+					<div className="w-full mt-3 flex justify-end mb-10">
+						<div className="flex gap-1">
+							<div className="w-[24px] h-[24px] bg-[#76bf70]"></div>
+							<div className="w-[24px] h-[24px] bg-[#f1be5b]"></div>
+							<div className="w-[24px] h-[24px] bg-red-500"></div>
 						</div>
 					</div>
 					<p className="text-center w-full sm:w-11/12 mx-auto m-8">
