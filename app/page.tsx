@@ -3902,11 +3902,11 @@ export default function Home() {
 									className="flex rounded-2xl px-6 py-4 space-x-4 w-[350px]  justify-between placeholder-sky-400 ">
 									<div style={{ flex: 2 }}>
 										<h1 className="text-xs">{content.city}</h1>
-										<p className="text-2xl font-bold">{content.price}</p>
+										<p className="text-2xl font-bold">Rp {content.price}/Kg</p>
 									</div>
 									<div style={{ flex: 1 }} className="flex justify-end">
 										<div
-											className={`rounded-md p-0 px-1 m-0 items-center flex text-white`}
+											className={`rounded-md p-0 px-1 m-0 font-bold text-[12px] items-center flex text-white`}
 											style={{ background: content.color }}>
 											{content.color === '#bf7070' ? (
 												<ArrowUpIcon width={20} height={20} />
@@ -3915,7 +3915,8 @@ export default function Home() {
 											) : (
 												<SymbolIcon width={20} height={20} />
 											)}
-											{content.change}
+											
+											 {content.change}
 										</div>
 									</div>
 								</Card>
