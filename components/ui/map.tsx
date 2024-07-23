@@ -105,8 +105,8 @@ export default function Map({ cardContents }: MapProps) {
 									×
 								</button>
 							</div>
-							<div className="flex md:flex-row justify-around space-y-4 sm:space-y-0 gap-5">
-								<div className="shadow-lg w-full sm:w-[20rem] p-4 text-sm lg:text-lg flex flex-col rounded-lg">
+							<div className="flex md:flex-row flex-wrap sm:flex-nowrap justify-around space-y-4 sm:space-y-0 gap-5">
+								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4 text-sm lg:text-lg flex flex-col rounded-lg">
 									<p className="text-[10px] lg:text-lg">
 										Harga rata - rata {detailHarga?.city}:{' '}
 									</p>
@@ -114,7 +114,7 @@ export default function Map({ cardContents }: MapProps) {
 										{detailHarga?.price}
 									</h1>
 								</div>
-								<div className="shadow-lg w-max sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
+								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
 									<p className="text-[10px] lg:text-lg">
 										Harga Pada {detailHarga?.city}:{' '}
 									</p>
@@ -122,13 +122,13 @@ export default function Map({ cardContents }: MapProps) {
 										{detailHarga?.price}
 									</h1>
 								</div>
-								<div className="shadow-lg w-max sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
+								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
 									<p className="text-[10px] lg:text-lg">Tanggal </p>
 									<h1 className="font-bold text-[10px] lg:text-lg">
 										20 Juni 2024
 									</h1>
 								</div>
-								<div className="shadow-lg w-max sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
+								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
 									<p className="text-[10px] lg:text-lg">Komoditas </p>
 									<h1 className="font-bold text-[10px] lg:text-lg">Beras</h1>
 								</div>
