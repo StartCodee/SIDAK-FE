@@ -809,7 +809,7 @@ export default function Home() {
 					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar
 				</h1>
 				<div className="h-1 rounded-lg  my-10 bg-black/10 z-0"></div>
-				<div className="mx-auto -mt-[80px] px-4   py-4 sm:py-2 sm:px-8 shadow-xl w-[20rem] md:w-[55rem] rounded-xl md:rounded-full flex flex-col md:flex-row items-center md:justify-between bg-white space-y-4 md:space-y-0 md:space-x-4">
+				<div className="mx-auto z-1 relative -mt-20 px-4 py-[0.4rem] sm:py-2 sm:px-8 shadow-xl w-[18rem] space-y-2 lg:w-[55rem] rounded-xl lg:rounded-full flex flex-col lg:flex-row items-center lg:justify-between bg-white ">
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm mb-1">Jenis Informasi</h1>
 						<Select
@@ -913,12 +913,12 @@ export default function Home() {
 					</p>
 				</div>
 			</section>
-			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4">
+			<section className="px-4 sm:px-8 md:px-10 lg:px-10 pt-4 space-y-4">
 				<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
 					Berita Hari Ini
 				</h1>
-				<div className="flex flex-wrap justify-center gap-24 p-8">
-					<Card className="w-[23rem]">
+				<div className="flex flex-wrap justify-center md:gap-10 lg:gap-24 gap-4 px-2 py-8">
+					<Card className="md:w-[13rem] lg:w-[23rem]">
 						<CardHeader>
 							<Image
 								src={berita}
@@ -929,18 +929,18 @@ export default function Home() {
 							/>
 						</CardHeader>
 						<CardContent>
-							<CardDescription>
+							<CardDescription className='mdtext-sm'>
 								Pada rabu, 27 februari 2024 kantor perwakilan bank indonesia
 								provinsi sulawesi tengah, ... Selengkapnya
 							</CardDescription>
 						</CardContent>
 						<CardFooter className="flex justify-between">
-							<Button asChild>
+							<Button asChild className="md:w-30 md:text-[10px]">
 								<Link href="/berita/1">Baca Selengkapnya</Link>
 							</Button>
 						</CardFooter>
 					</Card>
-					<Card className="w-[23rem]">
+					<Card className="md:w-[13rem] lg:w-[23rem]">
 						<CardHeader>
 							<Image
 								src={berita2}
@@ -951,18 +951,18 @@ export default function Home() {
 							/>
 						</CardHeader>
 						<CardContent>
-							<CardDescription>
+							<CardDescription className='mdtext-sm'>
 								Pada rabu, 27 februari 2024 kantor perwakilan bank indonesia
 								provinsi sulawesi tengah, ... Selengkapnya
 							</CardDescription>
 						</CardContent>
 						<CardFooter className="flex justify-between">
-							<Button asChild>
+							<Button asChild className="md:w-30 md:text-[10px]">
 								<Link href="/berita/1">Baca Selengkapnya</Link>
 							</Button>
 						</CardFooter>
 					</Card>
-					<Card className="w-[23rem]">
+					<Card className="md:w-[13rem] lg:w-[23rem]">
 						<CardHeader>
 							<Image
 								src={berita3}
@@ -973,13 +973,13 @@ export default function Home() {
 							/>
 						</CardHeader>
 						<CardContent>
-							<CardDescription>
+							<CardDescription className='mdtext-sm'>
 								Pada rabu, 27 februari 2024 kantor perwakilan bank indonesia
 								provinsi sulawesi tengah, ... Selengkapnya
 							</CardDescription>
 						</CardContent>
 						<CardFooter className="flex justify-between">
-							<Button asChild>
+							<Button asChild className="md:w-30 md:text-[10px]">
 								<Link href="/berita/1">Baca Selengkapnya</Link>
 							</Button>
 						</CardFooter>
@@ -988,7 +988,7 @@ export default function Home() {
 				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
 			</section>
 			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4">
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+				<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 					<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
 						<div className="flex items-center gap-4">
 							<div className="bg-blue-400 p-2 rounded-md">
