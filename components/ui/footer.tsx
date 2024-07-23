@@ -8,20 +8,24 @@ export default function Footer() {
 			<>
 				<footer className="mt-10 px-4 sm:px-10 py-6 bg-no-repeat bg-cover bg-[url('/footer.png')] text-white">
 					<div className="flex flex-col md:flex-row justify-between items-center gap-6">
-						<div className="flex flex-col sm:flex-row gap-6 sm:gap-8 w-8/12">
+						<div className="flex flex-col sm:flex-row gap-6 sm:gap-8 w-full lg:w-8/12">
 							<div className="flex items-center gap-4 ">
 								<Image src={bank} alt="bank" width={45} height={45} />
 								<div className="flex flex-col ">
-									<p className="text-xs">Kantor Perwakilan</p>
-									<h1 className="text-lg">Bank Indonesia</h1>
-									<p className="text-xs">Provinsi Sulawesi Tengah</p>
+									<p className="sm:text-xs text-[10px]">Kantor Perwakilan</p>
+									<h1 className="text-xs sm:text-lg">Bank Indonesia</h1>
+									<p className="sm:text-xs text-[10px]">
+										Provinsi Sulawesi Tengah
+									</p>
 								</div>
 							</div>
 							<div className="flex items-center gap-4 ">
 								<Image src={sulaw} alt="sulaw" width={30} height={30} />
 								<div>
-									<h1 className="text-lg">Pemerintahan</h1>
-									<p className="text-sm">Provinsi Sulawesi Tengah</p>
+									<h1 className="text-md sm:text-lg">Pemerintahan</h1>
+									<p className="sm:text-xs text-[10px]">
+										Provinsi Sulawesi Tengah
+									</p>
 								</div>
 							</div>
 						</div>

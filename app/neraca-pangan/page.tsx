@@ -495,7 +495,7 @@ export default function Home() {
 			</div>
 			{/* content */}
 			<Tabs defaultValue="table">
-				<section className="px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+				<section className="px-4 sm:px-8 lg:px-50 md:px-10 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 					<div className="flex flex-col sm:flex-row justify-between pt-10">
 						<div className="flex-col mb-3">
 							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-1 font-extrabold">
@@ -1367,7 +1367,7 @@ export default function Home() {
 				</section>
 			</Tabs>
 
-			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+			<section className="px-4 sm:px-8 lg:px-50 md:px-10 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col items-center space-y-8">
 					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 px-20 lg:grid-cols-3 xl:grid-cols-4 gap-[2rem] w-full ">
 						{cardContents.map((content, index) => (
@@ -1426,45 +1426,52 @@ export default function Home() {
 			</section>
 
 			<Dialog isOpen={isDialogOpen} onClose={closeDialog}>
-				<p className="mt-2">
-					<h1 className="text-2xl font-bold">Neraca {detailHarga?.city}</h1>
+				<div className="mt-2">
+					<h1 className="text-xl sm:text-2xl md:text-3xl font-bold">
+						Neraca {detailHarga?.city}
+					</h1>
 					<div className="h-1 rounded-lg my-5 bg-black z-0"></div>
-					<div className="shadow-lg px-10 rounded-lg p-4">
+					<div className="shadow-lg px-4 sm:px-6 md:px-10 rounded-lg p-4">
 						<Tabs defaultValue="bulanan">
-							<TabsList className="rounded-full flex justify-end w-full text-black">
-								<TabsTrigger className="rounded-full" value="tahunan">
+							<TabsList className="rounded-full flex sm:flex-row flex-col justify-end w-full h-full text-black">
+								<TabsTrigger
+									className="rounded-full text-xs sm:text-sm md:text-base"
+									value="tahunan">
 									Tahunan
 								</TabsTrigger>
-								<TabsTrigger className="rounded-full" value="triwulan">
+								<TabsTrigger
+									className="rounded-full text-xs sm:text-sm md:text-base"
+									value="triwulan">
 									Triwulan
 								</TabsTrigger>
-								<TabsTrigger className="rounded-full" value="bulanan">
+								<TabsTrigger
+									className="rounded-full text-xs sm:text-sm md:text-base"
+									value="bulanan">
 									Bulanan
 								</TabsTrigger>
 							</TabsList>
 
 							<TabsContent value="tahunan">
-								<div className="h-full w-full ">
+								<div className="h-full w-full">
 									<Chart />
 								</div>
 							</TabsContent>
 							<TabsContent value="triwulan">
-								<div className="h-full w-full ">
+								<div className="h-full w-full">
 									<Chart />
 								</div>
 							</TabsContent>
-
 							<TabsContent value="bulanan">
-								<div className="h-full w-full ">
+								<div className="h-full w-full">
 									<Chart />
 								</div>
 							</TabsContent>
 						</Tabs>
 					</div>
-				</p>
+				</div>
 				<div className="flex justify-end w-full">
 					<button
-						className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg"
+						className="mt-4 px-3 py-2 bg-red-500 text-white rounded-lg text-xs sm:text-sm md:text-base"
 						onClick={closeDialog}>
 						Close
 					</button>
