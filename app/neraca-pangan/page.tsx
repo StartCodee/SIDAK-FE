@@ -495,7 +495,7 @@ export default function Home() {
 			</div>
 			{/* content */}
 			<Tabs defaultValue="table">
-				<section className="px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+				<section className="px-4 sm:px-8 lg:px-50 md:px-10 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 					<div className="flex flex-col sm:flex-row justify-between pt-10">
 						<div className="flex-col mb-3">
 							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-1 font-extrabold">
@@ -1367,7 +1367,7 @@ export default function Home() {
 				</section>
 			</Tabs>
 
-			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+			<section className="px-4 sm:px-8 lg:px-50 md:px-10 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col items-center space-y-8">
 					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 px-20 lg:grid-cols-3 xl:grid-cols-4 gap-[2rem] w-full ">
 						{cardContents.map((content, index) => (
