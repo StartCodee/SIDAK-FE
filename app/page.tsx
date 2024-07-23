@@ -769,8 +769,8 @@ export default function Home() {
 											) : (
 												<SymbolIcon width={20} height={20} />
 
-												
-												)}
+
+											)}
 											{content.change}
 										</div>
 									</div>
@@ -836,46 +836,48 @@ export default function Home() {
 					<h1 className="text-center px-8 mt-1 mb-10 text-blue-800 text-lg sm:text-xl md:text-2xl items-center">
 						Harga Konsumen Pangan Strategis Sulawesi Tengah
 					</h1>
-					<div className="flex justify-start items-start self-center  flex-wrap gap-10 ">
-						{konsumenPangan.map((content, index) => (
-							<Card key={index} className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl">
-								<div className="flex items-center space-x-4">
-									<div>
-										<Image
-											src={content.image}
-											alt="user"
-											width={50}
-											height={50}
-											className="rounded-full"
-										/>
+					<center>
+						<div className="flex justify-start items-start self-center  flex-wrap gap-10 ">
+							{konsumenPangan.map((content, index) => (
+								<Card key={index} className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl">
+									<div className="flex items-center space-x-4">
+										<div>
+											<Image
+												src={content.image}
+												alt="user"
+												width={50}
+												height={50}
+												className="rounded-full"
+											/>
+										</div>
+										<div className="">
+											<h1 className="font-bold text-lg">{content.komoditas}</h1>
+											<p>{content.jenis}</p>
+											<p className="font-bold">{content.harga}</p>
+										</div>
+										<div></div>
 									</div>
-									<div className="">
-										<h1 className="font-bold text-lg">{content.komoditas}</h1>
-										<p>{content.jenis}</p>
-										<p className="font-bold">{content.harga}</p>
+									<div className="h-1 rounded-lg bg-black/10 my-2"></div>
+									<div className="flex justify-between items-center">
+										<p>{content.volatility}</p>
+										<p className="text-xs font-thin">DAY IN HIGH VOLATILITY</p>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											viewBox="0 0 24 24"
+											fill="currentColor"
+											className="size-4 fill-red-500">
+											{' '}
+											<path
+												fillRule="evenodd"
+												d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
+												clipRule="evenodd"
+											/>{' '}
+										</svg>
 									</div>
-									<div></div>
-								</div>
-								<div className="h-1 rounded-lg bg-black/10 my-2"></div>
-								<div className="flex justify-between items-center">
-									<p>{content.volatility}</p>
-									<p className="text-xs font-thin">DAY IN HIGH VOLATILITY</p>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										viewBox="0 0 24 24"
-										fill="currentColor"
-										className="size-4 fill-red-500">
-										{' '}
-										<path
-											fillRule="evenodd"
-											d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
-											clipRule="evenodd"
-										/>{' '}
-									</svg>
-								</div>
-							</Card>
-						))}
-					</div>
+								</Card>
+							))}
+						</div>
+					</center>
 
 					<div className='w-full mt-3 flex justify-end mb-10'>
 						<div className='flex gap-1'>
