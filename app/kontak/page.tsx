@@ -5,37 +5,14 @@ import vector2 from "@/public/vect2.svg";
 import cs from "@/public/cs1.png";
 import bank from '@/public/bank.svg';
 import sulaw from '@/public/sulaw.svg';
+import Hero from "@/components/ui/hero";
+import Footer from '@/components/ui/footer';
 
 export default function Kontak(){
     return (
 			<>
 				<Navbar />
-				<div className="relative h-72 flex items-center justify-center bg-no-repeat bg-cover bg-[url('/bgg.png')]">
-					<div className="hidden lg:block">
-						<Image
-							src={vector1}
-							alt="vector1"
-							width={440}
-							height={440}
-							objectFit="cover"
-							className="absolute opacity-60 right-0 top-0"
-						/>
-						<Image
-							src={vector2}
-							alt="vector2"
-							width={440}
-							height={440}
-							objectFit="cover"
-							className="absolute drop-shadow-md opacity-25 right-0 top-0"
-						/>
-					</div>
-
-					<div className="flex-col mx-auto z-1 items-center ">
-						<p className="text-lg text-center sm:text-2xl md:text-3xl lg:text-3xl  text-white font-semibold">
-							Sistem Informasi Komoditas : Harga dan Pasokan
-						</p>
-					</div>
-				</div>
+				<Hero />
 				<div className="relative bg-white">
 					<div className="lg:absolute lg:inset-0 lg:left-1/2  p-10">
 						<Image
@@ -125,37 +102,8 @@ export default function Kontak(){
 						</div>
 					</div>
 				</div>
-				<footer className="mt-10 px-4 sm:px-10 py-6 bg-no-repeat bg-cover bg-[url('/footer.png')] text-white">
-					<div className="flex flex-col md:flex-row justify-between items-center gap-6">
-						<div className="flex flex-col sm:flex-row gap-6 sm:gap-4">
-							<div className="flex items-center gap-4">
-								<Image src={bank} alt="bank" width={45} height={45} />
-								<div className="flex flex-col">
-									<p className="text-sm">Kantor Perwakilan</p>
-									<h1 className="text-lg">Bank Indonesia</h1>
-									<p className="text-sm">Provinsi Sulawesi Tengah</p>
-								</div>
-							</div>
-							<div className="flex items-center gap-4">
-								<Image src={sulaw} alt="sulaw" width={30} height={30} />
-								<div>
-									<h1 className="text-lg">Pemerintahan</h1>
-									<p className="text-sm">Provinsi Sulawesi Tengah</p>
-								</div>
-							</div>
-						</div>
-						<div className="text-center md:text-right w-full md:w-auto">
-							<p className="font-bold text-lg">
-								SEKRETARIAT TPID SULAWESI TENGAH KANTOR PERWAKILAN BANK
-								INDONESIA PROVINSI SULAWESI TENGAH
-							</p>
-							<p>
-								Jl. Sam Ratulangi No.23 Besusu Barat, Kec. Palu Timur, Kota
-								Palu, Sulawesi Tengah 94118
-							</p>
-						</div>
-					</div>
-				</footer>
+				<Footer />
+
 			</>
 		);
 }

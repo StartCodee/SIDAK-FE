@@ -379,7 +379,7 @@ const FlowChart: React.FC = () => {
 
 				<div className="flex-col mx-auto z-50 items-center ">
 					<p className="text-lg text-center sm:text-2xl md:text-3xl lg:text-3xl  text-white font-semibold">
-						Sistem Informasi Komoditas : Harga dan Pasokan
+						Sistem Informasi Pengendalian Harga dan Pasokan
 					</p>
 				</div>
 			</div>
