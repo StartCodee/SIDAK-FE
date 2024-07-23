@@ -91,6 +91,11 @@ export default function Home() {
 		{ value: 'perdagangan-pangan', label: 'Pola Perdagangan Pangan' },
 	];
 
+	const jenisPasar = [
+		{ value: 'pasar-tradisional', label: 'Pasar Tradisional' },
+		{ value: 'pasar-modern', label: 'Pasar Modern' },
+	];
+
 	const konsumenPangan = [
 		{
 			komoditas: 'Beras',
@@ -806,8 +811,8 @@ export default function Home() {
 					style={{ marginTop: '-40px' }}
 					className="mx-auto px-4 py-4 sm:py-2 sm:px-8 shadow-xl w-[20rem] sm:w-[55rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
 					<div className="flex-col flex-1">
-						<h1 className="font-bold text-sm mb-1">Jenis Informasi</h1>
-						<Select className=" basic-single w-[170px] border-none" options={jenisInformasi} />
+						<h1 className="font-bold text-sm mb-1">Jenis Pasar</h1>
+						<Select className=" basic-single w-[170px] border-none" options={jenisPasar} />
 					</div>
 					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 					<div className="flex-col flex-1">
