@@ -1,4 +1,6 @@
-import React from 'react';
+'use client'
+
+import {useState} from 'react';
 import Navbar from '@/components/ui/navbar';
 import Image from 'next/image';
 import Background from '@/public/bgg.png';
@@ -32,7 +34,7 @@ const BeritaPage: React.FC = () => {
 		{
 			Image: berita,
 			id: 1,
-			title: 'Kantor Perwakilan Bank Indonesia Sulawesi Tengah Bersama BULOG Lakukan Pengecekan Stok Beras untuk Cegah Kenaikan Harga Pangan 1',
+			title: 'Kantor test',
 			content: 'Pada Kamis, 2 februari 2024 kantor perwakilan bank indonesia provinsi sulawesi tengah, melakukan pengecekan stok beras di gudang BULOG. Tujuan kegiatan ini adalah. ',
 		},
 		{
@@ -54,13 +56,41 @@ const BeritaPage: React.FC = () => {
 			content: 'Pada Kamis, 2 februari 2024 kantor perwakilan bank indonesia provinsi sulawesi tengah, melakukan pengecekan stok beras di gudang BULOG. Tujuan kegiatan ini adalah. ',
 		},
 	]
+
+	 const [query, setQuery] = useState('');
+		const [filteredData, setFilteredData] = useState(data);
+
+		const searchBerita = () => {
+			// Filter the data based on the search query
+			const filtered = data.filter((item) =>
+				item.title.toLowerCase().includes(query.toLowerCase()) || item.content.toLowerCase().includes(query.toLowerCase()),
+			);
+			setFilteredData(filtered);
+		};
+
 	return (
 		<>
 			<Navbar />
 
 			<Hero />
 
-			<section>
+			<div
+				style={{ marginTop: '-30px' }}
+				className="mx-auto z-1 relative  py-[0.4rem] sm:py-2 px-2 shadow-xl w-[20rem] space-x-2 lg:w-[24rem] rounded-full flex items-center  bg-white ">
+				<input
+					type="text"
+					placeholder="Cari Berita"
+					id="search"
+					value={query}
+					onChange={(e) => setQuery(e.target.value)}
+					className="w-min sm:w-full outline-none rounded-full active:ring-2 active:ring-blue-300 p-2"
+				/>
+				<Button onClick={searchBerita} className="bg-blue-300 rounded-full p-2">
+					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
+				</Button>
+			</div>
+
+			<section className="min-h-screen">
 				<Card className="m-4 sm:m-6 lg:m-10 border-none">
 					<CardHeader>
 						<h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold">
@@ -68,42 +98,47 @@ const BeritaPage: React.FC = () => {
 						</h1>
 					</CardHeader>
 					<CardContent className="flex flex-col gap-4">
-						{data.map((item) => (
-							<Card
-								key={item.id}
-								className="w-full flex flex-col lg:flex-row items-center mb-4">
-								<CardHeader className="w-full lg:w-1/3">
-									<Image
-										src={item.image || berita}
-										className="rounded-2xl w-full"
-										alt="berita"
-										width={350}
-										height={200}
-										layout="responsive"
-									/>
-								</CardHeader>
-								<CardContent className="w-full lg:w-2/3 p-4 lg:p-6 ">
-									<div>
-										<h1 className="text-xl lg:text-2xl font-semibold text-black">
-											{item.title}
-										</h1>
-										<div className="my-4 border-b border-black w-full" />
-										<p className="text-lg lg:text-base ">{item.content}</p>
-									</div>
-									<Button asChild className="mt-4">
-										<Link href='/berita/1'>
-										
-										Baca Selengkapnya
-										</Link></Button>
-								</CardContent>
+						{filteredData.length > 0 ? (
+							filteredData.map((item) => (
+								<Card
+									key={item.id}
+									className="w-full flex flex-col lg:flex-row items-center mb-4">
+									<CardHeader className="w-full lg:w-1/3">
+										<Image
+											src={item.image || berita}
+											className="rounded-2xl w-full"
+											alt="berita"
+											width={350}
+											height={200}
+											layout="responsive"
+										/>
+									</CardHeader>
+									<CardContent className="w-full lg:w-2/3 p-4 lg:p-6 ">
+										<div>
+											<h1 className="text-xl lg:text-2xl font-semibold text-black">
+												{item.title}
+											</h1>
+											<div className="my-4 border-b border-black w-full" />
+											<p className="text-lg lg:text-base ">{item.content}</p>
+										</div>
+										<Button asChild className="mt-4">
+											<Link href={`/berita/${item.id}`}>Baca Selengkapnya</Link>
+										</Button>
+									</CardContent>
+								</Card>
+							))
+						) : (
+							<Card className="w-full p-6 flex flex-col items-center justify-center bg-gray-100">
+								<p className="text-lg text-gray-600">
+									Tidak bisa menemukan berita yang anda cari
+								</p>
 							</Card>
-						))}
+						)}
 					</CardContent>
 				</Card>
 			</section>
 
 			<Footer />
-
 		</>
 	);
 };
