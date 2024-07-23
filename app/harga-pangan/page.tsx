@@ -50,6 +50,292 @@ export default function Home() {
 	]
 
 	const [cardContents, setCardContents] = useState([
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Beras Premium",
+		// 	"price": "15,167",
+		// 	"color": "Green",
+		// 	"change": "-8.7%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Cabai Merah Besar",
+		// 	"price": "27,083",
+		// 	"color": "Green",
+		// 	"change": "-33.2%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Cabai Rawit Merah",
+		// 	"price": "57,778",
+		// 	"color": "Red",
+		// 	"change": "14.5%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Bawang Merah",
+		// 	"price": "50,833",
+		// 	"color": "Red",
+		// 	"change": "12.7%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Gula Pasir Kemasan",
+		// 	"price": "18,500",
+		// 	"color": "Red",
+		// 	"change": "0.7%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Minyak Goreng Sawit Kemasan Premium",
+		// 	"price": "18,694",
+		// 	"color": "Red",
+		// 	"change": "1.2%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Daging Ayam Ras",
+		// 	"price": "41,944",
+		// 	"color": "Green",
+		// 	"change": "-3.6%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Telur Ayam Ras",
+		// 	"price": "32,000",
+		// 	"color": "Red",
+		// 	"change": "1.3%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Daging Sapi Paha Belakang",
+		// 	"price": "130,000",
+		// 	"color": "Green",
+		// 	"change": "-2.6%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Ikan Tongkol",
+		// 	"price": "35,000",
+		// 	"color": "Green",
+		// 	"change": "-3.1%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Bawang Putih Honan",
+		// 	"price": "49,222",
+		// 	"color": "Green",
+		// 	"change": "-0.4%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Beras Premium",
+		// 	"price": "13,300",
+		// 	"color": "Green",
+		// 	"change": "-3.7%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Cabai Merah Besar",
+		// 	"price": "49,000",
+		// 	"color": "Red",
+		// 	"change": "39.9%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Cabai Rawit Merah",
+		// 	"price": "51,574",
+		// 	"color": "Red",
+		// 	"change": "6.2%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Bawang Merah",
+		// 	"price": "43,842",
+		// 	"color": "Green",
+		// 	"change": "-5.8%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Gula Pasir Kemasan",
+		// 	"price": "20,833",
+		// 	"color": "Green",
+		// 	"change": "-0.6%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Minyak Goreng Sawit Kemasan Premium",
+		// 	"price": "18,704",
+		// 	"color": "Green",
+		// 	"change": "-0.4%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Daging Ayam Ras",
+		// 	"price": "32,593",
+		// 	"color": "Green",
+		// 	"change": "-7.5%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Telur Ayam Ras",
+		// 	"price": "33,150",
+		// 	"color": "Green",
+		// 	"change": "-5.8%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Daging Sapi Paha Belakang",
+		// 	"price": "140,000",
+		// 	"color": "Red",
+		// 	"change": "0.1%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Ikan Tongkol",
+		// 	"price": "24,815",
+		// 	"color": "Red",
+		// 	"change": "10.1%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Bawang Putih Honan",
+		// 	"price": "47,472",
+		// 	"color": "Green",
+		// 	"change": "-3.9%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Beras Premium",
+		// 	"price": "15,889",
+		// 	"color": "Green",
+		// 	"change": "-2.8%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Cabai Merah Besar",
+		// 	"price": "47,500",
+		// 	"color": "Red",
+		// 	"change": "56.8%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Cabai Rawit Merah",
+		// 	"price": "61,944",
+		// 	"color": "Red",
+		// 	"change": "25.4%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Bawang Merah",
+		// 	"price": "46,389",
+		// 	"color": "Green",
+		// 	"change": "-1.4%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Gula Pasir Kemasan",
+		// 	"price": "18,000",
+		// 	"color": "Green",
+		// 	"change": "-2.2%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Minyak Goreng Sawit Kemasan Premium",
+		// 	"price": "18,111",
+		// 	"color": "Red",
+		// 	"change": "0.6%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Daging Ayam Ras",
+		// 	"price": "34,000",
+		// 	"color": "Red",
+		// 	"change": "0.0%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Telur Ayam Ras",
+		// 	"price": "33,789",
+		// 	"color": "Green",
+		// 	"change": "-12.4%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Daging Sapi Paha Belakang",
+		// 	"price": "130,000",
+		// 	"color": "Red",
+		// 	"change": "0.0%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Ikan Tongkol",
+		// 	"price": "28,611",
+		// 	"color": "Red",
+		// 	"change": "18.6%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Bawang Putih Honan",
+		// 	"price": "48,056",
+		// 	"color": "Red",
+		// 	"change": "2.8%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Morowali",
+		// 	"item": "Beras Premium",
+		// 	"price": "15,944",
+		// 	"color": "Green",
+		// 	"change": "-1.1%",
+		// 	"bulan": "2024-06"
+		// },
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
 		{
 			city: 'Kota Buol',
 			price: '20.000/kg',
