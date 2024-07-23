@@ -593,10 +593,15 @@ const FlowChart: React.FC = () => {
 			<Navbar />
 			<img src="/location.svg" id="location" className="hidden" alt="" />
 			<Hero />
-			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[30rem] gap-2 rounded-full py-2 flex flex-col items-center sm:flex-row flex-wrap  bg-white">
+			<div
+				style={{ marginTop: '-40px' }}
+				className="mx-auto z-1 relative px-4 py-[0.4rem] sm:py-2 sm:px-8 shadow-xl w-[18rem] md:w-[30rem] sm:w-[30rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm mb-1">Komoditas</h1>
-					<Select className=" basic-single w-[170px] border-none" options={options} />
+					<Select
+						className=" basic-single w-[170px] border-none"
+						options={options}
+					/>
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
@@ -623,13 +628,15 @@ const FlowChart: React.FC = () => {
 								April 2024
 							</Badge>
 						</div>
-						
-						<TabsList className="rounded-full  w-max p-4 py-6 w-max text-black">
+
+						<TabsList className="rounded-full   p-4 py-6 w-max text-black">
 							<div
 								onClick={() => {
 									changeTab('all');
 								}}>
-								<TabsTrigger className="rounded-full text-md font-bold" value="all">
+								<TabsTrigger
+									className="rounded-full text-md font-bold"
+									value="all">
 									All
 								</TabsTrigger>
 							</div>
@@ -637,7 +644,9 @@ const FlowChart: React.FC = () => {
 								onClick={() => {
 									changeTab('in');
 								}}>
-								<TabsTrigger className="rounded-full text-md font-bold" value="in">
+								<TabsTrigger
+									className="rounded-full text-md font-bold"
+									value="in">
 									In
 								</TabsTrigger>
 							</div>
@@ -645,7 +654,9 @@ const FlowChart: React.FC = () => {
 								onClick={() => {
 									changeTab('intra');
 								}}>
-								<TabsTrigger className="rounded-full text-md font-bold" value="intra">
+								<TabsTrigger
+									className="rounded-full text-md font-bold"
+									value="intra">
 									Intra
 								</TabsTrigger>
 							</div>
@@ -654,7 +665,9 @@ const FlowChart: React.FC = () => {
 								onClick={() => {
 									changeTab('out');
 								}}>
-								<TabsTrigger className="rounded-full text-md font-bold" value="out">
+								<TabsTrigger
+									className="rounded-full text-md font-bold"
+									value="out">
 									Out
 								</TabsTrigger>
 							</div>
@@ -1934,7 +1947,6 @@ const FlowChart: React.FC = () => {
 
 			<br />
 			<Footer />
-
 		</div>
 	);
 };
