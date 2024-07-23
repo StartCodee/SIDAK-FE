@@ -4000,7 +4000,7 @@ export default function Home() {
 										openDialog(content.city, content.item);
 									}}
 									key={index}
-									className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl">
+									className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl cursor-pointer">
 									<div className="flex items-center space-x-4">
 										<div>
 											<Image
