@@ -50,6 +50,292 @@ export default function Home() {
 	]
 
 	const [cardContents, setCardContents] = useState([
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Beras Premium",
+		// 	"price": "15,167",
+		// 	"color": "Green",
+		// 	"change": "-8.7%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Cabai Merah Besar",
+		// 	"price": "27,083",
+		// 	"color": "Green",
+		// 	"change": "-33.2%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Cabai Rawit Merah",
+		// 	"price": "57,778",
+		// 	"color": "Red",
+		// 	"change": "14.5%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Bawang Merah",
+		// 	"price": "50,833",
+		// 	"color": "Red",
+		// 	"change": "12.7%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Gula Pasir Kemasan",
+		// 	"price": "18,500",
+		// 	"color": "Red",
+		// 	"change": "0.7%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Minyak Goreng Sawit Kemasan Premium",
+		// 	"price": "18,694",
+		// 	"color": "Red",
+		// 	"change": "1.2%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Daging Ayam Ras",
+		// 	"price": "41,944",
+		// 	"color": "Green",
+		// 	"change": "-3.6%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Telur Ayam Ras",
+		// 	"price": "32,000",
+		// 	"color": "Red",
+		// 	"change": "1.3%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Daging Sapi Paha Belakang",
+		// 	"price": "130,000",
+		// 	"color": "Green",
+		// 	"change": "-2.6%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Ikan Tongkol",
+		// 	"price": "35,000",
+		// 	"color": "Green",
+		// 	"change": "-3.1%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Kota Palu",
+		// 	"item": "Bawang Putih Honan",
+		// 	"price": "49,222",
+		// 	"color": "Green",
+		// 	"change": "-0.4%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Beras Premium",
+		// 	"price": "13,300",
+		// 	"color": "Green",
+		// 	"change": "-3.7%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Cabai Merah Besar",
+		// 	"price": "49,000",
+		// 	"color": "Red",
+		// 	"change": "39.9%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Cabai Rawit Merah",
+		// 	"price": "51,574",
+		// 	"color": "Red",
+		// 	"change": "6.2%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Bawang Merah",
+		// 	"price": "43,842",
+		// 	"color": "Green",
+		// 	"change": "-5.8%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Gula Pasir Kemasan",
+		// 	"price": "20,833",
+		// 	"color": "Green",
+		// 	"change": "-0.6%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Minyak Goreng Sawit Kemasan Premium",
+		// 	"price": "18,704",
+		// 	"color": "Green",
+		// 	"change": "-0.4%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Daging Ayam Ras",
+		// 	"price": "32,593",
+		// 	"color": "Green",
+		// 	"change": "-7.5%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Telur Ayam Ras",
+		// 	"price": "33,150",
+		// 	"color": "Green",
+		// 	"change": "-5.8%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Daging Sapi Paha Belakang",
+		// 	"price": "140,000",
+		// 	"color": "Red",
+		// 	"change": "0.1%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Ikan Tongkol",
+		// 	"price": "24,815",
+		// 	"color": "Red",
+		// 	"change": "10.1%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Luwuk",
+		// 	"item": "Bawang Putih Honan",
+		// 	"price": "47,472",
+		// 	"color": "Green",
+		// 	"change": "-3.9%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Beras Premium",
+		// 	"price": "15,889",
+		// 	"color": "Green",
+		// 	"change": "-2.8%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Cabai Merah Besar",
+		// 	"price": "47,500",
+		// 	"color": "Red",
+		// 	"change": "56.8%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Cabai Rawit Merah",
+		// 	"price": "61,944",
+		// 	"color": "Red",
+		// 	"change": "25.4%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Bawang Merah",
+		// 	"price": "46,389",
+		// 	"color": "Green",
+		// 	"change": "-1.4%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Gula Pasir Kemasan",
+		// 	"price": "18,000",
+		// 	"color": "Green",
+		// 	"change": "-2.2%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Minyak Goreng Sawit Kemasan Premium",
+		// 	"price": "18,111",
+		// 	"color": "Red",
+		// 	"change": "0.6%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Daging Ayam Ras",
+		// 	"price": "34,000",
+		// 	"color": "Red",
+		// 	"change": "0.0%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Telur Ayam Ras",
+		// 	"price": "33,789",
+		// 	"color": "Green",
+		// 	"change": "-12.4%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Daging Sapi Paha Belakang",
+		// 	"price": "130,000",
+		// 	"color": "Red",
+		// 	"change": "0.0%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Ikan Tongkol",
+		// 	"price": "28,611",
+		// 	"color": "Red",
+		// 	"change": "18.6%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Tolitoli",
+		// 	"item": "Bawang Putih Honan",
+		// 	"price": "48,056",
+		// 	"color": "Red",
+		// 	"change": "2.8%",
+		// 	"bulan": "2024-06"
+		// },
+		// {
+		// 	"city": "Morowali",
+		// 	"item": "Beras Premium",
+		// 	"price": "15,944",
+		// 	"color": "Green",
+		// 	"change": "-1.1%",
+		// 	"bulan": "2024-06"
+		// },
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
 		{
 			city: 'Kota Buol',
 			price: '20.000/kg',
@@ -388,10 +674,15 @@ export default function Home() {
 		<main>
 			<Navbar />
 			<Hero />
-			<div className="relative mx-auto  -mt-24 px-8 lg:-mt-12 z-1 shadow-xl w-[20rem] sm:w-[30rem] gap-2 rounded-full py-2 flex flex-col items-center sm:flex-row flex-wrap  bg-white">
+			<div
+				style={{ marginTop: '-40px' }}
+				className="mx-auto z-1 relative px-4 py-[0.4rem] sm:py-2 sm:px-8 shadow-xl w-[18rem] md:w-[30rem] sm:w-[30rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm mb-1">Komoditas</h1>
-					<Select className=" basic-single w-[170px] border-none" options={options} />
+					<Select
+						className=" basic-single w-[170px] border-none"
+						options={options}
+					/>
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 
@@ -434,7 +725,6 @@ export default function Home() {
 				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
 			</section>
 			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
-
 				<div className="flex flex-col items-center space-y-8">
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-6xl">
 						{cardContents.map((content, index) => (
@@ -443,8 +733,12 @@ export default function Home() {
 								style={{ alignContent: 'center' }}
 								// style={{display: flex;align-content: center;flex-direction: column;justify-content: space-between;}}
 								className="border border-gray-200 p-4 flex flex-col justify-between rounded-lg shadow-md">
-								<div className="flex flex-col items-center justify-between space-y-2" style={{ flex: 1 }}>
-									<h1 className="text-md font-light text-center">{content.city}</h1>
+								<div
+									className="flex flex-col items-center justify-between space-y-2"
+									style={{ flex: 1 }}>
+									<h1 className="text-md font-light text-center">
+										{content.city}
+									</h1>
 									<p className="font-bold text-2xl">{content.price}</p>
 									<div
 										className={`rounded-md p-2 flex items-center justify-center text-white`}
@@ -452,24 +746,24 @@ export default function Home() {
 											background: content.color,
 										}}>
 										{content.color === '#bf7070' ? (
-											<div className='flex gap-2'>
+											<div className="flex gap-2">
 												<ArrowUpIcon width={20} height={20} />
 												Naik {content.change}
 											</div>
 										) : content.color === '#f1be5b' ? (
-											<div className='flex gap-2'>
+											<div className="flex gap-2">
 												<ArrowDownIcon width={20} height={20} />
 												Turun {content.change}
 											</div>
 										) : (
-											<div className='flex gap-2'>
+											<div className="flex gap-2">
 												<SymbolIcon width={20} height={20} />
 												Stabil
 											</div>
 										)}
 									</div>
 								</div>
-								<div className="flex flex-col mt-6" >
+								<div className="flex flex-col mt-6">
 									<p className="text-md font-semibold">{content.price}</p>
 									<p className="text-xs font-thin">DAY IN HIGH VOLATILITY</p>
 								</div>
