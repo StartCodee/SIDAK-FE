@@ -77,6 +77,7 @@ const BeritaPage: React.FC = () => {
 					'content-type': 'application/json',
 					'Authorization': `Bearer ${localStorage.getItem('token')}`,
 				},
+				withCredentials: true,
 			});
 			if (response.data.data) {
 				setBerita(response.data.data);
