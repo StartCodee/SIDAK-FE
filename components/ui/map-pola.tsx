@@ -23,9 +23,10 @@ export default function MapPola({ flow }: MapProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
+	
 	const changeTab = (tab: string) => {
-		console.log('masuk')
-	};
+		
+	}
 
 	useEffect(() => {
 		const container = containerRef.current;
@@ -420,7 +421,6 @@ export default function MapPola({ flow }: MapProps) {
 			}
 		}
 
-
 		function drawArrow(ctx: CanvasRenderingContext2D, endX: number, endY: number, startX: number, startY: number, controlX: number, controlY: number) {
 			const headlen = 15; // panjang kepala panah
 			const dx = endX - controlX;
@@ -435,7 +435,6 @@ export default function MapPola({ flow }: MapProps) {
 			ctx.lineWidth = 3;
 			ctx.stroke();
 		}
-
 
 		function drawIcon(ctx: CanvasRenderingContext2D, x: number, y: number, img: HTMLImageElement) {
 			const iconSize = 20; // Ukuran ikon

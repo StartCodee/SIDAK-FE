@@ -11,6 +11,8 @@ import {
 	CardFooter,
 	CardHeader,
 } from '@/components/ui/card';
+import Dialog from '@/components/ui/modal-harga';
+
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 
@@ -21,16 +23,18 @@ import {
 	CounterClockwiseClockIcon,
 	ChevronRightIcon,
 	ArrowDownIcon,
-	RotateCounterClockwiseIcon,
-	ReloadIcon,
 	ArrowUpIcon,
-	SymbolIcon
+	SymbolIcon,
+	TriangleDownIcon,
+	TriangleUpIcon,
+	BellIcon
 } from '@radix-ui/react-icons';
 import {
 	UserIcon,
 	ScaleIcon,
 	BuildingLibraryIcon,
 	MagnifyingGlassIcon,
+
 } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import berita from '@/public/berita.png';
@@ -57,15 +61,47 @@ interface cardContents {
 }
 
 export default function Home() {
+
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const [detailHargaKonsumen, setDetailHargaKonsumen] = useState(
+		{} as
+		| {
+			city: string;
+			komoditas: string;
+			price: string;
+			priceAvg: string;
+			volatility: string;
+			id: string;
+		}
+		| undefined,
+	);
+
+	const closeDialog = () => setIsDialogOpen(false);
+	const openDialog = (el: string, komoditas: string) => {
+		const filteredData = mockData.filter(data =>
+			data.item.includes(komoditas) && data.city.includes(el)
+		);
+		setDetailHargaKonsumen(
+			{
+				city: el,
+				komoditas: komoditas,
+				price: filteredData[0].price,
+				priceAvg: filteredData[0].price,
+				volatility: filteredData[0].change,
+				id: el
+			}
+		);
+		setIsDialogOpen(true);
+	};
+
 	const [selectedValue, setSelectedValue] = useState<string>('harga-pangan');
 	const [selectedCommodity, setSelectedCommodity] = useState('');
+	const [selectedCommodityKonsumen, setSelectedCommodityKonsumen] = useState('');
+	const [selectedKabupaten, setSelectedKabupaten] = useState('');
 
 	const [selectedDate, setSelectedDate] = React.useState<Date>();
-	const [selectedMonth, setSelectedMonth] = useState('');
+	const [selectedDateKonsumen, setSelectedDateKonsumen] = React.useState<Date>();
 	const [selectedOption, setSelectedOption] = useState<any[]>([]);
-
-
-
 
 	const options = [
 		{ value: 'Beras Premium', label: 'Beras Premium' },
@@ -93,7 +129,6 @@ export default function Home() {
 	]
 
 	const handleValueChange = (e: any) => {
-		console.log(e)
 		setSelectedValue(e.value);
 		if (e.value === 'neraca-pangan') {
 			setSelectedOption(optionsNeraca);
@@ -107,6 +142,10 @@ export default function Home() {
 			);
 			setCardContents(filteredData);
 		}
+	};
+
+	const handleValueChangeKonsumen = (e: any) => {
+		setSelectedKabupaten(e.value);
 	};
 
 	const mockData = [
@@ -1288,7 +1327,7 @@ export default function Home() {
 			"id": "MorowaliUtara"
 		}, {
 			"city": "Morowali Utara",
-			"item": "Gula Pasir",
+			"item": "Gula Pasir Kemasan",
 			"price": "22,000",
 			"color": "#bf7070",
 			"change": "1.02%",
@@ -3494,6 +3533,10 @@ export default function Home() {
 		{ value: 'perdagangan-pangan', label: 'Pola Perdagangan Pangan' },
 	];
 
+	const jenisPasar = [
+		{ value: 'semua-pasar', label: 'Semua Pasar' },
+	];
+
 	const konsumenPangan = [
 		{
 			komoditas: 'Beras',
@@ -3585,7 +3628,57 @@ export default function Home() {
 		},
 	];
 
+	const imgInformasi = [
+		{
+			komoditas: 'Beras Premium',
+			image: '/konsumen-pangan/rice.png',
+		},
+		{
+			komoditas: 'Daging Ayam Ras',
+			image: '/konsumen-pangan/ayam.png',
+		},
+		{
+			komoditas: 'Bawang Putih',
+			image: '/konsumen-pangan/bawangmerah.png',
+		},
+		{
+			komoditas: 'Bawang Merah',
+			image: '/konsumen-pangan/bawangungu.png',
+		},
+		{
+			komoditas: 'Cabai Merah Besar',
+			image: '/konsumen-pangan/cabe.png',
+		},
+		{
+			komoditas: 'Gula Pasir Kemasan',
+			image: '/konsumen-pangan/gula.png',
+		},
+		{
+			komoditas: 'Ikan Tongkol',
+			image: '/konsumen-pangan/ikan.png',
+		},
+		{
+			komoditas: 'Minyak Goreng',
+			image: '/konsumen-pangan/minyak.png',
+		},
+		{
+			komoditas: 'Cabai Rawit Merah',
+			image: '/konsumen-pangan/rawit.png',
+		},
+		{
+			komoditas: 'Daging Sapi',
+			image: '/konsumen-pangan/sapi.png',
+		},
+		{
+			komoditas: 'Telur Ayam Ras',
+			image: '/konsumen-pangan/telor.png',
+		},
+	];
+
+
 	const [cardContents, setCardContents] = useState<cardContents[]>([]);
+
+	const [hargaKonsumen, setHargaKonsumen] = useState<cardContents[]>([]);
 
 
 	const [cardContentsNeraca, setCardContentsNeraca] = useState([
@@ -3718,7 +3811,20 @@ export default function Home() {
 				data.komoditas.includes(selectedCommodity)
 			);
 			setCardContentsNeraca(filteredDataNeraca);
+		} else {
+			console.log('No date selected');
+		}
+	}
 
+	const handleChangeMonthKonsumen = () => {
+		if (selectedDateKonsumen) {
+			let commodity = selectedCommodityKonsumen;
+			let val = format(selectedDateKonsumen, 'yyyy-MM');
+			console.log(selectedKabupaten);
+			const filteredData = mockData.filter(data =>
+				data.bulan === val && data.id === selectedKabupaten
+			);
+			setHargaKonsumen(filteredData);
 		} else {
 			console.log('No date selected');
 		}
@@ -3728,9 +3834,12 @@ export default function Home() {
 		const filteredData = mockData.filter(data =>
 			data.item.includes('Beras Premium') && data.bulan === "2024-06"
 		);
-
 		setSelectedOption(options);
 		setCardContents(filteredData);
+		const filteredDataKonsumen = mockData.filter(data =>
+			data.bulan === "2024-06" && data.city === "Kota palu"
+		);
+		setHargaKonsumen(filteredDataKonsumen)
 	}, []);
 
 	return (
@@ -3768,7 +3877,6 @@ export default function Home() {
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 				</Button>
 			</div>
-
 			{selectedValue === 'harga-pangan' && (
 				<section className="px-4 sm:px-8 md:px-10 lg:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 					<div className="flex flex-col sm:flex-row justify-between pt-10">
@@ -3840,16 +3948,17 @@ export default function Home() {
 				<div className="h-1 rounded-lg  my-10 bg-black/10 z-0"></div>
 				<div className="mx-auto z-1 relative -mt-20 px-4 py-[0.4rem] sm:py-2 sm:px-8 shadow-xl w-[18rem] space-y-2 lg:w-[55rem] rounded-xl lg:rounded-full flex flex-col lg:flex-row items-center lg:justify-between bg-white ">
 					<div className="flex-col flex-1">
-						<h1 className="font-bold text-sm mb-1">Jenis Informasi</h1>
+						<h1 className="font-bold text-sm mb-1">Jenis Pasar</h1>
 						<Select
 							className=" basic-single w-[170px] border-none"
-							options={jenisInformasi}
+							options={jenisPasar}
 						/>
 					</div>
 					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm mb-1">Komoditas</h1>
 						<Select
+							onChange={(e) => handleValueChangeKonsumen(e)}
 							className=" basic-single w-[170px] border-none"
 							options={options}
 						/>
@@ -3858,6 +3967,7 @@ export default function Home() {
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm mb-1 ">Kabupaten/Kota</h1>
 						<Select
+							onChange={(option) => setSelectedKabupaten(option!.value)}
 							className=" basic-single w-[170px] border-none"
 							options={kabupaten}
 						/>
@@ -3865,9 +3975,11 @@ export default function Home() {
 					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm mb-1 ">Bulan</h1>
-						<MonthPicker date={selectedDate} setDate={setSelectedDate} />
+						<MonthPicker date={selectedDateKonsumen} setDate={setSelectedDateKonsumen} />
 					</div>
-					<Button className="bg-blue-300 rounded-full p-2">
+					<Button
+						onClick={handleChangeMonthKonsumen}
+						className="bg-blue-300 rounded-full p-2">
 						<MagnifyingGlassIcon
 							className="text-white"
 							width={24}
@@ -3881,14 +3993,17 @@ export default function Home() {
 					</h1>
 					<center>
 						<div className="flex lg:justify-start justify-center items-start self-center  flex-wrap gap-10 ">
-							{konsumenPangan.map((content, index) => (
+							{hargaKonsumen.map((content, index) => (
 								<Card
+									onClick={() => {
+										openDialog(content.city, content.item);
+									}}
 									key={index}
 									className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl">
 									<div className="flex items-center space-x-4">
 										<div>
 											<Image
-												src={content.image}
+												src={imgInformasi.find(item => item.komoditas === content.item)?.image as string}
 												alt="user"
 												width={50}
 												height={50}
@@ -3896,15 +4011,15 @@ export default function Home() {
 											/>
 										</div>
 										<div className="">
-											<h1 className="font-bold text-lg">{content.komoditas}</h1>
-											<p>{content.jenis}</p>
-											<p className="font-bold">{content.harga}</p>
+											<h1 className="ms-2 text-left font-bold text-lg">{content.item.split(' ')[0]}</h1>
+											<p className='text-left ms-2'>{content.item.split(' ').slice(1).join(' ')}</p>
+											<p className="text-left ms-2 font-bold">Rp {content.price}</p>
 										</div>
 										<div></div>
 									</div>
 									<div className="h-1 rounded-lg bg-black/10 my-2"></div>
 									<div className="flex justify-between items-center">
-										<p>{content.volatility}</p>
+										<p>50</p>
 										<p className="text-xs font-thin">DAY IN HIGH VOLATILITY</p>
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
@@ -3923,7 +4038,6 @@ export default function Home() {
 							))}
 						</div>
 					</center>
-
 					<div className="w-full mt-3 flex justify-end mb-10">
 						<div className="flex gap-1">
 							<div className="w-[24px] h-[24px] bg-[#76bf70]"></div>
@@ -4062,6 +4176,121 @@ export default function Home() {
 				<Separator className="shadow-lg" />
 			</section>
 			<Footer />
+			<Dialog isOpen={isDialogOpen} onClose={closeDialog}>
+				<div className="mt-2 overflow-y-auto max-h-132.5 md:max-h-full">
+					<div className="shadow-lg overflow-hidden px-4 sm:px-10 rounded-lg p-4">
+						<div className="flex flex-col space-y-10">
+							<div className="flex justify-between">
+								<h1 className="sm:text-xl text-lg font-bold">
+									Perkembangan Harga Harian : {detailHargaKonsumen?.komoditas}
+								</h1>
+								<button
+									className=" text-black text-4xl hover:text-gray-700"
+									onClick={closeDialog}>
+									×
+								</button>
+							</div>
+							<div className="flex md:flex-row flex-wrap sm:flex-nowrap justify-around space-y-4 sm:space-y-0 gap-5">
+								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4 text-sm lg:text-lg flex flex-col rounded-lg">
+									<p className="text-[10px] lg:text-lg">
+										Harga {' '}
+									</p>
+									<h1 className="font-bold text-[10px] lg:text-lg">
+										<div className="flex justify-between items-center">
+											<div>
+												Rp {detailHargaKonsumen?.price}
+											</div>
+											<div>
+												<TriangleUpIcon color='red' width={50} height={50} />
+											</div>
+										</div>
+									</h1>
+								</div>
+								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
+									<p className="text-[10px] lg:text-lg">
+										Harga Rata - Rata (MtM)
+									</p>
+									<h1 className="font-bold text-[10px] lg:text-lg">
+										<div className="flex justify-between items-center">
+											<div>
+												Rp {detailHargaKonsumen?.priceAvg}
+											</div>
+											<div>
+												<TriangleUpIcon color='red' width={50} height={50} />
+											</div>
+										</div>
+									</h1>
+								</div>
+								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
+									<p className="text-[10px] lg:text-lg">Volatilitas </p>
+									<h1 className="font-bold text-[10px] lg:text-lg">
+										<div className="flex justify-between items-center">
+											<div>
+												{detailHargaKonsumen?.volatility}
+											</div>
+											<div>
+												<BellIcon color='red' width={50} height={50} />
+											</div>
+										</div>
+									</h1>
+								</div>
+							</div>
+							<Button
+								className="bg-[#f0fdf4] text-[#228848] hover:bg-green-200 rounded-full cursor-pointer"
+								asChild>
+								<span className="self-end inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+									Export
+								</span>
+							</Button>
+						</div>
+						<div className="h-1 rounded-lg my-10 bg-black/10 z-0"></div>
+						<div className="flex flex-col ">
+							<h1 className="sm:text-2xl text-lg font-bold mb-3">
+								Tabel Harga Harian
+							</h1>
+							<div className="overflow-x-auto">
+								<table className="rounded-lg overflow-hidden w-full border border-gray-300">
+									<thead>
+										<tr className="bg-blue-200">
+											<th className="px-4 py-2">Subjek</th>
+											<th className="px-4 py-2">02 April 2024</th>
+											<th className="px-4 py-2">03 April 2024</th>
+											<th className="px-4 py-2">04 April 2024</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td className="px-4 py-2">
+												{detailHargaKonsumen?.city}
+											</td>
+											<td className="px-4 py-2">Rp. 12.572</td>
+											<td className="px-4 py-2">Rp. 12.572</td>
+											<td className="px-4 py-2">Rp. 12.572</td>
+										</tr>
+										<tr className="bg-blue-200">
+											<td
+												className="border-b-2 border-black px-4 py-2"
+												colSpan={4}></td>
+										</tr>
+										<tr>
+											<td className="px-4 py-2">Pasar Wajo</td>
+											<td className="px-4 py-2">Rp. 12.572</td>
+											<td className="px-4 py-2">Rp. 12.572</td>
+											<td className="px-4 py-2">Rp. 12.572</td>
+										</tr>
+										<tr className="bg-blue-200">
+											<td className="px-4 py-2">Pasar Sentral</td>
+											<td className="px-4 py-2">Rp. 12.572</td>
+											<td className="px-4 py-2">Rp. 12.572</td>
+											<td className="px-4 py-2">Rp. 12.572</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</Dialog>
 		</main>
 	);
 }
