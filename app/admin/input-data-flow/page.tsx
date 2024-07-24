@@ -15,7 +15,7 @@ export default function Home() {
             <DefaultLayout>
                 <Breadcrumb pageName="Data Flow" />
 
-                <div className="w-full bg-white rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
+                <div className="w-full rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
                     <h1 className="text-2xl font-bold">Data Flow</h1>
 
                     <form action="">

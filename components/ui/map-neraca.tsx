@@ -57,7 +57,7 @@ export default function MapNeraca({ cardContents }: MapProps) {
 		const card = document.createElement('div');
 		card.id = 'card-' + id;
 		card.className =
-			'absolute z-50 bg-white p-4 rounded-lg shadow-md flex items-center';
+			'absolute z-50 bg-white p-4 rounded-lg shadow-md flex items-center hidden md:block';
 		card.style.top = `${pathTop}px`;
 		card.style.left = `${pathLeft}px`;
 		card.innerHTML = `

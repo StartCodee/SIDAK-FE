@@ -49,6 +49,9 @@ import Hero from '@/components/ui/hero';
 import MonthPicker from '@/components/ui/monthpicker';
 import Select from 'react-select';
 
+import getBerita from '@/lib/getBerita';
+import getDashboard from '@/lib/getDashboard';
+
 
 interface cardContents {
 	city: string;
@@ -60,7 +63,24 @@ interface cardContents {
 	id: string;
 }
 
+interface News {
+	id: number;
+	title: string;
+	content: string;
+	author_id: number;
+	created_at: string;
+	updated_at: string;
+	deleted_at: string | null;
+	image: string | null;
+}
+
 export default function Home() {
+	const [berita, setBerita] = useState<News[]>([]);
+	  const [dashboard, setDashboard] = useState({
+			totalCommodities: 0,
+			totalPasar: 0,
+			totalUser: 0,
+		});
 
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [detailHargaKonsumen, setDetailHargaKonsumen] = useState(
@@ -75,6 +95,24 @@ export default function Home() {
 		}
 		| undefined,
 	);
+
+
+	
+
+	useEffect(() => {
+		getBerita().then((data) => {
+			setBerita(data.data);
+		});
+
+		getDashboard()
+			.then((data) => {
+					setDashboard(data);
+			})
+			
+
+	}, []);
+
+
 
 	const closeDialog = () => setIsDialogOpen(false);
 	const openDialog = (el: string, komoditas: string) => {
@@ -3915,8 +3953,8 @@ export default function Home() {
 											) : (
 												<SymbolIcon width={20} height={20} />
 											)}
-											
-											 {content.change}
+
+											{content.change}
 										</div>
 									</div>
 								</Card>
@@ -3976,7 +4014,10 @@ export default function Home() {
 					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm mb-1 ">Bulan</h1>
-						<MonthPicker date={selectedDateKonsumen} setDate={setSelectedDateKonsumen} />
+						<MonthPicker
+							date={selectedDateKonsumen}
+							setDate={setSelectedDateKonsumen}
+						/>
 					</div>
 					<Button
 						onClick={handleChangeMonthKonsumen}
@@ -4004,7 +4045,11 @@ export default function Home() {
 									<div className="flex items-center space-x-4">
 										<div>
 											<Image
-												src={imgInformasi.find(item => item.komoditas === content.item)?.image as string}
+												src={
+													imgInformasi.find(
+														(item) => item.komoditas === content.item,
+													)?.image as string
+												}
 												alt="user"
 												width={50}
 												height={50}
@@ -4012,9 +4057,15 @@ export default function Home() {
 											/>
 										</div>
 										<div className="">
-											<h1 className="ms-2 text-left font-bold text-lg">{content.item.split(' ')[0]}</h1>
-											<p className='text-left ms-2'>{content.item.split(' ').slice(1).join(' ')}</p>
-											<p className="text-left ms-2 font-bold">Rp {content.price}</p>
+											<h1 className="ms-2 text-left font-bold text-lg">
+												{content.item.split(' ')[0]}
+											</h1>
+											<p className="text-left ms-2">
+												{content.item.split(' ').slice(1).join(' ')}
+											</p>
+											<p className="text-left ms-2 font-bold">
+												Rp {content.price}
+											</p>
 										</div>
 										<div></div>
 									</div>
@@ -4062,7 +4113,31 @@ export default function Home() {
 					Berita Hari Ini
 				</h1>
 				<div className="flex flex-wrap justify-center md:gap-10 lg:gap-24 gap-4 px-2 py-8">
-					<Card className="md:w-[13rem] lg:w-[23rem]">
+					{berita.map((content, index) => (
+						<Card key={index} className="md:w-[13rem] lg:w-[23rem]">
+							<CardHeader>
+								<Image
+									src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${content.image}`}
+									className="rounded-2xl"
+									alt="berita"
+									width={300}
+									height={200}
+								/>
+							</CardHeader>
+							<CardContent>
+								<CardDescription className="mdtext-sm">
+									{content.content}
+								</CardDescription>
+							</CardContent>
+							<CardFooter className="flex justify-between">
+								<Button asChild className="md:w-30 md:text-[10px]">
+									<Link href={`/berita/${content.id}`}>Baca Selengkapnya</Link>
+								</Button>
+							</CardFooter>
+						</Card>
+					))}
+
+					{/* <Card className="md:w-[13rem] lg:w-[23rem]">
 						<CardHeader>
 							<Image
 								src={berita}
@@ -4083,51 +4158,7 @@ export default function Home() {
 								<Link href="/berita/1">Baca Selengkapnya</Link>
 							</Button>
 						</CardFooter>
-					</Card>
-					<Card className="md:w-[13rem] lg:w-[23rem]">
-						<CardHeader>
-							<Image
-								src={berita2}
-								className="rounded-2xl"
-								alt="berita"
-								width={300}
-								height={200}
-							/>
-						</CardHeader>
-						<CardContent>
-							<CardDescription className='mdtext-sm'>
-								Pada rabu, 27 februari 2024 kantor perwakilan bank indonesia
-								provinsi sulawesi tengah, ... Selengkapnya
-							</CardDescription>
-						</CardContent>
-						<CardFooter className="flex justify-between">
-							<Button asChild className="md:w-30 md:text-[10px]">
-								<Link href="/berita/1">Baca Selengkapnya</Link>
-							</Button>
-						</CardFooter>
-					</Card>
-					<Card className="md:w-[13rem] lg:w-[23rem]">
-						<CardHeader>
-							<Image
-								src={berita3}
-								className="rounded-2xl"
-								alt="berita"
-								width={300}
-								height={200}
-							/>
-						</CardHeader>
-						<CardContent>
-							<CardDescription className='mdtext-sm'>
-								Pada rabu, 27 februari 2024 kantor perwakilan bank indonesia
-								provinsi sulawesi tengah, ... Selengkapnya
-							</CardDescription>
-						</CardContent>
-						<CardFooter className="flex justify-between">
-							<Button asChild className="md:w-30 md:text-[10px]">
-								<Link href="/berita/1">Baca Selengkapnya</Link>
-							</Button>
-						</CardFooter>
-					</Card>
+					</Card> */}
 				</div>
 				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
 			</section>
@@ -4143,7 +4174,7 @@ export default function Home() {
 								<p>Jumlah Kunjungan User di Sulawesi Tengah</p>
 							</div>
 						</div>
-						<h1 className="text-4xl font-bold">3928</h1>
+						<h1 className="text-4xl font-bold">{dashboard.totalUser}</h1>
 					</Card>
 					<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
 						<div className="flex items-center gap-4">
@@ -4155,7 +4186,7 @@ export default function Home() {
 								<p>Jumlah Komoditas di Sulawesi Tengah</p>
 							</div>
 						</div>
-						<h1 className="text-4xl font-bold">30</h1>
+						<h1 className="text-4xl font-bold">{dashboard.totalCommodities}</h1>
 					</Card>
 					<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
 						<div className="flex items-center gap-4">
@@ -4171,7 +4202,7 @@ export default function Home() {
 								<p>Jumlah Pasar di Sulawesi Tengah</p>
 							</div>
 						</div>
-						<h1 className="text-4xl font-bold">60</h1>
+						<h1 className="text-4xl font-bold">{dashboard.totalPasar}</h1>
 					</Card>
 				</div>
 				<Separator className="shadow-lg" />
@@ -4193,16 +4224,12 @@ export default function Home() {
 							</div>
 							<div className="flex md:flex-row flex-wrap sm:flex-nowrap justify-around space-y-4 sm:space-y-0 gap-5">
 								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4 text-sm lg:text-lg flex flex-col rounded-lg">
-									<p className="text-[10px] lg:text-lg">
-										Harga {' '}
-									</p>
+									<p className="text-[10px] lg:text-lg">Harga </p>
 									<h1 className="font-bold text-[10px] lg:text-lg">
 										<div className="flex justify-between items-center">
+											<div>Rp {detailHargaKonsumen?.price}</div>
 											<div>
-												Rp {detailHargaKonsumen?.price}
-											</div>
-											<div>
-												<TriangleUpIcon color='red' width={50} height={50} />
+												<TriangleUpIcon color="red" width={50} height={50} />
 											</div>
 										</div>
 									</h1>
@@ -4213,11 +4240,9 @@ export default function Home() {
 									</p>
 									<h1 className="font-bold text-[10px] lg:text-lg">
 										<div className="flex justify-between items-center">
+											<div>Rp {detailHargaKonsumen?.priceAvg}</div>
 											<div>
-												Rp {detailHargaKonsumen?.priceAvg}
-											</div>
-											<div>
-												<TriangleUpIcon color='red' width={50} height={50} />
+												<TriangleUpIcon color="red" width={50} height={50} />
 											</div>
 										</div>
 									</h1>
@@ -4226,11 +4251,9 @@ export default function Home() {
 									<p className="text-[10px] lg:text-lg">Volatilitas </p>
 									<h1 className="font-bold text-[10px] lg:text-lg">
 										<div className="flex justify-between items-center">
+											<div>{detailHargaKonsumen?.volatility}</div>
 											<div>
-												{detailHargaKonsumen?.volatility}
-											</div>
-											<div>
-												<BellIcon color='red' width={50} height={50} />
+												<BellIcon color="red" width={50} height={50} />
 											</div>
 										</div>
 									</h1>
@@ -4261,9 +4284,7 @@ export default function Home() {
 									</thead>
 									<tbody>
 										<tr>
-											<td className="px-4 py-2">
-												{detailHargaKonsumen?.city}
-											</td>
+											<td className="px-4 py-2">{detailHargaKonsumen?.city}</td>
 											<td className="px-4 py-2">Rp. 12.572</td>
 											<td className="px-4 py-2">Rp. 12.572</td>
 											<td className="px-4 py-2">Rp. 12.572</td>
