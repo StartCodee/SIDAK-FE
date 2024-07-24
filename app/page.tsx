@@ -3993,7 +3993,7 @@ export default function Home() {
 						Harga Konsumen Pangan Strategis Sulawesi Tengah
 					</h1>
 					<center>
-						<div className="flex lg:justify-start justify-center items-start self-center  flex-wrap gap-10 ">
+						<div className="flex lg:justify-center justify-center items-start self-center  flex-wrap gap-10 ">
 							{hargaKonsumen.map((content, index) => (
 								<Card
 									onClick={() => {
