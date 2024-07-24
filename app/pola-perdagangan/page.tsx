@@ -24,47 +24,195 @@ import Footer from '@/components/ui/footer';
 const FlowChart: React.FC = () => {
 
 	const [selectedDate, setSelectedDate] = React.useState<Date>();
+	const [selectedCommodity, setSelectedCommodity] = useState('');
 
 	const options = [
-		{ value: '1', label: 'Beras Premium' },
-		{ value: '2', label: 'Daging Ayam' },
-		{ value: '3', label: 'Daging Sapi' },
-		{ value: '4', label: 'Minyak Goreng' },
-		{ value: '5', label: 'Bawang Merah' },
-		{ value: '6', label: 'Bawang Putih' },
-		{ value: '7', label: 'Telur Ayam' },
-		{ value: '8', label: 'Gula Pasir' },
-		{ value: '9', label: 'Cabe Merah' },
-		{ value: '10', label: 'Cabe Rawit' },
-		{ value: '11', label: 'Ikan' },
+		{ value: 'Beras', label: 'Beras' },
+		{ value: 'Bawang Merah', label: 'Bawang Merah' },
+		{ value: 'Telur Ayam', label: 'Telur Ayam' },
+		{ value: 'Daging Ayam', label: 'Daging Ayam' },
+		{ value: 'Minyak Goreng', label: 'Minyak Goreng' },
+		{ value: 'Gula Pasir', label: 'Gula Pasir' },
 	]
 
-	const [flow, setFlow] = useState<any>([
-		{ start: 'Buol', end: 'Tolitoli' },
-		{ start: 'Parigi', end: 'Morowali' },
-		{ start: 'Banggai', end: 'Morowali-Utara' },
-		{ start: 'Touna', end: 'Poso' },
-		{ start: 'Sigi', end: 'Donggala' },
-		{ start: 'Palu', end: 'Banggai-Laut' },
-		{ start: 'Palu', end: 'Banggai-Kepulauan' },
-		{ start: 'Buol', end: 'gorontalo' },
-	]);
+	const mockData = [
+		{
+			"commodity": "Beras",
+			"start": "sulbar",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Beras",
+			"start": "sumsel",
+			"end": "Poso"
+		},
+		{
+			"commodity": "Beras",
+			"start": "Banggai",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Beras",
+			"start": "Donggala",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Beras",
+			"start": "Poso",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Beras",
+			"start": "Gorontalo",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Beras",
+			"start": "Parigi",
+			"end": "gorontalo"
+		},
+		{
+			"commodity": "Beras",
+			"start": "Parigi",
+			"end": "sulut"
+		},
+		{
+			"commodity": "Bawang Merah",
+			"start": "sulsel",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Bawang Merah",
+			"start": "Donggala",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Bawang Putih",
+			"start": "sulsel",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Telur Ayam",
+			"start": "sulsel",
+			"end": "Poso"
+		},
+		{
+			"commodity": "Telur Ayam",
+			"start": "Donggala",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Telur Ayam",
+			"start": "Parigi",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Daging Ayam",
+			"start": "sulsel",
+			"end": "Poso"
+		},
+		{
+			"commodity": "Daging Ayam",
+			"start": "sulbar",
+			"end": "Poso"
+		},
+		{
+			"commodity": "Minyak Goreng",
+			"start": "Parigi",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Minyak Goreng",
+			"start": "Parigi",
+			"end": "gorontalo"
+		},
+		{
+			"commodity": "Minyak Goreng",
+			"start": "Parigi",
+			"end": "sulut"
+		},
+		{
+			"commodity": "Gula Pasir",
+			"start": "gorontalo",
+			"end": "Parigi"
+		},
+		{
+			"commodity": "Gula Pasir",
+			"start": "gorontalo",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Gula Pasir",
+			"start": "sulut",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Gula Pasir",
+			"start": "sulut",
+			"end": "Parigi"
+		},
+		{
+			"commodity": "Gula Pasir",
+			"start": "Parigi",
+			"end": "Palu"
+		}
+	];
 
+	const [flow, setFlow] = useState<any>([
+		{
+			"commodity": "Beras",
+			"start": "sulbar",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Beras",
+			"start": "sumsel",
+			"end": "Poso"
+		},
+		{
+			"commodity": "Beras",
+			"start": "Banggai",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Beras",
+			"start": "Donggala",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Beras",
+			"start": "Poso",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Beras",
+			"start": "Gorontalo",
+			"end": "Palu"
+		},
+		{
+			"commodity": "Beras",
+			"start": "Parigi",
+			"end": "gorontalo"
+		},
+		{
+			"commodity": "Beras",
+			"start": "Parigi",
+			"end": "sulut"
+		},
+	]);
 
 	const handleChangeMonth = () => {
 		if (selectedDate) {
-			let val = format(selectedDate, 'yyyy-MM');
-			if (val === '2024-06') {
-				setFlow([
-					{ start: 'Palu', end: 'Banggai-Laut' },
-					{ start: 'Palu', end: 'Banggai-Kepulauan' },
-					{ start: 'gorontalo', end: 'Buol' },
-				]);
-			}
+			let commodity = selectedCommodity;
+			const filteredData = mockData.filter(data =>
+				data.commodity.includes(selectedCommodity)
+			);
+			setFlow(filteredData);
 		} else {
 			console.log('No date selected');
 		}
 	}
+
 
 	const containerRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -101,15 +249,12 @@ const FlowChart: React.FC = () => {
 		}
 	}
 
-	
-
 	useEffect(() => {
 		const container = containerRef.current;
 		const canvas = canvasRef.current;
 		if (!container || !canvas) return;
 		const ctx = canvas.getContext('2d');
 		if (!ctx) return;
-
 
 		const externalFlow = [
 			"gorontalo"
@@ -448,7 +593,7 @@ const FlowChart: React.FC = () => {
 		}
 
 		function draw() {
-				externalFlow.forEach((el) => {
+			externalFlow.forEach((el) => {
 				const el1 = document.getElementById(el);
 				if (el1) {
 					el1.classList.add('hidden');
@@ -465,7 +610,7 @@ const FlowChart: React.FC = () => {
 					}
 				}
 
-				if (externalFlow.includes(el.end) ){
+				if (externalFlow.includes(el.end)) {
 					const ext2 = document.getElementById(el.end);
 					if (ext2) {
 						ext2.classList.remove('hidden');
@@ -487,14 +632,14 @@ const FlowChart: React.FC = () => {
 				const isExternalFlowStart = externalFlow.includes(el.start);
 				const isExternalFlowEnd = externalFlow.includes(el.end);
 
-				if (isExternalFlowStart ){
+				if (isExternalFlowStart) {
 					const ext1 = document.getElementById(el.start);
 					if (ext1) {
 						ext1.classList.remove('hidden');
 					}
 				}
 
-				if (isExternalFlowEnd ){
+				if (isExternalFlowEnd) {
 					const ext2 = document.getElementById(el.end);
 					if (ext2) {
 						ext2.classList.remove('hidden');
@@ -527,7 +672,6 @@ const FlowChart: React.FC = () => {
 			}
 		}
 
-
 		function drawArrow(ctx: CanvasRenderingContext2D, endX: number, endY: number, startX: number, startY: number, controlX: number, controlY: number) {
 			const headlen = 15; // panjang kepala panah
 			const dx = endX - controlX;
@@ -542,7 +686,6 @@ const FlowChart: React.FC = () => {
 			ctx.lineWidth = 3;
 			ctx.stroke();
 		}
-
 
 		function drawIcon(ctx: CanvasRenderingContext2D, x: number, y: number, img: HTMLImageElement) {
 			const iconSize = 20; // Ukuran ikon
@@ -571,6 +714,8 @@ const FlowChart: React.FC = () => {
 			container.removeEventListener('scroll', draw);
 			window.removeEventListener('resize', draw);
 		};
+
+
 	}, [flow]);
 
 	return (
@@ -599,6 +744,7 @@ const FlowChart: React.FC = () => {
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm mb-1">Komoditas</h1>
 					<Select
+						onChange={(option) => setSelectedCommodity(option!.value)}
 						className=" basic-single w-[170px] border-none"
 						options={options}
 					/>
@@ -614,10 +760,9 @@ const FlowChart: React.FC = () => {
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 				</Button>
 			</div>
-
 			{/* content */}
 			<Tabs defaultValue="all">
-				<section className="px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+				<section className="px-4 sm:px-8 lg:px-50 md:px-10 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 					<div className="flex flex-col sm:flex-row justify-between pt-10">
 						<div className="flex-col mb-3">
 							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-1 font-extrabold">
@@ -628,7 +773,6 @@ const FlowChart: React.FC = () => {
 								April 2024
 							</Badge>
 						</div>
-
 						<TabsList className="rounded-full   p-4 py-6 w-max text-black">
 							<div
 								onClick={() => {
@@ -660,7 +804,6 @@ const FlowChart: React.FC = () => {
 									Intra
 								</TabsTrigger>
 							</div>
-
 							<div
 								onClick={() => {
 									changeTab('out');
@@ -1944,7 +2087,6 @@ const FlowChart: React.FC = () => {
 					</svg>
 				</div>
 			</center>
-
 			<br />
 			<Footer />
 		</div>

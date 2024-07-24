@@ -160,7 +160,23 @@ const BeritaPage: React.FC = () => {
 
 			<Hero />
 
-			<section>
+			<div
+				style={{ marginTop: '-30px' }}
+				className="mx-auto z-1 relative  py-[0.4rem] sm:py-2 px-2 shadow-xl w-[20rem] space-x-2 lg:w-[24rem] rounded-full flex items-center  bg-white ">
+				<input
+					type="text"
+					placeholder="Cari Berita"
+					id="search"
+					// value={query}
+					// onChange={(e) => setQuery(e.target.value)}
+					className="w-min sm:w-full outline-none rounded-full active:ring-2 active:ring-blue-300 p-2"
+				/>
+				<Button onClick={searchBerita} className="bg-blue-300 rounded-full p-2">
+					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
+				</Button>
+			</div>
+
+			<section className="min-h-screen">
 				<Card className="m-4 sm:m-6 lg:m-10 border-none">
 					<CardHeader>
 						<h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold">
@@ -243,7 +259,6 @@ const BeritaPage: React.FC = () => {
 			</section>
 
 			<Footer />
-
 		</>
 	);
 };

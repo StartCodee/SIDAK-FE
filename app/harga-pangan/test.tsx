@@ -2578,7 +2578,7 @@ export default function Home() {
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 				</Button>
 			</div>
-			<section className="px-4 sm:px-8 md:px-10 lg:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+			<section className="px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col sm:flex-row justify-between pt-10">
 					<div className="flex-col">
 						<h1 className="text-2xl sm:text-3xl md:text-4xl mb-1 font-extrabold">
@@ -2606,7 +2606,7 @@ export default function Home() {
 				</h1>
 				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
 			</section>
-			<section className="px-4 sm:px-8 md:px-10 lg:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col items-center space-y-8">
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-6xl">
 						{cardContents.map((content, index) => (
@@ -2682,7 +2682,7 @@ export default function Home() {
 				<div className="h-1 rounded-lg bg-black/10"></div>
 			</section>
 			<Tabs defaultValue="table">
-				<section className="px-4 sm:px-8 md:px-10 lg:px-50 pt-4 space-y-4">
+				<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4">
 					<div className="flex flex-col space-y-4 sm:flex-row justify-between items-center">
 						<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
 							Monitoring Volatilitas
@@ -2776,9 +2776,7 @@ export default function Home() {
 					<div className="shadow-lg overflow-hidden px-4 sm:px-10 rounded-lg p-4">
 						<div className="flex flex-col space-y-10">
 							<div className="flex justify-between">
-								<h1 className="sm:text-2xl text-lg font-bold">
-									{detailHarga?.city}
-								</h1>
+								<h1 className="text-2xl font-bold">{detailHarga?.city}</h1>
 								<button
 									className=" text-black text-4xl hover:text-gray-700"
 									onClick={closeDialog}>
@@ -2786,19 +2784,19 @@ export default function Home() {
 								</button>
 							</div>
 							<div className="flex flex-col sm:flex-row justify-around space-y-4 sm:space-y-0 gap-5">
-								<div className="shadow-lg w-full sm:w-[20rem] p-4 sm:text-lg text-md  flex flex-col rounded-lg">
+								<div className="shadow-lg w-full sm:w-[20rem] p-4 text-lg flex flex-col rounded-lg">
 									<p>Harga rata - rata {detailHarga?.city}: </p>
 									<h1 className="font-bold">{detailHarga?.price}</h1>
 								</div>
-								<div className="shadow-lg w-full sm:w-[20rem] p-4 sm:text-lg text-md  flex flex-col rounded-lg">
+								<div className="shadow-lg w-full sm:w-[20rem] p-4 text-lg flex flex-col rounded-lg">
 									<p>Harga Pada {detailHarga?.city}: </p>
 									<h1 className="font-bold">{detailHarga?.price}</h1>
 								</div>
-								<div className="shadow-lg w-full sm:w-[20rem] p-4 sm:text-lg text-md  flex flex-col rounded-lg">
+								<div className="shadow-lg w-full sm:w-[20rem] p-4 text-lg flex flex-col rounded-lg">
 									<p>Tanggal </p>
 									<h1 className="font-bold">20 Juni 2024</h1>
 								</div>
-								<div className="shadow-lg w-full sm:w-[20rem] p-4 sm:text-lg text-md  flex flex-col rounded-lg">
+								<div className="shadow-lg w-full sm:w-[20rem] p-4 text-lg flex flex-col rounded-lg">
 									<p>Komoditas </p>
 									<h1 className="font-bold">Beras</h1>
 								</div>
@@ -2813,9 +2811,7 @@ export default function Home() {
 						</div>
 						<div className="h-1 rounded-lg my-10 bg-black/10 z-0"></div>
 						<div className="flex flex-col ">
-							<h1 className="sm:text-2xl text-lg font-bold mb-3">
-								Tabel Harga Harian
-							</h1>
+							<h1 className="text-2xl font-bold mb-3">Tabel Harga Harian</h1>
 							<div className="overflow-x-auto">
 								<table className="rounded-lg overflow-hidden w-full border border-gray-300">
 									<thead>

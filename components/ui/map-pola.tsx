@@ -23,9 +23,10 @@ export default function MapPola({ flow }: MapProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
+	
 	const changeTab = (tab: string) => {
-		console.log('masuk')
-	};
+		
+	}
 
 	useEffect(() => {
 		const container = containerRef.current;
@@ -420,7 +421,6 @@ export default function MapPola({ flow }: MapProps) {
 			}
 		}
 
-
 		function drawArrow(ctx: CanvasRenderingContext2D, endX: number, endY: number, startX: number, startY: number, controlX: number, controlY: number) {
 			const headlen = 15; // panjang kepala panah
 			const dx = endX - controlX;
@@ -435,7 +435,6 @@ export default function MapPola({ flow }: MapProps) {
 			ctx.lineWidth = 3;
 			ctx.stroke();
 		}
-
 
 		function drawIcon(ctx: CanvasRenderingContext2D, x: number, y: number, img: HTMLImageElement) {
 			const iconSize = 20; // Ukuran ikon
@@ -490,7 +489,7 @@ export default function MapPola({ flow }: MapProps) {
 					`}</style>
 				<img src="/location.svg" id="location" className="hidden" alt="" />
 				<Tabs defaultValue="all">
-					<section className="px-4 sm:px-8 md:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+					<section className="px-4 sm:px-8 md:px-10 lg:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 						<div className="flex flex-col sm:flex-row justify-between pt-10">
 							<div className="flex-col mb-3">
 								<h1 className="text-2xl sm:text-3xl md:text-4xl mb-3 font-extrabold">
