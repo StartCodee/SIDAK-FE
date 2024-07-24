@@ -1939,7 +1939,7 @@ export default function Home() {
 
 			<section className="px-4 sm:px-8 lg:px-50 md:px-10 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col items-center space-y-8">
-					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 px-20 lg:grid-cols-3 xl:grid-cols-4 gap-[2rem] w-full ">
+					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 px-10 lg:grid-cols-3 xl:grid-cols-4 gap-[2rem] w-full ">
 						{cardContents.map((content, index) => (
 							<div
 								key={index}
