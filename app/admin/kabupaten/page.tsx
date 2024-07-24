@@ -380,7 +380,7 @@ export default function Home() {
         <>
             <DefaultLayout>
                 <Breadcrumb pageName="Management Kabupaten" />
-                <div className="col-span-3 bg-white rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
+                <div className="col-span-3 bg-white rounded-lg border border-stroke  px-5  py-10 shadow-default">
                     <div className={`w-full  ${activeTab === 'profile' ? '' : 'hidden'}`}>
                         <h1 className="text-2xl font-bold">Management Kabupaten</h1>
                         <div className="flex items-center py-4">
@@ -413,7 +413,7 @@ export default function Home() {
                                                             name="name"
                                                             value={kabupaten.name}
                                                             onChange={handleInputChange}
-                                                            placeholder="Jahe"
+                                                            placeholder="Nama Kabupaten"
                                                             className="col-span-3 mt-1"
                                                         />
                                                     </div>

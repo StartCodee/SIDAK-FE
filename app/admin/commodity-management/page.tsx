@@ -506,7 +506,7 @@ export default function Home() {
                                     variant="outline"
                                     size="sm"
                                     onClick={() => table.previousPage()}
-                                    disabled={!table.getCanPreviousPage()}
+                                    // disabled={!table.getCanPreviousPage()}
                                 >
                                     Previous
                                 </Button>
@@ -514,7 +514,7 @@ export default function Home() {
                                     variant="outline"
                                     size="sm"
                                     onClick={() => table.nextPage()}
-                                    disabled={!table.getCanNextPage()}
+                                    // disabled={!table.getCanNextPage()}
                                 >
                                     Next
                                 </Button>

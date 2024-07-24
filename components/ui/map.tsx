@@ -63,7 +63,7 @@ export default function Map({ cardContents }: MapProps) {
 
 
 		card.id = 'card-' + id;
-		card.className = 'absolute z-50 bg-white p-4 rounded-md shadow-md';
+		card.className = 'absolute z-50 bg-white p-4 rounded-md shadow-md hidden md:block';
 		card.style.top = `${pathTop}px`;
 		card.style.left = `${pathLeft}px`;
 		card.innerHTML = `

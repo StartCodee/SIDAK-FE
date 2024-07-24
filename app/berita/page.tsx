@@ -188,10 +188,10 @@ const BeritaPage: React.FC = () => {
 							<Card
 								key={item.id}
 								className="w-full flex flex-col lg:flex-row items-center mb-4">
-								<CardHeader className="w-full lg:w-1/3">
+								<CardHeader className="w-full lg:w-1/3 ">
 									<Image
 										src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${item.image}`}
-										className="rounded-2xl w-full"
+										className="rounded-2xl w-full "
 										alt="berita"
 										width={350}
 										height={200}
