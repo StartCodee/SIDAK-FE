@@ -59,6 +59,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
+import { BeritaForm } from "./berita-form";
 
 interface News {
 	id: number;
@@ -76,7 +77,7 @@ interface News {
 export default function Home() {
 
     const [beritaData, setBeritaData] = useState<News[]>([]);
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+   
     const [selectedFile, setSelectedFile] = React.useState<File>();
     const [berita, setBerita] = useState({
         title: '',
@@ -105,6 +106,11 @@ export default function Home() {
 
 
     const [activeTab, setActiveTab] = useState('profile');
+
+
+const handleBeritaDataUpdate = (data: News[]) => {
+	setBeritaData(data);
+};
 
     const getBerita = async (page: number = 1, limit: number = 20) => {
 			try {
@@ -141,66 +147,66 @@ export default function Home() {
 			}
 		};
 
-    const createBerita = async (e: any) => {
-        e.preventDefault();
-        Swal.fire({
-            title: 'Loading...',
-            target: document.getElementById('modal-dialog'),
-            text: 'Please wait',
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
+    // const createBerita = async (e: any) => {
+    //     e.preventDefault();
+    //     Swal.fire({
+    //         title: 'Loading...',
+    //         target: document.getElementById('modal-dialog'),
+    //         text: 'Please wait',
+    //         didOpen: () => {
+    //             Swal.showLoading();
+    //         }
+    //     });
 
-        // formData 
-        const formData = new FormData();
-        if (selectedFile) {
-            formData.append('image', selectedFile);
-        }
-        formData.append('title', berita.title);
-        formData.append('content', berita.content);
-        formData.append('author_id', 1);
+    //     // formData 
+    //     const formData = new FormData();
+    //     if (selectedFile) {
+    //         formData.append('image', selectedFile);
+    //     }
+    //     formData.append('title', berita.title);
+    //     formData.append('content', berita.content);
+    //     formData.append('author_id', 1);
 
-        var res = await axios
-					.post(
-						`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news`,
-						formData,
-						{
-							headers: {
-								'Content-Type': 'application/json',
-								Authorization: `Bearer ${localStorage.getItem('token')}`,
-							},
-						},
-					)
-					.then(function (response) {
-						getBerita();
-						setBerita({ title: '', content: '' });
-						e.target.reset();
-						Swal.close();
-						setIsDialogOpen(false);
-					})
-					.catch(function (error) {
-						console.log(error);
-						if (error.response && error.response.status === 401) {
-							Swal.fire({
-								icon: 'error',
-								target: document.getElementById('modal-dialog'),
-								title: error.response.data.message,
-								showConfirmButton: false,
-								timer: 10000,
-							});
-						} else {
-							Swal.fire({
-								icon: 'error',
-								target: document.getElementById('modal-dialog'),
-								title: 'error terjadidsds',
-								text: 'mohon coba lagi nanti.',
-								showConfirmButton: false,
-								timer: 10000,
-							});
-						}
-					});
-    };
+    //     var res = await axios
+	// 				.post(
+	// 					`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news`,
+	// 					formData,
+	// 					{
+	// 						headers: {
+	// 							'Content-Type': 'application/json',
+	// 							Authorization: `Bearer ${localStorage.getItem('token')}`,
+	// 						},
+	// 					},
+	// 				)
+	// 				.then(function (response) {
+	// 					getBerita();
+	// 					setBerita({ title: '', content: '' });
+	// 					e.target.reset();
+	// 					Swal.close();
+	// 					setIsDialogOpen(false);
+	// 				})
+	// 				.catch(function (error) {
+	// 					console.log(error);
+	// 					if (error.response && error.response.status === 401) {
+	// 						Swal.fire({
+	// 							icon: 'error',
+	// 							target: document.getElementById('modal-dialog'),
+	// 							title: error.response.data.message,
+	// 							showConfirmButton: false,
+	// 							timer: 10000,
+	// 						});
+	// 					} else {
+	// 						Swal.fire({
+	// 							icon: 'error',
+	// 							target: document.getElementById('modal-dialog'),
+	// 							title: 'error terjadidsds',
+	// 							text: 'mohon coba lagi nanti.',
+	// 							showConfirmButton: false,
+	// 							timer: 10000,
+	// 						});
+	// 					}
+	// 				});
+    // };
 
        const handleFileSelect = (
 					event: React.ChangeEvent<HTMLInputElement>,
@@ -276,71 +282,7 @@ export default function Home() {
 										</Button>
 									</DropdownMenuTrigger>
 									<div className="ms-2">
-										<Dialog>
-											<DialogTrigger asChild>
-												<Button variant="outline">Add Berita</Button>
-											</DialogTrigger>
-											<DialogContent className="sm:max-w-[425px]">
-												<DialogHeader>
-													<DialogTitle>Add Berita</DialogTitle>
-												</DialogHeader>
-												<form
-													action=""
-													method="dialog"
-													onSubmit={
-														createBerita
-													}>
-													<div className="grid gap-4 py-4">
-														<div className="grid grid-cols-4 items-center gap-4">
-															<Label htmlFor="title" className="text-right">
-																Title
-															</Label>
-															<Input
-																id="title"
-																name="title"
-																value={berita.title}
-																onChange={handleInputChange}
-																defaultValue="Title Berita"
-																className="col-span-3"
-															/>
-														</div>
-													</div>
-													<div className="grid gap-4 py-4">
-														<div className="grid grid-cols-4 items-center gap-4">
-															<Label htmlFor="title" className="text-right">
-																Content
-															</Label>
-															<Input
-																id="content"
-																name="content"
-																value={berita.content}
-																onChange={handleInputChange}
-																defaultValue="content Berita"
-																className="col-span-3"
-															/>
-														</div>
-													</div>
-													<div className="grid gap-4 py-4">
-														<div className="grid grid-cols-4 items-center gap-4">
-															<Label htmlFor="name" className="text-right mb-3">
-																Image
-															</Label>
-															<Input
-																type="file"
-																onChange={handleFileSelect}
-																id="name"
-																placeholder="Jahe"
-																className="col-span-3 mt-1"
-															/>
-														</div>
-													</div>
-
-													<DialogFooter>
-														<Button type="submit">Save changes</Button>
-													</DialogFooter>
-												</form>
-											</DialogContent>
-										</Dialog>
+										<BeritaForm onBeritaDataUpdate={handleBeritaDataUpdate} />
 									</div>
 								</DropdownMenu>
 							</div>
