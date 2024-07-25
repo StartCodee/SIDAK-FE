@@ -203,7 +203,7 @@ export default function Home() {
     const [rowSelection, setRowSelection] = React.useState({});
 
     const table = useReactTable<Pasar>({
-        data: kecamatanData,
+        data: pasarData,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -223,7 +223,7 @@ export default function Home() {
 
     const getPasar = async (page: number = 1, limit: number = 2) => {
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kecamatan`, {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/pasar`, {
                 headers: {
                     'content-type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -267,7 +267,7 @@ export default function Home() {
         });
 
         var res = await axios.post(
-            `${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kecamatan`,
+            `${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/pasar`,
             {
                 name: kecamatan.name,
                 kecamatan_id: selectedKabupaten.value
@@ -312,7 +312,7 @@ export default function Home() {
     }
 
     const editPasar = async (id: number) => {
-        let fr = kecamatanData.find((f) => f.id === id);
+        let fr = pasarData.find((f) => f.id === id);
         if (fr) {
             setPasar({
                 id: fr.id,
@@ -345,9 +345,10 @@ export default function Home() {
         });
         try {
             const response = await axios.put(
-                `${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kecamatan/${kecamatan.id}`,
+                `${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/pasar/${kecamatan.id}`,
                 {
                     name: kecamatan.name,
+                    kecamatan_id: selectedKabupaten.value
                 },
                 {
                     headers: {
@@ -405,7 +406,7 @@ export default function Home() {
                 });
                 try {
                     await axios.delete(
-                        `${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kecamatan/${id}`,
+                        `${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/pasar/${id}`,
                         {
                             headers: {
                                 "Authorization": `Bearer ${localStorage.getItem('token')}`
@@ -443,7 +444,7 @@ export default function Home() {
         <>
             <DefaultLayout>
                 <Breadcrumb pageName="Management Pasar" />
-                <div className="col-span-3 bg-white rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
+                <div className="col-span-3  rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
                     <div className={`w-full  ${activeTab === 'profile' ? '' : 'hidden'}`}>
                         <h1 className="text-2xl font-bold">Management Pasar</h1>
                         <div className="flex items-center py-4">
@@ -470,7 +471,7 @@ export default function Home() {
 
                                                     <div>
                                                         <Label htmlFor="name" className="text-right mb-3">
-                                                            Nama Kabupaten
+                                                            Nama Kecamatan
                                                         </Label>
                                                         <Select
                                                             onChange={(kecamatanData) => setSelectedKabupaten({ value: kecamatanData!.value, label: kecamatanData!.label })}
@@ -489,7 +490,7 @@ export default function Home() {
                                                             name="name"
                                                             value={kecamatan.name}
                                                             onChange={handleInputChange}
-                                                            placeholder="Jahe"
+                                                            placeholder="Isi nama Pasar"
                                                             className="col-span-3 mt-1"
                                                         />
                                                     </div>
