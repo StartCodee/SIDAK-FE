@@ -19,27 +19,36 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
+import { LoginForm } from './login-form';
+
+import background from '@/public/bgg.png';
 
 export default function Page() {
 	return (
 		<>
-			<div className="md:hidden">
+			<div className="lg:hidden">
 				<Image
-					src="/examples/authentication-light.png"
+					src={background}
 					width={1280}
 					height={843}
 					alt="Authentication"
-					className="block dark:hidden"
+					className="object-cover w-full h-screen"
 				/>
-				<Image
-					src="/examples/authentication-dark.png"
-					width={1280}
-					height={843}
-					alt="Authentication"
-					className="hidden dark:block"
-				/>
+				<div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+					<div className="w-full max-w-sm px-4">
+						<Card>
+							<CardHeader>
+								<CardTitle>SIDAK</CardTitle>
+								<CardDescription>LOGIN</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<LoginForm />
+							</CardContent>
+						</Card>
+					</div>
+				</div>
 			</div>
-			<div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-slate-50">
+			<div className="container relative hidden h-screen flex-col items-center justify-center lg:grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-slate-50">
 				<div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
 					<div className="absolute inset-0 bg-gradient-to-bl from-slate-600 via-teal-600 to-blue-700" />
 					<div className="relative z-20 flex items-center text-lg font-medium">
@@ -56,29 +65,16 @@ export default function Page() {
 						</blockquote>
 					</div>
 				</div>
-				<div className="lg:p-8 ">
+				<div className="lg:p-8">
 					<div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
 						<Card className="w-[350px]">
 							<CardHeader>
 								<CardTitle>SIDAK</CardTitle>
 								<CardDescription>LOGIN</CardDescription>
 							</CardHeader>
-							<CardContent >
-								<form>
-									<Label htmlFor="username">Username</Label>
-									<Input
-										id="username"
-										type="username"
-										placeholder=" Username"
-										className='mb-4'
-									/>
-									<Label htmlFor="password">Password</Label>
-									<Input id="password" type="password" placeholder="********" />
-								</form>
+							<CardContent>
+								<LoginForm />
 							</CardContent>
-							<CardFooter className="flex justify-end">
-								<Button>Login</Button>
-							</CardFooter>
 						</Card>
 					</div>
 				</div>
