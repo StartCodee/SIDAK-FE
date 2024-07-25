@@ -16,6 +16,7 @@ import Footer from '@/components/ui/footer';
 import Hero from '@/components/ui/hero';
 import Map from '@/components/ui/map';
 import Select from 'react-select';
+import { format } from 'date-fns';
 import Swal from "sweetalert2";
 import Image from 'next/image';
 import Link from 'next/link';
@@ -27,6 +28,7 @@ interface cardContents {
 	item: string;
 	price: string;
 	color: string;
+	kabupaten_kota_id: string;
 	change: string;
 	bulan: string;
 	id: string;
@@ -70,6 +72,9 @@ export default function Home() {
 
 	const [cardContentsNeraca, setCardContentsNeraca] = useState<any>([]);
 
+	const [detailData, setdetailData] = useState<any>([]);
+
+
 	const [flow, setFlow] = useState<any>([]);
 
 	const [dashboardData, setDashboardData] = useState<any>({
@@ -79,22 +84,52 @@ export default function Home() {
 	});
 	const [beritaData, setBeritaData] = useState<any[]>([]);
 
+
+	const getDetailSupply = async (page: number = 1, limit: number = 2, date: string, komoditas: string, kota: string) => {
+		try {
+			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/detail-data?date=${date}komoditas=${komoditas}&kabupaten_kota_id=${kota}`, {
+				headers: {
+					'content-type': 'application/json',
+					'Authorization': `Bearer ${localStorage.getItem('token')}`,
+				},
+			});
+			if (response.data.data) {
+				console.log(response.data.data);
+				setdetailData(response.data.data);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500
+				});
+			}
+		}
+	};
 	const closeDialog = () => setIsDialogOpen(false);
 	const openDialog = (el: string, komoditas: string) => {
-		// const filteredData = mockData.filter(data =>
-		// 	data.item.includes(komoditas) && data.city.includes(el)
-		// );
-		// setDetailHargaKonsumen(
-		// 	{
-		// 		city: el,
-		// 		komoditas: komoditas,
-		// 		price: filteredData[0].price,
-		// 		priceAvg: filteredData[0].price,
-		// 		volatility: filteredData[0].change,
-		// 		id: el
-		// 	}
-		// );
-		// setIsDialogOpen(true);
+
+		try {
+			let val = format(selectedDateKonsumen as any, 'yyyy-MM')
+			const detail = hargaKonsumen.find((item) => item.city === el && item.item === komoditas);
+			setDetailHargaKonsumen(detail);
+			console.log(detail);
+			getDetailSupply(1, 2, val, detail?.komoditas_id, detail?.kabupaten_kota_id);
+			setIsDialogOpen(true);
+		} catch (error) {
+
+		}
+
 	};
 
 	const handleValueChange = (e: any) => {
@@ -114,34 +149,30 @@ export default function Home() {
 	};
 
 	const handleChangeMonth = () => {
-		// if (selectedDate) {
-		// 	let commodity = selectedCommodity;
-		// 	let val = format(selectedDate, 'yyyy-MM');
-		// 	const filteredData = mockData.filter(data =>
-		// 		data.item.includes(selectedCommodity) && data.bulan === val
-		// 	);
-		// 	setCardContents(filteredData);
-		// 	const filteredDataNeraca = mockDataNeraca.filter(data =>
-		// 		data.komoditas.includes(selectedCommodity)
-		// 	);
-		// 	setCardContentsNeraca(filteredDataNeraca);
-		// } else {
-		// 	console.log('No date selected');
-		// }
+		if (selectedDate) {
+			let commodity = selectedCommodity;
+			let val = format(selectedDate, 'yyyy-MM');
+			if (selectedValue === 'harga-pangan') {
+				getHargaPangan(1, 2, val, commodity);
+			} else if (selectedValue == 'neraca-pangan') {
+				getNeracaPangan(1, 2, val, commodity);
+			}
+			else if (selectedValue == 'perdagangan-pangan') {
+				getPolaPerdagangan(1, 2, val, commodity);
+			}
+		} else {
+			console.log('No date selected');
+		}
 	}
 
 	const handleChangeMonthKonsumen = () => {
-		// if (selectedDateKonsumen) {
-		// 	let commodity = selectedCommodityKonsumen;
-		// 	let val = format(selectedDateKonsumen, 'yyyy-MM');
-		// 	console.log(selectedKabupaten);
-		// 	const filteredData = mockData.filter(data =>
-		// 		data.bulan === val && data.id === selectedKabupaten
-		// 	);
-		// 	setHargaKonsumen(filteredData);
-		// } else {
-		// 	console.log('No date selected');
-		// }
+		if (selectedDateKonsumen) {
+			let commodity = selectedCommodityKonsumen;
+			let val = format(selectedDateKonsumen, 'yyyy-MM');
+			getHargaKonsumen(1, 2, val, selectedKabupaten);
+		} else {
+			console.log('No date selected');
+		}
 	}
 
 	const getHargaPangan = async (page: number = 1, limit: number = 2, date: string, komoditas: string) => {
@@ -723,7 +754,7 @@ export default function Home() {
 									<h1 className="font-bold text-[10px] lg:text-lg">
 										<div className="flex justify-between items-center">
 											<div>
-												Rp {detailHargaKonsumen?.price}
+											Rp {Math.round(detailHargaKonsumen?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
 											</div>
 											<div>
 												<TriangleUpIcon color='red' width={50} height={50} />
@@ -738,7 +769,7 @@ export default function Home() {
 									<h1 className="font-bold text-[10px] lg:text-lg">
 										<div className="flex justify-between items-center">
 											<div>
-												Rp {detailHargaKonsumen?.priceAvg}
+										Rp {Math.round(detailHargaKonsumen?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
 											</div>
 											<div>
 												<TriangleUpIcon color='red' width={50} height={50} />
@@ -774,41 +805,30 @@ export default function Home() {
 								Tabel Harga Harian
 							</h1>
 							<div className="overflow-x-auto">
-								<table className="rounded-lg overflow-hidden w-full border border-gray-300">
+								<table className="min-w-full bg-white border border-1">
 									<thead>
-										<tr className="bg-blue-200">
-											<th className="px-4 py-2">Subjek</th>
-											<th className="px-4 py-2">02 April 2024</th>
-											<th className="px-4 py-2">03 April 2024</th>
-											<th className="px-4 py-2">04 April 2024</th>
+										<tr>
+											<th className="px-4 py-2 bg-blue-200">Subjek</th>
+											{detailData.header != undefined && detailData.header.map((item: any, index: any) => (
+												<th key={index} className="px-4 py-2 bg-blue-200">
+													{item}
+												</th>
+											))}
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td className="px-4 py-2">
-												{detailHargaKonsumen?.city}
-											</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-										</tr>
-										<tr className="bg-blue-200">
-											<td
-												className="border-b-2 border-black px-4 py-2"
-												colSpan={4}></td>
-										</tr>
-										<tr>
-											<td className="px-4 py-2">Pasar Wajo</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-										</tr>
-										<tr className="bg-blue-200">
-											<td className="px-4 py-2">Pasar Sentral</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-										</tr>
+										{detailData.pasar != undefined && detailData.pasar.map((pasarItem: any, pasarIndex: any) => (
+											<tr key={pasarIndex}>
+												<td className="px-4 py-2">
+													<h2>{pasarItem.pasar_name || 'Unknown Pasar'}</h2>
+												</td>
+												{pasarItem.dates != undefined && pasarItem.dates.map((dateItem: any, dateIndex: any) => (
+													<td className="px-4 py-2" key={dateIndex}>
+														<h2>Rp {dateItem.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || ''}</h2>
+													</td>
+												))}
+											</tr>
+										))}
 									</tbody>
 								</table>
 							</div>

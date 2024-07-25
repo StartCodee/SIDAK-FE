@@ -29,10 +29,11 @@ interface cardContents {
 	color: string;
 	change: string;
 	bulan: string;
+	kabupaten_kota_id: string;
 	id: string;
 }
 
-const formatDate = (date : any) => {
+const formatDate = (date: any) => {
 	return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 };
 
@@ -42,6 +43,7 @@ export default function Home() {
 	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>([]);
 	const [cardContents, setCardContents] = useState<cardContents[]>([]);
 	const [selectedCommodity, setSelectedCommodity] = useState('');
+	const [monitoringVolatilitas, setMonitoringVolatilitas] = useState<any>([]);
 	const [selectedDate, setSelectedDate] = React.useState<Date>();
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [detailHarga, setDetailHarga] = useState<any>();
@@ -56,6 +58,38 @@ export default function Home() {
 			console.log('No date selected');
 		}
 	}
+
+
+	const getMonitoringVolatilitas = async (komoditas: string) => {
+		try {
+			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/monitoring-volatilitas/${komoditas}`, {
+				headers: {
+					'content-type': 'application/json',
+					'Authorization': `Bearer ${localStorage.getItem('token')}`,
+				},
+			});
+			if (response.data) {
+				setMonitoringVolatilitas(response.data);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500
+				});
+			}
+		}
+	};
 
 	const getHargaPangan = async (page: number = 1, limit: number = 2, date: string, komoditas: string) => {
 		try {
@@ -126,6 +160,7 @@ export default function Home() {
 	useEffect(() => {
 		getHargaPangan(1, 2, '2024-06', '18');
 		getCommodityOption();
+		getMonitoringVolatilitas('18');
 	}, []);
 
 	return (
@@ -300,19 +335,46 @@ export default function Home() {
 											Beras
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap">
-											<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
+											{monitoringVolatilitas.statusHarga1Bulan && monitoringVolatilitas.statusHarga1Bulan === 'naik' ? (
+												<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
+											) : monitoringVolatilitas.statusHarga1Bulan === 'turun' ? (
+												<div className="h-10 w-10 bg-yellow-500 rounded-sm"></div>
+											) : monitoringVolatilitas.statusHarga1Bulan === 'tidak tersedia' ? (
+												<div className="h-10 w-10 bg-[#7C9299] rounded-sm"></div>
+											) : (
+												<div className="h-10 w-10 bg-green-500 rounded-sm"></div>
+											)}
+
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap">
-											<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
+										{monitoringVolatilitas.statusHarga3Bulan && monitoringVolatilitas.statusHarga3Bulan === 'naik' ? (
+												<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
+											) : monitoringVolatilitas.statusHarga3Bulan === 'turun' ? (
+												<div className="h-10 w-10 bg-yellow-500 rounded-sm"></div>
+											) : monitoringVolatilitas.statusHarga3Bulan === 'tidak tersedia' ? (
+												<div className="h-10 w-10 bg-[#7C9299] rounded-sm"></div>
+											) : (
+												<div className="h-10 w-10 bg-green-500 rounded-sm"></div>
+											)}
+
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap">
-											<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
+										{monitoringVolatilitas.statusHarga12Bulan && monitoringVolatilitas.statusHarga12Bulan === 'naik' ? (
+												<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
+											) : monitoringVolatilitas.statusHarga12Bulan === 'turun' ? (
+												<div className="h-10 w-10 bg-yellow-500 rounded-sm"></div>
+											) : monitoringVolatilitas.statusHarga12Bulan === 'tidak tersedia' ? (
+												<div className="h-10 w-10 bg-[#7C9299] rounded-sm"></div>
+											) : (
+												<div className="h-10 w-10 bg-green-500 rounded-sm"></div>
+											)}
+
 										</td>
 										<td className="px-6 py-4 whitespace-normal text-sm text-gray-500">
-											Harga beras tetap sangat berfluktuasi sepanjang bulan Mei,
+											{/* Harga beras tetap sangat berfluktuasi sepanjang bulan Mei,
 											dengan harga awalnya..... dipengaruhi oleh produksi di
 											negara-negara kunci untuk tahun 2024/25, meskipun ada
-											tantangan yang sedang berlangsung seperti...
+											tantangan yang sedang berlangsung seperti... */}
 										</td>
 									</tr>
 								</tbody>
@@ -335,7 +397,27 @@ export default function Home() {
 											Beras
 										</td>
 										<td className="w-full py-5">
-											<div className="h-20 w-full bg-gradient-to-r from-red-500 via-green-600 to-red-700 rounded-md"></div>
+											<div className="flex w-full rounded-lg">
+												{monitoringVolatilitas.daftarHarga12Bulan && monitoringVolatilitas.daftarHarga12Bulan.map((item: any, index: number) => (
+													item.status_harga === 'naik' ? (
+														<div
+															key={index}
+															className="h-[100px] flex-1 bg-red-500"></div>
+													) : item.status_harga === 'turun' ? (
+														<div
+															key={index}
+															className="h-[100px] flex-1 bg-yellow-500"></div>
+													) : item.status_harga === 'tidak tersedia' ? (
+														<div
+															key={index}
+															className="h-[100px] flex-1 bg-[#7C9299]"></div>
+													) : (
+														<div
+															key={index}
+															className="h-[100px] flex-1 bg-green-500"></div>
+													)
+												))}
+											</div>
 										</td>
 									</tr>
 								</tbody>

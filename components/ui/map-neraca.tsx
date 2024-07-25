@@ -50,6 +50,7 @@ export default function MapNeraca({ cardContents }: MapProps) {
 			'absolute z-50 bg-white p-4 rounded-lg shadow-md flex items-center hidden md:block';
 		card.style.top = `${pathTop}px`;
 		card.style.left = `${pathLeft}px`;
+		console.log('CLR'+content?.color);
 		card.innerHTML = `
                     <div class="h-full w-20  rounded-md text-white mr-4 flex-shrink-0 bg-[${content?.color}]">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-20 mx-auto mt-0">
@@ -94,7 +95,6 @@ export default function MapNeraca({ cardContents }: MapProps) {
 
 	const getColorByCity = (cityName: string) => {
 		const cityData = cardContents.find((item) => item.id === cityName);
-		console.log(cityData, cityName);
 		return cityData ? cityData.color : undefined;
 	};
 	return (

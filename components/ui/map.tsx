@@ -4,12 +4,15 @@
 import { useEffect, useState } from 'react';
 import Dialog from './modal-harga';
 import { Button } from './button';
-
+import Swal from "sweetalert2";
+import axios from "axios";
+import React from 'react';
 interface CardContent {
 	city: string;
 	price: string;
 	color: string;
 	change: string;
+	kabupaten_kota_id: string;
 	id: string;
 }
 
@@ -21,9 +24,75 @@ export default function Map({ cardContents }: MapProps) {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [detailHarga, setDetailHarga] = useState<any>();
 
+	const [detailData, setdetailData] = useState<any>([]);
+
+
+	const getDetailSupply = async (page: number = 1, limit: number = 2, kota: string) => {
+		try {
+			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/detail-data?date=2024-06&komoditas=18&kabupaten_kota_id=${kota}`, {
+				headers: {
+					'content-type': 'application/json',
+					'Authorization': `Bearer ${localStorage.getItem('token')}`,
+				},
+			});
+			if (response.data.data) {
+				console.log(response.data.data);
+				setdetailData(response.data.data);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500
+				});
+			}
+		}
+	};
+
+	const data = [
+		{
+			"date": "2024-06-01",
+			"data": [
+				{
+					"id": 6,
+					"kabupaten_kota_id": 4,
+					"komoditas_id": 18,
+					"kecamatan_id": null,
+					"tanggal": "2024-05-31T17:00:00.000Z",
+					"harga": "15167",
+					"jumlah_kebutuhan": "2768.25",
+					"jumlah_ketersediaan": "888.75",
+					"created_at": "2024-07-24T14:35:28.189Z",
+					"updated_at": "2024-07-24T14:35:28.189Z",
+					"deleted_at": null,
+					"pasar_id": null,
+					"kabupaten_kota_name": "Kota Palu",
+					"kecamatan_name": null,
+					"pasar_name": null,
+					"average_price": "15167.0000000000000000",
+					"day": "1"
+				}
+			],
+			"kabupaten_kota_name": "Kota Palu",
+			"average_price": "15167.0000000000000000"
+		}
+	]
+
 	const closeDialog = () => setIsDialogOpen(false);
 	const openDialog = (el: string) => {
-		setDetailHarga(cardContents.find((card) => card.id === el));
+		const detail = cardContents.find((item) => item.id === el);
+		setDetailHarga(detail);
+		getDetailSupply(1, 2, detail?.kabupaten_kota_id as any);
 		setIsDialogOpen(true);
 	};
 
@@ -106,7 +175,7 @@ export default function Map({ cardContents }: MapProps) {
 								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
 									<p className="text-[10px] lg:text-lg">Tanggal </p>
 									<h1 className="font-bold text-[10px] lg:text-lg">
-									{detailHarga?.bulan}
+										{detailHarga?.bulan}
 									</h1>
 								</div>
 								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
@@ -128,39 +197,30 @@ export default function Map({ cardContents }: MapProps) {
 								Tabel Harga Harian
 							</h1>
 							<div className="overflow-x-auto">
-								<table className="rounded-lg overflow-hidden w-full border border-gray-300">
+								<table className="min-w-full bg-white border border-1">
 									<thead>
-										<tr className="bg-blue-200">
-											<th className="px-4 py-2">Subjek</th>
-											<th className="px-4 py-2">02 April 2024</th>
-											<th className="px-4 py-2">03 April 2024</th>
-											<th className="px-4 py-2">04 April 2024</th>
+										<tr>
+											<th className="px-4 py-2 bg-blue-200">Subjek</th>
+											{detailData.header != undefined && detailData.header.map((item: any, index: any) => (
+												<th key={index} className="px-4 py-2 bg-blue-200">
+													{item}
+												</th>
+											))}
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td className="px-4 py-2">Kab Touna</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-										</tr>
-										<tr className="bg-blue-200">
-											<td
-												className="border-b-2 border-black px-4 py-2"
-												colSpan={4}></td>
-										</tr>
-										<tr>
-											<td className="px-4 py-2">Pasar Wajo</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-										</tr>
-										<tr className="bg-blue-200">
-											<td className="px-4 py-2">Pasar Sentral</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-										</tr>
+										{detailData.pasar != undefined && detailData.pasar.map((pasarItem: any, pasarIndex: any) => (
+											<tr key={pasarIndex}>
+												<td className="px-4 py-2">
+													<h2>{pasarItem.pasar_name || 'Unknown Pasar'}</h2>
+												</td>
+												{pasarItem.dates != undefined && pasarItem.dates.map((dateItem: any, dateIndex: any) => (
+													<td className="px-4 py-2" key={dateIndex}>
+														<h2>Rp {dateItem.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || ''}</h2>
+													</td>
+												))}
+											</tr>
+										))}
 									</tbody>
 								</table>
 							</div>
