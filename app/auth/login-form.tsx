@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
+import Cookies from 'js-cookie';
 import {
 	Form,
 	FormControl,
@@ -42,6 +43,13 @@ export function LoginForm() {
         
        axios.post(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/auth/login`, values).then((res) => {
             if (res.status === 200) {
+                const { user, token } = res.data;
+
+                Cookies.set('token', token);
+                Cookies.set('userEmail', user.email);
+                Cookies.set('userName', user.username);
+                Cookies.set('userId', user.id);
+
                 toast({
 					title: 'Login Berhasil',
 					description: 'Anda akan diarahkan ke halaman dashboard',

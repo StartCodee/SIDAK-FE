@@ -1,28 +1,44 @@
-'use client'
+'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
 
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+	Form,
+	FormControl,
+	FormItem,
+	FormLabel,
+	FormMessage,
+    FormField,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import axios from 'axios';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import Cookies from 'js-cookie';
+import {
+	Dialog,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
 import Swal from 'sweetalert2';
 import { Textarea } from '@/components/ui/textarea';
+import { AuthHeader } from '@/lib/authHeader';
 
 const formSchema = z.object({
-    title: z.string().min(2, {
-        message: 'Title must be at least 2 characters.',
-    }),
-    content: z.string().min(8, {
-        message: 'Content must be at least 8 characters.',
-    }),
-    image: z.any(),
+	title: z.string().min(2, {
+		message: 'Title must be at least 2 characters.',
+	}),
+	content: z.string().min(8, {
+		message: 'Content must be at least 8 characters.',
+	}),
+	image: z.any(),
 });
 
 interface News {
@@ -37,39 +53,44 @@ interface News {
 }
 
 interface BeritaFormProps {
+	news?: News; // Optional news prop for editing
 	onBeritaDataUpdate: (data: News[]) => void;
 }
 
-
-export function BeritaForm({ onBeritaDataUpdate }: BeritaFormProps) {
+export function BeritaForm({ news, onBeritaDataUpdate }: BeritaFormProps) {
 	const { toast } = useToast();
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [beritaData, setBeritaData] = useState<News[]>([]);
+    const [selectedFile, setSelectedFile] = useState<File>();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			title: '',
-			content: '',
+			title: news?.title || '',
+			content: news?.content || '',
 			image: '',
 		},
 	});
+
+	useEffect(() => {
+		if (news) {
+			form.setValue('title', news.title);
+			form.setValue('content', news.content);
+		}
+	}, [news, form]);
 
 	const getBerita = async (page: number = 1, limit: number = 20) => {
 		try {
 			const response = await axios.get(
 				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news?page=${page}&limit=${limit}`,
 				{
-					headers: {
-						'content-type': 'application/json',
-						Authorization: `Bearer ${localStorage.getItem('token')}`,
-					},
+					headers: AuthHeader(),
 					withCredentials: true,
 				},
 			);
 			if (response.data.data) {
 				setBeritaData(response.data.data);
-                onBeritaDataUpdate(response.data.data);
+				onBeritaDataUpdate(response.data.data);
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
@@ -82,8 +103,8 @@ export function BeritaForm({ onBeritaDataUpdate }: BeritaFormProps) {
 			} else {
 				Swal.fire({
 					icon: 'error',
-					title: 'error terjadi',
-					text: 'mohon coba lagi nanti.',
+					title: 'Error occurred',
+					text: 'Please try again later.',
 					showConfirmButton: false,
 					timer: 1500,
 				});
@@ -91,34 +112,64 @@ export function BeritaForm({ onBeritaDataUpdate }: BeritaFormProps) {
 		}
 	};
 
-	function onsubmit(values: z.infer<typeof formSchema>) {
+    const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+			setSelectedFile(event.target.files?.[0]);
+		};
+
+
+	function onSubmit(values: z.infer<typeof formSchema>) {
 		const formData = new FormData();
 		formData.append('title', values.title);
 		formData.append('content', values.content);
-		 
-    if (values.image && values.image.length > 0) {
-			formData.append('image', values.image[0]); // Ensure the image file is valid
-		}
 
-		axios
-			.post(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news`, formData)
+		if (selectedFile) {
+            formData.append('image', selectedFile);
+        }
+
+        console.log(formData);
+
+		const request = news
+			? axios.put(
+					`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news/${news.id}`,
+					formData,
+					{
+						headers: {
+							'Content-Type': 'multipart/form-data',
+							Authorization: `Bearer ${Cookies.get('token')}`,
+						},
+					},
+			  )
+			: axios.post(
+					`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news`,
+					formData,
+					{
+						headers: {
+							'Content-Type': 'multipart/form-data',
+							Authorization: `Bearer ${Cookies.get('token')}`,
+						},
+					},
+			  );
+
+		request
 			.then((res) => {
 				if (res.status === 200) {
 					toast({
-						title: 'Berita Berhasil Ditambahkan',
-						description: 'Berita berhasil ditambahkan',
+						title: `Berita ${news ? 'Updated' : 'Added'} Successfully`,
+						description: `Berita has been ${
+							news ? 'updated' : 'added'
+						} successfully`,
 						variant: 'success',
 					});
 					getBerita();
 					setIsDialogOpen(false);
-                    form.reset();
+					form.reset();
 				}
 			})
 			.catch((err) => {
 				toast({
 					variant: 'destructive',
-					title: 'Berita Gagal Ditambahkan',
-					description: 'Berita gagal ditambahkan',
+					title: `Berita ${news ? 'Update' : 'Addition'} Failed`,
+					description: `Berita failed to ${news ? 'update' : 'add'}`,
 				});
 			});
 	}
@@ -127,14 +178,16 @@ export function BeritaForm({ onBeritaDataUpdate }: BeritaFormProps) {
 		<>
 			<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
 				<DialogTrigger asChild>
-					<Button variant="outline">Add Berita</Button>
+					<Button variant="outline">
+						{news ? 'Edit Berita' : 'Add Berita'}
+					</Button>
 				</DialogTrigger>
 				<DialogContent className="sm:max-w-[425px] ">
 					<DialogHeader>
-						<DialogTitle>Add Berita</DialogTitle>
+						<DialogTitle>{news ? 'Edit Berita' : 'Add Berita'}</DialogTitle>
 					</DialogHeader>
 					<Form {...form}>
-						<form onSubmit={form.handleSubmit(onsubmit)} className="space-y-4">
+						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
 							<FormField
 								control={form.control}
 								name="title"
@@ -163,79 +216,37 @@ export function BeritaForm({ onBeritaDataUpdate }: BeritaFormProps) {
 									</FormItem>
 								)}
 							/>
-							<FormField
-								control={form.control}
-								name="image"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Image</FormLabel>
-										<FormControl>
-											<Input type="file" {...field} />
-										</FormControl>
+                            <FormField
+                                control={form.control}
+                                name="image"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Image</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="file"
+                                                accept="image/*"
+                                                {...field}
+                                                onChange={(e) => {
+                                                    field.onChange(e);
+                                                    handleFileSelect(e);
+                                                }}
+                                            />
+                                        </FormControl>
 
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 							<DialogFooter>
-								<Button type="submit">Save changes</Button>
+								<Button type="submit">
+									{news ? 'Update' : 'Save'} changes
+								</Button>
 							</DialogFooter>
 						</form>
 					</Form>
 				</DialogContent>
 			</Dialog>
-
-			{/* <form action="" method="dialog" onSubmit={createBerita}>
-					<div className="grid gap-4 py-4">
-						<div className="grid grid-cols-4 items-center gap-4">
-							<Label htmlFor="title" className="text-right">
-								Title
-							</Label>
-							<Input
-								id="title"
-								name="title"
-								value={berita.title}
-								onChange={handleInputChange}
-								defaultValue="Title Berita"
-								className="col-span-3"
-							/>
-						</div>
-					</div>
-					<div className="grid gap-4 py-4">
-						<div className="grid grid-cols-4 items-center gap-4">
-							<Label htmlFor="title" className="text-right">
-								Content
-							</Label>
-							<Input
-								id="content"
-								name="content"
-								value={berita.content}
-								onChange={handleInputChange}
-								defaultValue="content Berita"
-								className="col-span-3"
-							/>
-						</div>
-					</div>
-					<div className="grid gap-4 py-4">
-						<div className="grid grid-cols-4 items-center gap-4">
-							<Label htmlFor="name" className="text-right mb-3">
-								Image
-							</Label>
-							<Input
-								type="file"
-								onChange={handleFileSelect}
-								id="name"
-								placeholder="Jahe"
-								className="col-span-3 mt-1"
-							/>
-						</div>
-					</div>
-
-					<DialogFooter>
-						<Button type="submit">Save changes</Button>
-					</DialogFooter>
-				</form> */}
 		</>
 	);
 }
-

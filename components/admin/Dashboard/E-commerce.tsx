@@ -6,15 +6,17 @@ import TableOne from"../Tables/TableOne";
 import CardDataStats from "../CardDataStats";
 import newsImg from "@/public/admin/images/cards/news.png";
 import Image from 'next/image'
+import Cookies from 'js-cookie';
 
 const ECommerce: React.FC = () => {
+  const username = Cookies.get('userName');
   return (
     <>
       <div className="flex gap-10 w-full">
         <div className="  justify-center" style={{ flex: '5' }}>
           <div className="flex justify-between w-full bg-white rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
             <div>
-            <h1 className="text-2xl font-bold">Hello Reksa !</h1>
+            <h1 className="text-2xl font-bold">Hello {username} !</h1>
             <p className="mt-4">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nisi, nihil?</p>
             </div>
             <div style={{position:'relative'}}>

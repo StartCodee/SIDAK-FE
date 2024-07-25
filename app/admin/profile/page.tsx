@@ -4,8 +4,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import user from '@/public/userr.png';
 import Background from '@/public/bgg.png';
+import Cookies from 'js-cookie';
 
 export default function Home() {
+
+	const username = Cookies.get('userName');
+	const userEmail = Cookies.get('userEmail');
+
+	// console.log(username);
     return (
 			<>
 				<DefaultLayout>
@@ -81,7 +87,7 @@ export default function Home() {
 													Email
 												</p>
 												<p className="text-base text-gray-600 dark:text-gray-300">
-													user@example.com
+													{userEmail}
 												</p>
 											</div>
 											<div className="mb-4.5">
@@ -89,7 +95,7 @@ export default function Home() {
 													Username
 												</p>
 												<p className="text-base text-gray-600 dark:text-gray-300">
-													username123
+													{username}
 												</p>
 											</div>
 											<div>
