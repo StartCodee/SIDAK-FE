@@ -1,15 +1,11 @@
 'use client'
 
-import { useState } from 'react';
-
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
-import { Chart } from '@/app/neraca-pangan/chart';
-import Dialog from './modal-harga';
-
-import { Badge } from './badge';
 import { CounterClockwiseClockIcon } from '@radix-ui/react-icons';
-
-
+import Chart from '@/app/neraca-pangan/chart';
+import Dialog from './modal-harga';
+import { useState } from 'react';
+import { Badge } from './badge';
 
 interface CardContent {
 	city: string;
@@ -24,20 +20,15 @@ interface MapProps {
 	cardContents: CardContent[];
 }
 
-export default function MapNeraca({ cardContents }: MapProps) {
-	const [detailHarga, setDetailHarga] = useState(
-		{} as
-		| {
-			city: string;
-			ketersediaan: string;
-			kebutuhan: string;
-			neraca: string;
-			color: string;
-			id: string;
-		}
-		| undefined,
-	);
+const formatDate = (date: any) => {
+	return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+};
 
+export default function MapNeraca({ cardContents }: MapProps) {
+	const today = new Date();
+	const formattedDate = formatDate(today);
+
+	const [detailHarga, setDetailHarga] = useState<any>();
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 
 	const closeDialog = () => setIsDialogOpen(false);
@@ -48,7 +39,6 @@ export default function MapNeraca({ cardContents }: MapProps) {
 	};
 
 	const showCardArea = (id: string) => {
-		console.log(id);
 		const content = cardContents.find((card) => card.id === id);
 		const path = document.getElementById(id);
 		const pathRect = path ? path.getBoundingClientRect() : null;
@@ -61,7 +51,7 @@ export default function MapNeraca({ cardContents }: MapProps) {
 		card.style.top = `${pathTop}px`;
 		card.style.left = `${pathLeft}px`;
 		card.innerHTML = `
-                    <div class="h-full w-20 rounded rounded-md text-white mr-4 flex-shrink-0 bg-[${content?.color}]">
+                    <div class="h-full w-20  rounded-md text-white mr-4 flex-shrink-0 bg-[${content?.color}]">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-20 mx-auto mt-0">
                         <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd"/>
                         </svg>
@@ -72,11 +62,11 @@ export default function MapNeraca({ cardContents }: MapProps) {
                         <tbody class="text-sm">
                             <tr>
                             <td class="pr-2">Ketersediaan:</td>
-                            <td class="text-right">${content?.ketersediaan}</td>
+                            <td class="text-right">${Math.round(content?.ketersediaan as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
                             </tr>
                             <tr>
                             <td class="pr-2">Kebutuhan:</td>
-                            <td class="text-right">${content?.kebutuhan}</td>
+                            <td class="text-right">${Math.round(content?.kebutuhan as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
                             </tr>
                             <tr>
                             <td colspan="2">
@@ -85,7 +75,7 @@ export default function MapNeraca({ cardContents }: MapProps) {
                             </tr>
                             <tr class="font-bold">
                             <td class="pr-2">Neraca Pangan:</td>
-                            <td class="text-right">${content?.neraca}</td>
+                            <td class="text-right">${Math.round(content?.neraca as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
                             </tr>
                         </tbody>
                         </table>
@@ -93,7 +83,7 @@ export default function MapNeraca({ cardContents }: MapProps) {
                     `;
 		console.log(card);
 		document.body.appendChild(card);
-	};
+	}
 
 	const hideCardArea = (id: string) => {
 		const card = document.getElementById('card-' + id);
@@ -137,17 +127,17 @@ export default function MapNeraca({ cardContents }: MapProps) {
 
 							<TabsContent value="tahunan">
 								<div className="h-full w-full">
-									<Chart />
+									{/* <Chart /> */}
 								</div>
 							</TabsContent>
 							<TabsContent value="triwulan">
 								<div className="h-full w-full">
-									<Chart />
+									{/* <Chart /> */}
 								</div>
 							</TabsContent>
 							<TabsContent value="bulanan">
 								<div className="h-full w-full">
-									<Chart />
+									<Chart cardContents={cardContents} />
 								</div>
 							</TabsContent>
 						</Tabs>
@@ -162,15 +152,14 @@ export default function MapNeraca({ cardContents }: MapProps) {
 				</div>
 			</Dialog>
 			<Tabs defaultValue="table">
-				<section className="px-4 sm:px-8 md:px-10 lg:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+				<section className="px-4 sm:px-8 lg:px-50 md:px-10 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 					<div className="flex flex-col sm:flex-row justify-between pt-10">
 						<div className="flex-col mb-3">
-							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-3 font-extrabold">
+							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-1 font-extrabold">
 								NERACA PANGAN
 							</h1>
 							<Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
-								<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal 15
-								April 2024
+								<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal {formattedDate}
 							</Badge>
 						</div>
 						<TabsList className="rounded-full w-max p-4 py-6 text-black">
@@ -189,7 +178,7 @@ export default function MapNeraca({ cardContents }: MapProps) {
 					<div className="mx-auto  self-center">
 						<TabsContent value="table">
 							<div className="h-full w-full ">
-								<div id="container" className="relative w-[90%] h-[90%]  ">
+								<div id="container" className="relative w-full h-full  ">
 									<center>
 										<svg
 											viewBox="0 0 731 723"
@@ -1011,14 +1000,26 @@ export default function MapNeraca({ cardContents }: MapProps) {
 									</center>
 								</div>
 							</div>
+							<br />
+							<br />
+							<div className="flex gap-8">
+								<div className="flex gap-2">
+									<div className="w-5 h-5 rounded-sm bg-[#76bf70]"></div>
+									<p>Surplus</p>
+								</div>
+								<div className="flex gap-2">
+									<div className="w-5 h-5 rounded-sm bg-[#bf7070]"></div>
+									<p>Defisit</p>
+								</div>
+							</div>
 						</TabsContent>
 						<TabsContent value="grafik">
 							<div className="h-full w-full ">
-								<Chart />
+								<Chart cardContents={cardContents} />
 							</div>
 						</TabsContent>
 					</div>
-					{/* <div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div> */}
+					<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
 				</section>
 			</Tabs>
 		</>

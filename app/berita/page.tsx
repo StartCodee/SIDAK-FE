@@ -72,16 +72,14 @@ const BeritaPage: React.FC = () => {
 
 	const getBerita = async (page: number = 1, limit: number = 2) => {
 		try {
-			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news?page=${page}&limit=${limit}`, {
+			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news`, {
 				headers: {
 					'content-type': 'application/json',
 					'Authorization': `Bearer ${localStorage.getItem('token')}`,
 				},
-				withCredentials: true,
 			});
 			if (response.data.data) {
 				setBerita(response.data.data);
-				setPaginationInfo(response.data.paginationInfo);
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
@@ -102,7 +100,6 @@ const BeritaPage: React.FC = () => {
 			}
 		}
 	};
-
 	const searchBerita = async () => {
 		const search = document.getElementById('search') as HTMLInputElement;
 		if (search.value) {
@@ -204,7 +201,7 @@ const BeritaPage: React.FC = () => {
 											{item.title}
 										</h1>
 										<div className="my-4 border-b border-black w-full" />
-										<p className="text-lg lg:text-base ">{item.content}</p>
+										<p className="text-lg lg:text-base line-clamp-3">{item.content}</p>
 									</div>
 									<Button asChild className="mt-4">
 										<Link href={`/berita/${item.id}`}>

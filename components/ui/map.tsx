@@ -19,17 +19,7 @@ interface MapProps {
 
 export default function Map({ cardContents }: MapProps) {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
-	const [detailHarga, setDetailHarga] = useState(
-		{} as
-		| {
-			city: string;
-			price: string;
-			color: string;
-			change: string;
-			id: string;
-		}
-		| undefined,
-	);
+	const [detailHarga, setDetailHarga] = useState<any>();
 
 	const closeDialog = () => setIsDialogOpen(false);
 	const openDialog = (el: string) => {
@@ -68,7 +58,7 @@ export default function Map({ cardContents }: MapProps) {
 		card.style.left = `${pathLeft}px`;
 		card.innerHTML = `
 						<h1 class='text-lg font-semibold'> ${content?.city}</h1>
-						<p class='text-xl font-bold'>${content?.price}</p>
+						<p class='text-xl font-bold'>Rp ${Math.round(content?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
 						<span class="inline-flex items-center rounded-full bg-[${content?.color}] px-2 py-1 mt-1 text-xs font-medium text-white ring-1 ring-inset ring-red-600/10">
 						<p class='text-sm '>${status} ${content?.change}</p>
 						</span>
@@ -85,7 +75,6 @@ export default function Map({ cardContents }: MapProps) {
 
 	const getColorByCity = (cityName: string) => {
 		const cityData = cardContents.find((item) => item.id === cityName);
-		// console.log(cityData, cityName);
 		return cityData ? cityData.color : undefined;
 	};
 
@@ -106,31 +95,23 @@ export default function Map({ cardContents }: MapProps) {
 								</button>
 							</div>
 							<div className="flex md:flex-row flex-wrap sm:flex-nowrap justify-around space-y-4 sm:space-y-0 gap-5">
-								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4 text-sm lg:text-lg flex flex-col rounded-lg">
-									<p className="text-[10px] lg:text-lg">
-										Harga rata - rata {detailHarga?.city}:{' '}
-									</p>
-									<h1 className="font-bold text-[10px] lg:text-lg">
-										{detailHarga?.price}
-									</h1>
+								<div className="shadow-lg w-full sm:w-[20rem] p-4 sm:text-lg text-md  flex flex-col rounded-lg">
+									<p>Harga rata - rata {detailHarga?.city}: </p>
+									<h1 className="font-bold">Rp {Math.round(detailHarga?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h1>
 								</div>
-								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
-									<p className="text-[10px] lg:text-lg">
-										Harga Pada {detailHarga?.city}:{' '}
-									</p>
-									<h1 className="font-bold text-[10px] lg:text-lg">
-										{detailHarga?.price}
-									</h1>
+								<div className="shadow-lg w-full sm:w-[20rem] p-4 sm:text-lg text-md  flex flex-col rounded-lg">
+									<p>Harga Pada {detailHarga?.city}: </p>
+									<h1 className="font-bold">Rp {Math.round(detailHarga?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h1>
 								</div>
 								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
 									<p className="text-[10px] lg:text-lg">Tanggal </p>
 									<h1 className="font-bold text-[10px] lg:text-lg">
-										20 Juni 2024
+									{detailHarga?.bulan}
 									</h1>
 								</div>
 								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
 									<p className="text-[10px] lg:text-lg">Komoditas </p>
-									<h1 className="font-bold text-[10px] lg:text-lg">Beras</h1>
+									<h1 className="font-bold text-[10px] lg:text-lg">{detailHarga?.item}</h1>
 								</div>
 							</div>
 							<Button
