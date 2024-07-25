@@ -45,6 +45,7 @@ import CheckboxFour from "@/components/admin/Checkboxes/CheckboxFour";
 import CheckboxOne from "@/components/admin/Checkboxes/CheckboxOne";
 import CheckboxThree from "@/components/admin/Checkboxes/CheckboxThree";
 import CheckboxTwo from "@/components/admin/Checkboxes/CheckboxTwo";
+import Cookies from "js-cookie";
 
 
 import axios from "axios";
@@ -60,6 +61,7 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { BeritaForm } from "./berita-form";
+import BeritaDelete from "./berita-delete";
 
 interface News {
 	id: number;
@@ -99,8 +101,22 @@ export default function Home() {
 				header: 'Tanggal',
 			},
 			{
-				accessorKey: 'action',
-				header: 'Action',
+				id: 'actions',
+				accessorKey: 'id',
+				header: ({ column }) => {
+					return 'Actions';
+				},
+				cell: (row) => {
+					return (
+						<div className="flex items-center space-x-2">
+							<BeritaForm
+								news={row.row.original}
+								onBeritaDataUpdate={handleBeritaDataUpdate}
+							/>
+							<BeritaDelete id={row.row.original.id} onBeritaDataUpdate={handleBeritaDataUpdate}  />
+						</div>
+					);
+				},
 			},
 		];
 
@@ -119,7 +135,7 @@ const handleBeritaDataUpdate = (data: News[]) => {
 					{
 						headers: {
 							'content-type': 'application/json',
-							Authorization: `Bearer ${localStorage.getItem('token')}`,
+							Authorization: `Bearer ${Cookies.get('token')}`,
 						},
 						withCredentials: true,
 					},
@@ -208,18 +224,20 @@ const handleBeritaDataUpdate = (data: News[]) => {
 	// 				});
     // };
 
-       const handleFileSelect = (
-					event: React.ChangeEvent<HTMLInputElement>,
-				) => {
-					setSelectedFile(event.target.files?.[0]);
-				};
+    //    const handleFileSelect = (
+	// 				event: React.ChangeEvent<HTMLInputElement>,
+	// 			) => {
+	// 				setSelectedFile(event.target.files?.[0]);
+	// 			};
 
-         const handleInputChange = (
-                    event: React.ChangeEvent<HTMLInputElement>,
-                ) => {
-                    const { name, value } = event.target;
-                    setBerita({ ...berita, [name]: value });
-                };
+    //      const handleInputChange = (
+    //                 event: React.ChangeEvent<HTMLInputElement>,
+    //             ) => {
+    //                 const { name, value } = event.target;
+    //                 setBerita({ ...berita, [name]: value });
+    //             };
+
+	
 
     const handleTabClick = (tab: string): void => {
         setActiveTab(tab);
