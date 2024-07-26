@@ -123,11 +123,13 @@ export default function Home() {
 			let val = format(selectedDateKonsumen as any, 'yyyy-MM')
 			const detail = hargaKonsumen.find((item) => item.city === el && item.item === komoditas);
 			setDetailHargaKonsumen(detail);
-			console.log(detail);
+
 			getDetailSupply(1, 2, val, detail?.komoditas_id, detail?.kabupaten_kota_id);
 			setIsDialogOpen(true);
 		} catch (error) {
-
+			const detail = hargaKonsumen.find((item) => item.city === el && item.item === komoditas);
+			setDetailHargaKonsumen(detail);
+			setIsDialogOpen(true);
 		}
 
 	};
@@ -738,7 +740,7 @@ export default function Home() {
 						<div className="flex flex-col space-y-10">
 							<div className="flex justify-between">
 								<h1 className="sm:text-xl text-lg font-bold">
-									Perkembangan Harga Harian : {detailHargaKonsumen?.komoditas}
+									Perkembangan Harga Harian : {detailHargaKonsumen?.item}
 								</h1>
 								<button
 									className=" text-black text-4xl hover:text-gray-700"
@@ -754,7 +756,7 @@ export default function Home() {
 									<h1 className="font-bold text-[10px] lg:text-lg">
 										<div className="flex justify-between items-center">
 											<div>
-											Rp {Math.round(detailHargaKonsumen?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+												Rp {Math.round(detailHargaKonsumen?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
 											</div>
 											<div>
 												<TriangleUpIcon color='red' width={50} height={50} />
@@ -769,9 +771,9 @@ export default function Home() {
 									<h1 className="font-bold text-[10px] lg:text-lg">
 										<div className="flex justify-between items-center">
 											<div>
-										Rp {Math.round(detailHargaKonsumen?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+												Rp {Math.round(detailHargaKonsumen?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
 											</div>
-											<div>
+											<div className='flex items-center'>
 												<TriangleUpIcon color='red' width={50} height={50} />
 											</div>
 										</div>
@@ -784,8 +786,10 @@ export default function Home() {
 											<div>
 												{detailHargaKonsumen?.volatility}
 											</div>
-											<div>
-												<BellIcon color='red' width={50} height={50} />
+											<div className='flex items-center'>
+												<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="red" className="size-10">
+													<path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+												</svg>
 											</div>
 										</div>
 									</h1>
@@ -808,9 +812,9 @@ export default function Home() {
 								<table className="min-w-full bg-white border border-1">
 									<thead>
 										<tr>
-											<th className="px-4 py-2 bg-blue-200">Subjek</th>
+											<th className="border border-1 px-4 py-2 bg-blue-200">Subjek</th>
 											{detailData.header != undefined && detailData.header.map((item: any, index: any) => (
-												<th key={index} className="px-4 py-2 bg-blue-200">
+												<th key={index} className="border border-1 px-4 py-2 bg-blue-200">
 													{item}
 												</th>
 											))}
@@ -819,11 +823,11 @@ export default function Home() {
 									<tbody>
 										{detailData.pasar != undefined && detailData.pasar.map((pasarItem: any, pasarIndex: any) => (
 											<tr key={pasarIndex}>
-												<td className="px-4 py-2">
-													<h2>{pasarItem.pasar_name || 'Unknown Pasar'}</h2>
+												<td className="px-4 py-2 border border-1">
+													<h2>{pasarItem.pasar_name != "null" ? pasarItem.pasar_name : detailHargaKonsumen?.city}</h2>
 												</td>
 												{pasarItem.dates != undefined && pasarItem.dates.map((dateItem: any, dateIndex: any) => (
-													<td className="px-4 py-2" key={dateIndex}>
+													<td className="border border-1 px-4 py-2" key={dateIndex}>
 														<h2>Rp {dateItem.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || ''}</h2>
 													</td>
 												))}

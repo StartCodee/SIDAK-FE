@@ -3,14 +3,19 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 import { CounterClockwiseClockIcon } from '@radix-ui/react-icons';
 import Chart from '@/app/neraca-pangan/chart';
+import ChartDetail from '@/app/neraca-pangan/chart-detail';
 import Dialog from './modal-harga';
 import { useState } from 'react';
 import { Badge } from './badge';
+import Swal from "sweetalert2";
+import axios from "axios";
 
 interface CardContent {
 	city: string;
+	komoditas: string;
 	ketersediaan: string;
 	kebutuhan: string;
+	kabupaten_kota_id: string;
 	neraca: string;
 	color: string;
 	id: string;
@@ -29,12 +34,51 @@ export default function MapNeraca({ cardContents }: MapProps) {
 	const formattedDate = formatDate(today);
 
 	const [detailHarga, setDetailHarga] = useState<any>();
+	const [chartDetail, setChartDetail] = useState<any>();
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 
 	const closeDialog = () => setIsDialogOpen(false);
 
+	const getDetailNeraca = async (page: number = 1, limit: number = 2, komoditas: string, kota: string) => {
+		try {
+			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/detail-neraca?komoditas=${komoditas}&kabupaten_kota_id=${kota}`, {
+				headers: {
+					'content-type': 'application/json',
+					'Authorization': `Bearer ${localStorage.getItem('token')}`,
+				},
+			});
+			if (response.data.data) {
+				setChartDetail(response.data.data);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500
+				});
+			}
+		}
+	};
+
 	const openDialog = (el: string) => {
-		setDetailHarga(cardContents.find((card) => card.id === el));
+		const detail = cardContents.find((card) => card.id === el);
+		getDetailNeraca(
+			1,
+			2,
+			detail?.komoditas as any,
+			detail?.kabupaten_kota_id as any
+		);
+		setDetailHarga(detail);
 		setIsDialogOpen(true);
 	};
 
@@ -50,7 +94,7 @@ export default function MapNeraca({ cardContents }: MapProps) {
 			'absolute z-50 bg-white p-4 rounded-lg shadow-md flex items-center hidden md:block';
 		card.style.top = `${pathTop}px`;
 		card.style.left = `${pathLeft}px`;
-		console.log('CLR'+content?.color);
+		console.log('CLR' + content?.color);
 		card.innerHTML = `
                     <div class="h-full w-20  rounded-md text-white mr-4 flex-shrink-0 bg-[${content?.color}]">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-20 mx-auto mt-0">
@@ -97,6 +141,7 @@ export default function MapNeraca({ cardContents }: MapProps) {
 		const cityData = cardContents.find((item) => item.id === cityName);
 		return cityData ? cityData.color : undefined;
 	};
+
 	return (
 		<>
 			<Dialog isOpen={isDialogOpen} onClose={closeDialog}>
@@ -127,17 +172,17 @@ export default function MapNeraca({ cardContents }: MapProps) {
 
 							<TabsContent value="tahunan">
 								<div className="h-full w-full">
-									{/* <Chart /> */}
+									<ChartDetail type='tahunan' data={chartDetail != undefined && chartDetail}/>
 								</div>
 							</TabsContent>
 							<TabsContent value="triwulan">
 								<div className="h-full w-full">
-									{/* <Chart /> */}
+									<ChartDetail type='triwulan' data={chartDetail != undefined && chartDetail}/>
 								</div>
 							</TabsContent>
 							<TabsContent value="bulanan">
 								<div className="h-full w-full">
-									<Chart cardContents={cardContents} />
+									<ChartDetail type='bulanan' data={chartDetail != undefined && chartDetail} />
 								</div>
 							</TabsContent>
 						</Tabs>

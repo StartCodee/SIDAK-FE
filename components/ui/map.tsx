@@ -59,35 +59,6 @@ export default function Map({ cardContents }: MapProps) {
 		}
 	};
 
-	const data = [
-		{
-			"date": "2024-06-01",
-			"data": [
-				{
-					"id": 6,
-					"kabupaten_kota_id": 4,
-					"komoditas_id": 18,
-					"kecamatan_id": null,
-					"tanggal": "2024-05-31T17:00:00.000Z",
-					"harga": "15167",
-					"jumlah_kebutuhan": "2768.25",
-					"jumlah_ketersediaan": "888.75",
-					"created_at": "2024-07-24T14:35:28.189Z",
-					"updated_at": "2024-07-24T14:35:28.189Z",
-					"deleted_at": null,
-					"pasar_id": null,
-					"kabupaten_kota_name": "Kota Palu",
-					"kecamatan_name": null,
-					"pasar_name": null,
-					"average_price": "15167.0000000000000000",
-					"day": "1"
-				}
-			],
-			"kabupaten_kota_name": "Kota Palu",
-			"average_price": "15167.0000000000000000"
-		}
-	]
-
 	const closeDialog = () => setIsDialogOpen(false);
 	const openDialog = (el: string) => {
 		const detail = cardContents.find((item) => item.id === el);
@@ -200,9 +171,9 @@ export default function Map({ cardContents }: MapProps) {
 								<table className="min-w-full bg-white border border-1">
 									<thead>
 										<tr>
-											<th className="px-4 py-2 bg-blue-200">Subjek</th>
+											<th className="px-4 py-2 border border-1 bg-blue-200">Subjek</th>
 											{detailData.header != undefined && detailData.header.map((item: any, index: any) => (
-												<th key={index} className="px-4 py-2 bg-blue-200">
+												<th key={index} className="px-4 py-2 border border-1 bg-blue-200">
 													{item}
 												</th>
 											))}
@@ -211,11 +182,11 @@ export default function Map({ cardContents }: MapProps) {
 									<tbody>
 										{detailData.pasar != undefined && detailData.pasar.map((pasarItem: any, pasarIndex: any) => (
 											<tr key={pasarIndex}>
-												<td className="px-4 py-2">
-													<h2>{pasarItem.pasar_name || 'Unknown Pasar'}</h2>
+												<td className="px-4 py-2 border border-1">
+												<h2>{pasarItem.pasar_name != "null" ? pasarItem.pasar_name : detailHarga?.city}</h2>
 												</td>
 												{pasarItem.dates != undefined && pasarItem.dates.map((dateItem: any, dateIndex: any) => (
-													<td className="px-4 py-2" key={dateIndex}>
+													<td className="px-4 py-2 border border-1" key={dateIndex}>
 														<h2>Rp {dateItem.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || ''}</h2>
 													</td>
 												))}

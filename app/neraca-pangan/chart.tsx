@@ -28,7 +28,7 @@ interface MapProps {
 export default function Chart({ cardContents }: MapProps) {
 	return (
 		<>
-			<ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+			<ChartContainer config={chartConfig} className=" w-full">
 				<BarChart accessibilityLayer data={cardContents}>
 					<CartesianGrid vertical={false} />
 					<XAxis
