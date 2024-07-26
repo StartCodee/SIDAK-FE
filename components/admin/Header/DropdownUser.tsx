@@ -9,7 +9,6 @@ const DropdownUser = () => {
   const username = Cookies.get('userName');
   const userEmail = Cookies.get('userEmail');
 
-  console.log(username, userEmail);
 
 
  const logout = () => {

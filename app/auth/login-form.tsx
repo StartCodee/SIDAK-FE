@@ -20,6 +20,9 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useToast } from '@/components/ui/use-toast';
 
+import { useRouter } from 'next/navigation';
+
+
 const formSchema = z.object({
 	username: z.string().min(2, {
 		message: 'Username must be at least 2 characters.',
@@ -45,10 +48,10 @@ export function LoginForm() {
             if (res.status === 200) {
                 const { user, token } = res.data;
 
-                Cookies.set('token', token);
-                Cookies.set('userEmail', user.email);
-                Cookies.set('userName', user.username);
-                Cookies.set('userId', user.id);
+                Cookies.set('token', token, { expires: 365 });
+				Cookies.set('userEmail', user.email, { expires: 365 });
+				Cookies.set('userName', user.username, { expires: 365 });
+				Cookies.set('userId', user.id, { expires: 365 });
 
                 toast({
 					title: 'Login Berhasil',

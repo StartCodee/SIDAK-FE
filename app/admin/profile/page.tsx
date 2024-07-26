@@ -1,3 +1,5 @@
+'use client'
+
 import DefaultLayout from '@/components/admin/Layouts/DefaultLayout';
 import Breadcrumb from '@/components/admin/Breadcrumbs/Breadcrumb';
 import Image from 'next/image';
@@ -5,13 +7,24 @@ import Link from 'next/link';
 import user from '@/public/userr.png';
 import Background from '@/public/bgg.png';
 import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
+	const [username, setUsername] = useState('');
+	const [userEmail, setUserEmail] = useState('');
 
-	const username = Cookies.get('userName');
-	const userEmail = Cookies.get('userEmail');
+	
+	useEffect(() => {
+		const username = Cookies.get('userName');
+		const userEmail = Cookies.get('userEmail');
 
-	// console.log(username);
+		if(username) {
+			setUsername(username);
+		}
+		if(userEmail) {
+			setUserEmail(userEmail);
+		}
+	}, []);
     return (
 			<>
 				<DefaultLayout>
@@ -95,7 +108,7 @@ export default function Home() {
 													Username
 												</p>
 												<p className="text-base text-gray-600 dark:text-gray-300">
-													{username}
+													{username ? username : 'Username'}
 												</p>
 											</div>
 											<div>
