@@ -16,6 +16,7 @@ import { useToast } from '@/components/ui/use-toast';
 import Swal from 'sweetalert2';
 import { Button } from '@/components/ui/button';
 import Cookies from 'js-cookie';
+import { Logout } from '@/lib/logout';
 
 interface News {
 	id: number;
@@ -29,7 +30,7 @@ interface News {
 }
 
 interface BeritaDeleteProps {
-	id?: News; // Optional news prop for editing
+	id?: Number; // Optional news prop for editing
 	onBeritaDataUpdate: (data: News[]) => void;
 }
 
@@ -92,7 +93,15 @@ export default function BeritaDelete({ id, onBeritaDataUpdate }: BeritaDeletePro
 						getBerita();
 					}
 				});
-		} catch (error) {
+		} catch (err: any) {
+			if (err.response.status === 401) {
+				toast({
+					variant: 'destructive',
+					title: 'Unauthorized',
+					description: 'You are not authorized to perform this action',
+				});
+				Logout();
+			}
 			toast({
 				title: 'Gagal menghapus berita',
 				description: 'Gagal menghapus berita dari database',
