@@ -59,6 +59,19 @@ import { useToast } from '@/components/ui/use-toast';
 import Swal from 'sweetalert2';
 import { Textarea } from '@/components/ui/textarea';
 import { AuthHeader } from '@/lib/authHeader';
+import { useRouter } from 'next/navigation';
+import { set } from 'date-fns';
+import { Logout } from '@/lib/logout';
+
+interface Kabupaten {
+	id: number;
+	name: string;
+}
+
+interface Komoditas {
+	id: number;
+	name: string;
+}
 
 
 const formSchema = z.object({
@@ -83,9 +96,11 @@ const formSchema = z.object({
 });
 
 export default function FLowForm(){
-
-    const [kabupatenData, setKabupatenData] = useState([]);
-    const [komoditasData, setKomoditasData] = useState([]);
+	const router = useRouter();
+    const [kabupatenData, setKabupatenData] = useState<Kabupaten []>([]);
+    const [komoditasData, setKomoditasData] = useState<Komoditas []>([]);
+	const [open, setOpen] = useState(false);
+	const [openKeluar, setOpenKeluar] = useState(false);
 
     const getKabupaten = async () => {
         try {
@@ -179,12 +194,21 @@ export default function FLowForm(){
 								description: 'Data berhasil diinput ke dalam database',
 								variant: 'success',
 							});
-                            setTimeout(() => {
-								window.location.href = '/admin';
-							}, 2000);
+							form.reset();
+                            // setTimeout(() => {
+							// 	router.push('/admin/tabel-data');
+							// }, 2000);
 						}
 					})
 					.catch((err) => {
+						if (err.response.status === 401) {
+							toast({
+								variant: 'destructive',
+								title: 'Unauthorized',
+								description: 'You are not authorized to perform this action',
+							});
+							Logout();
+						}
 						toast({
 							title: 'Gagal input data',
 							description: 'Data gagal diinput ke dalam database',
@@ -204,14 +228,14 @@ export default function FLowForm(){
 									render={({ field }) => (
 										<FormItem className="flex flex-col">
 											<FormLabel>Kabupaten Masuk</FormLabel>
-											<Popover>
+											<Popover open={open} onOpenChange={setOpen}>
 												<PopoverTrigger asChild>
 													<FormControl>
 														<Button
 															variant="outline"
 															role="combobox"
 															className={cn(
-																'w-[15rem] justify-between',
+																'w-[22rem] justify-between',
 																!field.value && 'text-muted-foreground',
 															)}>
 															{field.value
@@ -230,13 +254,14 @@ export default function FLowForm(){
 															<CommandGroup>
 																{kabupatenData.map((language) => (
 																	<CommandItem
-																		value={language.id}
+																		value={language.id.toString()}
 																		key={language.id}
 																		onSelect={() => {
 																			form.setValue(
 																				'kabupatenMasuk',
 																				language.id,
 																			);
+																			setOpen(false);
 																		}}>
 																		<Check
 																			className={cn(
@@ -254,14 +279,13 @@ export default function FLowForm(){
 													</Command>
 												</PopoverContent>
 											</Popover>
-											<FormDescription>Pilih Kabupaten Masuk</FormDescription>
 											<FormMessage />
 										</FormItem>
 									)}
 								/>
 							</FormControl>
 							{/* line  */}
-							<div className="bg-black h-5 w-full mx-4 rounded-full"></div>
+							<div className="bg-black h-2 w-[40%] rounded-full"></div>
 							<FormControl>
 								<FormField
 									control={form.control}
@@ -269,14 +293,14 @@ export default function FLowForm(){
 									render={({ field }) => (
 										<FormItem className="flex flex-col">
 											<FormLabel>Kabupaten Keluar</FormLabel>
-											<Popover>
+											<Popover open={openKeluar} onOpenChange={setOpenKeluar}>
 												<PopoverTrigger asChild>
 													<FormControl>
 														<Button
 															variant="outline"
 															role="combobox"
 															className={cn(
-																'w-[15rem] justify-between',
+																'w-[22rem] justify-between',
 																!field.value && 'text-muted-foreground',
 															)}>
 															{field.value
@@ -295,13 +319,14 @@ export default function FLowForm(){
 															<CommandGroup>
 																{kabupatenData.map((language) => (
 																	<CommandItem
-																		value={language.id}
+																		value={language.id.toString()}
 																		key={language.id}
 																		onSelect={() => {
 																			form.setValue(
 																				'kabupatenKeluar',
 																				language.id,
 																			);
+																			setOpenKeluar(false);
 																		}}>
 																		<Check
 																			className={cn(
@@ -319,7 +344,6 @@ export default function FLowForm(){
 													</Command>
 												</PopoverContent>
 											</Popover>
-											<FormDescription>Pilih Kabupaten Keluar</FormDescription>
 											<FormMessage />
 										</FormItem>
 									)}

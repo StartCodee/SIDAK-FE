@@ -103,7 +103,7 @@ interface PaginationInfo {
 export default function Home() {
 
     const [kecamatanData, setKecamatanData] = useState<Kecamatan[]>([]);
-    const [kabupatenData, setKabupatenData] = useState<any[]>([]);
+    const [kabupatenData, setKabupatenData] = useState<kabupaten[]>([]);
 
     const [paginationInfo, setPaginationInfo] = useState<PaginationInfo | null>(null);
     const [selectedFile, setSelectedFile] = React.useState<File>();

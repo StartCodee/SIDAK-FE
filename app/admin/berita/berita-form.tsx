@@ -30,6 +30,7 @@ import { useToast } from '@/components/ui/use-toast';
 import Swal from 'sweetalert2';
 import { Textarea } from '@/components/ui/textarea';
 import { AuthHeader } from '@/lib/authHeader';
+import { Logout } from '@/lib/logout';
 
 const formSchema = z.object({
 	title: z.string().min(2, {
@@ -166,6 +167,14 @@ export function BeritaForm({ news, onBeritaDataUpdate }: BeritaFormProps) {
 				}
 			})
 			.catch((err) => {
+				if(err.response.status === 401) {
+					toast({
+						variant: 'destructive',
+						title: 'Unauthorized',
+						description: 'You are not authorized to perform this action',
+					});
+					Logout();
+				}
 				toast({
 					variant: 'destructive',
 					title: `Berita ${news ? 'Update' : 'Addition'} Failed`,
