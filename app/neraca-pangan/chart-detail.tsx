@@ -30,35 +30,41 @@ const processData = (data: any, type: any) => {
 
 	if (type === 'bulanan') {
 		for (const period in data.bulanan) {
-			const average_price = parseFloat(data.bulanan[period]);
+			const average_price_kebutuhan = parseFloat(data.bulanan[period]['kebutuhan']);
+			const average_price_ketersediaan = parseFloat(data.bulanan[period]['ketersediaan']);
+			const average_price_neraca = parseFloat(data.bulanan[period]['neraca']);
 
 			result.push({
 				periode: period,
-				kebutuhan: average_price, // Sesuaikan nilai kebutuhan
-				ketersediaan: average_price, // Sesuaikan nilai ketersediaan
-				neraca: average_price, // Sesuaikan nilai neraca
+				kebutuhan: average_price_kebutuhan, // Sesuaikan nilai kebutuhan
+				ketersediaan: average_price_ketersediaan, // Sesuaikan nilai ketersediaan
+				neraca: average_price_neraca, // Sesuaikan nilai neraca
 			});
 		}
 	} else if (type === 'tahunan') {
 		for (const period in data.tahunan) {
-			const average_price = parseFloat(data.tahunan[period]);
+			const average_price_kebutuhan = parseFloat(data.bulanan[period]['kebutuhan']);
+			const average_price_ketersediaan = parseFloat(data.bulanan[period]['ketersediaan']);
+			const average_price_neraca = parseFloat(data.bulanan[period]['neraca']);
 
 			result.push({
 				periode: period,
-				kebutuhan: average_price, // Sesuaikan nilai kebutuhan
-				ketersediaan: average_price, // Sesuaikan nilai ketersediaan
-				neraca: average_price, // Sesuaikan nilai neraca
+				kebutuhan: average_price_kebutuhan, // Sesuaikan nilai kebutuhan
+				ketersediaan: average_price_ketersediaan, // Sesuaikan nilai ketersediaan
+				neraca: average_price_neraca, // Sesuaikan nilai neraca
 			});
 		}
 	} else if (type === 'triwulan') {
 		for (const period in data.triwulan) {
-			const average_price = parseFloat(data.triwulan[period]);
+			const average_price_kebutuhan = parseFloat(data.bulanan[period]['kebutuhan']);
+			const average_price_ketersediaan = parseFloat(data.bulanan[period]['ketersediaan']);
+			const average_price_neraca = parseFloat(data.bulanan[period]['neraca']);
 
 			result.push({
 				periode: period,
-				kebutuhan: average_price, // Sesuaikan nilai kebutuhan
-				ketersediaan: average_price, // Sesuaikan nilai ketersediaan
-				neraca: average_price, // Sesuaikan nilai neraca
+				kebutuhan: average_price_kebutuhan, // Sesuaikan nilai kebutuhan
+				ketersediaan: average_price_ketersediaan, // Sesuaikan nilai ketersediaan
+				neraca: average_price_neraca, // Sesuaikan nilai neraca
 			});
 		}
 	}
