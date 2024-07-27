@@ -377,9 +377,31 @@ export default function MapPola({ flow }: MapProps) {
 		}
 
 		function draw() {
+			externalFlow.forEach(el => {
+				const element = document.getElementById(el);
+				if (element) {
+					element.classList.add('hidden');
+				}
+			});
+
 			if (!ctx || !canvas || !container) return; // Add null check for ctx and canvas
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			flow.forEach((el: any) => {
+				const isExternalFlowStart = externalFlow.includes(el.start);
+				const isExternalFlowEnd = externalFlow.includes(el.end);
+				if (isExternalFlowStart) {
+					const ext1 = document.getElementById(el.start);
+					if (ext1) {
+						ext1.classList.remove('hidden');
+					}
+				}
+
+				if (isExternalFlowEnd) {
+					const ext2 = document.getElementById(el.end);
+					if (ext2) {
+						ext2.classList.remove('hidden');
+					}
+				}
 				const containerRect = container.getBoundingClientRect();
 				const offsetX = container.scrollLeft - containerRect.left;
 				const offsetY = container.scrollTop - containerRect.top;
@@ -393,8 +415,7 @@ export default function MapPola({ flow }: MapProps) {
 				const ender = getCoordinate(rect2, el.end, offsetX, offsetY);
 				const controlX = (starter[0] + ender[0]) / 2;
 				const controlY = starter[1] - 100;
-				const isExternalFlowStart = externalFlow.includes(el.start);
-				const isExternalFlowEnd = externalFlow.includes(el.end);
+				
 				drawBentDashedLine(isExternalFlowStart, isExternalFlowEnd, ctx, starter[0], starter[1], ender[0], ender[1], controlX, controlY, el.start, el.end);
 			});
 		}
