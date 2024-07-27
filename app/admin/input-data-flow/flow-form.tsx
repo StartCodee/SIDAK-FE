@@ -108,7 +108,7 @@ export default function FLowForm(){
                 `${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kabupaten`,
                 {
                     headers: AuthHeader(),
-                    withCredentials: true,
+                    
                 },
             );
             if (response.data.data) {
@@ -131,7 +131,7 @@ export default function FLowForm(){
 							`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/commodities`,
 							{
 								headers: AuthHeader(),
-								withCredentials: true,
+								
 							},
 						);
             if (response.data.data) {
@@ -166,6 +166,14 @@ export default function FLowForm(){
             tanggal : '',
         },
     });
+
+	 const logout = () => {
+			Cookies.remove('token');
+			Cookies.remove('userEmail');
+			Cookies.remove('userName');
+			Cookies.remove('userId');
+			window.location.href = '/auth';
+		};
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         axios
@@ -207,7 +215,7 @@ export default function FLowForm(){
 								title: 'Unauthorized',
 								description: 'You are not authorized to perform this action',
 							});
-							Logout();
+							logout();
 						}
 						toast({
 							title: 'Gagal input data',

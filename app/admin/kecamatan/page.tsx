@@ -79,6 +79,7 @@ interface kabupaten {
     created_at: string;
     updated_at: string;
     deleted_at: string | null;
+    value: number;
 }
 interface PaginationInfo {
     current_page: number;
@@ -320,13 +321,12 @@ export default function Home() {
             })
             console.log(fr);
 
-            let kab = kabupatenData.find((f) => f.value == fr.kabupaten_kota_id);
+            let kab = kabupatenData.find((f) => f.value == fr?.kabupaten_kota_id);
             console.log('ini');
             console.log(kab);
             setSelectedKabupaten({
                 value: fr.kabupaten_kota_id,
-                label: kab.name
-
+                label: kab?.name ?? ''
             })
             setIsDialogOpen(true);
         }
@@ -477,7 +477,7 @@ export default function Home() {
                                                             onChange={(kabupatenData) => setSelectedKabupaten({ value: kabupatenData!.value, label: kabupatenData!.label })}
                                                             value={selectedKabupaten}
                                                             className=" basic-single w-full border-none"
-                                                            options={kabupatenData}
+                                                            options={kabupatenData as any}
                                                         />
 
                                                     </div>

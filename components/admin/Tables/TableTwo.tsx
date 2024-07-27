@@ -1,108 +1,329 @@
-import Image from "next/image";
-import { Product } from "@/types/product";
+'use client';
 
-const productData: Product[] = [
-  {
-    image: "/images/product/product-01.png",
-    name: "Apple Watch Series 7",
-    category: "Electronics",
-    price: 296,
-    sold: 22,
-    profit: 45,
-  },
-  {
-    image: "/images/product/product-02.png",
-    name: "Macbook Pro M1",
-    category: "Electronics",
-    price: 546,
-    sold: 12,
-    profit: 125,
-  },
-  {
-    image: "/images/product/product-03.png",
-    name: "Dell Inspiron 15",
-    category: "Electronics",
-    price: 443,
-    sold: 64,
-    profit: 247,
-  },
-  {
-    image: "/images/product/product-04.png",
-    name: "HP Probook 450",
-    category: "Electronics",
-    price: 499,
-    sold: 72,
-    profit: 103,
-  },
-];
+import { BRAND } from '@/types/brand';
+import Image from 'next/image';
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from '@/components/ui/table';
+import { useState } from 'react';
+import {
+	ColumnDef,
+	ColumnFiltersState,
+	SortingState,
+	VisibilityState,
+	flexRender,
+	getCoreRowModel,
+	getFilteredRowModel,
+	getPaginationRowModel,
+	getSortedRowModel,
+	useReactTable,
+} from '@tanstack/react-table';
+import axios from 'axios';
+import { Badge } from '@/components/ui/badge';
+import Cookies from 'js-cookie';
+import { useEffect } from 'react';
+import Swal from 'sweetalert2';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useToast } from '@/components/ui/use-toast';
+interface Komoditas {
+	id: number;
+	name: string;
+	logo: string;
+	visitors: number;
+	revenues: number;
+	sales: number;
+	conversion: number;
+}
 
-const TableTwo = () => {
-  return (
-    <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-      <div className="px-4 py-6 md:px-6 xl:px-7.5">
-        <h4 className="text-xl font-semibold text-black dark:text-white">
-          Top Products
-        </h4>
-      </div>
+const TableOne = () => {
+	const [supply, setSupply] = useState([]);
+  const { toast } = useToast();
 
-      <div className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-        <div className="col-span-3 flex items-center">
-          <p className="font-medium">Product Name</p>
-        </div>
-        <div className="col-span-2 hidden items-center sm:flex">
-          <p className="font-medium">Category</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium">Price</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium">Sold</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium">Profit</p>
-        </div>
-      </div>
+  const logout = () => {
+    Cookies.remove('token');
+    Cookies.remove('userEmail');
+    Cookies.remove('userName');
+    Cookies.remove('userId');
+    window.location.href = '/auth';
+  }
 
-      {productData.map((product, key) => (
-        <div
-          className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5"
-          key={key}
-        >
-          <div className="col-span-3 flex items-center">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              <div className="h-12.5 w-15 rounded-md">
-                <Image
-                  src={product.image}
-                  width={60}
-                  height={50}
-                  alt="Product"
-                />
-              </div>
-              <p className="text-sm text-black dark:text-white">
-                {product.name}
-              </p>
-            </div>
-          </div>
-          <div className="col-span-2 hidden items-center sm:flex">
-            <p className="text-sm text-black dark:text-white">
-              {product.category}
-            </p>
-          </div>
-          <div className="col-span-1 flex items-center">
-            <p className="text-sm text-black dark:text-white">
-              ${product.price}
-            </p>
-          </div>
-          <div className="col-span-1 flex items-center">
-            <p className="text-sm text-black dark:text-white">{product.sold}</p>
-          </div>
-          <div className="col-span-1 flex items-center">
-            <p className="text-sm text-meta-3">${product.profit}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
+  const acceptSupply = async (id: number) => {
+		axios
+			.put(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/flow/approved/${id}`,
+				{},
+				{
+					headers: {
+						'content-type': 'application/json',
+						Authorization: `Bearer ${Cookies.get('token')}`,
+					},
+				},
+			)
+			.then((res) => {
+				if (res.status === 200) {
+					toast({
+						title: 'Berhasil input data',
+						description: 'Data berhasil diinput ke dalam database',
+						variant: 'success',
+					});
+					getKomoditas();
+				}
+			})
+			.catch((err) => {
+				if (err.response && err.response.status === 401) {
+					toast({
+						variant: 'destructive',
+						title: 'Unauthorized',
+						description: 'You are not authorized to perform this action',
+					});
+					logout();
+				} else {
+					toast({
+						title: 'Gagal input data',
+						description: 'Data gagal diinput ke dalam database',
+						variant: 'destructive',
+					});
+				}
+			});
+	};
+
+	const columns: ColumnDef<Komoditas[]>[] = [
+		{
+			id: 'sequence',
+			header: '#',
+			cell: (info) => info.row.index + 1,
+		},
+		{
+			header: 'Time Stamp Input',
+			accessorKey: 'created_at',
+			cell: (info) => {
+				// Create a new Date object from the timestamp
+				const dateStr = info.getValue() as string;
+
+				// Create a new Date object from the timestamp
+				const date = new Date(dateStr);
+
+				// Use Intl.DateTimeFormat to format the date to Jakarta time
+				const options: Intl.DateTimeFormatOptions = {
+					year: 'numeric',
+					month: '2-digit',
+					day: '2-digit',
+					hour: '2-digit',
+					minute: '2-digit',
+					second: '2-digit',
+					timeZone: 'Asia/Jakarta', // Set the timezone to Jakarta
+				};
+
+				const formattedDate = new Intl.DateTimeFormat('id-ID', options).format(
+					date,
+				);
+				return formattedDate;
+			},
+		},
+		// kabupaten_kota_masuk_name, kabupaten_kota_keluar_name, komoditas_name, jumlah_masuk_ton, jumlah_keluar_ton,
+		{
+			header: 'Kabupaten Masuk',
+			accessorKey: 'kabupaten_kota_masuk_name',
+		},
+		{
+			header: 'Kabupaten Keluar',
+			accessorKey: 'kabupaten_kota_keluar_name',
+		},
+		{
+			header: 'Komoditas',
+			accessorKey: 'komoditas_name',
+		},
+		{
+			header: 'Jumlah Masuk (ton)',
+			accessorKey: 'jumlah_masuk_ton',
+		},
+		{
+			header: 'Jumlah Keluar (ton)',
+			accessorKey: 'jumlah_keluar_ton',
+		},
+		{
+			header: 'Status',
+			accessorKey: 'approved',
+			cell: (info) => {
+				return (
+					<Badge variant={info.getValue() ? 'success' : 'destructive'}>
+						{info.getValue() ? 'Approved' : 'Pending'}
+					</Badge>
+				);
+			},
+		},
+		{
+			id: 'actions',
+			accessorKey: 'id',
+			header: () => {
+				return 'Actions';
+			},
+			cell: (row) => {
+				const id = row.getValue() as number;
+				return (
+					<Button
+						className="bg-green-500 hover:bg-green-600"
+						onClick={() => acceptSupply(id)}>
+						Approve
+					</Button>
+				);
+			},
+		},
+	];
+
+	const getKomoditas = async () => {
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/flow?type=unapproved`,
+				{
+					headers: {
+						'content-type': 'application/json',
+						Authorization: `Bearer ${Cookies.get('token')}`,
+					},
+				},
+			);
+			if (response.data.data) {
+				setSupply(response.data.data);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			}
+		}
+	};
+
+	const [sorting, setSorting] = useState<SortingState>([]);
+	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+	const [rowSelection, setRowSelection] = useState({});
+
+	const table = useReactTable({
+		data: supply,
+		columns,
+		onSortingChange: setSorting,
+		onColumnFiltersChange: setColumnFilters,
+		getCoreRowModel: getCoreRowModel(),
+		getPaginationRowModel: getPaginationRowModel(),
+		getSortedRowModel: getSortedRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
+		onColumnVisibilityChange: setColumnVisibility,
+		onRowSelectionChange: setRowSelection,
+		state: {
+			sorting,
+			columnFilters,
+			columnVisibility,
+			rowSelection,
+		},
+	});
+
+	useEffect(() => {
+		getKomoditas();
+	}, []);
+
+	return (
+		<div className="rounded-lg mt-5 border border-stroke bg-white  pb-2.5 pt-6 shadow-default  sm:px-7.5 xl:pb-1">
+			<h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
+				Data Flow Perdagangan
+			</h4>
+			<Input
+				placeholder="Filter komoditas..."
+				value={
+					(table.getColumn('komoditas_name')?.getFilterValue() as string) ?? ''
+				}
+				onChange={(event) =>
+					table.getColumn('komoditas_name')?.setFilterValue(event.target.value)
+				}
+				className="max-w-sm mb-4"
+			/>
+			<div className="rounded-md border">
+				<Table>
+					<TableHeader>
+						{table.getHeaderGroups().map((headerGroup) => (
+							<TableRow key={headerGroup.id}>
+								{headerGroup.headers.map((header) => (
+									<TableHead key={header.id}>
+										{header.isPlaceholder
+											? null
+											: flexRender(
+													header.column.columnDef.header,
+													header.getContext(),
+											  )}
+									</TableHead>
+								))}
+							</TableRow>
+						))}
+					</TableHeader>
+					<TableBody>
+						{table.getRowModel().rows?.length ? (
+							table.getRowModel().rows.map((row, key) => (
+								<TableRow
+									key={row.id}
+									data-state={row.getIsSelected() && 'selected'}>
+									{row.getVisibleCells().map((cell) => (
+										<TableCell key={cell.id}>
+											{flexRender(
+												cell.column.columnDef.cell,
+												cell.getContext(),
+											)}
+										</TableCell>
+									))}
+								</TableRow>
+							))
+						) : (
+							<TableRow>
+								<TableCell
+									colSpan={columns.length}
+									className="h-24 text-center">
+									No results.
+								</TableCell>
+							</TableRow>
+						)}
+					</TableBody>
+				</Table>
+			</div>
+			<div className="flex items-center justify-end space-x-2 py-4">
+				<div className="flex-1 text-sm text-muted-foreground">
+					{table.getFilteredSelectedRowModel().rows.length} of{' '}
+					{table.getFilteredRowModel().rows.length} row(s) selected.
+				</div>
+				<div className="space-x-2">
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => table.previousPage()}
+						disabled={!table.getCanPreviousPage()}>
+						Previous
+					</Button>
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => table.nextPage()}
+						disabled={!table.getCanNextPage()}>
+						Next
+					</Button>
+				</div>
+			</div>
+		</div>
+	);
 };
 
-export default TableTwo;
+export default TableOne;

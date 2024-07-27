@@ -1,123 +1,329 @@
+'use client'
+
 import { BRAND } from "@/types/brand";
 import Image from "next/image";
-
-const brandData: BRAND[] = [
-  {
-    logo: "/images/brand/brand-01.svg",
-    name: "Google",
-    visitors: 3.5,
-    revenues: "5,768",
-    sales: 590,
-    conversion: 4.8,
-  },
-  {
-    logo: "/images/brand/brand-02.svg",
-    name: "Twitter",
-    visitors: 2.2,
-    revenues: "4,635",
-    sales: 467,
-    conversion: 4.3,
-  },
-  {
-    logo: "/images/brand/brand-03.svg",
-    name: "Github",
-    visitors: 2.1,
-    revenues: "4,290",
-    sales: 420,
-    conversion: 3.7,
-  },
-  {
-    logo: "/images/brand/brand-04.svg",
-    name: "Vimeo",
-    visitors: 1.5,
-    revenues: "3,580",
-    sales: 389,
-    conversion: 2.5,
-  },
-  {
-    logo: "/images/brand/brand-05.svg",
-    name: "Facebook",
-    visitors: 3.5,
-    revenues: "6,768",
-    sales: 390,
-    conversion: 4.2,
-  },
-];
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from '@/components/ui/table';
+import { useState } from "react";
+import {
+	ColumnDef,
+	ColumnFiltersState,
+	SortingState,
+	VisibilityState,
+	flexRender,
+	getCoreRowModel,
+	getFilteredRowModel,
+	getPaginationRowModel,
+	getSortedRowModel,
+	useReactTable,
+} from '@tanstack/react-table';
+import axios from 'axios';
+import { Badge } from "@/components/ui/badge";
+import Cookies from 'js-cookie';
+import { useEffect } from "react";
+import Swal from 'sweetalert2';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
+import { set } from "date-fns";
+import { get } from "http";
+interface Komoditas {
+	id: number;
+	name: string;
+	created_at: string; // Assuming this is part of the data structure
+	tanggal: string; // Assuming this is part of the data structure
+	komoditas_name: string; // Assuming this is part of the data structure
+	kecamatan_name: string; // Assuming this is part of the data structure
+	approved: boolean; // Assuming this is part of the data structure
+}
 
 const TableOne = () => {
+const { toast } = useToast();
+  const [supply, setSupply] = useState([]);
+
+  const logout = () => {
+			Cookies.remove('token');
+			Cookies.remove('userEmail');
+			Cookies.remove('userName');
+			Cookies.remove('userId');
+			window.location.href = '/auth';
+		};
+
+  const acceptSupply = async (id: number) => {
+	axios
+		.put(
+			`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/supply/approved/${id}`,
+			{},
+			{
+				headers: {
+					'content-type': 'application/json',
+					Authorization: `Bearer ${Cookies.get('token')}`,
+				},
+			},
+		)
+		.then((res) => {
+			if (res.status === 200) {
+				toast({
+					title: 'Berhasil input data',
+					description: 'Data berhasil diinput ke dalam database',
+					variant: 'success',
+				});
+				getKomoditas();
+			}
+		})
+		.catch((err) => {
+			if (err.response && err.response.status === 401) {
+				toast({
+					variant: 'destructive',
+					title: 'Unauthorized',
+					description: 'You are not authorized to perform this action',
+				});
+				logout();
+			} else {
+				toast({
+					title: 'Gagal input data',
+					description: 'Data gagal diinput ke dalam database',
+					variant: 'destructive',
+				});
+			}
+		});
+
+  };
+
+  const columns: ColumnDef<Komoditas[]>[] = [
+		{
+			id: 'sequence',
+			header: '#',
+			cell: (info) => info.row.index + 1,
+		},
+		{
+			header: 'Time Stamp Input',
+			accessorKey: 'created_at',
+			cell: (info) => {
+				// Cast the value to string, which is expected for a date
+				const dateStr = info.getValue() as string;
+
+				// Create a new Date object from the timestamp
+				const date = new Date(dateStr);
+
+				// Use Intl.DateTimeFormat to format the date to Jakarta time
+				const options: Intl.DateTimeFormatOptions = {
+					year: 'numeric',
+					month: '2-digit',
+					day: '2-digit',
+					hour: '2-digit',
+					minute: '2-digit',
+					second: '2-digit',
+					timeZone: 'Asia/Jakarta', // Set the timezone to Jakarta
+				};
+
+				const formattedDate = new Intl.DateTimeFormat('id-ID', options).format(
+					date,
+				);
+				return formattedDate;
+			},
+		},
+		{
+			header: 'Tanggal Data',
+			accessorKey: 'tanggal',
+			cell: (info) => {
+				const dateStr = info.getValue() as string;
+				const date = new Date(dateStr);
+				// Format the date to YYYY-MM-DD
+				const formattedDate = date.toISOString().split('T')[0];
+				return formattedDate;
+			},
+		},
+		{
+			header: 'Komoditas',
+			accessorKey: 'komoditas_name',
+		},
+		{
+			header: 'Kecamatan',
+			accessorKey: 'kecamatan_name',
+		},
+		{
+			header: 'Status',
+			accessorKey: 'approved',
+			cell: (info) => {
+				return (
+					<Badge variant={info.getValue() ? 'success' : 'destructive'}>
+						{info.getValue() ? 'Approved' : 'Pending'}
+					</Badge>
+				);
+			},
+		},
+
+		{
+			id: 'actions',
+			accessorKey: 'id',
+			header: () => {
+				return 'Actions';
+			},
+			cell: (row) => {
+				const id = row.getValue() as number;
+				return (
+					<Button
+						className="bg-green-500 hover:bg-green-600"
+						onClick={() => acceptSupply(id)}>
+						Approve
+					</Button>
+				);
+			},
+		},
+	];
+
+  const getKomoditas = async () => {
+    try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/supply?type=unapproved`,
+				{
+					headers: {
+						'content-type': 'application/json',
+						Authorization: `Bearer ${Cookies.get('token')}`,
+					},
+				},
+			);
+			if (response.data.data) {
+				setSupply(response.data.data);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			}
+		}
+  }
+
+  const [sorting, setSorting] = useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+    const [rowSelection, setRowSelection] = useState({});
+
+  const table = useReactTable({
+		data: supply,
+		columns,
+		onSortingChange: setSorting,
+		onColumnFiltersChange: setColumnFilters,
+		getCoreRowModel: getCoreRowModel(),
+		getPaginationRowModel: getPaginationRowModel(),
+		getSortedRowModel: getSortedRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
+		onColumnVisibilityChange: setColumnVisibility,
+		onRowSelectionChange: setRowSelection,
+		state: {
+			sorting,
+			columnFilters,
+			columnVisibility,
+			rowSelection,
+		},
+	});
+
+  useEffect(() => {
+    getKomoditas();
+  }, []);
+
   return (
-    <div className="rounded-lg mt-5 border border-stroke bg-white  pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-      <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
-        Top Channels
-      </h4>
-
-      <div className="flex flex-col">
-        <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
-          <div className="p-2.5 xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Source
-            </h5>
-          </div>
-          <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Visitors
-            </h5>
-          </div>
-          <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Revenues
-            </h5>
-          </div>
-          <div className="hidden p-2.5 text-center sm:block xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Sales
-            </h5>
-          </div>
-          <div className="hidden p-2.5 text-center sm:block xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Conversion
-            </h5>
-          </div>
-        </div>
-
-        {brandData.map((brand, key) => (
-          <div
-            className={`grid grid-cols-3 sm:grid-cols-5 ${
-              key === brandData.length - 1
-                ? ""
-                : "border-b border-stroke dark:border-strokedark"
-            }`}
-            key={key}
-          >
-            <div className="flex items-center gap-3 p-2.5 xl:p-5">
-              <div className="flex-shrink-0">
-                <Image src={brand.logo} alt="Brand" width={48} height={48} />
-              </div>
-              <p className="hidden text-black dark:text-white sm:block">
-                {brand.name}
-              </p>
-            </div>
-
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{brand.visitors}K</p>
-            </div>
-
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-meta-3">${brand.revenues}</p>
-            </div>
-
-            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-              <p className="text-black dark:text-white">{brand.sales}</p>
-            </div>
-
-            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-              <p className="text-meta-5">{brand.conversion}%</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+		<div className="rounded-lg mt-5 border border-stroke bg-white  pb-2.5 pt-6 shadow-default  sm:px-7.5 xl:pb-1">
+			<h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
+				Data Harga Pangan
+			</h4>
+			<Input
+				placeholder="Filter komoditas..."
+				value={(table.getColumn('komoditas_name')?.getFilterValue() as string) ?? ''}
+				onChange={(event) =>
+					table.getColumn('komoditas_name')?.setFilterValue(event.target.value)
+				}
+				className="max-w-sm mb-4"
+			/>
+			<div className="rounded-md border">
+				<Table>
+					<TableHeader>
+						{table.getHeaderGroups().map((headerGroup) => (
+							<TableRow key={headerGroup.id}>
+								{headerGroup.headers.map((header) => (
+									<TableHead key={header.id}>
+										{header.isPlaceholder
+											? null
+											: flexRender(
+													header.column.columnDef.header,
+													header.getContext(),
+											  )}
+									</TableHead>
+								))}
+							</TableRow>
+						))}
+					</TableHeader>
+					<TableBody>
+						{table.getRowModel().rows?.length ? (
+							table.getRowModel().rows.map((row, key) => (
+								<TableRow
+									key={row.id}
+									data-state={row.getIsSelected() && 'selected'}>
+									{row.getVisibleCells().map((cell) => (
+										<TableCell key={cell.id}>
+											{flexRender(
+												cell.column.columnDef.cell,
+												cell.getContext(),
+											)}
+										</TableCell>
+									))}
+								</TableRow>
+							))
+						) : (
+							<TableRow>
+								<TableCell
+									colSpan={columns.length}
+									className="h-24 text-center">
+									No results.
+								</TableCell>
+							</TableRow>
+						)}
+					</TableBody>
+				</Table>
+			</div>
+			<div className="flex items-center justify-end space-x-2 py-4">
+				<div className="flex-1 text-sm text-muted-foreground">
+					{table.getFilteredSelectedRowModel().rows.length} of{' '}
+					{table.getFilteredRowModel().rows.length} row(s) selected.
+				</div>
+				<div className="space-x-2">
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => table.previousPage()}
+						disabled={!table.getCanPreviousPage()}>
+						Previous
+					</Button>
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => table.nextPage()}
+						disabled={!table.getCanNextPage()}>
+						Next
+					</Button>
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default TableOne;

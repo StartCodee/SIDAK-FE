@@ -48,7 +48,6 @@ import { cn } from '@/lib/utils';
 import { parse } from 'path';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
-import { Logout } from '@/lib/logout';
 
 const formSchema = z.object({
 	kabupaten: z.number().min(2, {
@@ -108,7 +107,7 @@ export default function InputDataForm() {
 						`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kabupaten`,
 						{
 							headers: AuthHeader(),
-							withCredentials: true,
+							
 						},
 					);
 					if (response.data.data) {
@@ -131,7 +130,7 @@ export default function InputDataForm() {
 						`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kecamatan`,
 						{
 							headers: AuthHeader(),
-							withCredentials: true,
+							
 						},
 					);
 					if (response.data.data) {
@@ -154,7 +153,7 @@ export default function InputDataForm() {
 						`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/commodities`,
 						{
 							headers: AuthHeader(),
-							withCredentials: true,
+							
 						},
 					);
 					if (response.data.data) {
@@ -189,6 +188,16 @@ export default function InputDataForm() {
                     tanggal: '',
                 },
             });
+
+
+ const logout = () => {
+		Cookies.remove('token');
+		Cookies.remove('userEmail');
+		Cookies.remove('userName');
+		Cookies.remove('userId');
+		window.location.href = '/auth';
+ };
+
 
         function onSubmit(values: z.infer<typeof formSchema>) {
             axios
@@ -226,14 +235,14 @@ export default function InputDataForm() {
 							})
 							.catch((err) => {
                                 if (err.response.status === 401) {
-																	toast({
-																		variant: 'destructive',
-																		title: 'Unauthorized',
-																		description:
-																			'You are not authorized to perform this action',
-																	});
-																	Logout();
-																}
+									toast({
+											variant: 'destructive',
+											title: 'Unauthorized',
+											description:
+											'You are not authorized to perform this action',
+										});
+										logout();
+								}
 								toast({
 									title: 'Gagal input data',
 									description: 'Data gagal diinput ke dalam database',

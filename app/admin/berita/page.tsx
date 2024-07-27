@@ -37,7 +37,7 @@ import {
 } from "@/components/ui/table";
 import DefaultLayout from "@/components/admin/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/admin/Breadcrumbs/Breadcrumb";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 
 import CheckboxFive from "@/components/admin/Checkboxes/CheckboxFive";
@@ -131,13 +131,13 @@ const handleBeritaDataUpdate = (data: News[]) => {
     const getBerita = async (page: number = 1, limit: number = 20) => {
 			try {
 				const response = await axios.get(
-					`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news?page=${page}&limit=${limit}`,
+					`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news`,
 					{
 						headers: {
 							'content-type': 'application/json',
-							Authorization: `Bearer ${Cookies.get('token')}`,
+							Authorization: `Bearer ${localStorage.getItem('token')}`,
 						},
-						withCredentials: true,
+						
 					},
 				);
 				if (response.data.data) {
@@ -267,7 +267,7 @@ const handleBeritaDataUpdate = (data: News[]) => {
         },
     });
 
-    React.useEffect(() => {
+    useEffect(() => {
         getBerita();
     }, []);
 
