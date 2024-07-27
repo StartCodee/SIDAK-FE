@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import ClickOutside from "@/components/admin/ClickOutside";
 import Cookies from 'js-cookie';
+import adminThumb from '@/public//admin/images/user/profile.png'
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -37,7 +38,7 @@ const DropdownUser = () => {
           <Image
             width={112}
             height={112}
-            src={"/admin/images/user/profile.png"}
+            src={adminThumb}
             style={{
               width: "auto",
               height: "auto",
