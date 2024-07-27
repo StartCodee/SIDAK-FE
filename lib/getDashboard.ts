@@ -8,7 +8,7 @@ const getDashboard = () => {
 				'content-type': 'application/json',
 				Authorization: `Bearer ${localStorage.getItem('token')}`,
 			},
-			withCredentials: true,
+			
 		})
 		.then((response) => {
 			return response.data;

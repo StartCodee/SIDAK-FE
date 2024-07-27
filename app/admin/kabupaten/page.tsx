@@ -45,11 +45,6 @@ import Breadcrumb from "@/components/admin/Breadcrumbs/Breadcrumb";
 // import { useState } from "react";
 
 
-import CheckboxFive from "@/components/admin/Checkboxes/CheckboxFive";
-import CheckboxFour from "@/components/admin/Checkboxes/CheckboxFour";
-import CheckboxOne from "@/components/admin/Checkboxes/CheckboxOne";
-import CheckboxThree from "@/components/admin/Checkboxes/CheckboxThree";
-import CheckboxTwo from "@/components/admin/Checkboxes/CheckboxTwo";
 
 import {
     Dialog,

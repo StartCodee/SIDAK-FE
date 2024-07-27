@@ -320,7 +320,7 @@ export default function Home() {
             })
             console.log(fr);
 
-            let kab = kecamatanData.find((f) => f.value == fr.kecamatan_id);
+            let kab = kecamatanData.find((f) => f.value == fr?.kecamatan_id);
             console.log('ini');
             console.log(kab);
             setSelectedKabupaten({

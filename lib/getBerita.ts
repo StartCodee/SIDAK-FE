@@ -10,7 +10,7 @@ const getBerita = async (page: number = 1, limit: number = 3) => {
 					'content-type': 'application/json',
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
 				},
-				withCredentials: true,
+				
 			},
 		);
 		if (response.data.data) {

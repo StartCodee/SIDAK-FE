@@ -86,7 +86,7 @@ export function BeritaForm({ news, onBeritaDataUpdate }: BeritaFormProps) {
 				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news?page=${page}&limit=${limit}`,
 				{
 					headers: AuthHeader(),
-					withCredentials: true,
+					
 				},
 			);
 			if (response.data.data) {
