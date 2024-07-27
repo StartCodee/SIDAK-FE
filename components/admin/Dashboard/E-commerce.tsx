@@ -19,6 +19,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import TableTwo from "../Tables/TableTwo";
 import Link from "next/link";
+import heroAdmin from '@/public/admin/images/brand/hero.png';
 
 interface Dashboard {
 	totalCommodities: number;
@@ -54,12 +55,7 @@ const ECommerce: React.FC = () => {
 							</p>
 						</div>
 						<div style={{ position: 'relative' }}>
-							<Image
-								src={'/admin/images/brand/hero.png'}
-								width={150}
-								height={200}
-								alt="hero"
-							/>
+							<Image src={heroAdmin} width={150} height={200} alt="hero" />
 						</div>
 					</div>
 					<div className="flex gap-3 my-5">
@@ -98,7 +94,7 @@ const ECommerce: React.FC = () => {
 								Harga Pangan
 							</TabsTrigger>
 							<TabsTrigger className="rounded-full" value="flow">
-								Flow 
+								Flow
 							</TabsTrigger>
 						</TabsList>
 						<TabsContent value="harga-pangan">
@@ -125,7 +121,9 @@ const ECommerce: React.FC = () => {
 								/>
 							</div>
 							<div className="p-4">
-								<h1 className="text-2xl text-black font-bold line-clamp-2">{item.title}</h1>
+								<h1 className="text-2xl text-black font-bold line-clamp-2">
+									{item.title}
+								</h1>
 								<p className="text-[10px]">{item.date}</p>
 								<p className="mt-2 line-clamp-3">{item.content}</p>
 							</div>
@@ -154,10 +152,9 @@ const ECommerce: React.FC = () => {
 						</div>
 					</div> */}
 					<div className="mt-4  flex justify-end">
-						<Link href='/admin/berita'>
+						<Link href="/admin/berita">
 							<span className="text-primary">Lihat Semua</span>
 						</Link>
-
 					</div>
 				</div>
 			</div>

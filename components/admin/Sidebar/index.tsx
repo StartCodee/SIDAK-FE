@@ -7,6 +7,7 @@ import Image from "next/image";
 import SidebarItem from "@/components/admin/Sidebar/SidebarItem";
 import ClickOutside from "@/components/admin/ClickOutside";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import logo from '@/public/admin/images/logo/logo.png';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -223,7 +224,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <Image
               width={176}
               height={32}
-              src={"/admin/images/logo/logo.png"}
+              src={logo}
               alt="Logo"
               priority
             />

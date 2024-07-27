@@ -46,6 +46,33 @@ interface Komoditas {
 const TableOne = () => {
 const { toast } = useToast();
   const [supply, setSupply] = useState([]);
+  const [role , setRole] = useState('');
+
+  const getRole = () => {
+	axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/auth/me`, {
+		headers:
+			{ Authorization: `Bearer ${Cookies.get('token')}` },
+	})
+		.then((res) => {
+			setRole(res.data.role);
+		})
+		.catch((err) => {
+			if (err.response && err.response.status === 401) {
+				toast({
+					variant: 'destructive',
+					title: 'Unauthorized',
+					description: 'You are not authorized to perform this action',
+				});
+				logout();
+			} else {
+				toast({
+					title: 'Gagal input data',
+					description: 'Data gagal diinput ke dalam database',
+					variant: 'destructive',
+				});
+			}
+		});
+  };
 
   const logout = () => {
 			Cookies.remove('token');
@@ -160,7 +187,11 @@ const { toast } = useToast();
 			},
 		},
 
-		{
+		
+	];
+
+	if(role !== 'KABUPATEN'){
+		columns.push({
 			id: 'actions',
 			accessorKey: 'id',
 			header: () => {
@@ -176,8 +207,10 @@ const { toast } = useToast();
 					</Button>
 				);
 			},
-		},
-	];
+		});
+
+	}
+	console.log(role);
 
   const getKomoditas = async () => {
     try {
@@ -239,6 +272,7 @@ const { toast } = useToast();
 
   useEffect(() => {
     getKomoditas();
+	getRole();
   }, []);
 
   return (

@@ -100,6 +100,35 @@ export default function InputDataForm() {
         const [open, setOpen] = useState(false);
         const [openKecamatan, setOpenKecamatan] = useState(false);
         const [openKomoditas, setOpenKomoditas] = useState(false);
+		const [role, setRole] = useState('');
+		const [userKabupaten, setUserKabupaten] = useState<number>();
+
+		const getRole = () => {
+			axios
+				.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/auth/me`, {
+					headers: { Authorization: `Bearer ${Cookies.get('token')}` },
+				})
+				.then((res) => {
+					setRole(res.data.role);
+					setUserKabupaten(res.data.kabupaten_id);
+				})
+				.catch((err) => {
+					if (err.response && err.response.status === 401) {
+						toast({
+							variant: 'destructive',
+							title: 'Unauthorized',
+							description: 'You are not authorized to perform this action',
+						});
+						logout();
+					} else {
+						toast({
+							title: 'Gagal input data',
+							description: 'Data gagal diinput ke dalam database',
+							variant: 'destructive',
+						});
+					}
+				});
+		};
 
      const getKabupaten = async () => {
 				try {
@@ -174,7 +203,17 @@ export default function InputDataForm() {
 				getKabupaten();
                 getKecamatan();
 				getKomoditas();
+				getRole();
+
+				
+
 			}, []);
+
+			useEffect(() => {
+				if (userKabupaten) {
+					form.setValue('kabupaten', userKabupaten);
+				}
+			}, [userKabupaten]);
 
         const form = useForm<z.infer<typeof formSchema>>({
                 resolver: zodResolver(formSchema),
