@@ -43,9 +43,9 @@ const processData = (data: any, type: any) => {
 		}
 	} else if (type === 'tahunan') {
 		for (const period in data.tahunan) {
-			const average_price_kebutuhan = parseFloat(data.bulanan[period]['kebutuhan']);
-			const average_price_ketersediaan = parseFloat(data.bulanan[period]['ketersediaan']);
-			const average_price_neraca = parseFloat(data.bulanan[period]['neraca']);
+			const average_price_kebutuhan = parseFloat(data.tahunan[period]['kebutuhan']);
+			const average_price_ketersediaan = parseFloat(data.tahunan[period]['ketersediaan']);
+			const average_price_neraca = parseFloat(data.tahunan[period]['neraca']);
 
 			result.push({
 				periode: period,
@@ -56,9 +56,9 @@ const processData = (data: any, type: any) => {
 		}
 	} else if (type === 'triwulan') {
 		for (const period in data.triwulan) {
-			const average_price_kebutuhan = parseFloat(data.bulanan[period]['kebutuhan']);
-			const average_price_ketersediaan = parseFloat(data.bulanan[period]['ketersediaan']);
-			const average_price_neraca = parseFloat(data.bulanan[period]['neraca']);
+			const average_price_kebutuhan = parseFloat(data.triwulan[period]['kebutuhan']);
+			const average_price_ketersediaan = parseFloat(data.triwulan[period]['ketersediaan']);
+			const average_price_neraca = parseFloat(data.triwulan[period]['neraca']);
 
 			result.push({
 				periode: period,
