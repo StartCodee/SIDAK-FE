@@ -129,11 +129,11 @@ const TableOne = () => {
 		// kabupaten_kota_masuk_name, kabupaten_kota_keluar_name, komoditas_name, jumlah_masuk_ton, jumlah_keluar_ton,
 		{
 			header: 'Kabupaten Masuk',
-			accessorKey: 'kabupaten_kota_masuk_name',
+			accessorKey: 'kabupaten_kota_masuk_id',
 		},
 		{
 			header: 'Kabupaten Keluar',
-			accessorKey: 'kabupaten_kota_keluar_name',
+			accessorKey: 'kabupaten_kota_keluar_id',
 		},
 		{
 			header: 'Komoditas',

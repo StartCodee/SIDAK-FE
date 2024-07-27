@@ -585,7 +585,7 @@ export default function Home() {
                                                         <Calendar
                                                             initialFocus
                                                             mode="range"
-                                                            defaultMonth={date?.from}
+                                                            defaultMonth={Date.now()}
                                                             selected={date}
                                                             onSelect={setDate}
                                                             numberOfMonths={2}

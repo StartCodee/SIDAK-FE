@@ -18,6 +18,7 @@ import {
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import TableTwo from "../Tables/TableTwo";
+import Link from "next/link";
 
 interface Dashboard {
 	totalCommodities: number;
@@ -124,9 +125,9 @@ const ECommerce: React.FC = () => {
 								/>
 							</div>
 							<div className="p-4">
-								<h1 className="text-2xl text-black font-bold ">{item.title}</h1>
+								<h1 className="text-2xl text-black font-bold line-clamp-2">{item.title}</h1>
 								<p className="text-[10px]">{item.date}</p>
-								<p className="mt-2">{item.content}</p>
+								<p className="mt-2 line-clamp-3">{item.content}</p>
 							</div>
 						</div>
 					))}
@@ -153,9 +154,10 @@ const ECommerce: React.FC = () => {
 						</div>
 					</div> */}
 					<div className="mt-4  flex justify-end">
-						<a className="hover:text-[#37B5FE]" href="">
-							Selengkapnya
-						</a>
+						<Link href='/admin/berita'>
+							<span className="text-primary">Lihat Semua</span>
+						</Link>
+
 					</div>
 				</div>
 			</div>

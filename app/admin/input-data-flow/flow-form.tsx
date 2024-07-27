@@ -66,6 +66,7 @@ import { Logout } from '@/lib/logout';
 interface Kabupaten {
 	id: number;
 	name: string;
+	cityIds: string;
 }
 
 interface Komoditas {
@@ -75,10 +76,10 @@ interface Komoditas {
 
 
 const formSchema = z.object({
-    kabupatenMasuk: z.number().min(2, {
+    kabupatenMasuk: z.string().min(2, {
         message: 'Kabupaten Masuk harus diisi',
     }),
-    kabupatenKeluar: z.number().min(2, {
+    kabupatenKeluar: z.string().min(2, {
         message: 'Kabupaten Keluar harus diisi',
     }),
     komoditas: z.string().min(2, {
@@ -158,8 +159,8 @@ export default function FLowForm(){
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            kabupatenMasuk: 0,
-            kabupatenKeluar: 0,
+            kabupatenMasuk: '',
+            kabupatenKeluar: '',
             komoditas: '',
             jumlahMasuk: '',
             jumlahKeluar: '',
@@ -248,7 +249,7 @@ export default function FLowForm(){
 															)}>
 															{field.value
 																? kabupatenData.find(
-																		(x) => x.id === field.value,
+																		(x) => x.cityIds === field.value,
 																  )?.name
 																: 'Pilih Kabupaten Masuk'}
 														</Button>
@@ -262,19 +263,19 @@ export default function FLowForm(){
 															<CommandGroup>
 																{kabupatenData.map((language) => (
 																	<CommandItem
-																		value={language.id.toString()}
+																		value={language.cityIds.toString()}
 																		key={language.id}
 																		onSelect={() => {
 																			form.setValue(
 																				'kabupatenMasuk',
-																				language.id,
+																				language.cityIds,
 																			);
 																			setOpen(false);
 																		}}>
 																		<Check
 																			className={cn(
 																				'mr-2 h-4 w-4',
-																				language.id === field.value
+																				language.cityIds === field.value
 																					? 'opacity-100'
 																					: 'opacity-0',
 																			)}
@@ -313,7 +314,7 @@ export default function FLowForm(){
 															)}>
 															{field.value
 																? kabupatenData.find(
-																		(x) => x.id === field.value,
+																		(x) => x.cityIds === field.value,
 																  )?.name
 																: 'Pilih Kabupaten Keluar'}
 														</Button>
@@ -332,14 +333,14 @@ export default function FLowForm(){
 																		onSelect={() => {
 																			form.setValue(
 																				'kabupatenKeluar',
-																				language.id,
+																				language.cityIds,
 																			);
 																			setOpenKeluar(false);
 																		}}>
 																		<Check
 																			className={cn(
 																				'mr-2 h-4 w-4',
-																				language.id === field.value
+																				language.cityIds === field.value
 																					? 'opacity-100'
 																					: 'opacity-0',
 																			)}
