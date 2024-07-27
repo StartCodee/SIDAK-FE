@@ -36,15 +36,7 @@ interface cardContents {
 
 export default function Home() {
 
-	const options = [
-		{ value: 'Beras', label: 'Beras' },
-		{ value: 'Bawang Merah', label: 'Bawang Merah' },
-		{ value: 'Bawang Putih', label: 'Bawang Putih' },
-		{ value: 'Cabai Merah', label: 'Cabai Merah' },
-		{ value: 'Cabai Rawit', label: 'Cabai Rawit' },
-		{ value: 'Daging Ayam', label: 'Daging Ayam' },
-		{ value: 'Telur Ayam', label: 'Telur Ayam' },
-	]
+	
 	const [selectedCommodity, setSelectedCommodity] = useState('');
 	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>([]);
 
@@ -119,6 +111,7 @@ export default function Home() {
 
 	const handleChangeMonth = () => {
 		try {
+			console.log(selectedCommodity);
 			getNeracaPangan(1, 2, format(selectedDate as Date, 'yyyy-MM'), selectedCommodity);
 		} catch (error) {
 		}
@@ -215,7 +208,7 @@ export default function Home() {
 					<Select
 						onChange={(option) => setSelectedCommodity(option!.value)}
 						className=" basic-single w-[170px] border-none"
-						options={options}
+						options={selectedCommodityOption}
 					/>
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
