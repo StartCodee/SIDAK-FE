@@ -76,13 +76,13 @@ export default function Home() {
     const [checkboxStateNeraca, setCheckboxStateNeraca] = useState<{ [key: string]: boolean }>({}); // Menggunakan index signature
 
     const [date, setDate] = React.useState<DateRange | undefined>({
-        from: new Date(2022, 0, 20),
-        to: addDays(new Date(2022, 0, 20), 20),
+        from: new Date(),
+        to: addDays(new Date(), 20),
     })
 
     const [dateNeraca, setDateNeraca] = React.useState<DateRange | undefined>({
-        from: new Date(2022, 0, 20),
-        to: addDays(new Date(2022, 0, 20), 20),
+        from: new Date(),
+        to: addDays(new Date(), 20),
     })
 
 
@@ -585,7 +585,7 @@ export default function Home() {
                                                         <Calendar
                                                             initialFocus
                                                             mode="range"
-                                                            defaultMonth={Date.now()}
+                                                            defaultMonth={date?.from}
                                                             selected={date}
                                                             onSelect={setDate}
                                                             numberOfMonths={2}
