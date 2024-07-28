@@ -59,236 +59,235 @@ const formSchema = z.object({
 	komoditas: z.number().min(2, {
 		message: 'Komoditas harus diisi',
 	}),
-    harga: z.string().min(2, {
-        message: 'Harga harus diisi',
-    }),
-    jumlah_kebutuhan: z.string().min(2, {
-        message: 'Jumlah Kebutuhan harus diisi',
-    }),
-    jumlah_ketersediaan: z.string().min(2, {
-        message: 'Jumlah Ketersediaan harus diisi',
-    }),
+	harga: z.string().min(2, {
+		message: 'Harga harus diisi',
+	}),
+	jumlah_kebutuhan: z.string().min(2, {
+		message: 'Jumlah Kebutuhan harus diisi',
+	}),
+	jumlah_ketersediaan: z.string().min(2, {
+		message: 'Jumlah Ketersediaan harus diisi',
+	}),
 	tanggal: z.string().min(2, {
 		message: 'Tanggal harus diisi',
 	}),
 });
 
 interface Kabupaten {
-    id: number;
-    name: string;
+	id: number;
+	name: string;
 }
 
 
 interface Kecamatan {
-    id: number;
-    name: string;
+	id: number;
+	name: string;
 }
 
 interface Komoditas {
-    id: number;
-    name: string;
+	id: number;
+	name: string;
 }
 
 
 export default function InputDataForm() {
 
-        const { toast } = useToast();
-        const router = useRouter();
-        const [kabupatenData, setKabupatenData] = useState<Kabupaten[]>([]);
-    	const [komoditasData, setKomoditasData] = useState<Komoditas[]>([]);
-        const [kecamatanData, setKecamatanData] = useState<Kecamatan[]>([]);
-        const [open, setOpen] = useState(false);
-        const [openKecamatan, setOpenKecamatan] = useState(false);
-        const [openKomoditas, setOpenKomoditas] = useState(false);
-		const [role, setRole] = useState('');
-		const [userKabupaten, setUserKabupaten] = useState<number>();
+	const { toast } = useToast();
+	const router = useRouter();
+	const [kabupatenData, setKabupatenData] = useState<Kabupaten[]>([]);
+	const [komoditasData, setKomoditasData] = useState<Komoditas[]>([]);
+	const [kecamatanData, setKecamatanData] = useState<Kecamatan[]>([]);
+	const [open, setOpen] = useState(false);
+	const [openKecamatan, setOpenKecamatan] = useState(false);
+	const [openKomoditas, setOpenKomoditas] = useState(false);
+	const [role, setRole] = useState('');
+	const [userKabupaten, setUserKabupaten] = useState<number>();
 
-		const getRole = () => {
-			axios
-				.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/auth/me`, {
-					headers: { Authorization: `Bearer ${Cookies.get('token')}` },
-				})
-				.then((res) => {
-					setRole(res.data.role);
-					setUserKabupaten(res.data.kabupaten_id);
-				})
-				.catch((err) => {
-					if (err.response && err.response.status === 401) {
-						toast({
-							variant: 'destructive',
-							title: 'Unauthorized',
-							description: 'You are not authorized to perform this action',
-						});
-						logout();
-					} else {
-						toast({
-							title: 'Gagal input data',
-							description: 'Data gagal diinput ke dalam database',
-							variant: 'destructive',
-						});
-					}
+	const getRole = () => {
+		axios
+			.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/auth/me`, {
+				headers: { Authorization: `Bearer ${Cookies.get('token')}` },
+			})
+			.then((res) => {
+				setRole(res.data.role);
+				setUserKabupaten(res.data.kabupaten_id);
+			})
+			.catch((err) => {
+				if (err.response && err.response.status === 401) {
+					toast({
+						variant: 'destructive',
+						title: 'Unauthorized',
+						description: 'You are not authorized to perform this action',
+					});
+					logout();
+				} else {
+					toast({
+						title: 'Gagal input data',
+						description: 'Data gagal diinput ke dalam database',
+						variant: 'destructive',
+					});
+				}
+			});
+	};
+
+	const getKabupaten = async () => {
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kabupaten`,
+				{
+					headers: AuthHeader(),
+
+				},
+			);
+			if (response.data.data) {
+				setKabupatenData(response.data.data);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Unauthorized',
+					text: 'Please login first',
 				});
-		};
+			}
+		}
+	};
 
-     const getKabupaten = async () => {
-				try {
-					const response = await axios.get(
-						`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kabupaten`,
-						{
-							headers: AuthHeader(),
-							
-						},
-					);
-					if (response.data.data) {
-						setKabupatenData(response.data.data);
-					}
-				} catch (error: any) {
-					if (error.response && error.response.status === 401) {
-						Swal.fire({
-							icon: 'error',
-							title: 'Unauthorized',
-							text: 'Please login first',
-						});
-					}
-				}
-			};
+	const getKecamatan = async (kabupaten_id = '') => {
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kecamatan?kabupaten_id=${kabupaten_id}`,
+				{
+					headers: AuthHeader(),
 
-     const getKecamatan = async () => {
-				try {
-					const response = await axios.get(
-						`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kecamatan`,
-						{
-							headers: AuthHeader(),
-							
-						},
-					);
-					if (response.data.data) {
-						setKecamatanData(response.data.data);
-					}
-				} catch (error: any) {
-					if (error.response && error.response.status === 401) {
-						Swal.fire({
-							icon: 'error',
-							title: 'Unauthorized',
-							text: 'Please login first',
-						});
-					}
-				}
-			};
+				},
+			);
+			if (response.data.data) {
+				setKecamatanData(response.data.data);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Unauthorized',
+					text: 'Please login first',
+				});
+			}
+		}
+	};
 
-			const getKomoditas = async () => {
-				try {
-					const response = await axios.get(
-						`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/commodities`,
-						{
-							headers: AuthHeader(),
-							
-						},
-					);
-					if (response.data.data) {
-						setKomoditasData(response.data.data);
-					}
-				} catch (error: any) {
-					if (error.response && error.response.status === 401) {
-						Swal.fire({
-							icon: 'error',
-							title: 'Unauthorized',
-							text: 'Please login first',
-						});
-					}
-				}
-			};
+	const getKomoditas = async () => {
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/commodities`,
+				{
+					headers: AuthHeader(),
 
-			useEffect(() => {
-				getKabupaten();
-                getKecamatan();
-				getKomoditas();
-				getRole();
+				},
+			);
+			if (response.data.data) {
+				setKomoditasData(response.data.data);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Unauthorized',
+					text: 'Please login first',
+				});
+			}
+		}
+	};
 
-				
-
-			}, []);
-
-			useEffect(() => {
-				if (userKabupaten) {
-					form.setValue('kabupaten', userKabupaten);
-				}
-			}, [userKabupaten]);
-
-        const form = useForm<z.infer<typeof formSchema>>({
-                resolver: zodResolver(formSchema),
-                defaultValues: {
-                    kabupaten: 0,
-                    kecamatan: 0,
-                    komoditas: 0,
-                    harga: '',
-                    jumlah_kebutuhan: '',
-                    jumlah_ketersediaan: '',
-                    tanggal: '',
-                },
-            });
+	useEffect(() => {
+		getKabupaten();
+		getKecamatan();
+		getKomoditas();
+		getRole();
 
 
- const logout = () => {
+
+	}, []);
+
+	useEffect(() => {
+		if (userKabupaten) {
+			form.setValue('kabupaten', userKabupaten);
+			getKecamatan(userKabupaten as unknown as string);
+
+		}
+	}, [userKabupaten]);
+
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			kabupaten: 0,
+			kecamatan: 0,
+			komoditas: 0,
+			harga: '',
+			jumlah_kebutuhan: '',
+			jumlah_ketersediaan: '',
+			tanggal: '',
+		},
+	});
+
+
+	const logout = () => {
 		Cookies.remove('token');
 		Cookies.remove('userEmail');
 		Cookies.remove('userName');
 		Cookies.remove('userId');
 		window.location.href = '/auth';
- };
+	};
 
 
-        function onSubmit(values: z.infer<typeof formSchema>) {
-            axios
-							.post(
-								`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/supply`,
-								{
-									kabupaten_kota_id: values.kabupaten,
-                                    kecamatan_id: values.kecamatan,
-                                    komoditas_id: values.komoditas,
-                                    harga: parseInt(values.harga),
-                                    jumlah_kebutuhan: parseInt(values.jumlah_kebutuhan),
-                                    jumlah_ketersediaan: parseInt(values.jumlah_ketersediaan),
-                                    tanggal: values.tanggal,
-								},
-								{
-									headers: {
-										Authorization: `Bearer ${Cookies.get('token')}`,
-										'Content-Type': 'application/json',
-									},
-								},
-							)
-							.then((res) => {
-								console.log(res);
-								if (res.status === 200) {
-									toast({
-										title: 'Berhasil input data',
-										description: 'Data berhasil diinput ke dalam database',
-										variant: 'success',
-									});
-                                    form.reset();
-									// setTimeout(() => {
-									// 	router.push('/admin/tabel-data');
-									// }, 2000);
-								}
-							})
-							.catch((err) => {
-                                if (err.response.status === 401) {
-									toast({
-											variant: 'destructive',
-											title: 'Unauthorized',
-											description:
-											'You are not authorized to perform this action',
-										});
-										logout();
-								}
-								toast({
-									title: 'Gagal input data',
-									description: 'Data gagal diinput ke dalam database',
-									variant: 'destructive',
-								});
-							});
-        }
+	function onSubmit(values: z.infer<typeof formSchema>) {
+		axios
+			.post(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/supply`,
+				{
+					kabupaten_kota_id: values.kabupaten,
+					kecamatan_id: values.kecamatan,
+					komoditas_id: values.komoditas,
+					harga: parseInt(values.harga),
+					jumlah_kebutuhan: parseInt(values.jumlah_kebutuhan),
+					jumlah_ketersediaan: parseInt(values.jumlah_ketersediaan),
+					tanggal: values.tanggal,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${Cookies.get('token')}`,
+						'Content-Type': 'application/json',
+					},
+				},
+			)
+			.then((res) => {
+				console.log(res);
+				if (res.status === 200) {
+					toast({
+						title: 'Berhasil input data',
+						description: 'Data berhasil diinput ke dalam database',
+						variant: 'success',
+					});
+					form.reset();
+				}
+			})
+			.catch((err) => {
+				if (err.response.status === 401) {
+					toast({
+						variant: 'destructive',
+						title: 'Unauthorized',
+						description:
+							'You are not authorized to perform this action',
+					});
+					logout();
+				}
+				toast({
+					title: 'Gagal input data',
+					description: 'Data gagal diinput ke dalam database',
+					variant: 'destructive',
+				});
+			});
+	}
 
 	return (
 		<>
@@ -310,12 +309,13 @@ export default function InputDataForm() {
 													<Button
 														variant="outline"
 														role="combobox"
+														disabled={role == 'KABUPATEN' ? true : false}
 														className={cn(
 															'w-[22rem] justify-between',
 															!field.value && 'text-muted-foreground',
 														)}>
 														{field.value
-															? kabupatenData.find((x:Kabupaten) => x.id === field.value) ?.name
+															? kabupatenData.find((x: Kabupaten) => x.id === field.value)?.name
 															: 'Pilih Kabupaten Masuk'}
 													</Button>
 												</FormControl>
@@ -332,7 +332,7 @@ export default function InputDataForm() {
 																	key={kab.id}
 																	onSelect={() => {
 																		form.setValue('kabupaten', kab.id);
-                                                                        setOpen(false)
+																		setOpen(false)
 																	}}>
 																	<Check
 																		className={cn(
@@ -374,7 +374,7 @@ export default function InputDataForm() {
 														)}>
 														{field.value
 															? kecamatanData.find((x: Kecamatan) => x.id === field.value)
-																	?.name
+																?.name
 															: 'Pilih Kecamatan'}
 													</Button>
 												</FormControl>
@@ -391,7 +391,7 @@ export default function InputDataForm() {
 																	key={kec.id}
 																	onSelect={() => {
 																		form.setValue('kecamatan', kec.id);
-                                                                        setOpenKecamatan(false)
+																		setOpenKecamatan(false)
 																	}}>
 																	<Check
 																		className={cn(
@@ -433,7 +433,7 @@ export default function InputDataForm() {
 														)}>
 														{field.value
 															? komoditasData.find((x: Komoditas) => x.id === field.value)
-																	?.name
+																?.name
 															: 'Pilih Komoditas'}
 													</Button>
 												</FormControl>
@@ -450,7 +450,7 @@ export default function InputDataForm() {
 																	key={komod.id}
 																	onSelect={() => {
 																		form.setValue('komoditas', komod.id);
-                                                                        setOpenKomoditas(false)
+																		setOpenKomoditas(false)
 																	}}>
 																	<Check
 																		className={cn(

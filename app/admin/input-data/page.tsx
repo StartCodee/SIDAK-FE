@@ -17,7 +17,7 @@ export default function Home() {
 
                 <div className="w-full rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
                     <h1 className="text-2xl font-bold">Informasi Umum</h1>
-                   <InputDataForm />
+                    <InputDataForm />
                 </div>
 
             </DefaultLayout>

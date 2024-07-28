@@ -129,28 +129,6 @@ const ECommerce: React.FC = () => {
 							</div>
 						</div>
 					))}
-					{/* <div className="w-full rounded-xl border border-stroke bg-white shadow-default">
-						<Image src={newsImg} className="rounded-t-xl" alt="news" />
-						<div className="p-4">
-							<h1 className="text-2xl text-black font-bold ">Lorem</h1>
-							<p className="text-[10px]">10-12-2004</p>
-							<p className="mt-2">
-								Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nisi,
-								nihil?
-							</p>
-						</div>
-					</div>
-					<div className="w-full rounded-xl border mt-7 border-stroke bg-white shadow-default">
-						<Image src={newsImg} className="rounded-t-xl" alt="news" />
-						<div className="p-4">
-							<h1 className="text-2xl text-black font-bold ">Lorem</h1>
-							<p className="text-[10px]">10-12-2004</p>
-							<p className="mt-2">
-								Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nisi,
-								nihil?
-							</p>
-						</div>
-					</div> */}
 					<div className="mt-4  flex justify-end">
 						<Link href="/admin/berita">
 							<span className="text-primary">Lihat Semua</span>

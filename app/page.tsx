@@ -130,7 +130,7 @@ export default function Home() {
 			const detail = hargaKonsumen.find((item) => item.city === el && item.item === komoditas);
 			setDetailHargaKonsumen(detail);
 			let val = format(new Date(), 'yyyy-MM');
-			
+
 			getDetailSupply(1, 2, val, detail?.komoditas_id, detail?.kabupaten_kota_id);
 			setIsDialogOpen(true);
 		}

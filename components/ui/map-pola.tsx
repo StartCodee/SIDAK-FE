@@ -521,7 +521,7 @@ export default function MapPola({ flow }: MapProps) {
 									tanggal 15 April 2024
 								</Badge>
 							</div>
-							<TabsList className="rounded-full  w-max p-4 py-6 w-max text-black">
+							<TabsList className="rounded-full  p-4 py-6 w-max text-black">
 							<div
 								onClick={() => {
 									changeTab('all');

@@ -25,6 +25,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { useToast } from '@/components/ui/use-toast';
+
 import {
     Table,
     TableBody,
@@ -38,6 +40,7 @@ import Breadcrumb from "@/components/admin/Breadcrumbs/Breadcrumb";
 import { useState, useEffect } from "react";
 
 import CheckboxOne from "@/components/admin/Checkboxes/CheckboxOne";
+import Cookies from 'js-cookie';
 
 import { addDays, format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
@@ -72,6 +75,8 @@ type ShowHeaderKeys = 'kebutuhan' | 'ketersediaan' | 'defisit';
 
 export default function Home() {
 
+    const { toast } = useToast();
+
     const [checkboxState, setCheckboxState] = useState<{ [key: string]: boolean }>({}); // Menggunakan index signature
     const [checkboxStateNeraca, setCheckboxStateNeraca] = useState<{ [key: string]: boolean }>({}); // Menggunakan index signature
 
@@ -85,14 +90,11 @@ export default function Home() {
         to: addDays(new Date(), 20),
     })
 
-
     const [dateRange, setDateRange] = useState([null, null]);
     const [startDate, endDate] = dateRange;
 
-
     const [selectedKabupaten, setSelectedKabupaten] = useState('');
     const [selectedKecamatan, setSelectedKecamatan] = useState('');
-
 
     const [columns, setColumns] = useState<ColumnDef<Commodity>[]>([]);
     const [columnsNeraca, setColumnsNeraca] = useState<ColumnDef<CommodityNeraca>[]>([]);
@@ -106,7 +108,6 @@ export default function Home() {
     const [selectedKecamatanOption, setSelectedKecamatanOption] = useState<any[]>([]);
     const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>([]);
 
-
     const [selectedKabupatenOptionNeraca, setSelectedKabupatenOptionNeraca] = useState<any[]>([]);
     const [selectedKecamatanOptionNeraca, setSelectedKecamatanOptionNeraca] = useState<any[]>([]);
     const [selectedCommodityOptionNeraca, setSelectedCommodityOptionNeraca] = useState<any[]>([]);
@@ -114,6 +115,8 @@ export default function Home() {
     const [selectedKabupatenNeraca, setSelectedKabupatenNeraca] = useState('');
     const [selectedKecamatanNeraca, setSelectedKecamatanNeraca] = useState('');
 
+    const [role, setRole] = useState('');
+    const [userKabupaten, setUserKabupaten] = useState<number>();
 
     const [showHeader, setShowHeader] = useState<{
         kebutuhan: boolean;
@@ -470,13 +473,57 @@ export default function Home() {
             getNeracaPanganData(1, 2, start_date as any, end_date as any, checkedKeys, selectedKabupatenNeraca, selectedKecamatanNeraca);
         }
     }
+
+    const logout = () => {
+        Cookies.remove('token');
+        Cookies.remove('userEmail');
+        Cookies.remove('userName');
+        Cookies.remove('userId');
+        window.location.href = '/auth';
+    };
+
+    const getRole = () => {
+        axios
+            .get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/auth/me`, {
+                headers: { Authorization: `Bearer ${Cookies.get('token')}` },
+            })
+            .then((res) => {
+                setRole(res.data.role);
+                setUserKabupaten(res.data.kabupaten_id);
+            })
+            .catch((err) => {
+                if (err.response && err.response.status === 401) {
+                    toast({
+                        variant: 'destructive',
+                        title: 'Unauthorized',
+                        description: 'You are not authorized to perform this action',
+                    });
+                    logout();
+                } else {
+                    toast({
+                        title: 'Gagal input data',
+                        description: 'Data gagal diinput ke dalam database',
+                        variant: 'destructive',
+                    });
+                }
+            });
+    };
+
     useEffect(() => {
         getHargaPanganData(1, 10, '', '', '', '', '');
         getNeracaPanganData(1, 10, '', '', '', '', '');
         getKabupatenOption();
         getCommodityOption();
+        getRole();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        if (userKabupaten) {
+            getKecamatanOption(1, 1, userKabupaten as unknown as string);
+
+        }
+    }, [userKabupaten]);
     return (
         <>
             <DefaultLayout>
@@ -525,13 +572,16 @@ export default function Home() {
                                                     getKecamatanOption(1, 2, e.target.value)
                                                     setSelectedKabupaten((e.target as HTMLSelectElement).value)
                                                 }}
+                                                disabled={role == 'KABUPATEN' ? true : false}
                                                 id="location"
                                                 name="location"
-                                                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                className={`mt-2 block w-full ${role == 'KABUPATEN' ? 'bg-gray' : ''} rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6`}
                                             >
                                                 <option>Kabupaten/Kota</option>
                                                 {selectedKabupatenOption.map((option) => (
-                                                    <option key={option.value} value={option.value}>{option.label}</option>
+                                                    <option key={option.value}
+                                                        selected={option.value == userKabupaten ? true : false}
+                                                        value={option.value}>{option.label}</option>
                                                 ))}
                                             </select>
                                         </div>
@@ -614,7 +664,7 @@ export default function Home() {
                                     role="tabpanel"
                                     aria-labelledby="dashboard-tab"
                                 >
-                                    <div className=" bg-white rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
+                                    <div className="  rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
                                         <div>
                                             <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
                                                 Kabupaten/Kota
@@ -626,11 +676,14 @@ export default function Home() {
                                                     getKecamatanOptionNeraca(1, 2, e.target.value)
                                                     setSelectedKabupatenNeraca((e.target as HTMLSelectElement).value)
                                                 }}
-                                                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                disabled={role == 'KABUPATEN' ? true : false}
+                                                className={`mt-2 block w-full ${role == 'KABUPATEN' ? 'bg-gray' : ''} rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6`}
                                             >
                                                 <option>Kabupaten/Kota</option>
                                                 {selectedKabupatenOption.map((option) => (
-                                                    <option key={option.value} value={option.value}>{option.label}</option>
+                                                    <option key={option.value}
+                                                        selected={option.value == userKabupaten ? true : false}
+                                                        value={option.value}>{option.label}</option>
                                                 ))}
                                             </select>
                                         </div>
