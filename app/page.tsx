@@ -87,7 +87,7 @@ export default function Home() {
 
 	const getDetailSupply = async (page: number = 1, limit: number = 2, date: string, komoditas: string, kota: string) => {
 		try {
-			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/detail-data?date=${date}komoditas=${komoditas}&kabupaten_kota_id=${kota}`, {
+			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/detail-data?date=${date}&komoditas=${komoditas}&kabupaten_kota_id=${kota}`, {
 				headers: {
 					'content-type': 'application/json',
 					'Authorization': `Bearer ${localStorage.getItem('token')}`,
