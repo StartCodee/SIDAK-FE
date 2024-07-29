@@ -515,7 +515,6 @@ export default function Home() {
         getKabupatenOption();
         getCommodityOption();
         getRole();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {

@@ -256,7 +256,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
 	useEffect(() => {
 		getRole();
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
