@@ -8,6 +8,7 @@ import user from '@/public/userr.png';
 import Background from '@/public/bgg.png';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
+import ResetForm from './reset-form';
 
 export default function Home() {
 	const [username, setUsername] = useState('');
@@ -127,42 +128,7 @@ export default function Home() {
 												Change Password
 											</h2>
 										</div>
-										<div className="p-6.5 w-10/12 mx-auto">
-											<form >
-												<div className="mb-4.5 text-left">
-													<label className="mb-1 text-sm  font-medium text-black dark:text-white">
-														Current Password
-													</label>
-													<input
-														type="password"
-														className="text-base mt-3  text-gray-600 dark:text-gray-300 w-full"
-													/>
-												</div>
-												<div className="mb-4.5 text-left">
-													<label className="mb-1 text-sm  font-medium text-black dark:text-white">
-														New Password
-													</label>
-													<input
-														type="password"
-														className="text-base mt-3 text-gray-600 dark:text-gray-300 w-full"
-													/>
-												</div>
-												<div className="mb-4.5 text-left">
-													<label className="mb-1 text-sm  font-medium text-black dark:text-white">
-														Confirm New Password
-													</label>
-													<input
-														type="password"
-														className="text-base mt-3 text-gray-600 dark:text-gray-300 w-full"
-													/>
-												</div>
-												<button
-													type="submit"
-													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-													Change Password
-												</button>
-											</form>
-										</div>
+										<ResetForm />
 									</div>
 								</div>
 							</div>
