@@ -13,54 +13,7 @@ import { useEffect } from 'react';
 
 export default function Kontak() {
 
-	useEffect(() => {
-		// Function to register the service worker for notifications
-		const registerForNotifications = () => {
-			if ('serviceWorker' in navigator && 'PushManager' in window) {
-				navigator.serviceWorker.register('/sw.js').then(swReg => {
-					console.log('Service Worker Registered', swReg);
-
-					// Request permission for notifications
-					Notification.requestPermission().then(permission => {
-						if (permission === 'granted') {
-							swReg.pushManager.subscribe({
-								userVisibleOnly: true,
-								applicationServerKey: 'BBJGBkTHwxZ8NcKSB7bncu-Iy1uNCTSuBktlRCjp590tXa6ILiLuNmRd8upC38dblCwH-fDrIpD14CgxsLdQ3Lk',
-							}).then(subscription => {
-								fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/subscribe`, {
-									method: 'POST',
-									headers: {
-										'Content-Type': 'application/json',
-									},
-									body: JSON.stringify(subscription),
-								}).then(response => response.json()).then(data => {
-									console.log(data.message);
-								});
-							});
-						}
-					});
-				});
-			}
-		};
-
-		// Handle admin registration form submission
-		const handleAdminRegister = (event: any) => {
-			event.preventDefault();
-			registerForNotifications();
-		};
-
-		// Add event listener to admin register form
-		const adminRegisterForm = document.getElementById('adminRegisterForm');
-		if (adminRegisterForm) {
-			adminRegisterForm.addEventListener('submit', handleAdminRegister);
-		}
-
-		return () => {
-			if (adminRegisterForm) {
-				adminRegisterForm.removeEventListener('submit', handleAdminRegister);
-			}
-		};
-	}, []);
+	
 
 	// Handle contact form submission
 	const handleContactSubmit = (event: any) => {
@@ -179,10 +132,7 @@ export default function Kontak() {
 					</div>
 				</div>
 			</div>
-			<form id="adminRegisterForm">
-				<input type="email" name="adminEmail" placeholder="Admin Email" required />
-				<button type="submit">Register for Notifications</button>
-			</form>
+			
 
 			<Footer />
 
