@@ -221,7 +221,7 @@ const menuGroups = [
 						/>
 					</svg>
 				),
-				label: 'Data Contact',
+				label: 'Data Contacts',
 				route: '/admin/contact',
 			},
 		],
