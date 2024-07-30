@@ -70,7 +70,6 @@ const menuGroups = [
 				label: 'Input Data',
 				route: '/admin/input-data',
 			},
-
 			{
 				icon: (
 					<svg
@@ -147,7 +146,6 @@ const menuGroups = [
 				label: 'Data Kecamatan',
 				route: '/admin/kecamatan',
 			},
-
 			{
 				icon: (
 					<svg
