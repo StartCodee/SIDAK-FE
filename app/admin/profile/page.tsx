@@ -130,7 +130,7 @@ export default function Home() {
 											height: 'auto',
 										}}
 										alt="profile"
-										className="rounded-full"
+										className="rounded-full s"
 									/>
 									{/* <label
 										htmlFor="profile"
