@@ -365,6 +365,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 									{group.menuItems.map((menuItem, menuIndex) => {
 										const restrictedRoutes = [
 											'#',
+											'/admin/kabupaten',
+											'/admin/contact',
+											'/admin/user',
+											'/admin/kecamatan',
+											'/admin/pasar',
+											'/admin/berita',
 										];
 										if (role === 'KABUPATEN' && restrictedRoutes.includes(menuItem.route)) {
 											return null; // Skip rendering this item
