@@ -36,10 +36,10 @@ interface cardContents {
 }
 
 export default function Home() {
-
-	
 	const [selectedCommodity, setSelectedCommodity] = useState('');
-	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>([]);
+	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>(
+		[],
+	);
 
 	const [detailHarga, setDetailHarga] = useState<any>();
 	const [selectedDate, setSelectedDate] = React.useState<Date>();
@@ -57,7 +57,7 @@ export default function Home() {
 	};
 
 	const showCardArea = (id: string) => {
-		console.log(id)
+		console.log(id);
 		const content = cardContents.find((card) => card.id === id);
 		const path = document.getElementById(id);
 		const pathRect = path ? path.getBoundingClientRect() : null;
@@ -70,7 +70,9 @@ export default function Home() {
 		card.style.top = `${pathTop}px`;
 		card.style.left = `${pathLeft}px`;
 		card.innerHTML = `
-                    <div class="h-full w-20  rounded-md text-white mr-4 flex-shrink-0 bg-[${content?.color}]">
+                    <div class="h-full w-20  rounded-md text-white mr-4 flex-shrink-0 bg-[${
+											content?.color
+										}]">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-20 mx-auto mt-0">
                         <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd"/>
                         </svg>
@@ -81,11 +83,19 @@ export default function Home() {
                         <tbody class="text-sm">
                             <tr>
                             <td class="pr-2">Ketersediaan:</td>
-                            <td class="text-right">${Math.round(content?.ketersediaan as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+                            <td class="text-right">${Math.round(
+															content?.ketersediaan as any,
+														)
+															.toString()
+															.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
                             </tr>
                             <tr>
                             <td class="pr-2">Kebutuhan:</td>
-                            <td class="text-right">${Math.round(content?.kebutuhan as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+                            <td class="text-right">${Math.round(
+															content?.kebutuhan as any,
+														)
+															.toString()
+															.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
                             </tr>
                             <tr>
                             <td colspan="2">
@@ -94,7 +104,11 @@ export default function Home() {
                             </tr>
                             <tr class="font-bold">
                             <td class="pr-2">Neraca Pangan:</td>
-                            <td class="text-right">${Math.round(content?.neraca as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+                            <td class="text-right">${Math.round(
+															content?.neraca as any,
+														)
+															.toString()
+															.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
                             </tr>
                         </tbody>
                         </table>
@@ -102,37 +116,49 @@ export default function Home() {
                     `;
 		console.log(card);
 		document.body.appendChild(card);
-	}
+	};
 
 	const hideCardArea = (id: string) => {
 		const card = document.getElementById('card-' + id);
 		if (card) {
 			card.remove();
 		}
-	}
+	};
 
 	const handleChangeMonth = () => {
 		try {
 			console.log(selectedCommodity);
-			getNeracaPangan(1, 2, format(selectedDate as Date, 'yyyy-MM'), selectedCommodity);
-		} catch (error) {
-		}
-	}
+			getNeracaPangan(
+				1,
+				2,
+				format(selectedDate as Date, 'yyyy-MM'),
+				selectedCommodity,
+			);
+		} catch (error) {}
+	};
 
 	const getColorByCity = (cityName: string) => {
-		const cityData = cardContents.find(item => item.id === cityName);
+		const cityData = cardContents.find((item) => item.id === cityName);
 		console.log(cityData, cityName);
 		return cityData ? cityData.color : undefined;
-	}
+	};
 
-	const getNeracaPangan = async (page: number = 1, limit: number = 2, date: string, komoditas: string) => {
+	const getNeracaPangan = async (
+		page: number = 1,
+		limit: number = 2,
+		date: string,
+		komoditas: string,
+	) => {
 		try {
-			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/harga-pasokan?date=${date}&komoditas=${komoditas}`, {
-				headers: {
-					'content-type': 'application/json',
-					'Authorization': `Bearer ${localStorage.getItem('token')}`,
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/harga-pasokan?date=${date}&komoditas=${komoditas}`,
+				{
+					headers: {
+						'content-type': 'application/json',
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
+					},
 				},
-			});
+			);
 			if (response.data.data) {
 				setCardContents(response.data.data);
 				setLoading(false);
@@ -143,7 +169,7 @@ export default function Home() {
 					icon: 'error',
 					title: error.response.data.message,
 					showConfirmButton: false,
-					timer: 1500
+					timer: 1500,
 				});
 			} else {
 				Swal.fire({
@@ -151,7 +177,7 @@ export default function Home() {
 					title: 'error terjadi',
 					text: 'mohon coba lagi nanti.',
 					showConfirmButton: false,
-					timer: 1500
+					timer: 1500,
 				});
 			}
 		}
@@ -159,17 +185,22 @@ export default function Home() {
 
 	const getCommodityOption = async (page: number = 1, limit: number = 2) => {
 		try {
-			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/commodities`, {
-				headers: {
-					'content-type': 'application/json',
-					'Authorization': `Bearer ${localStorage.getItem('token')}`,
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/commodities`,
+				{
+					headers: {
+						'content-type': 'application/json',
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
+					},
 				},
-			});
+			);
 			if (response.data.data) {
-				const mappedOptions = response.data.data.map((kabupaten: { name: string, id: number }) => ({
-					value: kabupaten.id,
-					label: kabupaten.name,
-				}));
+				const mappedOptions = response.data.data.map(
+					(kabupaten: { name: string; id: number }) => ({
+						value: kabupaten.id,
+						label: kabupaten.name,
+					}),
+				);
 				setSelectedCommodityOption(mappedOptions);
 			}
 		} catch (error: any) {
@@ -178,7 +209,7 @@ export default function Home() {
 					icon: 'error',
 					title: error.response.data.message,
 					showConfirmButton: false,
-					timer: 1500
+					timer: 1500,
 				});
 			} else {
 				Swal.fire({
@@ -186,7 +217,7 @@ export default function Home() {
 					title: 'error terjadi',
 					text: 'mohon coba lagi nanti.',
 					showConfirmButton: false,
-					timer: 1500
+					timer: 1500,
 				});
 			}
 		}
@@ -196,8 +227,7 @@ export default function Home() {
 		getNeracaPangan(1, 2, '2024-06', '18');
 		console.log(cardContents);
 		getCommodityOption();
-	}, []);
-
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<main>
