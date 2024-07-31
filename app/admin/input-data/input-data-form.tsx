@@ -91,7 +91,6 @@ interface Komoditas {
 
 
 export default function InputDataForm() {
-
 	const { toast } = useToast();
 	const router = useRouter();
 	const [kabupatenData, setKabupatenData] = useState<Kabupaten[]>([]);
@@ -136,7 +135,6 @@ export default function InputDataForm() {
 				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kabupaten`,
 				{
 					headers: AuthHeader(),
-
 				},
 			);
 			if (response.data.data) {
@@ -159,7 +157,6 @@ export default function InputDataForm() {
 				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kecamatan?kabupaten_id=${kabupaten_id}`,
 				{
 					headers: AuthHeader(),
-
 				},
 			);
 			if (response.data.data) {
@@ -182,7 +179,6 @@ export default function InputDataForm() {
 				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/commodities`,
 				{
 					headers: AuthHeader(),
-
 				},
 			);
 			if (response.data.data) {
@@ -204,16 +200,12 @@ export default function InputDataForm() {
 		getKecamatan();
 		getKomoditas();
 		getRole();
-
-
-
-	}, []);
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	useEffect(() => {
 		if (userKabupaten) {
 			form.setValue('kabupaten', userKabupaten);
 			getKecamatan(userKabupaten as unknown as string);
-
 		}
 	}, [userKabupaten]);
 
@@ -230,7 +222,6 @@ export default function InputDataForm() {
 		},
 	});
 
-
 	const logout = () => {
 		Cookies.remove('token');
 		Cookies.remove('userEmail');
@@ -238,7 +229,6 @@ export default function InputDataForm() {
 		Cookies.remove('userId');
 		window.location.href = '/auth';
 	};
-
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		axios
@@ -276,8 +266,7 @@ export default function InputDataForm() {
 					toast({
 						variant: 'destructive',
 						title: 'Unauthorized',
-						description:
-							'You are not authorized to perform this action',
+						description: 'You are not authorized to perform this action',
 					});
 					logout();
 				}
@@ -315,7 +304,9 @@ export default function InputDataForm() {
 															!field.value && 'text-muted-foreground',
 														)}>
 														{field.value
-															? kabupatenData.find((x: Kabupaten) => x.id === field.value)?.name
+															? kabupatenData.find(
+																	(x: Kabupaten) => x.id === field.value,
+															  )?.name
 															: 'Pilih Kabupaten Masuk'}
 													</Button>
 												</FormControl>
@@ -332,7 +323,7 @@ export default function InputDataForm() {
 																	key={kab.id}
 																	onSelect={() => {
 																		form.setValue('kabupaten', kab.id);
-																		setOpen(false)
+																		setOpen(false);
 																	}}>
 																	<Check
 																		className={cn(
@@ -362,7 +353,9 @@ export default function InputDataForm() {
 								render={({ field }) => (
 									<FormItem className="flex flex-col">
 										<FormLabel>Kecamatan </FormLabel>
-										<Popover open={openKecamatan} onOpenChange={setOpenKecamatan}>
+										<Popover
+											open={openKecamatan}
+											onOpenChange={setOpenKecamatan}>
 											<PopoverTrigger asChild>
 												<FormControl>
 													<Button
@@ -373,8 +366,9 @@ export default function InputDataForm() {
 															!field.value && 'text-muted-foreground',
 														)}>
 														{field.value
-															? kecamatanData.find((x: Kecamatan) => x.id === field.value)
-																?.name
+															? kecamatanData.find(
+																	(x: Kecamatan) => x.id === field.value,
+															  )?.name
 															: 'Pilih Kecamatan'}
 													</Button>
 												</FormControl>
@@ -391,7 +385,7 @@ export default function InputDataForm() {
 																	key={kec.id}
 																	onSelect={() => {
 																		form.setValue('kecamatan', kec.id);
-																		setOpenKecamatan(false)
+																		setOpenKecamatan(false);
 																	}}>
 																	<Check
 																		className={cn(
@@ -421,7 +415,9 @@ export default function InputDataForm() {
 								render={({ field }) => (
 									<FormItem className="flex flex-col">
 										<FormLabel>Komoditas </FormLabel>
-										<Popover open={openKomoditas} onOpenChange={setOpenKomoditas}>
+										<Popover
+											open={openKomoditas}
+											onOpenChange={setOpenKomoditas}>
 											<PopoverTrigger asChild>
 												<FormControl>
 													<Button
@@ -432,8 +428,9 @@ export default function InputDataForm() {
 															!field.value && 'text-muted-foreground',
 														)}>
 														{field.value
-															? komoditasData.find((x: Komoditas) => x.id === field.value)
-																?.name
+															? komoditasData.find(
+																	(x: Komoditas) => x.id === field.value,
+															  )?.name
 															: 'Pilih Komoditas'}
 													</Button>
 												</FormControl>
@@ -450,7 +447,7 @@ export default function InputDataForm() {
 																	key={komod.id}
 																	onSelect={() => {
 																		form.setValue('komoditas', komod.id);
-																		setOpenKomoditas(false)
+																		setOpenKomoditas(false);
 																	}}>
 																	<Check
 																		className={cn(

@@ -438,7 +438,7 @@ export default function Home() {
         getPasar();
         console.log(kecamatanData);
         getKabupaten();
-    }, []);
+    },  []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>

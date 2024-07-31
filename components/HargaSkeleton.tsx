@@ -5,7 +5,7 @@ function HargaSkeleton() {
   return (
 		<>
 			{arr.map((_, index) => (
-				<Card className="flex rounded-2xl px-6 py-4 space-x-4 w-[350px]  justify-between placeholder-sky-400 ">
+				<Card key={index} className="flex rounded-2xl px-6 py-4 space-x-4 w-[350px]  justify-between placeholder-sky-400 ">
 					<div style={{ flex: 2 }}>
 						<Skeleton className="h-8 w-8 rounded-full" />
 					</div>
