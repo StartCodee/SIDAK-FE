@@ -16,12 +16,16 @@ import Footer from '@/components/ui/footer';
 import Hero from '@/components/ui/hero';
 import Map from '@/components/ui/map';
 import Select from 'react-select';
-import { format } from 'date-fns';
+import { format, set } from 'date-fns';
 import Swal from "sweetalert2";
 import Image from 'next/image';
 import Link from 'next/link';
 import axios from "axios";
 import React from 'react';
+import { SkeletonCard } from '@/components/SkeletonCard';
+import BeritaSkeleton from '@/components/BeritaSkeleton';
+import KomoditasSkeleton from '@/components/KomoditasSkeleton';
+import HargaSkeleton from '@/components/HargaSkeleton';
 
 interface cardContents {
 	city: string;
@@ -67,6 +71,7 @@ export default function Home() {
 	const [selectedOption, setSelectedOption] = useState<any[]>([]);
 
 	const [cardContents, setCardContents] = useState<cardContents[]>([]);
+	const [loadingCard, setLoadingCard] = useState(true);
 
 	const [hargaKonsumen, setHargaKonsumen] = useState<any[]>([]);
 
@@ -83,6 +88,8 @@ export default function Home() {
 		totalUser: 0,
 	});
 	const [beritaData, setBeritaData] = useState<any[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [loadingKomoditas, setLoadingKomoditas] = useState(true);
 
 
 	const getDetailSupply = async (page: number = 1, limit: number = 2, date: string, komoditas: string, kota: string) => {
@@ -190,6 +197,7 @@ export default function Home() {
 			});
 			if (response.data.data) {
 				setCardContents(response.data.data);
+				setLoadingCard(false);
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
@@ -384,6 +392,7 @@ export default function Home() {
 			});
 			if (response.data.data) {
 				setBeritaData(response.data.data);
+				setLoading(false);
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
@@ -415,6 +424,8 @@ export default function Home() {
 			});
 			if (response.data.data) {
 				setHargaKonsumen(response.data.data);
+				setLoadingKomoditas(false);
+
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
@@ -488,7 +499,8 @@ export default function Home() {
 								PETA PERUBAHAN HARGA
 							</h1>
 							<Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
-								<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal {formattedDate}
+								<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal{' '}
+								{formattedDate}
 							</Badge>
 						</div>
 						<div></div>
@@ -498,32 +510,40 @@ export default function Home() {
 							<Map cardContents={cardContents} />
 						</div>
 						<div className="lg:flex-col  flex-col self-center flex flex-wrap gap-4 lg:self-start">
-							{cardContents.slice(0, 5).map((content, index) => (
-								<Card
-									key={index}
-									className="flex rounded-2xl px-6 py-4 space-x-4 w-[350px]  justify-between placeholder-sky-400 ">
-									<div style={{ flex: 2 }}>
-										<h1 className="text-xs">{content.city}</h1>
-										<p className="text-2xl font-bold">Rp {Math.round(content?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}/Kg</p>
-									</div>
-									<div style={{ flex: 1 }} className="flex justify-end">
-										<div
-											className={`rounded-md p-0 px-2 m-0 font-bold text-[12px] items-center flex text-white`}
-											style={{ background: content.color }}>
-											{content.color === '#bf7070' ? (
-												<ArrowUpIcon width={20} height={20} />
-											) : content.color === '#f1be5b' ? (
-												<ArrowDownIcon width={20} height={20} />
-											) : (
-												<SymbolIcon width={20} height={20} />
-											)}
-											<span className="ml-1">
-												{content.change}
-											</span>
+							{loadingCard ? (
+								<HargaSkeleton />
+							) : (
+								cardContents.slice(0, 5).map((content, index) => (
+									<Card
+										key={index}
+										className="flex rounded-2xl px-6 py-4 space-x-4 w-[350px]  justify-between placeholder-sky-400 ">
+										<div style={{ flex: 2 }}>
+											<h1 className="text-xs">{content.city}</h1>
+											<p className="text-2xl font-bold">
+												Rp{' '}
+												{Math.round(content?.price as any)
+													.toString()
+													.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+												/Kg
+											</p>
 										</div>
-									</div>
-								</Card>
-							))}
+										<div style={{ flex: 1 }} className="flex justify-end">
+											<div
+												className={`rounded-md p-0 px-2 m-0 font-bold text-[12px] items-center flex text-white`}
+												style={{ background: content.color }}>
+												{content.color === '#bf7070' ? (
+													<ArrowUpIcon width={20} height={20} />
+												) : content.color === '#f1be5b' ? (
+													<ArrowDownIcon width={20} height={20} />
+												) : (
+													<SymbolIcon width={20} height={20} />
+												)}
+												<span className="ml-1">{content.change}</span>
+											</div>
+										</div>
+									</Card>
+								))
+							)}
 							<Link href="/harga-pangan" className="self-start sm:self-end">
 								<p className="text-xs sm:text-sm self-end md:text-md text-blue-900 font-bold flex items-center">
 									Data Selengkapnya
@@ -579,7 +599,10 @@ export default function Home() {
 					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm mb-1 ">Bulan</h1>
-						<MonthPicker date={selectedDateKonsumen} setDate={setSelectedDateKonsumen} />
+						<MonthPicker
+							date={selectedDateKonsumen}
+							setDate={setSelectedDateKonsumen}
+						/>
 					</div>
 					<Button
 						onClick={handleChangeMonthKonsumen}
@@ -597,49 +620,64 @@ export default function Home() {
 					</h1>
 					<center>
 						<div className="flex lg:justify-center justify-center items-start self-center  flex-wrap gap-10 ">
-							{hargaKonsumen.map((content, index) => (
-								<Card
-									onClick={() => {
-										openDialog(content.city, content.item);
-									}}
-									key={index}
-									className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl cursor-pointer">
-									<div className="flex items-center space-x-4">
-										<div>
-											<Image
-												src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${content.image}`}
-												alt="user"
-												width={50}
-												height={50}
-												className="rounded-full"
-											/>
+							{loadingKomoditas ? (
+								<KomoditasSkeleton />
+							) : (
+								hargaKonsumen.map((content, index) => (
+									<Card
+										onClick={() => {
+											openDialog(content.city, content.item);
+										}}
+										key={index}
+										className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl cursor-pointer">
+										<div className="flex items-center space-x-4">
+											<div>
+												<Image
+													src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${content.image}`}
+													alt="user"
+													width={50}
+													height={50}
+													className="rounded-full"
+												/>
+											</div>
+											<div className="">
+												<h1 className="ms-2 text-left font-bold text-lg">
+													{content.item.split(' ')[0]}
+												</h1>
+												<p className="text-left ms-2">
+													{content.item.split(' ').slice(1).join(' ')}
+												</p>
+												<p className="text-left ms-2 font-bold">
+													Rp{' '}
+													{Math.round(content?.price as any)
+														.toString()
+														.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+												</p>
+											</div>
+											<div></div>
 										</div>
-										<div className="">
-											<h1 className="ms-2 text-left font-bold text-lg">{content.item.split(' ')[0]}</h1>
-											<p className='text-left ms-2'>{content.item.split(' ').slice(1).join(' ')}</p>
-											<p className="text-left ms-2 font-bold">Rp {Math.round(content?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
+										<div className="h-1 rounded-lg bg-black/10 my-2"></div>
+										<div className="flex justify-between items-center">
+											<p>50</p>
+											<p className="text-xs font-thin">
+												DAY IN HIGH VOLATILITY
+											</p>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												viewBox="0 0 24 24"
+												fill="currentColor"
+												className="size-4 fill-red-500">
+												{' '}
+												<path
+													fillRule="evenodd"
+													d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
+													clipRule="evenodd"
+												/>{' '}
+											</svg>
 										</div>
-										<div></div>
-									</div>
-									<div className="h-1 rounded-lg bg-black/10 my-2"></div>
-									<div className="flex justify-between items-center">
-										<p>50</p>
-										<p className="text-xs font-thin">DAY IN HIGH VOLATILITY</p>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 24 24"
-											fill="currentColor"
-											className="size-4 fill-red-500">
-											{' '}
-											<path
-												fillRule="evenodd"
-												d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
-												clipRule="evenodd"
-											/>{' '}
-										</svg>
-									</div>
-								</Card>
-							))}
+									</Card>
+								))
+							)}
 						</div>
 					</center>
 					<div className="w-full mt-3 flex justify-end mb-10">
@@ -665,29 +703,33 @@ export default function Home() {
 					Berita Hari Ini
 				</h1>
 				<div className="flex flex-wrap justify-center md:gap-10 lg:gap-24 gap-4 px-2 py-8">
-					{beritaData.map((item) => (
-						<Card key={item.id} className="md:w-[13rem] lg:w-[23rem]">
-							<CardHeader>
-								<Image
-									src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${item.image}`}
-									className="rounded-2xl"
-									alt="berita"
-									width={300}
-									height={200}
-								/>
-							</CardHeader>
-							<CardContent>
-								<CardDescription className='mdtext-sm'>
-									{item.title}
-								</CardDescription>
-							</CardContent>
-							<CardFooter className="flex justify-between">
-								<Button asChild className="md:w-30 md:text-[10px]">
-									<Link href={`/berita/${item.id}`}>Baca Selengkapnya</Link>
-								</Button>
-							</CardFooter>
-						</Card>
-					))}
+					{loading ? (
+						<BeritaSkeleton />
+					) : (
+						beritaData.map((item) => (
+							<Card key={item.id} className="md:w-[13rem] lg:w-[23rem]">
+								<CardHeader>
+									<Image
+										src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${item.image}`}
+										className="rounded-2xl"
+										alt="berita"
+										width={300}
+										height={200}
+									/>
+								</CardHeader>
+								<CardContent>
+									<CardDescription className="mdtext-sm">
+										{item.title}
+									</CardDescription>
+								</CardContent>
+								<CardFooter className="flex justify-between">
+									<Button asChild className="md:w-30 md:text-[10px]">
+										<Link href={`/berita/${item.id}`}>Baca Selengkapnya</Link>
+									</Button>
+								</CardFooter>
+							</Card>
+						))
+					)}
 				</div>
 				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
 			</section>
@@ -715,7 +757,9 @@ export default function Home() {
 								<p>Jumlah Komoditas di Sulawesi Tengah</p>
 							</div>
 						</div>
-						<h1 className="text-4xl font-bold">{dashboardData.totalCommodities}</h1>
+						<h1 className="text-4xl font-bold">
+							{dashboardData.totalCommodities}
+						</h1>
 					</Card>
 					<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
 						<div className="flex items-center gap-4">
@@ -753,16 +797,17 @@ export default function Home() {
 							</div>
 							<div className="flex md:flex-row flex-wrap sm:flex-nowrap justify-around space-y-4 sm:space-y-0 gap-5">
 								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4 text-sm lg:text-lg flex flex-col rounded-lg">
-									<p className="text-[10px] lg:text-lg">
-										Harga {' '}
-									</p>
+									<p className="text-[10px] lg:text-lg">Harga </p>
 									<h1 className="font-bold text-[10px] lg:text-lg">
 										<div className="flex justify-between items-center">
 											<div>
-												Rp {Math.round(detailHargaKonsumen?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+												Rp{' '}
+												{Math.round(detailHargaKonsumen?.price as any)
+													.toString()
+													.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
 											</div>
 											<div>
-												<TriangleUpIcon color='red' width={50} height={50} />
+												<TriangleUpIcon color="red" width={50} height={50} />
 											</div>
 										</div>
 									</h1>
@@ -774,10 +819,13 @@ export default function Home() {
 									<h1 className="font-bold text-[10px] lg:text-lg">
 										<div className="flex justify-between items-center">
 											<div>
-												Rp {Math.round(detailHargaKonsumen?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+												Rp{' '}
+												{Math.round(detailHargaKonsumen?.price as any)
+													.toString()
+													.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
 											</div>
-											<div className='flex items-center'>
-												<TriangleUpIcon color='red' width={50} height={50} />
+											<div className="flex items-center">
+												<TriangleUpIcon color="red" width={50} height={50} />
 											</div>
 										</div>
 									</h1>
@@ -786,12 +834,20 @@ export default function Home() {
 									<p className="text-[10px] lg:text-lg">Volatilitas </p>
 									<h1 className="font-bold text-[10px] lg:text-lg">
 										<div className="flex justify-between items-center">
-											<div>
-												{detailHargaKonsumen?.volatility}
-											</div>
-											<div className='flex items-center'>
-												<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="red" className="size-10">
-													<path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+											<div>{detailHargaKonsumen?.volatility}</div>
+											<div className="flex items-center">
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													fill="none"
+													viewBox="0 0 24 24"
+													strokeWidth={1.5}
+													stroke="red"
+													className="size-10">
+													<path
+														strokeLinecap="round"
+														strokeLinejoin="round"
+														d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
+													/>
 												</svg>
 											</div>
 										</div>
@@ -815,27 +871,52 @@ export default function Home() {
 								<table className="min-w-full bg-white border border-1">
 									<thead>
 										<tr>
-											<th className="border border-1 px-4 py-2 bg-blue-200">Subjek</th>
-											{detailData.header != undefined && detailData.header.map((item: any, index: any) => (
-												<th key={index} className="border border-1 px-4 py-2 bg-blue-200">
-													{item}
-												</th>
-											))}
+											<th className="border border-1 px-4 py-2 bg-blue-200">
+												Subjek
+											</th>
+											{detailData.header != undefined &&
+												detailData.header.map((item: any, index: any) => (
+													<th
+														key={index}
+														className="border border-1 px-4 py-2 bg-blue-200">
+														{item}
+													</th>
+												))}
 										</tr>
 									</thead>
 									<tbody>
-										{detailData.pasar != undefined && detailData.pasar.map((pasarItem: any, pasarIndex: any) => (
-											<tr key={pasarIndex}>
-												<td className="px-4 py-2 border border-1">
-													<h2>{pasarItem.pasar_name != "null" ? pasarItem.pasar_name : detailHargaKonsumen?.city}</h2>
-												</td>
-												{pasarItem.dates != undefined && pasarItem.dates.map((dateItem: any, dateIndex: any) => (
-													<td className="border border-1 px-4 py-2" key={dateIndex}>
-														<h2>Rp {dateItem.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || ''}</h2>
-													</td>
-												))}
-											</tr>
-										))}
+										{detailData.pasar != undefined &&
+											detailData.pasar.map(
+												(pasarItem: any, pasarIndex: any) => (
+													<tr key={pasarIndex}>
+														<td className="px-4 py-2 border border-1">
+															<h2>
+																{pasarItem.pasar_name != 'null'
+																	? pasarItem.pasar_name
+																	: detailHargaKonsumen?.city}
+															</h2>
+														</td>
+														{pasarItem.dates != undefined &&
+															pasarItem.dates.map(
+																(dateItem: any, dateIndex: any) => (
+																	<td
+																		className="border border-1 px-4 py-2"
+																		key={dateIndex}>
+																		<h2>
+																			Rp{' '}
+																			{dateItem.harga
+																				.toString()
+																				.replace(
+																					/\B(?=(\d{3})+(?!\d))/g,
+																					',',
+																				) || ''}
+																		</h2>
+																	</td>
+																),
+															)}
+													</tr>
+												),
+											)}
 									</tbody>
 								</table>
 							</div>
