@@ -21,6 +21,7 @@ import React from 'react';
 import Hero from '@/components/ui/hero';
 import Map from '@/components/ui/map';
 import Select from 'react-select';
+import HargaPanganSkeleton from '@/components/HargaPanganSkeleton';
 
 interface cardContents {
 	city: string;
@@ -48,6 +49,7 @@ export default function Home() {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [detailHarga, setDetailHarga] = useState<any>();
 	const closeDialog = () => setIsDialogOpen(false);
+	const [loading, setLoading] = useState(true);
 
 	const handleChangeMonth = () => {
 		if (selectedDate) {
@@ -101,6 +103,7 @@ export default function Home() {
 			});
 			if (response.data.data) {
 				setCardContents(response.data.data);
+				setLoading(false);
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
@@ -196,7 +199,8 @@ export default function Home() {
 							PETA PERUBAHAN HARGA
 						</h1>
 						<Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
-							<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal {formattedDate}
+							<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal{' '}
+							{formattedDate}
 						</Badge>
 					</div>
 					<div></div>
@@ -219,47 +223,61 @@ export default function Home() {
 			<section className="px-4 sm:px-8 md:px-10 lg:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col items-center space-y-8">
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-6xl">
-						{cardContents.map((content, index) => (
-							<div
-								key={index}
-								style={{ alignContent: 'center' }}
-								className="border border-gray-200 p-4 flex flex-col justify-between rounded-lg shadow-md">
+						{loading ? (
+							<HargaPanganSkeleton />
+						) : (
+							cardContents.map((content, index) => (
 								<div
-									className="flex flex-col items-center justify-between space-y-2"
-									style={{ flex: 1 }}>
-									<h1 className="text-md font-light text-center">
-										{content.city}
-									</h1>
-									<p className="font-bold text-2xl">Rp {Math.round(content?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
+									key={index}
+									style={{ alignContent: 'center' }}
+									className="border border-gray-200 p-4 flex flex-col justify-between rounded-lg shadow-md">
 									<div
-										className={`rounded-md p-2 flex items-center justify-center text-white`}
-										style={{
-											background: content.color,
-										}}>
-										{content.color === '#bf7070' ? (
-											<div className="flex gap-2">
-												<ArrowUpIcon width={20} height={20} />
-												Naik {content.change}
-											</div>
-										) : content.color === '#f1be5b' ? (
-											<div className="flex gap-2">
-												<ArrowDownIcon width={20} height={20} />
-												Turun {content.change}
-											</div>
-										) : (
-											<div className="flex gap-2">
-												<SymbolIcon width={20} height={20} />
-												Stabil
-											</div>
-										)}
+										className="flex flex-col items-center justify-between space-y-2"
+										style={{ flex: 1 }}>
+										<h1 className="text-md font-light text-center">
+											{content.city}
+										</h1>
+										<p className="font-bold text-2xl">
+											Rp{' '}
+											{Math.round(content?.price as any)
+												.toString()
+												.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+										</p>
+										<div
+											className={`rounded-md p-2 flex items-center justify-center text-white`}
+											style={{
+												background: content.color,
+											}}>
+											{content.color === '#bf7070' ? (
+												<div className="flex gap-2">
+													<ArrowUpIcon width={20} height={20} />
+													Naik {content.change}
+												</div>
+											) : content.color === '#f1be5b' ? (
+												<div className="flex gap-2">
+													<ArrowDownIcon width={20} height={20} />
+													Turun {content.change}
+												</div>
+											) : (
+												<div className="flex gap-2">
+													<SymbolIcon width={20} height={20} />
+													Stabil
+												</div>
+											)}
+										</div>
+									</div>
+									<div className="flex flex-col mt-6">
+										<p className="text-md font-semibold">
+											Rp{' '}
+											{Math.round(content?.price as any)
+												.toString()
+												.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+										</p>
+										<p className="text-xs font-thin">DAY IN HIGH VOLATILITY</p>
 									</div>
 								</div>
-								<div className="flex flex-col mt-6">
-									<p className="text-md font-semibold">Rp {Math.round(content?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
-									<p className="text-xs font-thin">DAY IN HIGH VOLATILITY</p>
-								</div>
-							</div>
-						))}
+							))
+						)}
 					</div>
 					<div className="flex flex-wrap justify-center gap-4 mt-5">
 						<div className="text-center w-48 md:w-60">
@@ -335,40 +353,46 @@ export default function Home() {
 											Beras
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap">
-											{monitoringVolatilitas.statusHarga1Bulan && monitoringVolatilitas.statusHarga1Bulan === 'naik' ? (
+											{monitoringVolatilitas.statusHarga1Bulan &&
+											monitoringVolatilitas.statusHarga1Bulan === 'naik' ? (
 												<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
-											) : monitoringVolatilitas.statusHarga1Bulan === 'turun' ? (
+											) : monitoringVolatilitas.statusHarga1Bulan ===
+											  'turun' ? (
 												<div className="h-10 w-10 bg-yellow-500 rounded-sm"></div>
-											) : monitoringVolatilitas.statusHarga1Bulan === 'tidak tersedia' ? (
+											) : monitoringVolatilitas.statusHarga1Bulan ===
+											  'tidak tersedia' ? (
 												<div className="h-10 w-10 bg-[#7C9299] rounded-sm"></div>
 											) : (
 												<div className="h-10 w-10 bg-green-500 rounded-sm"></div>
 											)}
-
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap">
-										{monitoringVolatilitas.statusHarga3Bulan && monitoringVolatilitas.statusHarga3Bulan === 'naik' ? (
+											{monitoringVolatilitas.statusHarga3Bulan &&
+											monitoringVolatilitas.statusHarga3Bulan === 'naik' ? (
 												<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
-											) : monitoringVolatilitas.statusHarga3Bulan === 'turun' ? (
+											) : monitoringVolatilitas.statusHarga3Bulan ===
+											  'turun' ? (
 												<div className="h-10 w-10 bg-yellow-500 rounded-sm"></div>
-											) : monitoringVolatilitas.statusHarga3Bulan === 'tidak tersedia' ? (
+											) : monitoringVolatilitas.statusHarga3Bulan ===
+											  'tidak tersedia' ? (
 												<div className="h-10 w-10 bg-[#7C9299] rounded-sm"></div>
 											) : (
 												<div className="h-10 w-10 bg-green-500 rounded-sm"></div>
 											)}
-
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap">
-										{monitoringVolatilitas.statusHarga12Bulan && monitoringVolatilitas.statusHarga12Bulan === 'naik' ? (
+											{monitoringVolatilitas.statusHarga12Bulan &&
+											monitoringVolatilitas.statusHarga12Bulan === 'naik' ? (
 												<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
-											) : monitoringVolatilitas.statusHarga12Bulan === 'turun' ? (
+											) : monitoringVolatilitas.statusHarga12Bulan ===
+											  'turun' ? (
 												<div className="h-10 w-10 bg-yellow-500 rounded-sm"></div>
-											) : monitoringVolatilitas.statusHarga12Bulan === 'tidak tersedia' ? (
+											) : monitoringVolatilitas.statusHarga12Bulan ===
+											  'tidak tersedia' ? (
 												<div className="h-10 w-10 bg-[#7C9299] rounded-sm"></div>
 											) : (
 												<div className="h-10 w-10 bg-green-500 rounded-sm"></div>
 											)}
-
 										</td>
 										<td className="px-6 py-4 whitespace-normal text-sm text-gray-500">
 											{/* Harga beras tetap sangat berfluktuasi sepanjang bulan Mei,
@@ -398,25 +422,27 @@ export default function Home() {
 										</td>
 										<td className="w-full py-5">
 											<div className="flex w-full rounded-lg">
-												{monitoringVolatilitas.daftarHarga12Bulan && monitoringVolatilitas.daftarHarga12Bulan.map((item: any, index: number) => (
-													item.status_harga === 'naik' ? (
-														<div
-															key={index}
-															className="h-[100px] flex-1 bg-red-500"></div>
-													) : item.status_harga === 'turun' ? (
-														<div
-															key={index}
-															className="h-[100px] flex-1 bg-yellow-500"></div>
-													) : item.status_harga === 'tidak tersedia' ? (
-														<div
-															key={index}
-															className="h-[100px] flex-1 bg-[#7C9299]"></div>
-													) : (
-														<div
-															key={index}
-															className="h-[100px] flex-1 bg-green-500"></div>
-													)
-												))}
+												{monitoringVolatilitas.daftarHarga12Bulan &&
+													monitoringVolatilitas.daftarHarga12Bulan.map(
+														(item: any, index: number) =>
+															item.status_harga === 'naik' ? (
+																<div
+																	key={index}
+																	className="h-[100px] flex-1 bg-red-500"></div>
+															) : item.status_harga === 'turun' ? (
+																<div
+																	key={index}
+																	className="h-[100px] flex-1 bg-yellow-500"></div>
+															) : item.status_harga === 'tidak tersedia' ? (
+																<div
+																	key={index}
+																	className="h-[100px] flex-1 bg-[#7C9299]"></div>
+															) : (
+																<div
+																	key={index}
+																	className="h-[100px] flex-1 bg-green-500"></div>
+															),
+													)}
 											</div>
 										</td>
 									</tr>

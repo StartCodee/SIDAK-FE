@@ -22,6 +22,7 @@ import MonthPicker from '@/components/ui/monthpicker';
 import MapNeraca from '@/components/ui/map-neraca';
 import Swal from "sweetalert2";
 import axios from "axios";
+import NeracaPanganSkeleton from '@/components/NeracaPanganSkeleton';
 
 interface cardContents {
 	city: string;
@@ -46,6 +47,7 @@ export default function Home() {
 	const [cardContents, setCardContents] = useState<cardContents[]>([]);
 
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	const closeDialog = () => setIsDialogOpen(false);
 
@@ -133,6 +135,7 @@ export default function Home() {
 			});
 			if (response.data.data) {
 				setCardContents(response.data.data);
+				setLoading(false);
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
@@ -228,53 +231,69 @@ export default function Home() {
 			<section className="px-4 sm:px-8 lg:px-50 md:px-10 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col items-center space-y-8">
 					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 px-10 lg:grid-cols-3 xl:grid-cols-4 gap-[2rem] w-full ">
-						{cardContents.map((content, index) => (
-							<div
-								key={index}
-								className="border border-gray-200  rounded-lg p-2 shadow-md flex items-center">
+						{loading ? (
+							<NeracaPanganSkeleton />
+						) : (
+							cardContents.map((content, index) => (
 								<div
-									className={` w-10 rounded-r-none rounded-md  text-white mr-4 flex-shrink-0 `}
-									style={{
-										background: content.color,
-									}}>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										viewBox="0 0 24 24"
-										fill="currentColor"
-										className="size-10 mx-auto my-5">
-										<path
-											fillRule="evenodd"
-											d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-											clipRule="evenodd"
-										/>
-									</svg>
+									key={index}
+									className="border border-gray-200  rounded-lg p-2 shadow-md flex items-center">
+									<div
+										className={` w-10 rounded-r-none rounded-md  text-white mr-4 flex-shrink-0 `}
+										style={{
+											background: content.color,
+										}}>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											viewBox="0 0 24 24"
+											fill="currentColor"
+											className="size-10 mx-auto my-5">
+											<path
+												fillRule="evenodd"
+												d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+												clipRule="evenodd"
+											/>
+										</svg>
+									</div>
+									<div className="flex-1">
+										<h1 className="text-sm  font-bold">{content.city}</h1>
+										<table className="w-full mt-2">
+											<tbody className="text-xs">
+												<tr>
+													<td className="pr-2">Ketersediaan:</td>
+													<td className="text-right">
+														{Math.round(content?.ketersediaan as any)
+															.toString()
+															.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+													</td>
+												</tr>
+												<tr>
+													<td className="pr-2">Kebutuhan:</td>
+													<td className="text-right">
+														{Math.round(content?.kebutuhan as any)
+															.toString()
+															.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+													</td>
+												</tr>
+												<tr>
+													<td colSpan={2}>
+														<hr className="my-1" />
+													</td>
+												</tr>
+												<tr className="font-bold">
+													<td className="pr-2">Neraca Pangan:</td>
+													<td className="text-right">
+														{Math.round(content?.neraca as any)
+															.toString()
+															.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
 								</div>
-								<div className="flex-1">
-									<h1 className="text-sm  font-bold">{content.city}</h1>
-									<table className="w-full mt-2">
-										<tbody className="text-xs">
-											<tr>
-												<td className="pr-2">Ketersediaan:</td>
-												<td className="text-right">{Math.round(content?.ketersediaan as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
-											</tr>
-											<tr>
-												<td className="pr-2">Kebutuhan:</td>
-												<td className="text-right">{Math.round(content?.kebutuhan as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
-											</tr>
-											<tr>
-												<td colSpan={2}>
-													<hr className="my-1" />
-												</td>
-											</tr>
-											<tr className="font-bold">
-												<td className="pr-2">Neraca Pangan:</td>
-												<td className="text-right">{Math.round(content?.neraca as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						))}
+							))
+						)}
 					</div>
 				</div>
 				<h1 className="text-sm m-0 p-0 sm:text-sm md:text-md">

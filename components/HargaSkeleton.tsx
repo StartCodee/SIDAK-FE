@@ -12,7 +12,7 @@ function HargaSkeleton() {
 					<div style={{ flex: 1 }} className="flex justify-end">
 						<div
 							className={`rounded-md p-0 px-2 m-0 font-bold text-[12px] items-center flex text-white`}>
-							<Skeleton className="h-4 w-[50px]" />
+							<Skeleton className="h-8 w-[50px]" />
 						</div>
 					</div>
 				</Card>
