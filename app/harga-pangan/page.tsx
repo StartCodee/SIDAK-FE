@@ -164,7 +164,7 @@ export default function Home() {
 		getHargaPangan(1, 2, '2024-06', '18');
 		getCommodityOption();
 		getMonitoringVolatilitas('18');
-	}, []);
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<main>
