@@ -68,13 +68,17 @@ export default function Map({ cardContents }: MapProps) {
 	};
 
 	const showCardArea = (id: string) => {
-		// console.log(id);
 		const content = cardContents.find((card) => card.id === id);
-		const path = document.getElementById(id);
-		if (!path) return;
-		const pathRect = path.getBoundingClientRect();
+		const group = document.getElementById(id);
+
+		if (!group) return;
+
+		const groupElements = group.querySelectorAll('path');
+
+		const pathRect = group.getBoundingClientRect();
 		const pathTop = pathRect.top + window.scrollY + 100; // Account for vertical scroll
 		const pathLeft = pathRect.left + window.scrollX + 150;
+
 		const card = document.createElement('div');
 		let status = '';
 		switch (content?.color) {
@@ -91,27 +95,93 @@ export default function Map({ cardContents }: MapProps) {
 				break;
 		}
 
-
 		card.id = 'card-' + id;
 		card.className = 'absolute z-50 bg-white p-4 rounded-md shadow-md hidden md:block';
 		card.style.top = `${pathTop}px`;
 		card.style.left = `${pathLeft}px`;
 		card.innerHTML = `
-						<h1 class='text-lg font-semibold'> ${content?.city}</h1>
-						<p class='text-xl font-bold'>Rp ${Math.round(content?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
-						<span class="inline-flex items-center rounded-full bg-[${content?.color}] px-2 py-1 mt-1 text-xs font-medium text-white ring-1 ring-inset ring-red-600/10">
-						<p class='text-sm '>${status} ${content?.change}</p>
-						</span>
-					`;
+        <h1 class='text-lg font-semibold'> ${content?.city}</h1>
+        <p class='text-xl font-bold'>Rp ${Math.round(content?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
+        <span class="inline-flex items-center rounded-full bg-[${content?.color}] px-2 py-1 mt-1 text-xs font-medium text-white ring-1 ring-inset ring-red-600/10">
+            <p class='text-sm '>${status} ${content?.change}</p>
+        </span>
+    `;
 		document.body.appendChild(card);
+
+		// Get the original color for the group
+		const originalColor = getColorByCity(id);
+		if (!originalColor) return;
+
+		// Function to darken color
+		const darkenColor = (color: string, percent: number): string => {
+			const num = parseInt(color.slice(1), 16),
+				amt = Math.round(2.55 * percent * 100),
+				R = (num >> 16) - amt,
+				G = (num >> 8 & 0x00FF) - amt,
+				B = (num & 0x0000FF) - amt;
+
+			return `#${(
+				0x1000000 +
+				(R < 255 ? (R < 0 ? 0 : R) : 255) * 0x10000 +
+				(G < 255 ? (G < 0 ? 0 : G) : 255) * 0x100 +
+				(B < 255 ? (B < 0 ? 0 : B) : 255)
+			).toString(16).slice(1).toUpperCase()}`;
+		};
+
+		// Apply event listeners to all paths
+		groupElements.forEach((path) => {
+			// Cek apakah parent dari path adalah mask
+			if (path.parentElement && path.parentElement.tagName.toLowerCase() === 'mask') {
+				return; // Skip ke elemen berikutnya jika parent adalah mask
+			}
+
+			path.style.fill = darkenColor(originalColor, 0.3);
+
+		});
+
 	};
+
+
+	// Utility function to darken color
 
 	const hideCardArea = (id: string) => {
 		const card = document.getElementById('card-' + id);
 		if (card) {
 			card.remove();
 		}
+		const group = document.getElementById(id);
+
+		if (!group) return;
+		// Get the original color for the group
+		const originalColor = getColorByCity(id);
+		if (!originalColor) return;
+		const groupElements = group.querySelectorAll('path');
+		groupElements.forEach((path) => {
+			// Cek apakah parent dari path adalah mask
+			if (path.parentElement && path.parentElement.tagName.toLowerCase() === 'mask') {
+				return; // Skip ke elemen berikutnya jika parent adalah mask
+			}
+
+			path.style.fill = originalColor;
+
+		});
 	};
+
+	const darkenColor = (color: string | undefined, percent: number) => {
+		if (!color) return;
+		const num = parseInt(color.slice(1), 16),
+			amt = Math.round(2.55 * percent * 100),
+			R = (num >> 16) - amt,
+			G = (num >> 8 & 0x00FF) - amt,
+			B = (num & 0x0000FF) - amt;
+
+		return `#${(
+			0x1000000 +
+			(R < 255 ? (R < 0 ? 0 : R) : 255) * 0x10000 +
+			(G < 255 ? (G < 0 ? 0 : G) : 255) * 0x100 +
+			(B < 255 ? (B < 0 ? 0 : B) : 255)
+		).toString(16).slice(1).toUpperCase()}`;
+	}
 
 	const getColorByCity = (cityName: string) => {
 		const cityData = cardContents.find((item) => item.id === cityName);
@@ -183,7 +253,7 @@ export default function Map({ cardContents }: MapProps) {
 										{detailData.pasar != undefined && detailData.pasar.map((pasarItem: any, pasarIndex: any) => (
 											<tr key={pasarIndex}>
 												<td className="px-4 py-2 border border-1">
-												<h2>{pasarItem.pasar_name != "null" ? pasarItem.pasar_name : detailHarga?.city}</h2>
+													<h2>{pasarItem.pasar_name != "null" ? pasarItem.pasar_name : detailHarga?.city}</h2>
 												</td>
 												{pasarItem.dates != undefined && pasarItem.dates.map((dateItem: any, dateIndex: any) => (
 													<td className="px-4 py-2 border border-1" key={dateIndex}>
@@ -245,6 +315,8 @@ export default function Map({ cardContents }: MapProps) {
 									d="M210.373 95.0862C210.373 95.0862 213.56 93.0365 215.829 85.756C215.829 85.756 223.333 79.3856 229.47 78.7051C229.47 78.7051 233.107 77.1145 232.657 65.2837C232.657 65.2837 235.843 57.0931 234.025 53.6824C232.206 50.2718 232.19 50.7227 234.59 49.8126C236.99 48.9026 238.572 45.0327 238.572 45.0327C238.572 45.0327 244.708 42.9257 244.487 40.1135C244.265 37.3013 242.226 33.2019 244.487 30.4717C246.748 27.7416 251.983 26.151 252.212 22.9617C252.442 19.7724 255.17 17.7309 260.397 19.0919C265.624 20.4529 264.944 24.831 276.315 18.6655H286.998C286.998 18.6655 293.593 16.3617 294.502 11.1309C294.502 11.1309 304.055 11.59 297.46 18.1818L294.273 21.3711L293.364 29.1107C293.364 29.1107 304.276 47.5416 316.098 46.4019L330.419 46.1724C330.419 46.1724 335.875 42.5321 341.102 44.8032C341.102 44.8032 349.516 43.434 351.105 43.434C351.105 43.434 353.383 40.9334 359.969 43.6636C359.969 43.6636 367.924 39.3428 367.924 42.9831C367.924 46.6233 372.242 55.4944 380.656 50.034C380.656 50.034 386.112 46.6233 386.341 45.0245C386.341 45.0245 389.069 43.8849 397.483 47.3038C397.483 47.3038 401.35 49.1239 404.529 48.4434C407.708 47.7629 406.348 50.2636 399.753 51.8541C393.158 53.4447 384.973 55.4944 383.834 55.9535C382.696 56.4126 382.696 61.4139 376.33 64.1441C376.33 64.1441 377.698 73.2447 370.874 68.0139C370.874 68.0139 363.369 63.9145 363.369 61.873C363.369 59.8315 358.142 53.6824 352.907 59.8233C352.907 59.8233 345.403 64.8328 339.947 65.0541L330.173 69.834C330.173 69.834 324.037 69.834 319.031 73.4743H309.478C309.478 73.4743 308.34 78.9346 299.705 77.795H290.84C290.84 77.795 285.155 76.2044 282.427 76.8849C282.427 76.8849 281.747 82.1158 283.336 84.1654C283.336 84.1654 279.469 86.2151 277.65 86.2151C275.832 86.2151 267.418 81.6648 262.42 86.2151C257.423 90.7654 257.415 92.5856 257.415 92.5856C257.415 92.5856 258.553 98.956 254.006 101.916C254.006 101.916 244.921 99.7677 244.224 98.4887C244.224 98.4887 236.909 99.6529 232.378 97.3245C232.378 97.3245 225.062 101.744 220.065 99.6529C215.067 97.5622 210.356 96.8653 210.356 96.8653C210.356 96.8653 209.357 95.9963 210.356 95.0944L210.373 95.0862Z"
 									stroke="#FFFEFE"
 									stroke-width="8"
+									fill={getColorByCity('Buol')}
+
 									mask="url(#path-1-outside-1_0_1)"
 								/>
 							</g>
