@@ -34,15 +34,17 @@ export default function Page({ params }: { params: { id: string } }) {
 
 	const [berita, setBerita] = useState<any>({});
 
-
 	const getBerita = async () => {
 		try {
-			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news/${params.id}`, {
-				headers: {
-					'content-type': 'application/json',
-					// 'Authorization': `Bearer ${localStorage.getItem('token')}`,
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news/${params.id}`,
+				{
+					headers: {
+						'content-type': 'application/json',
+						// 'Authorization': `Bearer ${localStorage.getItem('token')}`,
+					},
 				},
-			});
+			);
 			console.log(response);
 			setBerita(response.data);
 		} catch (error) {
@@ -58,7 +60,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
 	useEffect(() => {
 		getBerita();
-	}, []);
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<>
@@ -77,11 +79,10 @@ export default function Page({ params }: { params: { id: string } }) {
 									Lakukan Pengecekan Stok Beras untuk Cegah Kenaikan Harga
 									Pangan
 									<br />
-									<span className='text-xs text-graydark opacity-50'>
+									<span className="text-xs text-graydark opacity-50">
 										2024-02-02 | Oleh Admin
 									</span>
 								</h1>
-
 
 								<div className="h-1 rounded-lg my-10 bg-black z-0"></div>
 							</div>

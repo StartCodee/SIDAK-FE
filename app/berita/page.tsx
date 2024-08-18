@@ -35,6 +35,7 @@ import Footer from '@/components/ui/footer';
 import berita2 from '@/public/berita 2.png';
 import berita3 from '@/public/berita 3.png';
 import Hero from '@/components/ui/hero';
+import UserBeritaSkeleton from '@/components/UserBeritaSkeleton';
 
 interface News {
 	id: number;
@@ -69,7 +70,7 @@ interface PaginationInfo {
 const BeritaPage: React.FC = () => {
 	const [berita, setBerita] = useState<News[]>([]);
 	const [paginationInfo, setPaginationInfo] = useState<PaginationInfo | null>(null);
-
+	const [loading, setLoading] = useState(true);
 	const getBerita = async (page: number = 1, limit: number = 2) => {
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news`, {
@@ -80,6 +81,7 @@ const BeritaPage: React.FC = () => {
 			});
 			if (response.data.data) {
 				setBerita(response.data.data);
+				setLoading(false);
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
@@ -181,36 +183,40 @@ const BeritaPage: React.FC = () => {
 						</h1>
 					</CardHeader>
 					<CardContent className="flex flex-col gap-4">
-						{berita.map((item) => (
-							<Card
-								key={item.id}
-								className="w-full flex flex-col lg:flex-row items-center mb-4">
-								<CardHeader className="w-full lg:w-1/3 ">
-									<Image
-										src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${item.image}`}
-										className="rounded-2xl w-full "
-										alt="berita"
-										width={350}
-										height={200}
-										layout="responsive"
-									/>
-								</CardHeader>
-								<CardContent className="w-full lg:w-2/3 p-4 lg:p-6 ">
-									<div>
-										<h1 className="text-xl lg:text-2xl font-semibold text-black">
-											{item.title}
-										</h1>
-										<div className="my-4 border-b border-black w-full" />
-										<p className="text-lg lg:text-base line-clamp-3">{item.content}</p>
-									</div>
-									<Button asChild className="mt-4">
-										<Link href={`/berita/${item.id}`}>
-
-											Baca Selengkapnya
-										</Link></Button>
-								</CardContent>
-							</Card>
-						))}
+						{loading ? (
+							<UserBeritaSkeleton />
+						) : (
+							berita.map((item) => (
+								<Card
+									key={item.id}
+									className="w-full flex flex-col lg:flex-row items-center mb-4">
+									<CardHeader className="w-full lg:w-1/3 ">
+										<Image
+											src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${item.image}`}
+											className="rounded-2xl w-full "
+											alt="berita"
+											width={350}
+											height={200}
+											layout="responsive"
+										/>
+									</CardHeader>
+									<CardContent className="w-full lg:w-2/3 p-4 lg:p-6 ">
+										<div>
+											<h1 className="text-xl lg:text-2xl font-semibold text-black">
+												{item.title}
+											</h1>
+											<div className="my-4 border-b border-black w-full" />
+											<p className="text-lg lg:text-base line-clamp-3">
+												{item.content}
+											</p>
+										</div>
+										<Button asChild className="mt-4">
+											<Link href={`/berita/${item.id}`}>Baca Selengkapnya</Link>
+										</Button>
+									</CardContent>
+								</Card>
+							))
+						)}
 
 						<div className="flex justify-end">
 							<Pagination>
@@ -221,7 +227,11 @@ const BeritaPage: React.FC = () => {
 												<PaginationItem key={index}>
 													<PaginationNext
 														href="#"
-														onClick={() => handlePageChange(paginationInfo?.next_page_url as string)}
+														onClick={() =>
+															handlePageChange(
+																paginationInfo?.next_page_url as string,
+															)
+														}
 													/>
 												</PaginationItem>
 											);
@@ -230,7 +240,11 @@ const BeritaPage: React.FC = () => {
 												<PaginationItem key={index}>
 													<PaginationPrevious
 														href="#"
-														onClick={() => handlePageChange(paginationInfo?.prev_page_url as string)}
+														onClick={() =>
+															handlePageChange(
+																paginationInfo?.prev_page_url as string,
+															)
+														}
 													/>
 												</PaginationItem>
 											);
@@ -240,8 +254,7 @@ const BeritaPage: React.FC = () => {
 													<PaginationLink
 														href="#"
 														isActive={link.active}
-														onClick={() => handlePageChange(link.url)}
-													>
+														onClick={() => handlePageChange(link.url)}>
 														{link.label}
 													</PaginationLink>
 												</PaginationItem>

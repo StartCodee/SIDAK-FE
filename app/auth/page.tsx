@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Logo from '@/public/logo sidak.svg';
+import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -27,13 +28,15 @@ export default function Page() {
 	return (
 		<>
 			<div className="lg:hidden">
-				<Image
-					src={background}
-					width={1280}
-					height={843}
-					alt="Authentication"
-					className="object-cover w-full h-screen"
-				/>
+				<Link href="/">
+					<Image
+						src={background}
+						width={1280}
+						height={843}
+						alt="Authentication"
+						className="object-cover w-full h-screen"
+					/>
+				</Link>
 				<div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
 					<div className="w-full max-w-sm px-4">
 						<Card>
@@ -52,7 +55,9 @@ export default function Page() {
 				<div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
 					<div className="absolute inset-0 bg-gradient-to-bl from-slate-600 via-teal-600 to-blue-700" />
 					<div className="relative z-20 flex items-center text-lg font-medium">
-						<Image src={Logo} alt="SIDAK" width={200} height={200} />
+						<Link href='/'>
+							<Image src={Logo} alt="SIDAK" width={200} height={200} />
+						</Link>
 					</div>
 					<div className="relative z-20 mt-auto">
 						<blockquote className="space-y-2">

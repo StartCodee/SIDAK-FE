@@ -263,7 +263,7 @@ export default function FLowForm(){
 															<CommandGroup>
 																{kabupatenData.map((language) => (
 																	<CommandItem
-																		value={language.cityIds.toString()}
+																		value={language.id.toString()}
 																		key={language.id}
 																		onSelect={() => {
 																			form.setValue(

@@ -249,7 +249,7 @@ export default function Home() {
 			<>
 				<DefaultLayout>
 					<Breadcrumb pageName="Management Contact" />
-					<div className="col-span-3 bg-white rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
+					<div className="col-span-3 rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
 						<div className={`w-full `}>
 							<h1 className="text-2xl font-bold">Management Contact</h1>
 							<form id="adminRegisterForm" className="p-4 space-y-4">

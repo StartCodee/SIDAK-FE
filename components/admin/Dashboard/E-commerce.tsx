@@ -20,6 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import TableTwo from "../Tables/TableTwo";
 import Link from "next/link";
 import heroAdmin from '@/public/admin/images/brand/hero.png';
+import { SkeletonCard } from "@/components/SkeletonCard";
 
 interface Dashboard {
 	totalCommodities: number;
@@ -31,6 +32,7 @@ const ECommerce: React.FC = () => {
   const username = Cookies.get('userName');
   const [dashboard, setDashboard] = useState<Dashboard>();
 	const [berita, setBerita] = useState<any[]>([]);
+	const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     getDashboard().then((data) => {
@@ -38,6 +40,7 @@ const ECommerce: React.FC = () => {
     })
 	getBerita(1, 2).then((data) => {
 		setBerita(data.data);
+		setLoading(false);
 	}
 	)
   }, []);
@@ -108,7 +111,7 @@ const ECommerce: React.FC = () => {
 				<div
 					className="w-full rounded-lg border border-stroke bg-white px-5  py-6 shadow-default"
 					style={{ flex: '2' }}>
-					{berita.map((item) => (
+					{/* {berita.map((item) => (
 						<div
 							key={item.id}
 							className="w-full mb-7 rounded-xl border border-stroke bg-white shadow-default">
@@ -128,7 +131,33 @@ const ECommerce: React.FC = () => {
 								<p className="mt-2 line-clamp-3">{item.content}</p>
 							</div>
 						</div>
-					))}
+					))} */}
+					{loading ? (
+						<SkeletonCard /> ) 
+						: (
+							berita.map((item) => (
+						<div
+							key={item.id}
+							className="w-full mb-7 rounded-xl border border-stroke bg-white shadow-default">
+							<div className="aspect-video relative bg-white/50  backdrop-blur-md rounded-lg ">
+								<Image
+									src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${item.image}`}
+									className="rounded-t-xl object-contain"
+									alt="news"
+									fill
+								/>
+							</div>
+							<div className="p-4">
+								<h1 className="text-2xl text-black font-bold line-clamp-2">
+									{item.title}
+								</h1>
+								<p className="text-[10px]">{item.date}</p>
+								<p className="mt-2 line-clamp-3">{item.content}</p>
+							</div>
+						</div>
+					))
+					)
+					}
 					<div className="mt-4  flex justify-end">
 						<Link href="/admin/berita">
 							<span className="text-primary">Lihat Semua</span>
