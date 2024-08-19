@@ -2,8 +2,8 @@
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 import { CounterClockwiseClockIcon } from '@radix-ui/react-icons';
-import Chart from '@/app/neraca-pangan/chart';
 import ChartDetail from '@/app/neraca-pangan/chart-detail';
+import Chart from '@/app/neraca-pangan/chart';
 import Dialog from './modal-harga';
 import { useState } from 'react';
 import { Badge } from './badge';
@@ -154,11 +154,9 @@ export default function MapNeraca({ cardContents }: MapProps) {
 			).toString(16).slice(1).toUpperCase()}`;
 		};
 
-		// Apply event listeners to all paths
 		groupElements.forEach((path) => {
-			// Cek apakah parent dari path adalah mask
 			if (path.parentElement && path.parentElement.tagName.toLowerCase() === 'mask') {
-				return; // Skip ke elemen berikutnya jika parent adalah mask
+				return;
 			}
 
 			path.style.fill = darkenColor(originalColor, 0.3);
@@ -175,14 +173,12 @@ export default function MapNeraca({ cardContents }: MapProps) {
 		const group = document.getElementById(id);
 
 		if (!group) return;
-		// Get the original color for the group
 		const originalColor = getColorByCity(id);
 		if (!originalColor) return;
 		const groupElements = group.querySelectorAll('path');
 		groupElements.forEach((path) => {
-			// Cek apakah parent dari path adalah mask
 			if (path.parentElement && path.parentElement.tagName.toLowerCase() === 'mask') {
-				return; // Skip ke elemen berikutnya jika parent adalah mask
+				return;
 			}
 
 			path.style.fill = originalColor;
@@ -222,7 +218,6 @@ export default function MapNeraca({ cardContents }: MapProps) {
 									Bulanan
 								</TabsTrigger>
 							</TabsList>
-
 							<TabsContent value="tahunan">
 								<div className="h-full w-full">
 									<ChartDetail type='tahunan' data={chartDetail != undefined && chartDetail} />

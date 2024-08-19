@@ -13,6 +13,8 @@ interface CardContent {
 	color: string;
 	change: string;
 	kabupaten_kota_id: string;
+	komoditas_id: string;
+
 	id: string;
 }
 
@@ -25,17 +27,19 @@ export default function Map({ cardContents }: MapProps) {
 	const [detailHarga, setDetailHarga] = useState<any>();
 
 	const [detailData, setdetailData] = useState<any>([]);
+	const [linkExport, setLinkExport] = useState('');
 
 
-	const getDetailSupply = async (page: number = 1, limit: number = 2, kota: string) => {
+	const getDetailSupply = async (page: number = 1, limit: number = 2, kota: string, komoditas: string) => {
 		try {
-			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/detail-data?date=2024-06&komoditas=18&kabupaten_kota_id=${kota}`, {
+			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/detail-data?date=2024-06&komoditas=${komoditas}&kabupaten_kota_id=${kota}`, {
 				headers: {
 					'content-type': 'application/json',
 					'Authorization': `Bearer ${localStorage.getItem('token')}`,
 				},
 			});
 			if (response.data.data) {
+				setLinkExport(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/export-excel?date=2024-06&komoditas=${komoditas}&kabupaten_kota_id=${kota}&export=1`);
 				console.log(response.data.data);
 				setdetailData(response.data.data);
 			}
@@ -62,8 +66,9 @@ export default function Map({ cardContents }: MapProps) {
 	const closeDialog = () => setIsDialogOpen(false);
 	const openDialog = (el: string) => {
 		const detail = cardContents.find((item) => item.id === el);
+		console.log(detail);
 		setDetailHarga(detail);
-		getDetailSupply(1, 2, detail?.kabupaten_kota_id as any);
+		getDetailSupply(1, 2, detail?.kabupaten_kota_id as any, detail?.komoditas_id as any);
 		setIsDialogOpen(true);
 	};
 
@@ -76,7 +81,7 @@ export default function Map({ cardContents }: MapProps) {
 		const groupElements = group.querySelectorAll('path');
 
 		const pathRect = group.getBoundingClientRect();
-		const pathTop = pathRect.top + window.scrollY + 100; // Account for vertical scroll
+		const pathTop = pathRect.top + window.scrollY + 100;
 		const pathLeft = pathRect.left + window.scrollX + 150;
 
 		const card = document.createElement('div');
@@ -108,11 +113,9 @@ export default function Map({ cardContents }: MapProps) {
     `;
 		document.body.appendChild(card);
 
-		// Get the original color for the group
 		const originalColor = getColorByCity(id);
 		if (!originalColor) return;
 
-		// Function to darken color
 		const darkenColor = (color: string, percent: number): string => {
 			const num = parseInt(color.slice(1), 16),
 				amt = Math.round(2.55 * percent * 100),
@@ -128,11 +131,9 @@ export default function Map({ cardContents }: MapProps) {
 			).toString(16).slice(1).toUpperCase()}`;
 		};
 
-		// Apply event listeners to all paths
 		groupElements.forEach((path) => {
-			// Cek apakah parent dari path adalah mask
 			if (path.parentElement && path.parentElement.tagName.toLowerCase() === 'mask') {
-				return; // Skip ke elemen berikutnya jika parent adalah mask
+				return;
 			}
 
 			path.style.fill = darkenColor(originalColor, 0.3);
@@ -140,9 +141,6 @@ export default function Map({ cardContents }: MapProps) {
 		});
 
 	};
-
-
-	// Utility function to darken color
 
 	const hideCardArea = (id: string) => {
 		const card = document.getElementById('card-' + id);
@@ -152,36 +150,18 @@ export default function Map({ cardContents }: MapProps) {
 		const group = document.getElementById(id);
 
 		if (!group) return;
-		// Get the original color for the group
 		const originalColor = getColorByCity(id);
 		if (!originalColor) return;
 		const groupElements = group.querySelectorAll('path');
 		groupElements.forEach((path) => {
-			// Cek apakah parent dari path adalah mask
 			if (path.parentElement && path.parentElement.tagName.toLowerCase() === 'mask') {
-				return; // Skip ke elemen berikutnya jika parent adalah mask
+				return;
 			}
 
 			path.style.fill = originalColor;
 
 		});
 	};
-
-	const darkenColor = (color: string | undefined, percent: number) => {
-		if (!color) return;
-		const num = parseInt(color.slice(1), 16),
-			amt = Math.round(2.55 * percent * 100),
-			R = (num >> 16) - amt,
-			G = (num >> 8 & 0x00FF) - amt,
-			B = (num & 0x0000FF) - amt;
-
-		return `#${(
-			0x1000000 +
-			(R < 255 ? (R < 0 ? 0 : R) : 255) * 0x10000 +
-			(G < 255 ? (G < 0 ? 0 : G) : 255) * 0x100 +
-			(B < 255 ? (B < 0 ? 0 : B) : 255)
-		).toString(16).slice(1).toUpperCase()}`;
-	}
 
 	const getColorByCity = (cityName: string) => {
 		const cityData = cardContents.find((item) => item.id === cityName);
@@ -223,8 +203,8 @@ export default function Map({ cardContents }: MapProps) {
 									<p className="text-[10px] lg:text-lg">Komoditas </p>
 									<h1 className="font-bold text-[10px] lg:text-lg">{detailHarga?.item}</h1>
 								</div>
-							</div>
-							<Button
+							</div> 
+							<Button onClick={() => { window.open(linkExport, '_blank'); }}
 								className="bg-[#f0fdf4] text-[#228848] hover:bg-green-200 rounded-full cursor-pointer"
 								asChild>
 								<span className="self-end inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
@@ -316,7 +296,6 @@ export default function Map({ cardContents }: MapProps) {
 									stroke="#FFFEFE"
 									stroke-width="8"
 									fill={getColorByCity('Buol')}
-
 									mask="url(#path-1-outside-1_0_1)"
 								/>
 							</g>

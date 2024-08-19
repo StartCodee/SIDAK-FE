@@ -31,6 +31,7 @@ interface cardContents {
 	change: string;
 	bulan: string;
 	kabupaten_kota_id: string;
+	komoditas_id: string;
 	id: string;
 }
 
@@ -102,6 +103,7 @@ export default function Home() {
 				},
 			});
 			if (response.data.data) {
+				console.log(response.data.data);
 				setCardContents(response.data.data);
 				setLoading(false);
 			}
