@@ -29,15 +29,12 @@ const formatDate = (date: any) => {
 };
 
 const FlowChart: React.FC = () => {
-
-	
 	const today = new Date();
 	const formattedDate = formatDate(today);
 
 	const [selectedDate, setSelectedDate] = useState<Date>();
 	const [selectedCommodity, setSelectedCommodity] = useState('');
 	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>([]);
-
 
 	const [flow, setFlow] = useState<any>([]);
 
@@ -50,7 +47,6 @@ const FlowChart: React.FC = () => {
 			console.log('No date selected');
 		}
 	}
-
 
 	const containerRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -121,41 +117,22 @@ const FlowChart: React.FC = () => {
 		}
 	};
 
+	const filterByClassification = (classification: string) => {
+		if (classification === 'all') {
+			return flow;
+		} else {
+			return flow.filter((item: any) => item.classification == classification);
+		}
+	};
+
 	const changeTab = (tab: string) => {
-		if (tab === 'all') {
-			setFlow([
-				{ start: 'Buol', end: 'Tolitoli' },
-				{ start: 'Parigi', end: 'Morowali' },
-				{ start: 'Banggai', end: 'Morowali-Utara' },
-				{ start: 'Touna', end: 'Poso' },
-				{ start: 'Sigi', end: 'Donggala' },
-				{ start: 'Palu', end: 'Banggai-Laut' },
-				{ start: 'Palu', end: 'Banggai-Kepulauan' },
-				{ start: 'gorontalo', end: 'Buol' },
-			]);
-		} else if (tab === 'in') {
-			setFlow([
-				{ start: 'Sigi', end: 'Donggala' },
-				{ start: 'Palu', end: 'Banggai-Laut' },
-				{ start: 'Palu', end: 'Banggai-Kepulauan' },
-			]);
-		} else if (tab === 'intra') {
-			setFlow([
-				{ start: 'Buol', end: 'Tolitoli' },
-				{ start: 'Parigi', end: 'sumsel' },
-			]);
-		}
-		else if (tab === 'out') {
-			setFlow([
-				{ start: 'Buol', end: 'gorontalo' },
-			]);
-		}
-	}
+		const newFilteredFlow = filterByClassification(tab);
+		setFlow(newFilteredFlow);
+	};
 
 	useEffect(() => {
 		getPolaPerdagangan(1, 2, '2024-07', '18');
 		getCommodityOption();
-
 	}, []);
 
 	useEffect(() => {
@@ -477,16 +454,6 @@ const FlowChart: React.FC = () => {
 							</div>
 							<div
 								onClick={() => {
-									changeTab('in');
-								}}>
-								<TabsTrigger
-									className="rounded-full text-md font-bold"
-									value="in">
-									In
-								</TabsTrigger>
-							</div>
-							<div
-								onClick={() => {
 									changeTab('intra');
 								}}>
 								<TabsTrigger
@@ -509,7 +476,6 @@ const FlowChart: React.FC = () => {
 					</div>
 				</section>
 			</Tabs>
-
 			<center>
 				<div
 					className="container"

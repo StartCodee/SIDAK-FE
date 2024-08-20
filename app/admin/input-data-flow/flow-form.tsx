@@ -41,7 +41,7 @@ import {
 	FormLabel,
 	FormMessage,
 	FormField,
-    FormDescription
+	FormDescription
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import axios from 'axios';
@@ -76,389 +76,390 @@ interface Komoditas {
 
 
 const formSchema = z.object({
-    kabupatenMasuk: z.string().min(2, {
-        message: 'Kabupaten Masuk harus diisi',
-    }),
-    kabupatenKeluar: z.string().min(2, {
-        message: 'Kabupaten Keluar harus diisi',
-    }),
-    komoditas: z.string().min(2, {
-        message: 'Komoditas harus diisi',
-    }),
-    jumlahMasuk: z.string().min(2, {
-        message: 'Jumlah Masuk harus diisi',
-    }),
-    jumlahKeluar: z.string().min(2, {
-        message: 'Jumlah Keluar harus diisi',
-    }),
-    tanggal: z.string().min(2, {
-        message: 'Tanggal harus diisi',
-    }),
+	kabupatenMasuk: z.string().nonempty({
+		message: 'Kabupaten Masuk harus diisi'
+	}),
+	kabupatenKeluar: z.string().nonempty({
+		message: 'Kabupaten Keluar harus diisi'
+	}),
+	komoditas: z.string().nonempty({
+		message: 'Komoditas harus diisi'
+	}),
+	jumlahMasuk: z.string().nonempty({
+		message: 'Jumlah Masuk harus diisi'
+	}),
+	jumlahKeluar: z.string().nonempty({
+		message: 'Jumlah Keluar harus diisi'
+	}),
+	tanggal: z.string().nonempty({
+		message: 'Tanggal harus diisi'
+	}),
 });
 
-export default function FLowForm(){
+
+export default function FLowForm() {
 	const router = useRouter();
-    const [kabupatenData, setKabupatenData] = useState<Kabupaten []>([]);
-    const [komoditasData, setKomoditasData] = useState<Komoditas []>([]);
+	const [kabupatenData, setKabupatenData] = useState<Kabupaten[]>([]);
+	const [komoditasData, setKomoditasData] = useState<Komoditas[]>([]);
 	const [open, setOpen] = useState(false);
 	const [openKeluar, setOpenKeluar] = useState(false);
 
-    const getKabupaten = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kabupaten`,
-                {
-                    headers: AuthHeader(),
-                    
-                },
-            );
-            if (response.data.data) {
-                setKabupatenData(response.data.data);
-            }
-        } catch (error: any) {
-            if (error.response && error.response.status === 401) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Unauthorized',
-                    text: 'Please login first',
-                });
-            }
-        }
-    }
+	const getKabupaten = async () => {
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kabupaten`,
+				{
+					headers: AuthHeader(),
 
-    const getKomoditas = async () => {
-        try {
-            const response = await axios.get(
-							`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/commodities`,
-							{
-								headers: AuthHeader(),
-								
-							},
-						);
-            if (response.data.data) {
-                setKomoditasData(response.data.data);
-            }
-        } catch (error: any) {
-            if (error.response && error.response.status === 401) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Unauthorized',
-                    text: 'Please login first',
-                });
-            }
-        }
-    }
+				},
+			);
+			if (response.data.data) {
+				setKabupatenData(response.data.data);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Unauthorized',
+					text: 'Please login first',
+				});
+			}
+		}
+	}
 
-    useEffect(() => {
-        getKabupaten();
-        getKomoditas();
-    }, []);
+	const getKomoditas = async () => {
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/commodities`,
+				{
+					headers: AuthHeader(),
+
+				},
+			);
+			if (response.data.data) {
+				setKomoditasData(response.data.data);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Unauthorized',
+					text: 'Please login first',
+				});
+			}
+		}
+	}
+
+	useEffect(() => {
+		getKabupaten();
+		getKomoditas();
+	}, []);
 
 
-    const { toast } = useToast();
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            kabupatenMasuk: '',
-            kabupatenKeluar: '',
-            komoditas: '',
-            jumlahMasuk: '',
-            jumlahKeluar: '',
-            tanggal : '',
-        },
-    });
+	const { toast } = useToast();
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			kabupatenMasuk: '',
+			kabupatenKeluar: '',
+			komoditas: '',
+			jumlahMasuk: '',
+			jumlahKeluar: '',
+			tanggal: '',
+		},
+	});
 
-	 const logout = () => {
-			Cookies.remove('token');
-			Cookies.remove('userEmail');
-			Cookies.remove('userName');
-			Cookies.remove('userId');
-			window.location.href = '/auth';
-		};
+	const logout = () => {
+		Cookies.remove('token');
+		Cookies.remove('userEmail');
+		Cookies.remove('userName');
+		Cookies.remove('userId');
+		window.location.href = '/auth';
+	};
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        axios
-					.post(
-						`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/flow`,
-						{
-							kabupaten_kota_masuk_id: values.kabupatenMasuk,
-							kabupaten_kota_keluar_id: values.kabupatenKeluar,
-							komoditas_id: parseInt(values.komoditas),
-							jumlah_masuk_ton: values.jumlahMasuk,
-							jumlah_keluar_ton: values.jumlahKeluar,
-                            tanggal : values.tanggal
-						},
-						{
-							headers: {
-								Authorization: `Bearer ${Cookies.get('token')}`,
-								'Content-Type': 'application/json',
-							},
-						},
-					)
-					.then((res) => {
-						console.log(res);
-						if (res.status === 200) {
-							toast({
-								title: 'Berhasil input data',
-								description: 'Data berhasil diinput ke dalam database',
-								variant: 'success',
-							});
-							form.reset();
-                            // setTimeout(() => {
-							// 	router.push('/admin/tabel-data');
-							// }, 2000);
-						}
-					})
-					.catch((err) => {
-						if (err.response.status === 401) {
-							toast({
-								variant: 'destructive',
-								title: 'Unauthorized',
-								description: 'You are not authorized to perform this action',
-							});
-							logout();
-						}
-						toast({
-							title: 'Gagal input data',
-							description: 'Data gagal diinput ke dalam database',
-							variant: 'destructive',
-						});
+	function onSubmit(values: z.infer<typeof formSchema>) {
+		axios
+			.post(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/flow`,
+				{
+					kabupaten_kota_masuk_id: values.kabupatenMasuk,
+					kabupaten_kota_keluar_id: values.kabupatenKeluar,
+					komoditas_id: parseInt(values.komoditas),
+					jumlah_masuk_ton: values.jumlahMasuk,
+					jumlah_keluar_ton: values.jumlahKeluar,
+					tanggal: values.tanggal
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${Cookies.get('token')}`,
+						'Content-Type': 'application/json',
+					},
+				},
+			)
+			.then((res) => {
+				console.log(res);
+				if (res.status === 200) {
+					toast({
+						title: 'Berhasil input data',
+						description: 'Data berhasil diinput ke dalam database',
+						variant: 'success',
 					});
-    }
-    return (
-			<>
-				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-						<div className="flex justify-between items-center">
-							<FormControl>
-								<FormField
-									control={form.control}
-									name="kabupatenMasuk"
-									render={({ field }) => (
-										<FormItem className="flex flex-col">
-											<FormLabel>Kabupaten Masuk</FormLabel>
-											<Popover open={open} onOpenChange={setOpen}>
-												<PopoverTrigger asChild>
-													<FormControl>
-														<Button
-															variant="outline"
-															role="combobox"
-															className={cn(
-																'w-[22rem] justify-between',
-																!field.value && 'text-muted-foreground',
-															)}>
-															{field.value
-																? kabupatenData.find(
-																		(x) => x.cityIds === field.value,
-																  )?.name
-																: 'Pilih Kabupaten Masuk'}
-														</Button>
-													</FormControl>
-												</PopoverTrigger>
-												<PopoverContent className="w-[15rem] p-0">
-													<Command>
-														<CommandInput placeholder="Pilih Kabupaten Masuk" />
-														<CommandList>
-															<CommandEmpty>Kabupaten Tidak ada</CommandEmpty>
-															<CommandGroup>
-																{kabupatenData.map((language) => (
-																	<CommandItem
-																		value={language.id.toString()}
-																		key={language.id}
-																		onSelect={() => {
-																			form.setValue(
-																				'kabupatenMasuk',
-																				language.cityIds,
-																			);
-																			setOpen(false);
-																		}}>
-																		<Check
-																			className={cn(
-																				'mr-2 h-4 w-4',
-																				language.cityIds === field.value
-																					? 'opacity-100'
-																					: 'opacity-0',
-																			)}
-																		/>
-																		{language.name}
-																	</CommandItem>
-																))}
-															</CommandGroup>
-														</CommandList>
-													</Command>
-												</PopoverContent>
-											</Popover>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-							</FormControl>
-							{/* line  */}
-							<div className="bg-black h-2 w-[40%] rounded-full"></div>
-							<FormControl>
-								<FormField
-									control={form.control}
-									name="kabupatenKeluar"
-									render={({ field }) => (
-										<FormItem className="flex flex-col">
-											<FormLabel>Kabupaten Keluar</FormLabel>
-											<Popover open={openKeluar} onOpenChange={setOpenKeluar}>
-												<PopoverTrigger asChild>
-													<FormControl>
-														<Button
-															variant="outline"
-															role="combobox"
-															className={cn(
-																'w-[22rem] justify-between',
-																!field.value && 'text-muted-foreground',
-															)}>
-															{field.value
-																? kabupatenData.find(
-																		(x) => x.cityIds === field.value,
-																  )?.name
-																: 'Pilih Kabupaten Keluar'}
-														</Button>
-													</FormControl>
-												</PopoverTrigger>
-												<PopoverContent className="w-[15rem] p-0">
-													<Command>
-														<CommandInput placeholder="Pilih Kabupaten Keluar" />
-														<CommandList>
-															<CommandEmpty>Kabupaten Tidak ada</CommandEmpty>
-															<CommandGroup>
-																{kabupatenData.map((language) => (
-																	<CommandItem
-																		value={language.id.toString()}
-																		key={language.id}
-																		onSelect={() => {
-																			form.setValue(
-																				'kabupatenKeluar',
-																				language.cityIds,
-																			);
-																			setOpenKeluar(false);
-																		}}>
-																		<Check
-																			className={cn(
-																				'mr-2 h-4 w-4',
-																				language.cityIds === field.value
-																					? 'opacity-100'
-																					: 'opacity-0',
-																			)}
-																		/>
-																		{language.name}
-																	</CommandItem>
-																))}
-															</CommandGroup>
-														</CommandList>
-													</Command>
-												</PopoverContent>
-											</Popover>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-							</FormControl>
-						</div>
+					form.reset();
+					// setTimeout(() => {
+					// 	router.push('/admin/tabel-data');
+					// }, 2000);
+				}
+			})
+			.catch((err) => {
+				if (err.response.status === 401) {
+					toast({
+						variant: 'destructive',
+						title: 'Unauthorized',
+						description: 'You are not authorized to perform this action',
+					});
+					logout();
+				}
+				toast({
+					title: 'Gagal input data',
+					description: 'Data gagal diinput ke dalam database',
+					variant: 'destructive',
+				});
+			});
+	}
+	return (
+		<>
+			<Form {...form}>
+				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+					<div className="flex justify-between items-center">
 						<FormControl>
 							<FormField
 								control={form.control}
-								name="komoditas"
+								name="kabupatenMasuk"
 								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Komoditas</FormLabel>
-										<Select
-											onValueChange={field.onChange}
-											defaultValue={field.value}>
-											<FormControl>
-												<SelectTrigger>
-													<SelectValue placeholder="Pilih Komoditas" />
-												</SelectTrigger>
-											</FormControl>
-											<SelectContent>
-												{komoditasData.map((item) => (
-													<SelectItem
-														key={item.id}
-														value={item.id.toString()}
-														onClick={() => {
-															field.onChange(item.id);
-														}}>
-														{item.name}
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
-										<FormDescription>
-											Pilih Komoditas yang akan diinput
-										</FormDescription>
+									<FormItem className="flex flex-col">
+										<FormLabel>Kabupaten Masuk</FormLabel>
+										<Popover open={open} onOpenChange={setOpen}>
+											<PopoverTrigger asChild>
+												<FormControl>
+													<Button
+														variant="outline"
+														role="combobox"
+														className={cn(
+															'w-[22rem] justify-between',
+															!field.value && 'text-muted-foreground',
+														)}>
+														{field.value
+															? kabupatenData.find(
+																(x) => x.cityIds === field.value,
+															)?.name
+															: 'Pilih Kabupaten Masuk'}
+													</Button>
+												</FormControl>
+											</PopoverTrigger>
+											<PopoverContent className="w-[15rem] p-0">
+												<Command>
+													<CommandInput placeholder="Pilih Kabupaten Masuk" />
+													<CommandList>
+														<CommandEmpty>Kabupaten Tidak ada</CommandEmpty>
+														<CommandGroup>
+															{kabupatenData.map((language) => (
+																<CommandItem
+																	value={language.id.toString()}
+																	key={language.id}
+																	onSelect={() => {
+																		form.setValue(
+																			'kabupatenMasuk',
+																			language.cityIds,
+																		);
+																		setOpen(false);
+																	}}>
+																	<Check
+																		className={cn(
+																			'mr-2 h-4 w-4',
+																			language.cityIds === field.value
+																				? 'opacity-100'
+																				: 'opacity-0',
+																		)}
+																	/>
+																	{language.name}
+																</CommandItem>
+															))}
+														</CommandGroup>
+													</CommandList>
+												</Command>
+											</PopoverContent>
+										</Popover>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
 						</FormControl>
+						{/* line  */}
+						<div className="bg-black h-2 w-[40%] rounded-full"></div>
 						<FormControl>
 							<FormField
 								control={form.control}
-								name="jumlahMasuk"
+								name="kabupatenKeluar"
 								render={({ field }) => (
-									<FormItem>
-										<FormLabel htmlFor="jumlahMasuk">Jumlah Masuk</FormLabel>
-										<Input
-											{...field}
-											type="number"
-											id="jumlahMasuk"
-											name="jumlahMasuk"
-											placeholder="Jumlah Masuk"
-										/>
+									<FormItem className="flex flex-col">
+										<FormLabel>Kabupaten Keluar</FormLabel>
+										<Popover open={openKeluar} onOpenChange={setOpenKeluar}>
+											<PopoverTrigger asChild>
+												<FormControl>
+													<Button
+														variant="outline"
+														role="combobox"
+														className={cn(
+															'w-[22rem] justify-between',
+															!field.value && 'text-muted-foreground',
+														)}>
+														{field.value
+															? kabupatenData.find(
+																(x) => x.cityIds === field.value,
+															)?.name
+															: 'Pilih Kabupaten Keluar'}
+													</Button>
+												</FormControl>
+											</PopoverTrigger>
+											<PopoverContent className="w-[15rem] p-0">
+												<Command>
+													<CommandInput placeholder="Pilih Kabupaten Keluar" />
+													<CommandList>
+														<CommandEmpty>Kabupaten Tidak ada</CommandEmpty>
+														<CommandGroup>
+															{kabupatenData.map((language) => (
+																<CommandItem
+																	value={language.id.toString()}
+																	key={language.id}
+																	onSelect={() => {
+																		form.setValue(
+																			'kabupatenKeluar',
+																			language.cityIds,
+																		);
+																		setOpenKeluar(false);
+																	}}>
+																	<Check
+																		className={cn(
+																			'mr-2 h-4 w-4',
+																			language.cityIds === field.value
+																				? 'opacity-100'
+																				: 'opacity-0',
+																		)}
+																	/>
+																	{language.name}
+																</CommandItem>
+															))}
+														</CommandGroup>
+													</CommandList>
+												</Command>
+											</PopoverContent>
+										</Popover>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
 						</FormControl>
-						<FormControl>
-							<FormField
-								control={form.control}
-								name="jumlahKeluar"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel htmlFor="jumlahKeluar">Jumlah Keluar</FormLabel>
-										<Input
-											{...field}
-											type="number"
-											id="jumlahKeluar"
-											name="jumlahKeluar"
-											placeholder="Jumlah Keluar"
-										/>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</FormControl>
-                        <FormControl>
-                                <FormField
-                                    control={form.control}
-                                    name="tanggal"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Tanggal</FormLabel>
-                                            <Input
-                                                {...field}
-                                                type="date"
-                                                placeholder="Tanggal"
-                                            />
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                        </FormControl>
-						<FormControl>
-							<FormItem>
-								<Button type="submit">Submit</Button>
-							</FormItem>
-						</FormControl>
-					</form>
-				</Form>
+					</div>
+					<FormControl>
+						<FormField
+							control={form.control}
+							name="komoditas"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Komoditas</FormLabel>
+									<Select
+										onValueChange={field.onChange}
+										defaultValue={field.value}>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue placeholder="Pilih Komoditas" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											{komoditasData.map((item) => (
+												<SelectItem
+													key={item.id}
+													value={item.id.toString()}
+													onClick={() => {
+														field.onChange(item.id);
+													}}>
+													{item.name}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+									<FormDescription>
+										Pilih Komoditas yang akan diinput
+									</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</FormControl>
+					<FormControl>
+						<FormField
+							control={form.control}
+							name="jumlahMasuk"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel htmlFor="jumlahMasuk">Jumlah Masuk</FormLabel>
+									<Input
+										{...field}
+										type="number"
+										id="jumlahMasuk"
+										name="jumlahMasuk"
+										placeholder="Jumlah Masuk"
+									/>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</FormControl>
+					<FormControl>
+						<FormField
+							control={form.control}
+							name="jumlahKeluar"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel htmlFor="jumlahKeluar">Jumlah Keluar</FormLabel>
+									<Input
+										{...field}
+										type="number"
+										id="jumlahKeluar"
+										name="jumlahKeluar"
+										placeholder="Jumlah Keluar"
+									/>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</FormControl>
+					<FormControl>
+						<FormField
+							control={form.control}
+							name="tanggal"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Tanggal</FormLabel>
+									<Input
+										{...field}
+										type="date"
+										placeholder="Tanggal"
+									/>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</FormControl>
+					<FormControl>
+						<FormItem>
+							<Button type="submit">Submit</Button>
+						</FormItem>
+					</FormControl>
+				</form>
+			</Form>
 
-				{/* <form action="">
+			{/* <form action="">
 					<div className="mt-10 flex flex-wrap justify-between gap-10">
 						<div className="w-[22rem] flex-1">
 							<label
@@ -546,8 +547,8 @@ export default function FLowForm(){
 						</button>
 					</div>
 				</form> */}
-			</>
-		);
+		</>
+	);
 }
 
 

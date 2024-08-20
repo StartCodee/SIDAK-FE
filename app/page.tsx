@@ -3,11 +3,13 @@
 import { CounterClockwiseClockIcon, ChevronRightIcon, ArrowDownIcon, ArrowUpIcon, SymbolIcon, TriangleDownIcon, TriangleUpIcon, BellIcon } from '@radix-ui/react-icons';
 import { UserIcon, ScaleIcon, BuildingLibraryIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/components/ui/card';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import MonthPicker from '@/components/ui/monthpicker';
 import MapNeraca from '@/components/ui/map-neraca';
 import Dialog from '@/components/ui/modal-harga';
 import { Button } from '@/components/ui/button';
+
 import MapPola from '@/components/ui/map-pola';
 import { Badge } from '@/components/ui/badge';
 import { useEffect, useState } from 'react';
@@ -79,8 +81,9 @@ export default function Home() {
 
 	const [detailData, setdetailData] = useState<any>([]);
 
-
 	const [flow, setFlow] = useState<any>([]);
+
+	const [filteredFlow, setFilteredFlow] = useState<any>([]);
 
 	const [dashboardData, setDashboardData] = useState<any>({
 		totalCommodities: 0,
@@ -90,7 +93,6 @@ export default function Home() {
 	const [beritaData, setBeritaData] = useState<any[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [loadingKomoditas, setLoadingKomoditas] = useState(true);
-
 
 	const getDetailSupply = async (page: number = 1, limit: number = 2, date: string, komoditas: string, kota: string) => {
 		try {
@@ -123,7 +125,9 @@ export default function Home() {
 			}
 		}
 	};
+
 	const closeDialog = () => setIsDialogOpen(false);
+
 	const openDialog = (el: string, komoditas: string) => {
 
 		try {
@@ -161,6 +165,7 @@ export default function Home() {
 	};
 
 	const handleChangeMonth = () => {
+		console.log('search');
 		if (selectedDate) {
 			let commodity = selectedCommodity;
 			let val = format(selectedDate, 'yyyy-MM');
@@ -186,6 +191,19 @@ export default function Home() {
 			console.log('No date selected');
 		}
 	}
+
+	const filterByClassification = (classification: string) => {
+		if (classification === 'all') {
+			return flow;
+		} else {
+			return flow.filter((item: any) => item.classification === classification);
+		}
+	};
+
+	const changeTab = (tab: string) => {
+		const newFilteredFlow = filterByClassification(tab);
+		setFilteredFlow(newFilteredFlow);
+	};
 
 	const getHargaPangan = async (page: number = 1, limit: number = 2, date: string, komoditas: string) => {
 		try {
@@ -260,6 +278,7 @@ export default function Home() {
 			});
 			if (response.data.data) {
 				setFlow(response.data.data);
+				setFilteredFlow(response.data.data);
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
@@ -561,7 +580,48 @@ export default function Home() {
 			)}
 			{selectedValue === 'perdagangan-pangan' && (
 				<>
-					<MapPola flow={flow} />
+					<Tabs defaultValue="all">
+						<section className="px-4 sm:px-8 md:px-10 lg:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+							<div className="flex flex-col sm:flex-row justify-between pt-10">
+								<div className="flex-col mb-3">
+									<h1 className="text-2xl sm:text-3xl md:text-4xl mb-3 font-extrabold">
+										COMMODITY FLOW
+									</h1>
+									<Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
+										<CounterClockwiseClockIcon /> Harga diperbaharui pada
+										tanggal {formattedDate}
+									</Badge>
+								</div>
+								<TabsList className="rounded-full  p-4 py-6 w-max text-black">
+									<div
+										onClick={() => {
+											changeTab('all');
+										}}>
+										<TabsTrigger className="rounded-full text-md font-bold" value="all">
+											All
+										</TabsTrigger>
+									</div>
+									<div
+										onClick={() => {
+											changeTab('intra');
+										}}>
+										<TabsTrigger className="rounded-full text-md font-bold" value="intra">
+											Intra
+										</TabsTrigger>
+									</div>
+									<div
+										onClick={() => {
+											changeTab('out');
+										}}>
+										<TabsTrigger className="rounded-full text-md font-bold" value="out">
+											Out
+										</TabsTrigger>
+									</div>
+								</TabsList>
+							</div>
+						</section>
+					</Tabs>
+					<MapPola flow={filteredFlow} />
 				</>
 			)}
 			<section className=" px-4 sm:px-8 md:px-10 lg:px-50 pt-4 ">
