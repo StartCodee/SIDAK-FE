@@ -38,6 +38,8 @@ const FlowChart: React.FC = () => {
 
 	const [flow, setFlow] = useState<any>([]);
 
+	const [filteredFlow, setFilteredFlow] = useState<any>([]);
+
 	const handleChangeMonth = () => {
 		if (selectedDate) {
 			let commodity = selectedCommodity;
@@ -61,6 +63,7 @@ const FlowChart: React.FC = () => {
 			});
 			if (response.data.data) {
 				setFlow(response.data.data);
+				setFilteredFlow(response.data.data);
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
@@ -127,7 +130,7 @@ const FlowChart: React.FC = () => {
 
 	const changeTab = (tab: string) => {
 		const newFilteredFlow = filterByClassification(tab);
-		setFlow(newFilteredFlow);
+		setFilteredFlow(newFilteredFlow);
 	};
 
 	useEffect(() => {
@@ -291,7 +294,7 @@ const FlowChart: React.FC = () => {
 			if (!ctx || !canvas || !container) return;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-			flow.forEach((el: any) => {
+			filteredFlow.forEach((el: any) => {
 				const isExternalFlowStart = externalFlow.includes(el.start);
 				const isExternalFlowEnd = externalFlow.includes(el.end);
 
@@ -385,7 +388,7 @@ const FlowChart: React.FC = () => {
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		};
-	}, [flow, containerRef, canvasRef]);
+	}, [filteredFlow, containerRef, canvasRef]);
 
 	return (
 		<div style={{ overflowX: 'hidden' }}>
