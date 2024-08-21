@@ -13,6 +13,7 @@ interface CardContent {
 	price: string;
 	color: string;
 	kabupaten_kota_id: string;
+	komoditas_id: string;
 	change: string;
 	bulan: string;
 	id: string;
