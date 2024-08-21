@@ -7,14 +7,14 @@ import { Button } from './button';
 import Swal from "sweetalert2";
 import axios from "axios";
 import React from 'react';
-interface CardContent {
+interface cardContents {
 	city: string;
+	item: string;
 	price: string;
 	color: string;
-	change: string;
 	kabupaten_kota_id: string;
-	komoditas_id: string;
-
+	change: string;
+	bulan: string;
 	id: string;
 }
 
