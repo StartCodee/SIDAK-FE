@@ -7,7 +7,7 @@ import { Button } from './button';
 import Swal from "sweetalert2";
 import axios from "axios";
 import React from 'react';
-interface cardContents {
+interface CardContent {
 	city: string;
 	item: string;
 	price: string;
