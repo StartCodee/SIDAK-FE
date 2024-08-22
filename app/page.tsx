@@ -94,8 +94,10 @@ export default function Home() {
 	const [beritaData, setBeritaData] = useState<any[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [loadingKomoditas, setLoadingKomoditas] = useState(true);
+	const [linkExportHg, setLinkExportHg] = useState('');
 
-	const getDetailSupply = async (page: number = 1, limit: number = 2, date: string, komoditas: string, kota: string) => {
+
+	const getDetailSupply = async (date: string, komoditas: string, kota: string) => {
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/detail-data?date=${date}&komoditas=${komoditas}&kabupaten_kota_id=${kota}`, {
 				headers: {
@@ -136,14 +138,16 @@ export default function Home() {
 			const detail = hargaKonsumen.find((item) => item.city === el && item.item === komoditas);
 			setDetailHargaKonsumen(detail);
 
-			getDetailSupply(1, 2, val, detail?.komoditas_id, detail?.kabupaten_kota_id);
+			getDetailSupply(val, detail?.komoditas_id, detail?.kabupaten_kota_id);
+			setLinkExportHg(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/export-excel?komoditas=${detail?.komoditas_id}&kabupaten_kota_id=${detail?.kabupaten_kota_id}&export=1`);
 			setIsDialogOpen(true);
 		} catch (error) {
 			const detail = hargaKonsumen.find((item) => item.city === el && item.item === komoditas);
 			setDetailHargaKonsumen(detail);
 			let val = format(new Date(), 'yyyy-MM');
 
-			getDetailSupply(1, 2, val, detail?.komoditas_id, detail?.kabupaten_kota_id);
+			getDetailSupply(val, detail?.komoditas_id, detail?.kabupaten_kota_id);
+			setLinkExportHg(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/export-excel?komoditas=${detail?.komoditas_id}&kabupaten_kota_id=${detail?.kabupaten_kota_id}&export=1`);
 			setIsDialogOpen(true);
 		}
 
@@ -152,12 +156,12 @@ export default function Home() {
 	const handleValueChange = (e: any) => {
 		setSelectedValue(e.value);
 		if (e.value === 'neraca-pangan') {
-			getNeracaPangan(1, 2, '2024-06', '18');
+			getNeracaPangan('', '18');
 		}
 		else if (e.value === 'perdagangan-pangan') {
-			getPolaPerdagangan(1, 2, '2024-07', '18');
+			getPolaPerdagangan('', '18');
 		} else {
-			getHargaPangan(1, 2, '2024-06', '18');
+			getHargaPangan('', '18');
 		}
 	};
 
@@ -171,12 +175,12 @@ export default function Home() {
 			let commodity = selectedCommodity;
 			let val = format(selectedDate, 'yyyy-MM');
 			if (selectedValue === 'harga-pangan') {
-				getHargaPangan(1, 2, val, commodity);
+				getHargaPangan(val, commodity);
 			} else if (selectedValue == 'neraca-pangan') {
-				getNeracaPangan(1, 2, val, commodity);
+				getNeracaPangan(val, commodity);
 			}
 			else if (selectedValue == 'perdagangan-pangan') {
-				getPolaPerdagangan(1, 2, val, commodity);
+				getPolaPerdagangan(val, commodity);
 			}
 		} else {
 			console.log('No date selected');
@@ -187,7 +191,7 @@ export default function Home() {
 		if (selectedDateKonsumen) {
 			let commodity = selectedCommodityKonsumen;
 			let val = format(selectedDateKonsumen, 'yyyy-MM');
-			getHargaKonsumen(1, 2, val, selectedKabupaten);
+			getHargaKonsumen(val, selectedKabupaten);
 		} else {
 			console.log('No date selected');
 		}
@@ -206,7 +210,13 @@ export default function Home() {
 		setFilteredFlow(newFilteredFlow);
 	};
 
-	const getHargaPangan = async (page: number = 1, limit: number = 2, date: string, komoditas: string) => {
+	const getHargaPangan = async (date: string = '', komoditas: string) => {
+		if (!date) {
+			const now = new Date();
+			const year = now.getFullYear();
+			const month = String(now.getMonth() + 1).padStart(2, '0'); // Ensure two digits for month
+			date = `${year}-${month}`;
+		}
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/perubahan-harga?date=${date}&komoditas=${komoditas}`, {
 				headers: {
@@ -238,7 +248,13 @@ export default function Home() {
 		}
 	};
 
-	const getNeracaPangan = async (page: number = 1, limit: number = 2, date: string, komoditas: string) => {
+	const getNeracaPangan = async (date: string = '', komoditas: string) => {
+		if (!date) {
+			const now = new Date();
+			const year = now.getFullYear();
+			const month = String(now.getMonth() + 1).padStart(2, '0'); // Ensure two digits for month
+			date = `${year}-${month}`;
+		}
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/harga-pasokan?date=${date}&komoditas=${komoditas}`, {
 				headers: {
@@ -269,7 +285,13 @@ export default function Home() {
 		}
 	};
 
-	const getPolaPerdagangan = async (page: number = 1, limit: number = 2, date: string, komoditas: string) => {
+	const getPolaPerdagangan = async (date: string = '', komoditas: string) => {
+		if (!date) {
+			const now = new Date();
+			const year = now.getFullYear();
+			const month = String(now.getMonth() + 1).padStart(2, '0'); // Ensure two digits for month
+			date = `${year}-${month}`;
+		}
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/pola-perdagangan?date=${date}&komoditas=${komoditas}`, {
 				headers: {
@@ -301,7 +323,7 @@ export default function Home() {
 		}
 	};
 
-	const getCommodityOption = async (page: number = 1, limit: number = 2) => {
+	const getCommodityOption = async () => {
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/commodities`, {
 				headers: {
@@ -336,7 +358,7 @@ export default function Home() {
 		}
 	};
 
-	const getKabupatenOption = async (page: number = 1, limit: number = 2) => {
+	const getKabupatenOption = async () => {
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kabupaten`, {
 				headers: {
@@ -371,7 +393,7 @@ export default function Home() {
 		}
 	};
 
-	const getDashboard = async (page: number = 1, limit: number = 2) => {
+	const getDashboard = async () => {
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/dashboard`, {
 				headers: {
@@ -402,7 +424,7 @@ export default function Home() {
 		}
 	};
 
-	const getBerita = async (page: number = 1, limit: number = 3) => {
+	const getBerita = async () => {
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news?limit=3`, {
 				headers: {
@@ -434,7 +456,13 @@ export default function Home() {
 		}
 	};
 
-	const getHargaKonsumen = async (page: number = 1, limit: number = 2, date: string, kabupaten_kota_id: string) => {
+	const getHargaKonsumen = async (date: string = '', kabupaten_kota_id: string) => {
+		if (!date) {
+			const now = new Date();
+			const year = now.getFullYear();
+			const month = String(now.getMonth() + 1).padStart(2, '0'); // Ensure two digits for month
+			date = `${year}-${month}`;
+		}
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/harga-konsumen?date=${date}&kabupaten_kota_id=${kabupaten_kota_id}`, {
 				headers: {
@@ -468,8 +496,8 @@ export default function Home() {
 	};
 
 	useEffect(() => {
-		getHargaPangan(1, 2, '2024-06', '18');
-		getHargaKonsumen(1, 2, '2024-06', '4');
+		getHargaPangan('', '18');
+		getHargaKonsumen('', '7201');
 		getCommodityOption();
 		getKabupatenOption();
 		getDashboard();
@@ -915,7 +943,7 @@ export default function Home() {
 									</h1>
 								</div>
 							</div>
-							<Button
+							<Button onClick={() => { window.open(linkExportHg, '_blank'); }}
 								className="bg-[#f0fdf4] text-[#228848] hover:bg-green-200 rounded-full cursor-pointer"
 								asChild>
 								<span className="self-end inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">

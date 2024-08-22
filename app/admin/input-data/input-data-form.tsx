@@ -50,41 +50,52 @@ import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
 
 const formSchema = z.object({
-	kabupaten: z.number().min(2, {
+	kabupaten: z.string().nonempty({
 		message: 'Kabupaten Masuk harus diisi',
 	}),
-	kecamatan: z.number().min(2, {
+	kecamatan: z.string().nonempty({
 		message: 'Kabupaten Keluar harus diisi',
 	}),
-	komoditas: z.number().min(2, {
+	komoditas: z.number().min(1, {
 		message: 'Komoditas harus diisi',
 	}),
-	harga: z.string().min(2, {
+
+	pasar: z.number().min(1, {
+		message: 'Pasar harus diisi',
+	}),
+
+	harga: z.string().nonempty({
 		message: 'Harga harus diisi',
 	}),
-	jumlah_kebutuhan: z.string().min(2, {
+	jumlah_kebutuhan: z.string().nonempty({
 		message: 'Jumlah Kebutuhan harus diisi',
 	}),
-	jumlah_ketersediaan: z.string().min(2, {
+	jumlah_ketersediaan: z.string().nonempty({
 		message: 'Jumlah Ketersediaan harus diisi',
 	}),
-	tanggal: z.string().min(2, {
+	tanggal: z.string().nonempty({
 		message: 'Tanggal harus diisi',
 	}),
 });
 
 interface Kabupaten {
-	id: number;
+	id: string;
 	name: string;
 }
 
 
 interface Kecamatan {
-	id: number;
+	id: string;
+	code: string;
 	name: string;
 }
 
 interface Komoditas {
+	id: number;
+	name: string;
+}
+
+interface Pasar {
 	id: number;
 	name: string;
 }
@@ -96,9 +107,11 @@ export default function InputDataForm() {
 	const [kabupatenData, setKabupatenData] = useState<Kabupaten[]>([]);
 	const [komoditasData, setKomoditasData] = useState<Komoditas[]>([]);
 	const [kecamatanData, setKecamatanData] = useState<Kecamatan[]>([]);
+	const [pasarData, setPasarData] = useState<Pasar[]>([]);
 	const [open, setOpen] = useState(false);
 	const [openKecamatan, setOpenKecamatan] = useState(false);
 	const [openKomoditas, setOpenKomoditas] = useState(false);
+	const [openPasar, setOpenPasar] = useState(false);
 	const [role, setRole] = useState('');
 	const [userKabupaten, setUserKabupaten] = useState<number>();
 
@@ -151,7 +164,7 @@ export default function InputDataForm() {
 		}
 	};
 
-	const getKecamatan = async (kabupaten_id = '') => {
+	const getKecamatan = async (kabupaten_id: any) => {
 		try {
 			const response = await axios.get(
 				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kecamatan?kabupaten_id=${kabupaten_id}`,
@@ -172,6 +185,28 @@ export default function InputDataForm() {
 			}
 		}
 	};
+
+	const getPasar = async (kecamatan_id: any) => {
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/pasar?kecamatan_id=${kecamatan_id}`,
+				{
+					headers: AuthHeader(),
+				},
+			);
+			if (response.data.data) {
+				setPasarData(response.data.data);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Unauthorized',
+					text: 'Please login first',
+				});
+			}
+		}
+	}
 
 	const getKomoditas = async () => {
 		try {
@@ -197,14 +232,13 @@ export default function InputDataForm() {
 
 	useEffect(() => {
 		getKabupaten();
-		getKecamatan();
 		getKomoditas();
 		getRole();
-	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+	}, []);
 
 	useEffect(() => {
 		if (userKabupaten) {
-			form.setValue('kabupaten', userKabupaten);
+			form.setValue('kabupaten', userKabupaten as unknown as string);
 			getKecamatan(userKabupaten as unknown as string);
 		}
 	}, [userKabupaten]);
@@ -212,8 +246,8 @@ export default function InputDataForm() {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			kabupaten: 0,
-			kecamatan: 0,
+			kabupaten: '',
+			kecamatan: '',
 			komoditas: 0,
 			harga: '',
 			jumlah_kebutuhan: '',
@@ -238,6 +272,7 @@ export default function InputDataForm() {
 					kabupaten_kota_id: values.kabupaten,
 					kecamatan_id: values.kecamatan,
 					komoditas_id: values.komoditas,
+					pasar_id: values.pasar,
 					harga: parseInt(values.harga),
 					jumlah_kebutuhan: parseInt(values.jumlah_kebutuhan),
 					jumlah_ketersediaan: parseInt(values.jumlah_ketersediaan),
@@ -305,8 +340,8 @@ export default function InputDataForm() {
 														)}>
 														{field.value
 															? kabupatenData.find(
-																	(x: Kabupaten) => x.id === field.value,
-															  )?.name
+																(x: Kabupaten) => x.id === field.value,
+															)?.name
 															: 'Pilih Kabupaten Masuk'}
 													</Button>
 												</FormControl>
@@ -323,6 +358,7 @@ export default function InputDataForm() {
 																	key={kab.id}
 																	onSelect={() => {
 																		form.setValue('kabupaten', kab.id);
+																		getKecamatan(kab.id);
 																		setOpen(false);
 																	}}>
 																	<Check
@@ -367,8 +403,8 @@ export default function InputDataForm() {
 														)}>
 														{field.value
 															? kecamatanData.find(
-																	(x: Kecamatan) => x.id === field.value,
-															  )?.name
+																(x: Kecamatan) => x.code === field.value,
+															)?.name
 															: 'Pilih Kecamatan'}
 													</Button>
 												</FormControl>
@@ -381,11 +417,76 @@ export default function InputDataForm() {
 														<CommandGroup>
 															{kecamatanData.map((kec) => (
 																<CommandItem
+																	value={kec.code.toString()}
+																	key={kec.code}
+																	onSelect={() => {
+																		form.setValue('kecamatan', kec.code);
+																		getPasar(kec.code);
+																		setOpenKecamatan(false);
+																	}}>
+																	<Check
+																		className={cn(
+																			'mr-2 h-4 w-4',
+																			kec.code === field.value
+																				? 'opacity-100'
+																				: 'opacity-0',
+																		)}
+																	/>
+																	{kec.name}
+																</CommandItem>
+															))}
+														</CommandGroup>
+													</CommandList>
+												</Command>
+											</PopoverContent>
+										</Popover>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</FormControl>
+
+
+						<FormControl>
+							<FormField
+								control={form.control}
+								name="pasar"
+								render={({ field }) => (
+									<FormItem className="flex flex-col">
+										<FormLabel>Pasar </FormLabel>
+										<Popover
+											open={openPasar}
+											onOpenChange={setOpenPasar}>
+											<PopoverTrigger asChild>
+												<FormControl>
+													<Button
+														variant="outline"
+														role="combobox"
+														className={cn(
+															'w-[22rem] justify-between',
+															!field.value && 'text-muted-foreground',
+														)}>
+														{field.value
+															? pasarData.find(
+																(x: Pasar) => x.id === field.value,
+															)?.name
+															: 'Pilih Pasar'}
+													</Button>
+												</FormControl>
+											</PopoverTrigger>
+											<PopoverContent className="w-[15rem] p-0">
+												<Command>
+													<CommandInput placeholder="Pilih Pasar" />
+													<CommandList>
+														<CommandEmpty>Pasar Tidak ada</CommandEmpty>
+														<CommandGroup>
+															{pasarData.map((kec) => (
+																<CommandItem
 																	value={kec.id.toString()}
 																	key={kec.id}
 																	onSelect={() => {
-																		form.setValue('kecamatan', kec.id);
-																		setOpenKecamatan(false);
+																		form.setValue('pasar', kec.id);
+																		setOpenPasar(false);
 																	}}>
 																	<Check
 																		className={cn(
@@ -408,6 +509,8 @@ export default function InputDataForm() {
 								)}
 							/>
 						</FormControl>
+
+
 						<FormControl>
 							<FormField
 								control={form.control}
@@ -429,8 +532,8 @@ export default function InputDataForm() {
 														)}>
 														{field.value
 															? komoditasData.find(
-																	(x: Komoditas) => x.id === field.value,
-															  )?.name
+																(x: Komoditas) => x.id === field.value,
+															)?.name
 															: 'Pilih Komoditas'}
 													</Button>
 												</FormControl>
@@ -554,117 +657,6 @@ export default function InputDataForm() {
 					</FormControl>
 				</form>
 			</Form>
-			{/* <form action="">
-				<div className="mt-10 flex flex-wrap justify-start gap-15">
-					<div className="w-[22rem]">
-						<label
-							htmlFor="location"
-							className="block text-sm font-medium leading-6 text-gray-900">
-							Kabupaten/Kota
-						</label>
-						<select
-							id="location"
-							name="location"
-							className="mt-2 block w-full h-[4rem] rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
-							<option selected>Kabupaten/Kota</option>
-						</select>
-					</div>
-					<div className="w-[22rem]">
-						<label
-							htmlFor="location"
-							className="block text-sm font-medium leading-6 text-gray-900">
-							Kecamatan
-						</label>
-						<select
-							id="location"
-							name="location"
-							className="mt-2 block w-full  h-[4rem] rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
-							<option selected>Kecamatan</option>
-						</select>
-					</div>
-					<div className="w-[22rem]">
-						<label
-							htmlFor="location"
-							className="block text-sm font-medium leading-6 text-gray-900">
-							Komoditas
-						</label>
-						<select
-							id="location"
-							name="location"
-							className="mt-2 block w-full h-[4rem] rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
-							<option selected>Komoditas</option>
-						</select>
-					</div>
-				</div>
-				<br />
-				<br />
-				<h1 className="text-2xl font-bold">Detail Transaksi </h1>
-
-				<br />
-				<div className="flex flex-wrap justify-start gap-15">
-					<div className="w-[22rem]">
-						<label
-							htmlFor="location"
-							className="block text-sm font-medium leading-6 text-gray-900">
-							Tanggal
-						</label>
-						<input
-							id="location"
-							name="location"
-							type="date"
-							className="mt-2 block w-full h-[4rem] rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-						/>
-					</div>
-					<div className="w-[22rem]">
-						<label
-							htmlFor="location"
-							className="block text-sm font-medium leading-6 text-gray-900">
-							Harga
-						</label>
-						<input
-							id="location"
-							name="location"
-							type="text"
-							className="mt-2 block w-full h-[4rem] rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-						/>
-					</div>
-					<div className="w-[22rem]">
-						<label
-							htmlFor="location"
-							className="block text-sm font-medium leading-6 text-gray-900">
-							Jumlah Kebutuhan
-						</label>
-						<input
-							id="location"
-							name="location"
-							type="text"
-							className="mt-2 block w-full h-[4rem] rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-						/>
-					</div>
-					<div className="w-[22rem]">
-						<label
-							htmlFor="location"
-							className="block text-sm font-medium leading-6 text-gray-900">
-							Jumlah Ketersediaan
-						</label>
-						<input
-							id="location"
-							name="location"
-							type="text"
-							className="mt-2 block w-full h-[4rem] rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-						/>
-					</div>
-				</div>
-
-				<br />
-				<div className="flex justify-start">
-					<button
-						type="submit"
-						className="inline-flex justify-center py-4 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#37B5FE] text-white hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-						Submit
-					</button>
-				</div>
-			</form> */}
 		</>
 	);
 }

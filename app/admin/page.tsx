@@ -6,11 +6,11 @@ import DefaultLayout from "@/components/admin/Layouts/DefaultLayout";
 export default function Home() {
 
 
-    return (
-      <DefaultLayout>
-        <ECommerce />
-      </DefaultLayout>
-    )
-  
+  return (
+    <DefaultLayout>
+      <ECommerce />
+    </DefaultLayout>
+  )
+
 
 }

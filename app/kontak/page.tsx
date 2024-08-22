@@ -13,7 +13,7 @@ import { useEffect } from 'react';
 
 export default function Kontak() {
 
-	
+
 
 	// Handle contact form submission
 	const handleContactSubmit = (event: any) => {
@@ -132,7 +132,7 @@ export default function Kontak() {
 					</div>
 				</div>
 			</div>
-			
+
 
 			<Footer />
 

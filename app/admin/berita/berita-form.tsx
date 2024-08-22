@@ -13,7 +13,7 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-    FormField,
+	FormField,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import axios from 'axios';
@@ -62,7 +62,7 @@ export function BeritaForm({ news, onBeritaDataUpdate }: BeritaFormProps) {
 	const { toast } = useToast();
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [beritaData, setBeritaData] = useState<News[]>([]);
-    const [selectedFile, setSelectedFile] = useState<File>();
+	const [selectedFile, setSelectedFile] = useState<File>();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -86,7 +86,7 @@ export function BeritaForm({ news, onBeritaDataUpdate }: BeritaFormProps) {
 				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news?page=${page}&limit=${limit}`,
 				{
 					headers: AuthHeader(),
-					
+
 				},
 			);
 			if (response.data.data) {
@@ -113,9 +113,9 @@ export function BeritaForm({ news, onBeritaDataUpdate }: BeritaFormProps) {
 		}
 	};
 
-    const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-			setSelectedFile(event.target.files?.[0]);
-		};
+	const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setSelectedFile(event.target.files?.[0]);
+	};
 
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
@@ -124,41 +124,40 @@ export function BeritaForm({ news, onBeritaDataUpdate }: BeritaFormProps) {
 		formData.append('content', values.content);
 
 		if (selectedFile) {
-            formData.append('image', selectedFile);
-        }
+			formData.append('image', selectedFile);
+		}
 
-        console.log(formData);
+		console.log(formData);
 
 		const request = news
 			? axios.put(
-					`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news/${news.id}`,
-					formData,
-					{
-						headers: {
-							'Content-Type': 'multipart/form-data',
-							Authorization: `Bearer ${Cookies.get('token')}`,
-						},
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news/${news.id}`,
+				formData,
+				{
+					headers: {
+						'Content-Type': 'multipart/form-data',
+						Authorization: `Bearer ${Cookies.get('token')}`,
 					},
-			  )
+				},
+			)
 			: axios.post(
-					`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news`,
-					formData,
-					{
-						headers: {
-							'Content-Type': 'multipart/form-data',
-							Authorization: `Bearer ${Cookies.get('token')}`,
-						},
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news`,
+				formData,
+				{
+					headers: {
+						'Content-Type': 'multipart/form-data',
+						Authorization: `Bearer ${Cookies.get('token')}`,
 					},
-			  );
+				},
+			);
 
 		request
 			.then((res) => {
 				if (res.status === 200) {
 					toast({
 						title: `Berita ${news ? 'Updated' : 'Added'} Successfully`,
-						description: `Berita has been ${
-							news ? 'updated' : 'added'
-						} successfully`,
+						description: `Berita has been ${news ? 'updated' : 'added'
+							} successfully`,
 						variant: 'success',
 					});
 					getBerita();
@@ -167,7 +166,7 @@ export function BeritaForm({ news, onBeritaDataUpdate }: BeritaFormProps) {
 				}
 			})
 			.catch((err) => {
-				if(err.response.status === 401) {
+				if (err.response.status === 401) {
 					toast({
 						variant: 'destructive',
 						title: 'Unauthorized',
@@ -225,28 +224,28 @@ export function BeritaForm({ news, onBeritaDataUpdate }: BeritaFormProps) {
 									</FormItem>
 								)}
 							/>
-                            <FormField
-                                control={form.control}
-                                name="image"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Image</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="file"
-                                                accept="image/*"
-                                                {...field}
-                                                onChange={(e) => {
-                                                    field.onChange(e);
-                                                    handleFileSelect(e);
-                                                }}
-                                            />
-                                        </FormControl>
+							<FormField
+								control={form.control}
+								name="image"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Image</FormLabel>
+										<FormControl>
+											<Input
+												type="file"
+												accept="image/*"
+												{...field}
+												onChange={(e) => {
+													field.onChange(e);
+													handleFileSelect(e);
+												}}
+											/>
+										</FormControl>
 
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 							<DialogFooter>
 								<Button type="submit">
 									{news ? 'Update' : 'Save'} changes

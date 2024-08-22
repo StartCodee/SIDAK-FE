@@ -48,7 +48,7 @@ export default function BeritaDelete({ id, onBeritaDataUpdate }: BeritaDeletePro
 						'content-type': 'application/json',
 						Authorization: `Bearer ${localStorage.getItem('token')}`,
 					},
-					
+
 				},
 			);
 			if (response.data.data) {

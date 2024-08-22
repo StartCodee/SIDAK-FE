@@ -48,7 +48,6 @@ export default function Home() {
 	const [monitoringVolatilitas, setMonitoringVolatilitas] = useState<any>([]);
 	const [selectedDate, setSelectedDate] = React.useState<Date>();
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
-	const [detailHarga, setDetailHarga] = useState<any>();
 	const closeDialog = () => setIsDialogOpen(false);
 	const [loading, setLoading] = useState(true);
 
@@ -56,14 +55,13 @@ export default function Home() {
 		if (selectedDate) {
 			let commodity = selectedCommodity;
 			let val = format(selectedDate, 'yyyy-MM');
-			getHargaPangan(1, 2, val, commodity);
+			getHargaPangan(val, commodity);
 		} else {
 			console.log('No date selected');
 		}
 	}
 
-
-	const getMonitoringVolatilitas = async (komoditas: string) => {
+	const getMonitoringVolatilitas = async (komoditas: string = '') => {
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/monitoring-volatilitas/${komoditas}`, {
 				headers: {
@@ -94,7 +92,13 @@ export default function Home() {
 		}
 	};
 
-	const getHargaPangan = async (page: number = 1, limit: number = 2, date: string, komoditas: string) => {
+	const getHargaPangan = async (date: string = '', komoditas: string = '') => {
+		if (!date) {
+			const now = new Date();
+			const year = now.getFullYear();
+			const month = String(now.getMonth() + 1).padStart(2, '0'); // Ensure two digits for month
+			date = `${year}-${month}`;
+		}
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/perubahan-harga?date=${date}&komoditas=${komoditas}`, {
 				headers: {
@@ -127,7 +131,7 @@ export default function Home() {
 		}
 	};
 
-	const getCommodityOption = async (page: number = 1, limit: number = 2) => {
+	const getCommodityOption = async () => {
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/commodities`, {
 				headers: {
@@ -163,10 +167,10 @@ export default function Home() {
 	};
 
 	useEffect(() => {
-		getHargaPangan(1, 2, '2024-06', '18');
+		getHargaPangan('', '18');
 		getCommodityOption();
 		getMonitoringVolatilitas('18');
-	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<main>
@@ -356,13 +360,13 @@ export default function Home() {
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap">
 											{monitoringVolatilitas.statusHarga1Bulan &&
-											monitoringVolatilitas.statusHarga1Bulan === 'naik' ? (
+												monitoringVolatilitas.statusHarga1Bulan === 'naik' ? (
 												<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
 											) : monitoringVolatilitas.statusHarga1Bulan ===
-											  'turun' ? (
+												'turun' ? (
 												<div className="h-10 w-10 bg-yellow-500 rounded-sm"></div>
 											) : monitoringVolatilitas.statusHarga1Bulan ===
-											  'tidak tersedia' ? (
+												'tidak tersedia' ? (
 												<div className="h-10 w-10 bg-[#7C9299] rounded-sm"></div>
 											) : (
 												<div className="h-10 w-10 bg-green-500 rounded-sm"></div>
@@ -370,13 +374,13 @@ export default function Home() {
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap">
 											{monitoringVolatilitas.statusHarga3Bulan &&
-											monitoringVolatilitas.statusHarga3Bulan === 'naik' ? (
+												monitoringVolatilitas.statusHarga3Bulan === 'naik' ? (
 												<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
 											) : monitoringVolatilitas.statusHarga3Bulan ===
-											  'turun' ? (
+												'turun' ? (
 												<div className="h-10 w-10 bg-yellow-500 rounded-sm"></div>
 											) : monitoringVolatilitas.statusHarga3Bulan ===
-											  'tidak tersedia' ? (
+												'tidak tersedia' ? (
 												<div className="h-10 w-10 bg-[#7C9299] rounded-sm"></div>
 											) : (
 												<div className="h-10 w-10 bg-green-500 rounded-sm"></div>
@@ -384,13 +388,13 @@ export default function Home() {
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap">
 											{monitoringVolatilitas.statusHarga12Bulan &&
-											monitoringVolatilitas.statusHarga12Bulan === 'naik' ? (
+												monitoringVolatilitas.statusHarga12Bulan === 'naik' ? (
 												<div className="h-10 w-10 bg-red-500 rounded-sm"></div>
 											) : monitoringVolatilitas.statusHarga12Bulan ===
-											  'turun' ? (
+												'turun' ? (
 												<div className="h-10 w-10 bg-yellow-500 rounded-sm"></div>
 											) : monitoringVolatilitas.statusHarga12Bulan ===
-											  'tidak tersedia' ? (
+												'tidak tersedia' ? (
 												<div className="h-10 w-10 bg-[#7C9299] rounded-sm"></div>
 											) : (
 												<div className="h-10 w-10 bg-green-500 rounded-sm"></div>

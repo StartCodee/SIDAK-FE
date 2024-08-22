@@ -44,6 +44,7 @@ import {
 import DefaultLayout from "@/components/admin/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/admin/Breadcrumbs/Breadcrumb";
 // import { useState } from "react";
+import { AuthHeader } from '@/lib/authHeader';
 
 
 import CheckboxFive from "@/components/admin/Checkboxes/CheckboxFive";
@@ -76,6 +77,7 @@ interface Pasar {
 interface kecamatan {
     id: number;
     name: string;
+    code: string;
     created_at: string;
     updated_at: string;
     deleted_at: string | null;
@@ -103,7 +105,7 @@ interface PaginationInfo {
 export default function Home() {
 
     const [pasarData, setPasarData] = useState<Pasar[]>([]);
-    const [kecamatanData, setKabupatenData] = useState<any[]>([]);
+    const [kecamatanData, setKecamatanData] = useState<any[]>([]);
 
     const [paginationInfo, setPaginationInfo] = useState<PaginationInfo | null>(null);
     const [selectedFile, setSelectedFile] = React.useState<File>();
@@ -142,8 +144,8 @@ export default function Home() {
             },
             cell: (row) => (
                 <div className="flex items-center space-x-2">
-                    <Button variant="outline" size="sm" onClick={() => editPasar(Number(row.getValue()))}>Edit</Button>
-                    <Button variant="destructive" onClick={() => deletePasar(Number(row.getValue()))} size="sm">Delete</Button>
+                    <Button variant="outline" size="sm" onClick={() => editPasar(row.getValue())}>Edit</Button>
+                    <Button variant="destructive" onClick={() => deletePasar(row.getValue())} size="sm">Delete</Button>
                 </div>
             ),
         },
@@ -155,20 +157,17 @@ export default function Home() {
         setActiveTab(tab);
     };
 
-    const getKabupaten = async (page: number = 1, limit: number = 2) => {
+    const getKecamatan = async (page: number = 1, limit: number = 2) => {
         try {
             const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kecamatan`, {
-                headers: {
-                    'content-type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                },
+                headers: AuthHeader(),
             });
             if (response.data.data) {
-                const mappedOptions = response.data.data.map((kecamatan: { name: string, id: number }) => ({
-                    value: kecamatan.id,
+                const mappedOptions = response.data.data.map((kecamatan: { name: string, code: string }) => ({
+                    value: kecamatan.code,
                     label: kecamatan.name,
                 }));
-                setKabupatenData(mappedOptions);
+                setKecamatanData(mappedOptions);
                 setPaginationInfo(response.data.paginationInfo);
             }
         } catch (error: any) {
@@ -224,10 +223,7 @@ export default function Home() {
     const getPasar = async (page: number = 1, limit: number = 2) => {
         try {
             const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/pasar`, {
-                headers: {
-                    'content-type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                },
+                headers: AuthHeader(),
             });
             if (response.data.data) {
                 setPasarData(response.data.data);
@@ -273,10 +269,7 @@ export default function Home() {
                 kecamatan_id: selectedKabupaten.value
             },
             {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
+                headers: AuthHeader(),
             }
         )
             .then(function (response) {
@@ -311,7 +304,7 @@ export default function Home() {
             })
     }
 
-    const editPasar = async (id: number) => {
+    const editPasar = async (id: any) => {
         let fr = pasarData.find((f) => f.id === id);
         if (fr) {
             setPasar({
@@ -320,9 +313,9 @@ export default function Home() {
             })
             console.log(fr);
 
+
             let kab = kecamatanData.find((f) => f.value == fr?.kecamatan_id);
-            console.log('ini');
-            console.log(kab);
+            console.log(kecamatanData);
             setSelectedKabupaten({
                 value: fr.kecamatan_id,
                 label: kab.name
@@ -351,10 +344,7 @@ export default function Home() {
                     kecamatan_id: selectedKabupaten.value
                 },
                 {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
+                    headers: AuthHeader(),
                 }
             );
             getPasar();
@@ -385,7 +375,7 @@ export default function Home() {
         }
     };
 
-    const deletePasar = async (id: number) => {
+    const deletePasar = async (id: any) => {
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -408,9 +398,7 @@ export default function Home() {
                     await axios.delete(
                         `${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/pasar/${id}`,
                         {
-                            headers: {
-                                "Authorization": `Bearer ${localStorage.getItem('token')}`
-                            }
+                            headers: AuthHeader(),
                         }
                     );
                     await getPasar();
@@ -436,9 +424,8 @@ export default function Home() {
 
     useEffect(() => {
         getPasar();
-        console.log(kecamatanData);
-        getKabupaten();
-    },  []); // eslint-disable-line react-hooks/exhaustive-deps
+        getKecamatan();
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>

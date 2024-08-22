@@ -11,13 +11,10 @@ export default function Home() {
         <>
             <DefaultLayout>
                 <Breadcrumb pageName="Data Flow" />
-
                 <div className="w-full rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
                     <h1 className="text-2xl font-bold mb-2">Input Data Flow</h1>
-
                     <FLowForm />
                 </div>
-
             </DefaultLayout>
         </>
     );

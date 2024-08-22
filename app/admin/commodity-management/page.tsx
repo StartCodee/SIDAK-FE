@@ -15,6 +15,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { AuthHeader } from '@/lib/authHeader';
 
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -173,10 +174,7 @@ export default function Home() {
     const getCommodity = async (page: number = 1, limit: number = 2) => {
         try {
             const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/commodities`, {
-                headers: {
-                    'content-type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                },
+                headers: AuthHeader(),
             });
             if (response.data.data) {
                 setCommodityData(response.data.data);
@@ -506,7 +504,7 @@ export default function Home() {
                                     variant="outline"
                                     size="sm"
                                     onClick={() => table.previousPage()}
-                                    // disabled={!table.getCanPreviousPage()}
+                                // disabled={!table.getCanPreviousPage()}
                                 >
                                     Previous
                                 </Button>
@@ -514,7 +512,7 @@ export default function Home() {
                                     variant="outline"
                                     size="sm"
                                     onClick={() => table.nextPage()}
-                                    // disabled={!table.getCanNextPage()}
+                                // disabled={!table.getCanNextPage()}
                                 >
                                     Next
                                 </Button>

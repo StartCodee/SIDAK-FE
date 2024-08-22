@@ -19,6 +19,7 @@ import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { AuthHeader } from '@/lib/authHeader';
 
 
 import { Button } from "@/components/ui/button";
@@ -126,8 +127,8 @@ export default function Home() {
             },
             cell: (row) => (
                 <div className="flex items-center space-x-2">
-                    <Button variant="outline" size="sm" onClick={() => editKabupaten(Number(row.getValue()))}>Edit</Button>
-                    <Button variant="destructive" onClick={() => deleteKabupaten(Number(row.getValue()))} size="sm">Delete</Button>
+                    <Button variant="outline" size="sm" onClick={() => editKabupaten(row.getValue())}>Edit</Button>
+                    <Button variant="destructive" onClick={() => deleteKabupaten(row.getValue())} size="sm">Delete</Button>
                 </div>
             ),
         },
@@ -168,10 +169,7 @@ export default function Home() {
     const getKabupaten = async (page: number = 1, limit: number = 2) => {
         try {
             const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kabupaten`, {
-                headers: {
-                    'content-type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                },
+                headers: AuthHeader(),
             });
             if (response.data.data) {
                 setKabupatenData(response.data.data);
@@ -209,7 +207,7 @@ export default function Home() {
                 Swal.showLoading();
             }
         });
-       
+
         var res = await axios.post(
             `${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kabupaten`,
             {
@@ -254,7 +252,7 @@ export default function Home() {
             })
     }
 
-    const editKabupaten = async (id: number) => {
+    const editKabupaten = async (id: any) => {
         let fr = kabupatenData.find((f) => f.id === id);
         if (fr) {
             setKabupaten({
@@ -318,7 +316,7 @@ export default function Home() {
     };
 
 
-    const deleteKabupaten = async (id: number) => {
+    const deleteKabupaten = async (id: any) => {
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",

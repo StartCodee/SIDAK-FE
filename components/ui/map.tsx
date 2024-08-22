@@ -40,7 +40,7 @@ export default function Map({ cardContents }: MapProps) {
 				},
 			});
 			if (response.data.data) {
-				setLinkExport(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/export-excel?date=2024-06&komoditas=${komoditas}&kabupaten_kota_id=${kota}&export=1`);
+				setLinkExport(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/export-excel?komoditas=${komoditas}&kabupaten_kota_id=${kota}&export=1`);
 				console.log(response.data.data);
 				setdetailData(response.data.data);
 			}
@@ -67,7 +67,6 @@ export default function Map({ cardContents }: MapProps) {
 	const closeDialog = () => setIsDialogOpen(false);
 	const openDialog = (el: string) => {
 		const detail = cardContents.find((item) => item.id === el);
-		console.log(detail);
 		setDetailHarga(detail);
 		getDetailSupply(1, 2, detail?.kabupaten_kota_id as any, detail?.komoditas_id as any);
 		setIsDialogOpen(true);
@@ -204,7 +203,7 @@ export default function Map({ cardContents }: MapProps) {
 									<p className="text-[10px] lg:text-lg">Komoditas </p>
 									<h1 className="font-bold text-[10px] lg:text-lg">{detailHarga?.item}</h1>
 								</div>
-							</div> 
+							</div>
 							<Button onClick={() => { window.open(linkExport, '_blank'); }}
 								className="bg-[#f0fdf4] text-[#228848] hover:bg-green-200 rounded-full cursor-pointer"
 								asChild>

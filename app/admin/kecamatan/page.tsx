@@ -3,16 +3,16 @@
 
 // import * as React from "react";
 import {
-    ColumnDef,
-    ColumnFiltersState,
-    SortingState,
-    VisibilityState,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
+	ColumnDef,
+	ColumnFiltersState,
+	SortingState,
+	VisibilityState,
+	flexRender,
+	getCoreRowModel,
+	getFilteredRowModel,
+	getPaginationRowModel,
+	getSortedRowModel,
+	useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 
@@ -21,25 +21,26 @@ import axios from "axios";
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
 import Select from 'react-select';
+import { AuthHeader } from '@/lib/authHeader';
 
 import { Button } from "@/components/ui/button";
 import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
 } from "@/components/ui/table";
 import DefaultLayout from "@/components/admin/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/admin/Breadcrumbs/Breadcrumb";
@@ -53,51 +54,52 @@ import CheckboxThree from "@/components/admin/Checkboxes/CheckboxThree";
 import CheckboxTwo from "@/components/admin/Checkboxes/CheckboxTwo";
 
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 
 
 
 interface Kecamatan {
-    id: number;
-    name: string;
-    kabupaten_kota_id: number;
-    created_at: string;
-    updated_at: string;
-    deleted_at: string | null;
+	id: number;
+	name: string;
+	code: string;
+	kabupaten_kota_id: number;
+	created_at: string;
+	updated_at: string;
+	deleted_at: string | null;
 }
 interface kabupaten {
-    id: number;
-    name: string;
-    created_at: string;
-    updated_at: string;
-    deleted_at: string | null;
-    value: number;
+	id: number;
+	name: string;
+	created_at: string;
+	updated_at: string;
+	deleted_at: string | null;
+	value: number;
 }
 interface PaginationInfo {
-    current_page: number;
-    from: number;
-    last_page: number;
-    first_page_url: string;
-    next_page_url: string | null;
-    prev_page_url: string | null;
-    last_page_url: string;
-    path: string;
-    per_page: number;
-    to: number;
-    total: number;
-    links: {
-        url: string | null;
-        label: string;
-        active: boolean;
-    }[];
+	current_page: number;
+	from: number;
+	last_page: number;
+	first_page_url: string;
+	next_page_url: string | null;
+	prev_page_url: string | null;
+	last_page_url: string;
+	path: string;
+	per_page: number;
+	to: number;
+	total: number;
+	links: {
+		url: string | null;
+		label: string;
+		active: boolean;
+	}[];
 }
 
 
@@ -111,6 +113,7 @@ export default function Home() {
 	const [selectedFile, setSelectedFile] = React.useState<File>();
 	const [kecamatan, setKecamatan] = React.useState({
 		id: 0,
+		code: '',
 		name: '',
 	});
 
@@ -146,12 +149,12 @@ export default function Home() {
 					<Button
 						variant="outline"
 						size="sm"
-						onClick={() => editKecamatan(Number(row.getValue()))}>
+						onClick={() => editKecamatan(row.getValue())}>
 						Edit
 					</Button>
 					<Button
 						variant="destructive"
-						onClick={() => deleteKecamatan(Number(row.getValue()))}
+						onClick={() => deleteKecamatan(row.getValue())}
 						size="sm">
 						Delete
 					</Button>
@@ -171,10 +174,7 @@ export default function Home() {
 			const response = await axios.get(
 				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kabupaten`,
 				{
-					headers: {
-						'content-type': 'application/json',
-						Authorization: `Bearer ${localStorage.getItem('token')}`,
-					},
+					headers: AuthHeader(),
 				},
 			);
 			if (response.data.data) {
@@ -245,15 +245,11 @@ export default function Home() {
 			const response = await axios.get(
 				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kecamatan`,
 				{
-					headers: {
-						'content-type': 'application/json',
-						Authorization: `Bearer ${localStorage.getItem('token')}`,
-					},
+					headers: AuthHeader(),
 				},
 			);
 			if (response.data.data) {
 				setKecamatanData(response.data.data);
-				console.log(response.data.data);
 				setPaginationInfo(response.data.paginationInfo);
 			}
 		} catch (error: any) {
@@ -296,16 +292,14 @@ export default function Home() {
 					kabupaten_id: selectedKabupaten.value,
 				},
 				{
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${localStorage.getItem('token')}`,
-					},
+					headers: AuthHeader(),
 				},
 			)
 			.then(function (response) {
 				getKecamatan();
 				setKecamatan({
 					id: 0,
+					code: '',
 					name: '',
 				});
 				e.target.reset();
@@ -335,11 +329,13 @@ export default function Home() {
 			});
 	};
 
-	const editKecamatan = async (id: number) => {
+	const editKecamatan = async (id: any) => {
 		let fr = kecamatanData.find((f) => f.id === id);
+		console.log(fr, kecamatanData);
 		if (fr) {
 			setKecamatan({
 				id: fr.id,
+				code: fr.code,
 				name: fr.name,
 			});
 			console.log(fr);
@@ -374,15 +370,13 @@ export default function Home() {
 					kabupaten_id: selectedKabupaten.value,
 				},
 				{
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${localStorage.getItem('token')}`,
-					},
+					headers: AuthHeader(),
 				},
 			);
 			getKecamatan();
 			setKecamatan({
 				id: 0,
+				code: '',
 				name: '',
 			});
 			e.target.reset();
@@ -408,7 +402,7 @@ export default function Home() {
 		}
 	};
 
-	const deleteKecamatan = async (id: number) => {
+	const deleteKecamatan = async (id: any) => {
 		Swal.fire({
 			title: 'Are you sure?',
 			text: "You won't be able to revert this!",
@@ -438,7 +432,7 @@ export default function Home() {
 					);
 					await getKecamatan();
 					Swal.fire('Deleted!', 'Your data has been deleted.', 'success');
-				} catch (error) {}
+				} catch (error) { }
 			}
 		});
 	};
@@ -454,7 +448,6 @@ export default function Home() {
 
 	useEffect(() => {
 		getKecamatan();
-		console.log(kecamatanData);
 		getKabupaten();
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -513,6 +506,21 @@ export default function Home() {
 															options={kabupatenData as any}
 														/>
 													</div>
+
+													<div className="">
+														<Label htmlFor="code" className="text-right mb-3">
+															Kode Kecamatan
+														</Label>
+														<Input
+															id="code"
+															name="code"
+															value={kecamatan.code}
+															onChange={handleInputChange}
+															placeholder="Isi kode Kecamatan"
+															className="col-span-3 mt-1"
+														/>
+													</div>
+
 													<div className="">
 														<Label htmlFor="name" className="text-right mb-3">
 															Nama Kecamatan
@@ -547,9 +555,9 @@ export default function Home() {
 														{header.isPlaceholder
 															? null
 															: flexRender(
-																	header.column.columnDef.header,
-																	header.getContext(),
-															  )}
+																header.column.columnDef.header,
+																header.getContext(),
+															)}
 													</TableHead>
 												);
 											})}
