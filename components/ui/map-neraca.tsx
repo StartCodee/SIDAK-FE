@@ -273,7 +273,7 @@ export default function MapNeraca({ cardContents }: MapProps) {
 					<div className="mx-auto  self-center">
 						<TabsContent value="table">
 							<div className="h-full w-full ">
-								<div id="container" className="relative w-full h-full  ">
+								<div id="container" style={{ width: '75%' }} className="relative h-full  ">
 									<center>
 										<svg
 											viewBox="0 0 731 723"

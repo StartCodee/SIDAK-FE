@@ -223,7 +223,7 @@ export default function Home() {
 				</div>
 				<div className="mx-auto  self-center">
 					<div className="h-full w-full ">
-						<div id="container" className="relative w-full h-full  ">
+						<div id="container" className="relative h-full  " style={{width:'75%'}}>
 							<center>
 								<Map cardContents={cardContents} />
 							</center>
