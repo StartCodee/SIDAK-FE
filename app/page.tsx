@@ -514,6 +514,16 @@ export default function Home() {
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm mb-1">Jenis Informasi</h1>
 					<Select
+						styles={{
+							control: (provided) => ({
+							...provided,
+							border: 'none',
+							boxShadow: 'none',
+							}),
+						}}
+						 components={{
+							IndicatorSeparator: () => null
+						}}
 						onChange={(e) => handleValueChange(e)}
 						className=" basic-single w-[170px] border-none"
 						options={jenisInformasi}
@@ -523,6 +533,16 @@ export default function Home() {
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm mb-1">Komoditas</h1>
 					<Select
+						styles={{
+							control: (provided) => ({
+							...provided,
+							border: 'none',
+							boxShadow: 'none',
+							}),
+						}}
+						 components={{
+							IndicatorSeparator: () => null
+						}}
 						className=" basic-single w-[170px] border-none"
 						onChange={(option) => setSelectedCommodity(option!.value)}
 						options={selectedCommodityOption}
@@ -663,6 +683,16 @@ export default function Home() {
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm mb-1">Jenis Pasar</h1>
 						<Select
+							styles={{
+							control: (provided) => ({
+							...provided,
+							border: 'none',
+							boxShadow: 'none',
+							}),
+						}}
+						 components={{
+							IndicatorSeparator: () => null
+						}}
 							className=" basic-single w-[170px] border-none"
 							options={jenisPasar}
 						/>
@@ -671,6 +701,16 @@ export default function Home() {
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm mb-1">Komoditas</h1>
 						<Select
+							styles={{
+							control: (provided) => ({
+							...provided,
+							border: 'none',
+							boxShadow: 'none',
+							}),
+						}}
+						 components={{
+							IndicatorSeparator: () => null
+						}}
 							onChange={(e) => handleValueChangeKonsumen(e)}
 							className=" basic-single w-[170px] border-none"
 							options={selectedCommodityOption}
@@ -680,6 +720,16 @@ export default function Home() {
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-sm mb-1 ">Kabupaten/Kota</h1>
 						<Select
+							styles={{
+							control: (provided) => ({
+							...provided,
+							border: 'none',
+							boxShadow: 'none',
+							}),
+						}}
+						 components={{
+							IndicatorSeparator: () => null
+						}}
 							onChange={(option) => setSelectedKabupaten(option!.value)}
 							className=" basic-single w-[170px] border-none"
 							options={selectedKabupatenOption}

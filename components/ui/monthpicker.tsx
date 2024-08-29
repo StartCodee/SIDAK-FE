@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ChevronDown } from 'lucide-react';
@@ -9,10 +9,17 @@ interface DatePickerProps {
 }
 
 export default function MonthPicker({ date, setDate }: DatePickerProps) {
+	const datePickerRef = useRef<DatePicker | null>(null);
+	const handleDivClick = () => {
+    if (datePickerRef.current) {
+      datePickerRef.current.setOpen(true);
+    }
+  };
 	return (
 		<>
-			<div className="flex items-start">
+			<div className="flex items-start max-w-[170px] h-[38px] cursor-pointer" onClick={handleDivClick}>
 				<DatePicker
+					ref={datePickerRef}
 					selected={date}
 					onChange={(date) => date && setDate(date)}
 					dateFormat="MM/yyyy"

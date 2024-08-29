@@ -182,6 +182,16 @@ export default function Home() {
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm mb-1">Komoditas</h1>
 					<Select
+						styles={{
+							control: (provided) => ({
+							...provided,
+							border: 'none',
+							boxShadow: 'none',
+							}),
+						}}
+						 components={{
+							IndicatorSeparator: () => null
+						}}
 						onChange={(option) => setSelectedCommodity(option!.value)}
 						className=" basic-single w-[170px] border-none"
 						options={selectedCommodityOption}
