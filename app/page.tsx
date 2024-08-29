@@ -729,7 +729,7 @@ export default function Home() {
 													className="rounded-full"
 												/>
 											</div>
-											<div className="">
+											<div className="" style={{ height: '80px' }}>
 												<h1 className="ms-2 text-left font-bold text-lg">
 													{content.item.split(' ')[0]}
 												</h1>
@@ -974,7 +974,7 @@ export default function Home() {
 										</tr>
 									</thead>
 									<tbody>
-										{detailData.pasar != undefined &&
+										{detailData.pasar != undefined && detailData.pasar.length > 0 ? (
 											detailData.pasar.map(
 												(pasarItem: any, pasarIndex: any) => (
 													<tr key={pasarIndex}>
@@ -1005,7 +1005,15 @@ export default function Home() {
 															)}
 													</tr>
 												),
-											)}
+											)
+										) : (
+											<tr key="1">
+												<td className="px-4 py-2 border border-1 text-center">
+													Data Kosong
+												</td>
+											</tr>
+										)
+										}
 									</tbody>
 								</table>
 							</div>

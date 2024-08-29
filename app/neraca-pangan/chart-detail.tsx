@@ -77,7 +77,7 @@ export default function Chart({ type, data }: MapProps) {
 
 
 	const processedData = processData(data, type);
-
+	const barWidth = 80;
 	return (
 		<>
 			<ChartContainer config={chartConfig} className="w-full">
@@ -87,9 +87,9 @@ export default function Chart({ type, data }: MapProps) {
 					<YAxis />
 					<Tooltip content={<ChartTooltipContent />} />
 					<Legend content={<ChartLegendContent />} />
-					<Bar dataKey="neraca" fill={chartConfig.neraca.color} radius={4} />
-					<Bar dataKey="kebutuhan" fill={chartConfig.kebutuhan.color} radius={4} />
-					<Bar dataKey="ketersediaan" fill={chartConfig.ketersediaan.color} radius={4} />
+					<Bar dataKey="neraca" fill={chartConfig.neraca.color} radius={4} barSize={barWidth}/>
+					<Bar dataKey="kebutuhan" fill={chartConfig.kebutuhan.color} radius={4} barSize={barWidth}/>
+					<Bar dataKey="ketersediaan" fill={chartConfig.ketersediaan.color} radius={4} barSize={barWidth}/>
 				</BarChart>
 			</ChartContainer>
 		</>

@@ -113,6 +113,8 @@ export default function FLowForm() {
 
 				},
 			);
+			console.log('ini responseee')
+			console.log(response.data.data)
 			if (response.data.data) {
 				setKabupatenData(response.data.data);
 			}

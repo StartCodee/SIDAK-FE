@@ -72,6 +72,8 @@ export default function MapNeraca({ cardContents }: MapProps) {
 
 	const openDialog = (el: string) => {
 		const detail = cardContents.find((card) => card.id === el);
+		console.log('INI DIALGO');
+		console.log(detail)
 		getDetailNeraca(
 			1,
 			2,

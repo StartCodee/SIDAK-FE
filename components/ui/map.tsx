@@ -230,18 +230,26 @@ export default function Map({ cardContents }: MapProps) {
 										</tr>
 									</thead>
 									<tbody>
-										{detailData.pasar != undefined && detailData.pasar.map((pasarItem: any, pasarIndex: any) => (
-											<tr key={pasarIndex}>
-												<td className="px-4 py-2 border border-1">
-													<h2>{pasarItem.pasar_name != "null" ? pasarItem.pasar_name : detailHarga?.city}</h2>
-												</td>
-												{pasarItem.dates != undefined && pasarItem.dates.map((dateItem: any, dateIndex: any) => (
-													<td className="px-4 py-2 border border-1" key={dateIndex}>
-														<h2>Rp {dateItem.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || ''}</h2>
+										{detailData.pasar != undefined && detailData.pasar.length > 0 ? (
+											detailData.pasar.map((pasarItem: any, pasarIndex: any) => (
+												<tr key={pasarIndex}>
+													<td className="px-4 py-2 border border-1">
+														<h2>{pasarItem.pasar_name != "null" ? pasarItem.pasar_name : detailHarga?.city}</h2>
 													</td>
-												))}
+													{pasarItem.dates != undefined && pasarItem.dates.map((dateItem: any, dateIndex: any) => (
+														<td className="px-4 py-2 border border-1" key={dateIndex}>
+															<h2>Rp {dateItem.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || ''}</h2>
+														</td>
+													))}
+												</tr>
+											)
+											)) : (
+											<tr key="1">
+												<td className="px-4 py-2 border border-1 text-center">
+													Data Kosong
+												</td>
 											</tr>
-										))}
+										)}
 									</tbody>
 								</table>
 							</div>
