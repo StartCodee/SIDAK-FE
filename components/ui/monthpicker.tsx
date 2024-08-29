@@ -28,6 +28,7 @@ export default function MonthPicker({ date, setDate }: DatePickerProps) {
 					showFullMonthYearPicker
 					placeholderText="Bulan"
 					popperPlacement="bottom-end"
+					popperClassName='rasta-stripes'					
 				/>
 				<ChevronDown className="h-4 w-4 mt-3 opacity-50" />
 			</div>
