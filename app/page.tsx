@@ -18,7 +18,7 @@ import Footer from '@/components/ui/footer';
 import Hero from '@/components/ui/hero';
 import Map from '@/components/ui/map';
 import Select from 'react-select';
-import { format, set } from 'date-fns';
+import { format, set,subDays } from 'date-fns';
 import Swal from "sweetalert2";
 import Image from 'next/image';
 import Link from 'next/link';
@@ -26,6 +26,7 @@ import axios from "axios";
 import React from 'react';
 import { SkeletonCard } from '@/components/SkeletonCard';
 import BeritaSkeleton from '@/components/BeritaSkeleton';
+import SmallLineChart from '@/components/SmallLineChart';
 import KomoditasSkeleton from '@/components/KomoditasSkeleton';
 import HargaSkeleton from '@/components/HargaSkeleton';
 
@@ -516,12 +517,12 @@ export default function Home() {
 					<Select
 						styles={{
 							control: (provided) => ({
-							...provided,
-							border: 'none',
-							boxShadow: 'none',
+								...provided,
+								border: 'none',
+								boxShadow: 'none',
 							}),
 						}}
-						 components={{
+						components={{
 							IndicatorSeparator: () => null
 						}}
 						onChange={(e) => handleValueChange(e)}
@@ -535,12 +536,12 @@ export default function Home() {
 					<Select
 						styles={{
 							control: (provided) => ({
-							...provided,
-							border: 'none',
-							boxShadow: 'none',
+								...provided,
+								border: 'none',
+								boxShadow: 'none',
 							}),
 						}}
-						 components={{
+						components={{
 							IndicatorSeparator: () => null
 						}}
 						className=" basic-single w-[170px] border-none"
@@ -684,15 +685,15 @@ export default function Home() {
 						<h1 className="font-bold text-sm mb-1">Jenis Pasar</h1>
 						<Select
 							styles={{
-							control: (provided) => ({
-							...provided,
-							border: 'none',
-							boxShadow: 'none',
-							}),
-						}}
-						 components={{
-							IndicatorSeparator: () => null
-						}}
+								control: (provided) => ({
+									...provided,
+									border: 'none',
+									boxShadow: 'none',
+								}),
+							}}
+							components={{
+								IndicatorSeparator: () => null
+							}}
 							className=" basic-single w-[170px] border-none"
 							options={jenisPasar}
 						/>
@@ -702,15 +703,15 @@ export default function Home() {
 						<h1 className="font-bold text-sm mb-1">Komoditas</h1>
 						<Select
 							styles={{
-							control: (provided) => ({
-							...provided,
-							border: 'none',
-							boxShadow: 'none',
-							}),
-						}}
-						 components={{
-							IndicatorSeparator: () => null
-						}}
+								control: (provided) => ({
+									...provided,
+									border: 'none',
+									boxShadow: 'none',
+								}),
+							}}
+							components={{
+								IndicatorSeparator: () => null
+							}}
 							onChange={(e) => handleValueChangeKonsumen(e)}
 							className=" basic-single w-[170px] border-none"
 							options={selectedCommodityOption}
@@ -721,15 +722,15 @@ export default function Home() {
 						<h1 className="font-bold text-sm mb-1 ">Kabupaten/Kota</h1>
 						<Select
 							styles={{
-							control: (provided) => ({
-							...provided,
-							border: 'none',
-							boxShadow: 'none',
-							}),
-						}}
-						 components={{
-							IndicatorSeparator: () => null
-						}}
+								control: (provided) => ({
+									...provided,
+									border: 'none',
+									boxShadow: 'none',
+								}),
+							}}
+							components={{
+								IndicatorSeparator: () => null
+							}}
 							onChange={(option) => setSelectedKabupaten(option!.value)}
 							className=" basic-single w-[170px] border-none"
 							options={selectedKabupatenOption}
@@ -762,60 +763,68 @@ export default function Home() {
 							{loadingKomoditas ? (
 								<KomoditasSkeleton />
 							) : (
-								hargaKonsumen.map((content, index) => (
-									<Card
-										onClick={() => {
-											openDialog(content.city, content.item);
-										}}
-										key={index}
-										className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl cursor-pointer">
-										<div className="flex items-center space-x-4">
-											<div>
-												<Image
-													src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${content.image}`}
-													alt="user"
-													width={50}
-													height={50}
-													className="rounded-full"
-												/>
+								hargaKonsumen.map((content, index) => {
+									const last7DaysData = Array.from({ length: 7 }, (_, i) => {
+										const date = format(subDays(new Date(), i), 'yyyy-MM-dd');
+										return content.last7DaysPrices[date] || 0;
+									}).reverse(); // Reverse to start with the oldest date first
+
+									return (
+										<Card
+											onClick={() => {
+												openDialog(content.city, content.item);
+											}}
+											key={index}
+											className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl cursor-pointer relative">
+											<div className="flex items-center space-x-4">
+												<div>
+													<Image
+														src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${content.image}`}
+														alt="user"
+														width={50}
+														height={50}
+														className="rounded-full"
+													/>
+												</div>
+												<div className="" style={{ height: '80px' }}>
+													<h1 className="ms-2 text-left font-bold text-lg">
+														{content.item.split(' ')[0]}
+													</h1>
+													<p className="text-left ms-2">
+														{content.item.split(' ').slice(1).join(' ')}
+													</p>
+													<p className="text-left ms-2 font-bold">
+														Rp{' '}
+														{Math.round(content?.price as any)
+															.toString()
+															.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+													</p>
+												</div>
+												<div className="absolute top-2 right-2">
+													<SmallLineChart data={last7DaysData} />
+												</div>
 											</div>
-											<div className="" style={{ height: '80px' }}>
-												<h1 className="ms-2 text-left font-bold text-lg">
-													{content.item.split(' ')[0]}
-												</h1>
-												<p className="text-left ms-2">
-													{content.item.split(' ').slice(1).join(' ')}
+											<div className="h-1 rounded-lg bg-black/10 my-2"></div>
+											<div className="flex justify-between items-center">
+												<p>50</p>
+												<p className="text-xs font-thin">
+													DAY IN HIGH VOLATILITY
 												</p>
-												<p className="text-left ms-2 font-bold">
-													Rp{' '}
-													{Math.round(content?.price as any)
-														.toString()
-														.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-												</p>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													viewBox="0 0 24 24"
+													fill="currentColor"
+													className="size-4 fill-red-500">
+													<path
+														fillRule="evenodd"
+														d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
+														clipRule="evenodd"
+													/>
+												</svg>
 											</div>
-											<div></div>
-										</div>
-										<div className="h-1 rounded-lg bg-black/10 my-2"></div>
-										<div className="flex justify-between items-center">
-											<p>50</p>
-											<p className="text-xs font-thin">
-												DAY IN HIGH VOLATILITY
-											</p>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-												fill="currentColor"
-												className="size-4 fill-red-500">
-												{' '}
-												<path
-													fillRule="evenodd"
-													d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
-													clipRule="evenodd"
-												/>{' '}
-											</svg>
-										</div>
-									</Card>
-								))
+										</Card>
+									);
+								})
 							)}
 						</div>
 					</center>
