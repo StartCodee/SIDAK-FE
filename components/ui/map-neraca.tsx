@@ -190,7 +190,31 @@ export default function MapNeraca({ cardContents }: MapProps) {
 
 	const getColorByCity = (cityName: string) => {
 		const cityData = cardContents.find((item) => item.id === cityName);
+
+		try {
+			const card = document.getElementById('card-' + cityName);
+			if (card) {
+				card?.remove();
+			}
+			const group = document.getElementById(cityName);
+
+			if (!group) return;
+			const originalColor = cityData?.color;
+			if (!originalColor) return;
+			const groupElements = group.querySelectorAll('path');
+			groupElements.forEach((path) => {
+				if (path.parentElement && path.parentElement.tagName.toLowerCase() === 'mask') {
+					return;
+				}
+
+				path.style.fill = originalColor;
+
+			});
+		} catch (error) {
+
+		}
 		return cityData ? cityData.color : undefined;
+
 	};
 
 	return (
