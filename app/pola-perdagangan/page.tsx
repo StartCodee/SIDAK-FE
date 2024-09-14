@@ -1254,6 +1254,13 @@ const FlowChart: React.FC = () => {
 											SELATAN
 										</tspan>
 									</text>
+									<circle
+										id="sulsel-pinpoint"
+										cx="370"
+										cy="871"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="sulteng">
 									<rect
@@ -1279,6 +1286,13 @@ const FlowChart: React.FC = () => {
 											TENGGARA
 										</tspan>
 									</text>
+									<circle
+										id="sulteng-pinpoint"
+										cx="890"
+										cy="855"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="manado">
 									<rect
@@ -1301,6 +1315,13 @@ const FlowChart: React.FC = () => {
 											MANADO
 										</tspan>
 									</text>
+									<circle
+										id="manado-pinpoint"
+										cx="890"
+										cy="278"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="papua">
 									<rect
@@ -1323,6 +1344,13 @@ const FlowChart: React.FC = () => {
 											Papua
 										</tspan>
 									</text>
+									<circle
+										id="papua-pinpoint"
+										cx="970"
+										cy="163"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="papua-pegunungan">
 									<rect
@@ -1348,6 +1376,13 @@ const FlowChart: React.FC = () => {
 											Pegunungan
 										</tspan>
 									</text>
+									<circle
+										id="papua-pegunungan-pinpoint"
+										cx="980"
+										cy="248"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="maluku">
 									<rect
@@ -1370,6 +1405,13 @@ const FlowChart: React.FC = () => {
 											Maluku
 										</tspan>
 									</text>
+									<circle
+										id="maluku-pinpoint"
+										cx="1050"
+										cy="798"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="papua-barat-daya">
 									<rect
@@ -1395,6 +1437,13 @@ const FlowChart: React.FC = () => {
 											Barat Daya
 										</tspan>
 									</text>
+									<circle
+										id="papua-barat-daya-pinpoint"
+										cx="1050"
+										cy="928"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="papua-selatan">
 									<rect
@@ -1420,6 +1469,13 @@ const FlowChart: React.FC = () => {
 											Selatan
 										</tspan>
 									</text>
+									<circle
+										id="papua-selatan-pinpoint"
+										cx="985"
+										cy="418"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="maluku-utara">
 									<rect
@@ -1445,6 +1501,13 @@ const FlowChart: React.FC = () => {
 											Utara
 										</tspan>
 									</text>
+									<circle
+										id="maluku-utara-pinpoint"
+										cx="989"
+										cy="528"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="papua-barat">
 									<rect
@@ -1470,6 +1533,13 @@ const FlowChart: React.FC = () => {
 											Barat
 										</tspan>
 									</text>
+									<circle
+										id="papua-barat-pinpoint"
+										cx="990"
+										cy="658"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="ntt">
 									<rect
@@ -1492,6 +1562,13 @@ const FlowChart: React.FC = () => {
 											NTT
 										</tspan>
 									</text>
+									<circle
+										id="ntt-pinpoint"
+										cx="670"
+										cy="1008"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="ntb">
 									<rect
@@ -1514,6 +1591,13 @@ const FlowChart: React.FC = () => {
 											NTB
 										</tspan>
 									</text>
+									<circle
+										id="ntb-pinpoint"
+										cx="815"
+										cy="1008"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="bali">
 									<rect
@@ -1536,6 +1620,13 @@ const FlowChart: React.FC = () => {
 											Bali
 										</tspan>
 									</text>
+									<circle
+										id="bali-pinpoint"
+										cx="515"
+										cy="1014"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="jatim">
 									<rect
@@ -1558,6 +1649,13 @@ const FlowChart: React.FC = () => {
 											Jawa Timur
 										</tspan>
 									</text>
+									<circle
+										id="jatim-pinpoint"
+										cx="236"
+										cy="695"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="yogya">
 									<rect
@@ -1581,6 +1679,13 @@ const FlowChart: React.FC = () => {
 											Yogyakarta
 										</tspan>
 									</text>
+									<circle
+										id="yogya-pinpoint"
+										cx="156"
+										cy="1010"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="jabar">
 									<rect
@@ -1603,6 +1708,13 @@ const FlowChart: React.FC = () => {
 											Jawa barat
 										</tspan>
 									</text>
+									<circle
+										id="jabar-pinpoint"
+										cx="214"
+										cy="570"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="jateng">
 									<rect
@@ -1625,6 +1737,13 @@ const FlowChart: React.FC = () => {
 											Jawa Tengah
 										</tspan>
 									</text>
+									<circle
+										id="jateng-pinpoint"
+										cx="184"
+										cy="460"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="jakarta">
 									<rect
@@ -1647,6 +1766,13 @@ const FlowChart: React.FC = () => {
 											DKI Jakarta
 										</tspan>
 									</text>
+									<circle
+										id="jakarta-pinpoint"
+										cx="234"
+										cy="275"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="bangka">
 									<rect
@@ -1672,6 +1798,13 @@ const FlowChart: React.FC = () => {
 											belitung
 										</tspan>
 									</text>
+									<circle
+										id="bangka-pinpoint"
+										cx="310"
+										cy="192"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="kepulauan-riau">
 									<rect
@@ -1697,6 +1830,13 @@ const FlowChart: React.FC = () => {
 											Riau
 										</tspan>
 									</text>
+									<circle
+										id="kepulauan-riau-pinpoint"
+										cx="410"
+										cy="158"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="jambi">
 									<rect
@@ -1719,6 +1859,13 @@ const FlowChart: React.FC = () => {
 											Jambi
 										</tspan>
 									</text>
+									<circle
+										id="jambi-pinpoint"
+										cx="208"
+										cy="375"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="banten">
 									<rect
@@ -1741,6 +1888,13 @@ const FlowChart: React.FC = () => {
 											Banten
 										</tspan>
 									</text>
+									<circle
+										id="banten-pinpoint"
+										cx="170"
+										cy="940"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="sumsel">
 									<rect
@@ -1796,6 +1950,13 @@ const FlowChart: React.FC = () => {
 											Aceh
 										</tspan>
 									</text>
+									<circle
+										id="aceh-pinpoint"
+										cx="185"
+										cy="120"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="bengkulu">
 									<rect
@@ -1811,13 +1972,20 @@ const FlowChart: React.FC = () => {
 										id="Bengkulu"
 										fill="white"
 										font-family="Montserrat"
-										font-size="17"
+										font-size="17s"
 										font-weight="900"
 										letter-spacing="0em">
 										<tspan x="292.447" y="1041.73">
 											Bengkulu
 										</tspan>
 									</text>
+									<circle
+										id="bengkulu-pinpoint"
+										cx="335"
+										cy="1014"
+										r="5"
+										fill="red"
+									/>
 								</g>
 							</g>
 						</g>
