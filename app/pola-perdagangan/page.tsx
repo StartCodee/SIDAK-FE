@@ -133,305 +133,305 @@ const FlowChart: React.FC = () => {
 		setFilteredFlow(newFilteredFlow);
 	};
 
-	// useEffect(() => {
-	// 	getPolaPerdagangan(1, 2, '2024-07', '18');
-	// 	getCommodityOption();
-	// }, []);
+	useEffect(() => {
+		getPolaPerdagangan(1, 2, '2024-07', '18');
+		getCommodityOption();
+	}, []);
 
-	// useEffect(() => {
-	// 	const container = containerRef.current;
-	// 	const canvas = canvasRef.current;
-	// 	if (!container || !canvas) return;
-	// 	const ctx = canvas.getContext('2d');
-	// 	if (!ctx) return;
+	useEffect(() => {
+		const container = containerRef.current;
+		const canvas = canvasRef.current;
+		if (!container || !canvas) return;
+		const ctx = canvas.getContext('2d');
+		if (!ctx) return;
 
-	// 	const externalFlow = [
-	// 		"gorontalo", "sulbar", "sulsel", "sulteng", "manado", "papua",
-	// 		"papua-pegunungan", "maluku", "papua-barat-daya", "papua-selatan",
-	// 		"maluku-utara", "papua-barat", "ntt", "ntb", "bali", "jatim",
-	// 		"yogya", "jabar", "jateng", "jakarta", "bangka", "kepulauan-riau",
-	// 		"jambi", "banten", "sumsel", "aceh", "bengkulu"
-	// 	];
+		const externalFlow = [
+			"gorontalo", "sulbar", "sulsel", "sulteng", "manado", "papua",
+			"papua-pegunungan", "maluku", "papua-barat-daya", "papua-selatan",
+			"maluku-utara", "papua-barat", "ntt", "ntb", "bali", "jatim",
+			"yogya", "jabar", "jateng", "jakarta", "bangka", "kepulauan-riau",
+			"jambi", "banten", "sumsel", "aceh", "bengkulu"
+		];
 
-	// 	canvas.width = container.scrollWidth;
-	// 	canvas.height = container.scrollHeight;
+		canvas.width = container.scrollWidth;
+		canvas.height = container.scrollHeight;
 
-	// 	function getCoordinate(rect: any, el: any, offsetX: any, offsetY: any) {
-	// 		const screenWidth = window.innerWidth;
-	// 		let startX = offsetX + (rect.left + rect.width / 2);
+		function getCoordinate(rect: any, el: any, offsetX: any, offsetY: any) {
+			const screenWidth = window.innerWidth;
+			let startX = offsetX + (rect.left + rect.width / 2);
 
-	// 		let startY;
+			let startY;
 
-	// 		const pinpoint = document.getElementById(`${el}-pinpoint`);
-	// 		if (pinpoint) {
-	// 			const pinpoints = document.getElementById(`${el}`);
+			const pinpoint = document.getElementById(`${el}-pinpoint`);
+			if (pinpoint) {
+				const pinpoints = document.getElementById(`${el}`);
 
-	// 			if (pinpoints) {
-	// 				const pinpointRect = pinpoint.getBoundingClientRect();
-	// 				startX = offsetX + pinpointRect.left + pinpointRect.width / 2;
-	// 				startY = offsetY + pinpointRect.top + pinpointRect.height / 2;
+				if (pinpoints) {
+					const pinpointRect = pinpoint.getBoundingClientRect();
+					startX = offsetX + pinpointRect.left + pinpointRect.width / 2;
+					startY = offsetY + pinpointRect.top + pinpointRect.height / 2;
 
-	// 				return [startX, startY];
-	// 			}
-	// 		} else {
-	// 			startY = offsetY + (rect.top + rect.height / 2);
-	// 		}
+					return [startX, startY];
+				}
+			} else {
+				startY = offsetY + (rect.top + rect.height / 2);
+			}
 
-	// 		if (screenWidth <= 450) {
-	// 			switch (el) {
-	// 				case 'Buol':
-	// 					startX -= 10;
-	// 					break;
-	// 				case 'Tolitoli':
-	// 					startX += 5;
-	// 					break;
-	// 				case 'Parigi':
-	// 					startX += 20;
-	// 					startY -= 40;
-	// 					break;
-	// 				case 'Donggala':
-	// 					startX += 5;
-	// 					startY -= 20;
-	// 					break;
-	// 				case 'Palu':
-	// 					startY += 5;
-	// 					break;
-	// 				default:
-	// 					startY += 10;
-	// 					break;
-	// 			}
-	// 		} else if (screenWidth <= 600) {
-	// 			switch (el) {
-	// 				case 'Buol':
-	// 					startX -= 20;
-	// 					break;
-	// 				case 'Tolitoli':
-	// 					startX += 15;
-	// 					break;
-	// 				case 'Parigi':
-	// 					startX += 20;
-	// 					startY -= 50;
-	// 					break;
-	// 				case 'Donggala':
-	// 					startX += 5;
-	// 					startY -= 20;
-	// 					break;
-	// 				case 'Palu':
-	// 					startY += 5;
-	// 					break;
-	// 				default:
-	// 					startY += 10;
-	// 					break;
-	// 			}
-	// 		} else if (screenWidth <= 800) {
-	// 			switch (el) {
-	// 				case 'Buol':
-	// 					startX -= 20;
-	// 					break;
-	// 				case 'Tolitoli':
-	// 					startX += 15;
-	// 					break;
-	// 				case 'Parigi':
-	// 					startX += 40;
-	// 					startY -= 60;
-	// 					break;
-	// 				case 'Donggala':
-	// 					startX += 10;
-	// 					startY -= 40;
-	// 					break;
-	// 				case 'Palu':
-	// 					startY += 5;
-	// 					break;
-	// 				default:
-	// 					startY += 10;
-	// 					break;
-	// 			}
-	// 		} else if (screenWidth <= 1050) {
-	// 			switch (el) {
-	// 				case 'Buol':
-	// 					startX -= 30;
-	// 					break;
-	// 				case 'Tolitoli':
-	// 					startX += 30;
-	// 					break;
-	// 				case 'Parigi':
-	// 					startX += 60;
-	// 					startY -= 85;
-	// 					break;
-	// 				case 'Donggala':
-	// 					startX += 20;
-	// 					startY -= 60;
-	// 					break;
-	// 				case 'Palu':
-	// 					startX += 10;
-	// 					startY += 15;
-	// 					break;
-	// 				default:
-	// 					startY += 10;
-	// 					break;
-	// 			}
-	// 		} else {
-	// 			switch (el) {
-	// 				case 'Buol':
-	// 					startX -= 30;
-	// 					break;
-	// 				case 'Tolitoli':
-	// 					startX += 30;
-	// 					break;
-	// 				case 'Parigi':
-	// 					startX += 60;
-	// 					startY -= 120;
-	// 					break;
-	// 				case 'Donggala':
-	// 					startX += 20;
-	// 					startY -= 60;
-	// 					break;
-	// 				case 'Palu':
-	// 					startX += 10;
-	// 					startY += 15;
-	// 					break;
-	// 				default:
-	// 					startY += 10;
-	// 					break;
-	// 			}
-	// 		}
-	// 		return [startX, startY];
-	// 	}
+			if (screenWidth <= 450) {
+				switch (el) {
+					case 'Buol':
+						startX -= 10;
+						break;
+					case 'Tolitoli':
+						startX += 5;
+						break;
+					case 'Parigi':
+						startX += 20;
+						startY -= 40;
+						break;
+					case 'Donggala':
+						startX += 5;
+						startY -= 20;
+						break;
+					case 'Palu':
+						startY += 5;
+						break;
+					default:
+						startY += 10;
+						break;
+				}
+			} else if (screenWidth <= 600) {
+				switch (el) {
+					case 'Buol':
+						startX -= 20;
+						break;
+					case 'Tolitoli':
+						startX += 15;
+						break;
+					case 'Parigi':
+						startX += 20;
+						startY -= 50;
+						break;
+					case 'Donggala':
+						startX += 5;
+						startY -= 20;
+						break;
+					case 'Palu':
+						startY += 5;
+						break;
+					default:
+						startY += 10;
+						break;
+				}
+			} else if (screenWidth <= 800) {
+				switch (el) {
+					case 'Buol':
+						startX -= 20;
+						break;
+					case 'Tolitoli':
+						startX += 15;
+						break;
+					case 'Parigi':
+						startX += 40;
+						startY -= 60;
+						break;
+					case 'Donggala':
+						startX += 10;
+						startY -= 40;
+						break;
+					case 'Palu':
+						startY += 5;
+						break;
+					default:
+						startY += 10;
+						break;
+				}
+			} else if (screenWidth <= 1050) {
+				switch (el) {
+					case 'Buol':
+						startX -= 30;
+						break;
+					case 'Tolitoli':
+						startX += 30;
+						break;
+					case 'Parigi':
+						startX += 60;
+						startY -= 85;
+						break;
+					case 'Donggala':
+						startX += 20;
+						startY -= 60;
+						break;
+					case 'Palu':
+						startX += 10;
+						startY += 15;
+						break;
+					default:
+						startY += 10;
+						break;
+				}
+			} else {
+				switch (el) {
+					case 'Buol':
+						startX -= 30;
+						break;
+					case 'Tolitoli':
+						startX += 30;
+						break;
+					case 'Parigi':
+						startX += 60;
+						startY -= 120;
+						break;
+					case 'Donggala':
+						startX += 20;
+						startY -= 60;
+						break;
+					case 'Palu':
+						startX += 10;
+						startY += 15;
+						break;
+					default:
+						startY += 10;
+						break;
+				}
+			}
+			return [startX, startY];
+		}
 
-	// 	function draw() {
-	// 		externalFlow.forEach(el => {
-	// 			const element = document.getElementById(el);
-	// 			if (element) {
-	// 				element.classList.add('hidden');
-	// 			}
-	// 		});
-	// 		if (!ctx || !canvas || !container) return;
-	// 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-	// 		filteredFlow.forEach((el: any) => {
-	// 			const isExternalFlowStart = externalFlow.includes(el.start);
-	// 			const isExternalFlowEnd = externalFlow.includes(el.end);
-	// 			if (isExternalFlowStart) {
-	// 				const ext1 = document.getElementById(el.start);
-	// 				if (ext1) {
-	// 					ext1.classList.remove('hidden');
-	// 				}
-	// 			}
-	// 			if (isExternalFlowEnd) {
-	// 				const ext2 = document.getElementById(el.end);
-	// 				if (ext2) {
-	// 					ext2.classList.remove('hidden');
-	// 				}
-	// 			}
-	// 			const containerRect = container.getBoundingClientRect();
-	// 			const offsetX = container.scrollLeft - containerRect.left;
-	// 			const offsetY = container.scrollTop - containerRect.top;
-	// 			const el1 = document.getElementById(el.start);
-	// 			const rect1 = el1?.getBoundingClientRect();
-	// 			if (!rect1) return;
-	// 			const starter = getCoordinate(rect1, el.start, offsetX, offsetY);
-	// 			const el2 = document.getElementById(el.end);
-	// 			const rect2 = el2?.getBoundingClientRect();
-	// 			if (!rect2) return;
-	// 			const ender = getCoordinate(rect2, el.end, offsetX, offsetY);
-	// 			const controlX = (starter[0] + ender[0]) / 2;
-	// 			const controlY = starter[1] - 100;
-	// 			drawBentDashedLine(isExternalFlowStart, isExternalFlowEnd, ctx, starter[0], starter[1], ender[0], ender[1], controlX, controlY, el.start, el.end);
-	// 		});
-	// 	}
-	// 	function drawBentDashedLine(
-	// 		isExternalFlowStart: any,
-	// 		isExternalFlowEnd: any,
-	// 		ctx: any,
-	// 		startX: any,
-	// 		startY: any,
-	// 		endX: any,
-	// 		endY: any,
-	// 		controlX: any,
-	// 		controlY: any,
-	// 		startLabel: any,
-	// 		endLabel: any
-	// 	) {
-	// 		const path = new Path2D();
-	// 		let lineStepsBeforeEnd;
-	// 		if (!isExternalFlowEnd) {
-	// 			lineStepsBeforeEnd = 10; // Jumlah langkah sebelum akhir garis
-	// 		} else {
-	// 			lineStepsBeforeEnd = 1; // Jumlah langkah sebelum akhir garis
-	// 		}
-	// 		const dx = endX - startX;
-	// 		const dy = endY - startY;
-	// 		const distance = Math.sqrt(dx * dx + dy * dy);
-	// 		// Hitung posisi akhir baru untuk garis (dikurangi 10 langkah)
-	// 		const adjustedEndX = endX - (dx / distance) * lineStepsBeforeEnd;
-	// 		const adjustedEndY = endY - (dy / distance) * lineStepsBeforeEnd;
-	// 		// Jika start atau end adalah external flow, maka buat garis lurus
-	// 		if (externalFlow.includes(startLabel) || externalFlow.includes(endLabel)) {
-	// 			path.moveTo(startX, startY);
-	// 			path.lineTo(adjustedEndX, adjustedEndY); // Garis berakhir pada titik yang dikurangi
-	// 		} else {
-	// 			// Gambar garis melengkung
-	// 			path.moveTo(startX, startY);
-	// 			path.quadraticCurveTo(controlX, controlY, adjustedEndX, adjustedEndY); // Garis berakhir pada titik yang dikurangi
-	// 		}
-	// 		// Set properti garis
-	// 		ctx.setLineDash([10, 5]);
-	// 		ctx.lineWidth = 3;
-	// 		ctx.strokeStyle = '#01518B';
-	// 		ctx.stroke(path);
-	// 		// Gambar panah pada titik yang baru (adjustedEndX, adjustedEndY)
-	// 		if (!isExternalFlowEnd) {
-	// 			drawArrow(ctx, adjustedEndX, adjustedEndY, startX, startY, controlX, controlY);
-	// 		}
-	// 		// Jika titik tujuan adalah external flow, tambahkan tanda titik kuning
-	// 		if (isExternalFlowEnd || isExternalFlowStart) {
-	// 			// drawDot(ctx, adjustedEndX, adjustedEndY, 'yellow');
-	// 		} else {
-	// 			drawIcon(ctx, startX, startY, bank);
-	// 		}
-	// 	}
+		function draw() {
+			externalFlow.forEach(el => {
+				const element = document.getElementById(el);
+				if (element) {
+					element.classList.add('hidden');
+				}
+			});
+			if (!ctx || !canvas || !container) return;
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			filteredFlow.forEach((el: any) => {
+				const isExternalFlowStart = externalFlow.includes(el.start);
+				const isExternalFlowEnd = externalFlow.includes(el.end);
+				if (isExternalFlowStart) {
+					const ext1 = document.getElementById(el.start);
+					if (ext1) {
+						ext1.classList.remove('hidden');
+					}
+				}
+				if (isExternalFlowEnd) {
+					const ext2 = document.getElementById(el.end);
+					if (ext2) {
+						ext2.classList.remove('hidden');
+					}
+				}
+				const containerRect = container.getBoundingClientRect();
+				const offsetX = container.scrollLeft - containerRect.left;
+				const offsetY = container.scrollTop - containerRect.top;
+				const el1 = document.getElementById(el.start);
+				const rect1 = el1?.getBoundingClientRect();
+				if (!rect1) return;
+				const starter = getCoordinate(rect1, el.start, offsetX, offsetY);
+				const el2 = document.getElementById(el.end);
+				const rect2 = el2?.getBoundingClientRect();
+				if (!rect2) return;
+				const ender = getCoordinate(rect2, el.end, offsetX, offsetY);
+				const controlX = (starter[0] + ender[0]) / 2;
+				const controlY = starter[1] - 100;
+				drawBentDashedLine(isExternalFlowStart, isExternalFlowEnd, ctx, starter[0], starter[1], ender[0], ender[1], controlX, controlY, el.start, el.end);
+			});
+		}
+		function drawBentDashedLine(
+			isExternalFlowStart: any,
+			isExternalFlowEnd: any,
+			ctx: any,
+			startX: any,
+			startY: any,
+			endX: any,
+			endY: any,
+			controlX: any,
+			controlY: any,
+			startLabel: any,
+			endLabel: any
+		) {
+			const path = new Path2D();
+			let lineStepsBeforeEnd;
+			if (!isExternalFlowEnd) {
+				lineStepsBeforeEnd = 10; // Jumlah langkah sebelum akhir garis
+			} else {
+				lineStepsBeforeEnd = 1; // Jumlah langkah sebelum akhir garis
+			}
+			const dx = endX - startX;
+			const dy = endY - startY;
+			const distance = Math.sqrt(dx * dx + dy * dy);
+			// Hitung posisi akhir baru untuk garis (dikurangi 10 langkah)
+			const adjustedEndX = endX - (dx / distance) * lineStepsBeforeEnd;
+			const adjustedEndY = endY - (dy / distance) * lineStepsBeforeEnd;
+			// Jika start atau end adalah external flow, maka buat garis lurus
+			if (externalFlow.includes(startLabel) || externalFlow.includes(endLabel)) {
+				path.moveTo(startX, startY);
+				path.lineTo(adjustedEndX, adjustedEndY); // Garis berakhir pada titik yang dikurangi
+			} else {
+				// Gambar garis melengkung
+				path.moveTo(startX, startY);
+				path.quadraticCurveTo(controlX, controlY, adjustedEndX, adjustedEndY); // Garis berakhir pada titik yang dikurangi
+			}
+			// Set properti garis
+			ctx.setLineDash([10, 5]);
+			ctx.lineWidth = 3;
+			ctx.strokeStyle = '#01518B';
+			ctx.stroke(path);
+			// Gambar panah pada titik yang baru (adjustedEndX, adjustedEndY)
+			if (!isExternalFlowEnd) {
+				drawArrow(ctx, adjustedEndX, adjustedEndY, startX, startY, controlX, controlY);
+			}
+			// Jika titik tujuan adalah external flow, tambahkan tanda titik kuning
+			if (isExternalFlowEnd || isExternalFlowStart) {
+				// drawDot(ctx, adjustedEndX, adjustedEndY, 'yellow');
+			} else {
+				drawIcon(ctx, startX, startY, bank);
+			}
+		}
 
-	// 	function drawArrow(ctx: CanvasRenderingContext2D, endX: number, endY: number, startX: number, startY: number, controlX: number, controlY: number) {
-	// 		const headlen = 15; // panjang kepala panah
-	// 		const stepsBeforeEnd = 0; // jumlah langkah sebelum mencapai tujuan
-	// 		const dx = endX - controlX;
-	// 		const dy = endY - controlY;
-	// 		const distance = Math.sqrt(dx * dx + dy * dy);
-	// 		const angle = Math.atan2(dy, dx);
-	// 		// Hitung posisi panah sebelum sampai ke tujuan
-	// 		const adjustedX = endX - (dx / distance) * stepsBeforeEnd;
-	// 		const adjustedY = endY - (dy / distance) * stepsBeforeEnd;
-	// 		// Gambar panah yang terletak beberapa langkah sebelum titik akhir
-	// 		ctx.beginPath();
-	// 		ctx.moveTo(adjustedX, adjustedY);
-	// 		ctx.lineTo(adjustedX - headlen * Math.cos(angle - Math.PI / 6), adjustedY - headlen * Math.sin(angle - Math.PI / 6));
-	// 		ctx.moveTo(adjustedX, adjustedY);
-	// 		ctx.lineTo(adjustedX - headlen * Math.cos(angle + Math.PI / 6), adjustedY - headlen * Math.sin(angle + Math.PI / 6));
-	// 		ctx.strokeStyle = '#01518B';
-	// 		ctx.lineWidth = 3;
-	// 		ctx.stroke();
-	// 	}
+		function drawArrow(ctx: CanvasRenderingContext2D, endX: number, endY: number, startX: number, startY: number, controlX: number, controlY: number) {
+			const headlen = 15; // panjang kepala panah
+			const stepsBeforeEnd = 0; // jumlah langkah sebelum mencapai tujuan
+			const dx = endX - controlX;
+			const dy = endY - controlY;
+			const distance = Math.sqrt(dx * dx + dy * dy);
+			const angle = Math.atan2(dy, dx);
+			// Hitung posisi panah sebelum sampai ke tujuan
+			const adjustedX = endX - (dx / distance) * stepsBeforeEnd;
+			const adjustedY = endY - (dy / distance) * stepsBeforeEnd;
+			// Gambar panah yang terletak beberapa langkah sebelum titik akhir
+			ctx.beginPath();
+			ctx.moveTo(adjustedX, adjustedY);
+			ctx.lineTo(adjustedX - headlen * Math.cos(angle - Math.PI / 6), adjustedY - headlen * Math.sin(angle - Math.PI / 6));
+			ctx.moveTo(adjustedX, adjustedY);
+			ctx.lineTo(adjustedX - headlen * Math.cos(angle + Math.PI / 6), adjustedY - headlen * Math.sin(angle + Math.PI / 6));
+			ctx.strokeStyle = '#01518B';
+			ctx.lineWidth = 3;
+			ctx.stroke();
+		}
 
-	// 	function drawIcon(ctx: CanvasRenderingContext2D, x: number, y: number, img: HTMLImageElement) {
-	// 		const iconSize = 20; // Ukuran ikon
-	// 		ctx.drawImage(document.getElementById('location') as CanvasImageSource, x - iconSize / 2, y - iconSize / 2, iconSize, iconSize);
-	// 	}
-	// 	function drawDot(ctx: CanvasRenderingContext2D, x: number, y: number, color: string) {
-	// 		ctx.beginPath();
-	// 		ctx.arc(x, y, 5, 0, 2 * Math.PI, false);
-	// 		ctx.fillStyle = color;
-	// 		ctx.fill();
-	// 	}
-	// 	draw();
-	// 	const handleResize = () => {
-	// 		canvas.width = container.scrollWidth;
-	// 		canvas.height = container.scrollHeight;
-	// 		draw();
-	// 	};
-	// 	window.addEventListener('resize', handleResize);
-	// 	return () => {
-	// 		window.removeEventListener('resize', handleResize);
-	// 	};
-	// }, [filteredFlow, containerRef, canvasRef]);
+		function drawIcon(ctx: CanvasRenderingContext2D, x: number, y: number, img: HTMLImageElement) {
+			const iconSize = 20; // Ukuran ikon
+			ctx.drawImage(document.getElementById('location') as CanvasImageSource, x - iconSize / 2, y - iconSize / 2, iconSize, iconSize);
+		}
+		function drawDot(ctx: CanvasRenderingContext2D, x: number, y: number, color: string) {
+			ctx.beginPath();
+			ctx.arc(x, y, 5, 0, 2 * Math.PI, false);
+			ctx.fillStyle = color;
+			ctx.fill();
+		}
+		draw();
+		const handleResize = () => {
+			canvas.width = container.scrollWidth;
+			canvas.height = container.scrollHeight;
+			draw();
+		};
+		window.addEventListener('resize', handleResize);
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
+	}, [filteredFlow, containerRef, canvasRef]);
 
 	return (
 		<div style={{ overflowX: 'hidden' }}>
@@ -1168,7 +1168,7 @@ const FlowChart: React.FC = () => {
 										mask="url(#path-23-outside-21_0_1)"
 									/>
 								</g>
-								<g className="" id="gorontalo">
+								<g className="hidden" id="gorontalo">
 									<rect
 										id="Rectangle 130"
 										x="621.616"
@@ -1197,7 +1197,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="sulbar">
+								<g className="hidden" id="sulbar">
 									<rect
 										id="Rectangle 130_2"
 										x="129.905"
@@ -1230,7 +1230,7 @@ const FlowChart: React.FC = () => {
 									/>
 								</g>
 
-								<g className="" id="sulsel">
+								<g className="hidden" id="sulsel">
 									<rect
 										id="Rectangle 130_3"
 										x="290.428"
@@ -1262,7 +1262,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="sulteng">
+								<g className="hidden" id="sulteng">
 									<rect
 										id="Rectangle 130_4"
 										x="822.337"
@@ -1294,7 +1294,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="manado">
+								<g className="hidden" id="manado">
 									<rect
 										id="Rectangle 130_5"
 										x="807.997"
@@ -1323,7 +1323,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="papua">
+								<g className="hidden" id="papua">
 									<rect
 										id="Rectangle 130_6"
 										x="970"
@@ -1352,7 +1352,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="papua-pegunungan">
+								<g className="hidden" id="papua-pegunungan">
 									<rect
 										id="Rectangle 130_7"
 										x="982"
@@ -1384,7 +1384,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="maluku">
+								<g className="hidden" id="maluku">
 									<rect
 										id="Rectangle 130_8"
 										x="995"
@@ -1413,7 +1413,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="papua-barat-daya">
+								<g className="hidden" id="papua-barat-daya">
 									<rect
 										id="Rectangle 130_9"
 										x="986"
@@ -1445,7 +1445,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="papua-selatan">
+								<g className="hidden" id="papua-selatan">
 									<rect
 										id="Rectangle 130_10"
 										x="987"
@@ -1477,7 +1477,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="maluku-utara">
+								<g className="hidden" id="maluku-utara">
 									<rect
 										id="Rectangle 130_11"
 										x="992"
@@ -1509,7 +1509,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="papua-barat">
+								<g className="hidden" id="papua-barat">
 									<rect
 										id="Rectangle 130_12"
 										x="993"
@@ -1541,7 +1541,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="ntt">
+								<g className="hidden" id="ntt">
 									<rect
 										id="Rectangle 130_13"
 										x="634"
@@ -1570,7 +1570,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="ntb">
+								<g className="hidden" id="ntb">
 									<rect
 										id="Rectangle 130_14"
 										x="780"
@@ -1599,7 +1599,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="bali">
+								<g className="hidden" id="bali">
 									<rect
 										id="Rectangle 130_15"
 										x="476"
@@ -1628,7 +1628,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="jatim">
+								<g className="hidden" id="jatim">
 									<rect
 										id="Rectangle 130_16"
 										x="95"
@@ -1657,7 +1657,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="yogya">
+								<g className="hidden" id="yogya">
 									<rect
 										id="Rectangle 130_17"
 										x="78"
@@ -1687,7 +1687,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="jabar">
+								<g className="hidden" id="jabar">
 									<rect
 										id="Rectangle 130_18"
 										x="70"
@@ -1716,7 +1716,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="jateng">
+								<g className="hidden" id="jateng">
 									<rect
 										id="Rectangle 130_19"
 										x="40"
@@ -1745,7 +1745,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="jakarta">
+								<g className="hidden" id="jakarta">
 									<rect
 										id="Rectangle 130_20"
 										x="92"
@@ -1774,7 +1774,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="bangka">
+								<g className="hidden" id="bangka">
 									<rect
 										id="Rectangle 130_21"
 										x="192"
@@ -1806,7 +1806,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="kepulauan-riau">
+								<g className="hidden" id="kepulauan-riau">
 									<rect
 										id="Rectangle 130_22"
 										x="342"
@@ -1838,7 +1838,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="jambi">
+								<g className="hidden" id="jambi">
 									<rect
 										id="Rectangle 130_23"
 										x="92"
@@ -1867,7 +1867,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="banten">
+								<g className="hidden" id="banten">
 									<rect
 										id="Rectangle 130_24"
 										x="55"
@@ -1896,7 +1896,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="sumsel">
+								<g className="hidden" id="sumsel">
 									<rect
 										id="Rectangle 130_25"
 										x="385"
@@ -1929,7 +1929,7 @@ const FlowChart: React.FC = () => {
 									/>
 								</g>
 
-								<g className="" id="aceh">
+								<g className="hidden" id="aceh">
 									<rect
 										id="Rectangle 130_26"
 										x="80"
@@ -1958,7 +1958,7 @@ const FlowChart: React.FC = () => {
 										fill="red"
 									/>
 								</g>
-								<g className="" id="bengkulu">
+								<g className="hidden" id="bengkulu">
 									<rect
 										id="Rectangle 130_27"
 										x="279"
