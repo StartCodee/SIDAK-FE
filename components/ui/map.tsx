@@ -260,16 +260,23 @@ export default function Map({ cardContents }: MapProps) {
 													<td className="px-4 py-2 border border-1">
 														<h2>{pasarItem.pasar_name != "null" ? pasarItem.pasar_name : detailHarga?.city}</h2>
 													</td>
-													{pasarItem.dates != undefined && pasarItem.dates.map((dateItem: any, dateIndex: any) => (
-														<td className="px-4 py-2 border border-1" key={dateIndex}>
-															<h2>Rp {dateItem.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || ''}</h2>
-														</td>
-													))}
+													{detailData.header != undefined && detailData.header.map((headerDate: any, headerIndex: any) => {
+														// Mencari data harga berdasarkan tanggal dari header
+														const dateItem = pasarItem.dates.find((date: any) => date.date === headerDate);
+
+														return (
+															<td className="px-4 py-2 border border-1" key={headerIndex}>
+																<h2>
+																	{dateItem ? `Rp ${dateItem.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}` : '-'}
+																</h2>
+															</td>
+														);
+													})}
 												</tr>
-											)
-											)) : (
+											))
+										) : (
 											<tr key="1">
-												<td className="px-4 py-2 border border-1 text-center">
+												<td className="px-4 py-2 border border-1 text-center" colSpan={detailData.header != undefined && detailData.header.length + 1}>
 													Data Kosong
 												</td>
 											</tr>

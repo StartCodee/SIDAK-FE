@@ -159,7 +159,23 @@ const FlowChart: React.FC = () => {
 		function getCoordinate(rect: any, el: any, offsetX: any, offsetY: any) {
 			const screenWidth = window.innerWidth;
 			let startX = offsetX + (rect.left + rect.width / 2);
-			let startY = offsetY + (rect.top + rect.height / 2);
+
+			let startY;
+
+			const pinpoint = document.getElementById(`${el}-pinpoint`);
+			if (pinpoint) {
+				const pinpoints = document.getElementById(`${el}`);
+
+				if (pinpoints) {
+					const pinpointRect = pinpoint.getBoundingClientRect();
+					startX = offsetX + pinpointRect.left + pinpointRect.width / 2;
+					startY = offsetY + pinpointRect.top + pinpointRect.height / 2;
+
+					return [startX, startY];
+				}
+			} else {
+				startY = offsetY + (rect.top + rect.height / 2);
+			}
 
 			if (screenWidth <= 450) {
 				switch (el) {
@@ -279,7 +295,6 @@ const FlowChart: React.FC = () => {
 						break;
 				}
 			}
-
 			return [startX, startY];
 		}
 
@@ -290,28 +305,23 @@ const FlowChart: React.FC = () => {
 					element.classList.add('hidden');
 				}
 			});
-
 			if (!ctx || !canvas || !container) return;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-
 			filteredFlow.forEach((el: any) => {
 				const isExternalFlowStart = externalFlow.includes(el.start);
 				const isExternalFlowEnd = externalFlow.includes(el.end);
-
 				if (isExternalFlowStart) {
 					const ext1 = document.getElementById(el.start);
 					if (ext1) {
 						ext1.classList.remove('hidden');
 					}
 				}
-
 				if (isExternalFlowEnd) {
 					const ext2 = document.getElementById(el.end);
 					if (ext2) {
 						ext2.classList.remove('hidden');
 					}
 				}
-
 				const containerRect = container.getBoundingClientRect();
 				const offsetX = container.scrollLeft - containerRect.left;
 				const offsetY = container.scrollTop - containerRect.top;
@@ -325,42 +335,77 @@ const FlowChart: React.FC = () => {
 				const ender = getCoordinate(rect2, el.end, offsetX, offsetY);
 				const controlX = (starter[0] + ender[0]) / 2;
 				const controlY = starter[1] - 100;
-
 				drawBentDashedLine(isExternalFlowStart, isExternalFlowEnd, ctx, starter[0], starter[1], ender[0], ender[1], controlX, controlY, el.start, el.end);
 			});
 		}
-
-		function drawBentDashedLine(isExternalFlowStart: any, isExternalFlowEnd: any, ctx: any, startX: any, startY: any, endX: any, endY: any, controlX: any, controlY: any, startLabel: any, endLabel: any) {
+		function drawBentDashedLine(
+			isExternalFlowStart: any,
+			isExternalFlowEnd: any,
+			ctx: any,
+			startX: any,
+			startY: any,
+			endX: any,
+			endY: any,
+			controlX: any,
+			controlY: any,
+			startLabel: any,
+			endLabel: any
+		) {
 			const path = new Path2D();
+			let lineStepsBeforeEnd;
+			if (!isExternalFlowEnd) {
+				lineStepsBeforeEnd = 10; // Jumlah langkah sebelum akhir garis
+			} else {
+				lineStepsBeforeEnd = 1; // Jumlah langkah sebelum akhir garis
+			}
+			const dx = endX - startX;
+			const dy = endY - startY;
+			const distance = Math.sqrt(dx * dx + dy * dy);
+			// Hitung posisi akhir baru untuk garis (dikurangi 10 langkah)
+			const adjustedEndX = endX - (dx / distance) * lineStepsBeforeEnd;
+			const adjustedEndY = endY - (dy / distance) * lineStepsBeforeEnd;
+			// Jika start atau end adalah external flow, maka buat garis lurus
 			if (externalFlow.includes(startLabel) || externalFlow.includes(endLabel)) {
 				path.moveTo(startX, startY);
-				path.lineTo(endX, endY);
+				path.lineTo(adjustedEndX, adjustedEndY); // Garis berakhir pada titik yang dikurangi
 			} else {
+				// Gambar garis melengkung
 				path.moveTo(startX, startY);
-				path.quadraticCurveTo(controlX, controlY, endX, endY);
+				path.quadraticCurveTo(controlX, controlY, adjustedEndX, adjustedEndY); // Garis berakhir pada titik yang dikurangi
 			}
+			// Set properti garis
 			ctx.setLineDash([10, 5]);
 			ctx.lineWidth = 3;
 			ctx.strokeStyle = '#01518B';
 			ctx.stroke(path);
-			drawIcon(ctx, startX, startY, bank);
+			// Gambar panah pada titik yang baru (adjustedEndX, adjustedEndY)
+			if (!isExternalFlowEnd) {
+				drawArrow(ctx, adjustedEndX, adjustedEndY, startX, startY, controlX, controlY);
+			}
+			// Jika titik tujuan adalah external flow, tambahkan tanda titik kuning
 			if (isExternalFlowEnd || isExternalFlowStart) {
-				drawDot(ctx, endX, endY, 'yellow');
+				// drawDot(ctx, adjustedEndX, adjustedEndY, 'yellow');
 			} else {
-				drawArrow(ctx, endX, endY, startX, startY, controlX, controlY);
+				drawIcon(ctx, startX, startY, bank);
 			}
 		}
 
 		function drawArrow(ctx: CanvasRenderingContext2D, endX: number, endY: number, startX: number, startY: number, controlX: number, controlY: number) {
 			const headlen = 15; // panjang kepala panah
+			const stepsBeforeEnd = 0; // jumlah langkah sebelum mencapai tujuan
 			const dx = endX - controlX;
 			const dy = endY - controlY;
+			const distance = Math.sqrt(dx * dx + dy * dy);
 			const angle = Math.atan2(dy, dx);
+			// Hitung posisi panah sebelum sampai ke tujuan
+			const adjustedX = endX - (dx / distance) * stepsBeforeEnd;
+			const adjustedY = endY - (dy / distance) * stepsBeforeEnd;
+			// Gambar panah yang terletak beberapa langkah sebelum titik akhir
 			ctx.beginPath();
-			ctx.moveTo(endX, endY);
-			ctx.lineTo(endX - headlen * Math.cos(angle - Math.PI / 6), endY - headlen * Math.sin(angle - Math.PI / 6));
-			ctx.moveTo(endX, endY);
-			ctx.lineTo(endX - headlen * Math.cos(angle + Math.PI / 6), endY - headlen * Math.sin(angle + Math.PI / 6));
+			ctx.moveTo(adjustedX, adjustedY);
+			ctx.lineTo(adjustedX - headlen * Math.cos(angle - Math.PI / 6), adjustedY - headlen * Math.sin(angle - Math.PI / 6));
+			ctx.moveTo(adjustedX, adjustedY);
+			ctx.lineTo(adjustedX - headlen * Math.cos(angle + Math.PI / 6), adjustedY - headlen * Math.sin(angle + Math.PI / 6));
 			ctx.strokeStyle = '#01518B';
 			ctx.lineWidth = 3;
 			ctx.stroke();
@@ -382,9 +427,7 @@ const FlowChart: React.FC = () => {
 			canvas.height = container.scrollHeight;
 			draw();
 		};
-
 		window.addEventListener('resize', handleResize);
-
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		};
@@ -418,12 +461,12 @@ const FlowChart: React.FC = () => {
 					<Select
 						styles={{
 							control: (provided) => ({
-							...provided,
-							border: 'none',
-							boxShadow: 'none',
+								...provided,
+								border: 'none',
+								boxShadow: 'none',
 							}),
 						}}
-						 components={{
+						components={{
 							IndicatorSeparator: () => null
 						}}
 						onChange={(option) => setSelectedCommodity(option!.value)}
@@ -1146,6 +1189,13 @@ const FlowChart: React.FC = () => {
 											GORONTALO
 										</tspan>
 									</text>
+									<circle
+										id="gorontalo-pinpoint"
+										cx="700"
+										cy="250"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="sulbar">
 									<rect
@@ -1171,7 +1221,15 @@ const FlowChart: React.FC = () => {
 											BARAT
 										</tspan>
 									</text>
+									<circle
+										id="sulbar-pinpoint"
+										cx="210"
+										cy="771"
+										r="5"
+										fill="red"
+									/>
 								</g>
+
 								<g className="hidden" id="sulsel">
 									<rect
 										id="Rectangle 130_3"
@@ -1701,13 +1759,22 @@ const FlowChart: React.FC = () => {
 										font-weight="900"
 										letter-spacing="0em">
 										<tspan x="399.111" y="25.5945">
-											Sumatera&#10;
+											Sumatera
 										</tspan>
 										<tspan x="408.64" y="46.5945">
 											Selatan
 										</tspan>
 									</text>
+
+									<circle
+										id="sumsel-pinpoint"
+										cx="442"
+										cy="65"
+										r="5"
+										fill="red"
+									/>
 								</g>
+
 								<g className="hidden" id="aceh">
 									<rect
 										id="Rectangle 130_26"
