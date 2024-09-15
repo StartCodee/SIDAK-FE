@@ -44,7 +44,7 @@ const FlowChart: React.FC = () => {
 		if (selectedDate) {
 			let commodity = selectedCommodity;
 			console.log(selectedCommodity);
-			getPolaPerdagangan(1, 2, format(selectedDate, 'yyyy-MM'), commodity);
+			getPolaPerdagangan(format(selectedDate, 'yyyy-MM'), commodity);
 		} else {
 			console.log('No date selected');
 		}
@@ -53,7 +53,15 @@ const FlowChart: React.FC = () => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
-	const getPolaPerdagangan = async (page: number = 1, limit: number = 2, date: string, komoditas: string) => {
+
+
+	const getPolaPerdagangan = async (date: string = '', komoditas: string) => {
+		if (!date) {
+			const now = new Date();
+			const year = now.getFullYear();
+			const month = String(now.getMonth() + 1).padStart(2, '0'); // Ensure two digits for month
+			date = `${year}-${month}`;
+		}
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/pola-perdagangan?date=${date}&komoditas=${komoditas}`, {
 				headers: {
@@ -134,7 +142,7 @@ const FlowChart: React.FC = () => {
 	};
 
 	useEffect(() => {
-		getPolaPerdagangan(1, 2, '2024-07', '18');
+		getPolaPerdagangan( '', '18');
 		getCommodityOption();
 	}, []);
 
@@ -1288,7 +1296,7 @@ const FlowChart: React.FC = () => {
 									</text>
 									<circle
 										id="sulteng-pinpoint"
-										cx="890"
+										cx="905"
 										cy="855"
 										r="5"
 										fill="red"
@@ -1407,8 +1415,8 @@ const FlowChart: React.FC = () => {
 									</text>
 									<circle
 										id="maluku-pinpoint"
-										cx="1050"
-										cy="798"
+										cx="1052"
+										cy="800"
 										r="5"
 										fill="red"
 									/>
@@ -1440,7 +1448,7 @@ const FlowChart: React.FC = () => {
 									<circle
 										id="papua-barat-daya-pinpoint"
 										cx="1050"
-										cy="928"
+										cy="933"
 										r="5"
 										fill="red"
 									/>
@@ -1565,7 +1573,7 @@ const FlowChart: React.FC = () => {
 									<circle
 										id="ntt-pinpoint"
 										cx="670"
-										cy="1008"
+										cy="1010"
 										r="5"
 										fill="red"
 									/>
@@ -1651,8 +1659,8 @@ const FlowChart: React.FC = () => {
 									</text>
 									<circle
 										id="jatim-pinpoint"
-										cx="236"
-										cy="695"
+										cx="233"
+										cy="697"
 										r="5"
 										fill="red"
 									/>
@@ -1681,8 +1689,8 @@ const FlowChart: React.FC = () => {
 									</text>
 									<circle
 										id="yogya-pinpoint"
-										cx="156"
-										cy="1010"
+										cx="146"
+										cy="1013"
 										r="5"
 										fill="red"
 									/>
@@ -1800,7 +1808,7 @@ const FlowChart: React.FC = () => {
 									</text>
 									<circle
 										id="bangka-pinpoint"
-										cx="310"
+										cx="307"
 										cy="192"
 										r="5"
 										fill="red"
@@ -1832,7 +1840,7 @@ const FlowChart: React.FC = () => {
 									</text>
 									<circle
 										id="kepulauan-riau-pinpoint"
-										cx="410"
+										cx="395"
 										cy="158"
 										r="5"
 										fill="red"
@@ -1861,8 +1869,8 @@ const FlowChart: React.FC = () => {
 									</text>
 									<circle
 										id="jambi-pinpoint"
-										cx="208"
-										cy="375"
+										cx="207"
+										cy="373"
 										r="5"
 										fill="red"
 									/>
