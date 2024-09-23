@@ -668,7 +668,7 @@ export default function Home() {
 									role="tabpanel"
 									aria-labelledby="profile-tab">
 									<div className="rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
-										<div>
+										{/* <div>
 											<label
 												htmlFor="periode"
 												className="block text-sm font-medium leading-6 text-gray-900">
@@ -697,9 +697,8 @@ export default function Home() {
 													</option>
 												))}
 											</select>
-										</div>
+										</div> */}
 
-										{periode === 'harian' && (
 											<div className="mt-5">
 											<label
 												htmlFor="location"
@@ -733,9 +732,8 @@ export default function Home() {
 												</Popover>
 											</div>
 										</div>
-										)}
 
-										{periode === 'mingguan' && (
+										{/* {periode === 'mingguan' && (
 											<>
 											<div className="mt-5">
 												<label
@@ -777,7 +775,7 @@ export default function Home() {
 												
 											</div>
 											</>
-										)}
+										)} */}
 
 
 												
