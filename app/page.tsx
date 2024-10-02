@@ -48,6 +48,8 @@ import React from 'react';
 import Hero from '@/components/ui/hero';
 import MonthPicker from '@/components/ui/monthpicker';
 import Select from 'react-select';
+import StatusIndicators from '@/components/ui/status_indicator';
+
 
 
 interface cardContents {
@@ -4039,13 +4041,8 @@ export default function Home() {
 							))}
 						</div>
 					</center>
-					<div className="w-full mt-3 flex justify-end mb-10">
-						<div className="flex gap-1">
-							<div className="w-[24px] h-[24px] bg-[#76bf70]"></div>
-							<div className="w-[24px] h-[24px] bg-[#f1be5b]"></div>
-							<div className="w-[24px] h-[24px] bg-red-500"></div>
-						</div>
-					</div>
+					
+					<StatusIndicators />
 					<p className="text-center w-full sm:w-11/12 mx-auto m-8">
 						Perubahan harga telah terjadi pada beberapa komoditas pangan
 						strategis di beberapa kota/kabupaten di Provinsi Sulawesi Tengah
