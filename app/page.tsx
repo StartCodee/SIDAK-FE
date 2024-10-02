@@ -29,6 +29,7 @@ import BeritaSkeleton from '@/components/BeritaSkeleton';
 import SmallLineChart from '@/components/SmallLineChart';
 import KomoditasSkeleton from '@/components/KomoditasSkeleton';
 import HargaSkeleton from '@/components/HargaSkeleton';
+import StatusIndicators from '@/components/ui/status_indicator';
 
 interface cardContents {
 	city: string;
