@@ -10,7 +10,8 @@ import bank from '@/public/bank.svg';
 interface Flow {
 	start: string;
 	end: string;
-	
+	classification: string;
+
 }
 
 interface MapProps {
@@ -19,14 +20,8 @@ interface MapProps {
 
 export default function MapPola({ flow }: MapProps) {
 
-
 	const containerRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
-
-	
-	const changeTab = (tab: string) => {
-		
-	}
 
 	useEffect(() => {
 		const container = containerRef.current;
@@ -36,340 +31,152 @@ export default function MapPola({ flow }: MapProps) {
 		if (!ctx) return;
 
 		const externalFlow = [
-			'gorontalo',
-			'sulbar',
-			'sulsel',
-			'sulteng',
-			'manado',
-			'papua',
-			'papua-pegunungan',
-			'maluku',
-			'papua-barat-daya',
-			'papua-selatan',
-			'maluku-utara',
-			'papua-barat',
-			'ntt',
-			'ntb',
-			'bali',
-			'jatim',
-			'yogya',
-			'jabar',
-			'jateng',
-			'jakarta',
-			'bangka',
-			'kepulauan-riau',
-			'jambi',
-			'banten',
-			'sumsel',
-			'aceh',
-			'bengkulu',
+			"gorontalo", "sulbar", "sulsel", "sulteng", "manado", "papua",
+			"papua-pegunungan", "maluku", "papua-barat-daya", "papua-selatan",
+			"maluku-utara", "papua-barat", "ntt", "ntb", "bali", "jatim",
+			"yogya", "jabar", "jateng", "jakarta", "bangka", "kepulauan-riau",
+			"jambi", "banten", "sumsel", "aceh", "bengkulu"
 		];
 
 		canvas.width = container.scrollWidth;
 		canvas.height = container.scrollHeight;
 
-		function getCoordinate(
-			rect: DOMRect,
-			el: string,
-			offsetX: number,
-			offsetY: number,
-		): [number, number] {
+		function getCoordinate(rect: any, el: any, offsetX: any, offsetY: any) {
 			const screenWidth = window.innerWidth;
-			let startX = 0;
-			let startY = 0;
+			let startX = offsetX + (rect.left + rect.width / 2);
+
+			let startY;
+
+			const pinpoint = document.getElementById(`${el}-pinpoint`);
+			if (pinpoint) {
+				const pinpoints = document.getElementById(`${el}`);
+
+				if (pinpoints) {
+					const pinpointRect = pinpoint.getBoundingClientRect();
+					startX = offsetX + pinpointRect.left + pinpointRect.width / 2;
+					startY = offsetY + pinpointRect.top + pinpointRect.height / 2;
+
+					return [startX, startY];
+				}
+			} else {
+				startY = offsetY + (rect.top + rect.height / 2);
+			}
+
 			if (screenWidth <= 450) {
 				switch (el) {
 					case 'Buol':
-						startX = offsetX + (rect.left + rect.width / 2) - 10;
-						startY = offsetY + rect.top + rect.height / 2;
+						startX -= 10;
 						break;
 					case 'Tolitoli':
-						startX = offsetX + (rect.left + rect.width / 2) + 5;
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 5;
 						break;
 					case 'Parigi':
-						startX = offsetX + (rect.left + rect.width / 2) + 20;
-						startY = offsetY + (rect.top + rect.height / 2) - 40;
-						break;
-					case 'Morowali':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai':
-						startX = offsetX + (rect.left + rect.width / 2) - 20;
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Morowali-Utara':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Touna':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Poso':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Sigi':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 20;
+						startY -= 40;
 						break;
 					case 'Donggala':
-						startX = offsetX + (rect.left + rect.width / 2) + 5;
-						startY = offsetY + (rect.top + rect.height / 2) - 20;
+						startX += 5;
+						startY -= 20;
 						break;
 					case 'Palu':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) + 5;
-						break;
-					case 'Banggai-Laut':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai-Kepulauan':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startY += 5;
 						break;
 					default:
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) + 10;
+						startY += 10;
 						break;
 				}
 			} else if (screenWidth <= 600) {
 				switch (el) {
 					case 'Buol':
-						startX = offsetX + (rect.left + rect.width / 2) - 20;
-						startY = offsetY + rect.top + rect.height / 2;
+						startX -= 20;
 						break;
 					case 'Tolitoli':
-						startX = offsetX + (rect.left + rect.width / 2) + 15;
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 15;
 						break;
 					case 'Parigi':
-						startX = offsetX + (rect.left + rect.width / 2) + 20;
-						startY = offsetY + (rect.top + rect.height / 2) - 50;
-						break;
-					case 'Morowali':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai':
-						startX = offsetX + (rect.left + rect.width / 2) - 20;
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Morowali-Utara':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Touna':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Poso':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Sigi':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 20;
+						startY -= 50;
 						break;
 					case 'Donggala':
-						startX = offsetX + (rect.left + rect.width / 2) + 5;
-						startY = offsetY + (rect.top + rect.height / 2) - 20;
+						startX += 5;
+						startY -= 20;
 						break;
 					case 'Palu':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) + 5;
-						break;
-					case 'Banggai-Laut':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai-Kepulauan':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startY += 5;
 						break;
 					default:
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) + 10;
+						startY += 10;
 						break;
 				}
 			} else if (screenWidth <= 800) {
 				switch (el) {
 					case 'Buol':
-						startX = offsetX + (rect.left + rect.width / 2) - 20;
-						startY = offsetY + rect.top + rect.height / 2;
+						startX -= 20;
 						break;
 					case 'Tolitoli':
-						startX = offsetX + (rect.left + rect.width / 2) + 15;
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 15;
 						break;
 					case 'Parigi':
-						startX = offsetX + (rect.left + rect.width / 2) + 40;
-						startY = offsetY + (rect.top + rect.height / 2) - 60;
-						break;
-					case 'Morowali':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai':
-						startX = offsetX + (rect.left + rect.width / 2) - 20;
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Morowali-Utara':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) - 20;
-						break;
-					case 'Touna':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Poso':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Sigi':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 40;
+						startY -= 60;
 						break;
 					case 'Donggala':
-						startX = offsetX + (rect.left + rect.width / 2) + 10;
-						startY = offsetY + (rect.top + rect.height / 2) - 40;
+						startX += 10;
+						startY -= 40;
 						break;
 					case 'Palu':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) + 5;
-						break;
-					case 'Banggai-Laut':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai-Kepulauan':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startY += 5;
 						break;
 					default:
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) + 10;
+						startY += 10;
 						break;
 				}
 			} else if (screenWidth <= 1050) {
 				switch (el) {
 					case 'Buol':
-						startX = offsetX + (rect.left + rect.width / 2) - 30;
-						startY = offsetY + rect.top + rect.height / 2;
+						startX -= 30;
 						break;
 					case 'Tolitoli':
-						startX = offsetX + (rect.left + rect.width / 2) + 30;
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 30;
 						break;
 					case 'Parigi':
-						startX = offsetX + (rect.left + rect.width / 2) + 60;
-						startY = offsetY + (rect.top + rect.height / 2) - 85;
-						break;
-					case 'Morowali':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai':
-						startX = offsetX + (rect.left + rect.width / 2) - 50;
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Morowali-Utara':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) - 20;
-						break;
-					case 'Touna':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Poso':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Sigi':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 60;
+						startY -= 85;
 						break;
 					case 'Donggala':
-						startX = offsetX + (rect.left + rect.width / 2) + 20;
-						startY = offsetY + (rect.top + rect.height / 2) - 60;
+						startX += 20;
+						startY -= 60;
 						break;
 					case 'Palu':
-						startX = offsetX + (rect.left + rect.width / 2) + 10;
-						startY = offsetY + (rect.top + rect.height / 2) + 15;
-						break;
-					case 'Banggai-Laut':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai-Kepulauan':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 10;
+						startY += 15;
 						break;
 					default:
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) + 10;
+						startY += 10;
 						break;
 				}
 			} else {
 				switch (el) {
 					case 'Buol':
-						startX = offsetX + (rect.left + rect.width / 2) - 30;
-						startY = offsetY + rect.top + rect.height / 2;
+						startX -= 30;
 						break;
 					case 'Tolitoli':
-						startX = offsetX + (rect.left + rect.width / 2) + 30;
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 30;
 						break;
 					case 'Parigi':
-						startX = offsetX + (rect.left + rect.width / 2) + 60;
-						startY = offsetY + (rect.top + rect.height / 2) - 120;
-						break;
-					case 'Morowali':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai':
-						startX = offsetX + (rect.left + rect.width / 2) - 50;
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Morowali-Utara':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) - 20;
-						break;
-					case 'Touna':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Poso':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Sigi':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 60;
+						startY -= 120;
 						break;
 					case 'Donggala':
-						startX = offsetX + (rect.left + rect.width / 2) + 20;
-						startY = offsetY + (rect.top + rect.height / 2) - 60;
+						startX += 20;
+						startY -= 60;
 						break;
 					case 'Palu':
-						startX = offsetX + (rect.left + rect.width / 2) + 10;
-						startY = offsetY + (rect.top + rect.height / 2) + 15;
-						break;
-					case 'Banggai-Laut':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai-Kepulauan':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 10;
+						startY += 15;
 						break;
 					default:
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) + 10;
+						startY += 10;
 						break;
 				}
 			}
@@ -377,9 +184,29 @@ export default function MapPola({ flow }: MapProps) {
 		}
 
 		function draw() {
-			if (!ctx || !canvas || !container) return; // Add null check for ctx and canvas
+			externalFlow.forEach(el => {
+				const element = document.getElementById(el);
+				if (element) {
+					element.classList.add('hidden');
+				}
+			});
+			if (!ctx || !canvas || !container) return;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			flow.forEach((el: any) => {
+				const isExternalFlowStart = externalFlow.includes(el.start);
+				const isExternalFlowEnd = externalFlow.includes(el.end);
+				if (isExternalFlowStart) {
+					const ext1 = document.getElementById(el.start);
+					if (ext1) {
+						ext1.classList.remove('hidden');
+					}
+				}
+				if (isExternalFlowEnd) {
+					const ext2 = document.getElementById(el.end);
+					if (ext2) {
+						ext2.classList.remove('hidden');
+					}
+				}
 				const containerRect = container.getBoundingClientRect();
 				const offsetX = container.scrollLeft - containerRect.left;
 				const offsetY = container.scrollTop - containerRect.top;
@@ -393,44 +220,77 @@ export default function MapPola({ flow }: MapProps) {
 				const ender = getCoordinate(rect2, el.end, offsetX, offsetY);
 				const controlX = (starter[0] + ender[0]) / 2;
 				const controlY = starter[1] - 100;
-				const isExternalFlowStart = externalFlow.includes(el.start);
-				const isExternalFlowEnd = externalFlow.includes(el.end);
 				drawBentDashedLine(isExternalFlowStart, isExternalFlowEnd, ctx, starter[0], starter[1], ender[0], ender[1], controlX, controlY, el.start, el.end);
 			});
 		}
-
-		function drawBentDashedLine(isExternalFlowStart: boolean, isExternalFlowEnd: boolean, ctx: CanvasRenderingContext2D, startX: number, startY: number, endX: number, endY: number, controlX: number, controlY: number, startLabel: string, endLabel: string) {
+		function drawBentDashedLine(
+			isExternalFlowStart: any,
+			isExternalFlowEnd: any,
+			ctx: any,
+			startX: any,
+			startY: any,
+			endX: any,
+			endY: any,
+			controlX: any,
+			controlY: any,
+			startLabel: any,
+			endLabel: any
+		) {
 			const path = new Path2D();
+			let lineStepsBeforeEnd;
+			if (!isExternalFlowEnd) {
+				lineStepsBeforeEnd = 10; // Jumlah langkah sebelum akhir garis
+			} else {
+				lineStepsBeforeEnd = 1; // Jumlah langkah sebelum akhir garis
+			}
+			const dx = endX - startX;
+			const dy = endY - startY;
+			const distance = Math.sqrt(dx * dx + dy * dy);
+			// Hitung posisi akhir baru untuk garis (dikurangi 10 langkah)
+			const adjustedEndX = endX - (dx / distance) * lineStepsBeforeEnd;
+			const adjustedEndY = endY - (dy / distance) * lineStepsBeforeEnd;
+			// Jika start atau end adalah external flow, maka buat garis lurus
 			if (externalFlow.includes(startLabel) || externalFlow.includes(endLabel)) {
 				path.moveTo(startX, startY);
-				path.lineTo(endX, endY);
+				path.lineTo(adjustedEndX, adjustedEndY); // Garis berakhir pada titik yang dikurangi
 			} else {
+				// Gambar garis melengkung
 				path.moveTo(startX, startY);
-				path.quadraticCurveTo(controlX, controlY, endX, endY);
+				path.quadraticCurveTo(controlX, controlY, adjustedEndX, adjustedEndY); // Garis berakhir pada titik yang dikurangi
 			}
+			// Set properti garis
 			ctx.setLineDash([10, 5]);
 			ctx.lineWidth = 3;
 			ctx.strokeStyle = '#01518B';
 			ctx.stroke(path);
-			// drawDot(ctx, startX, startY, '#01518B');
-			drawIcon(ctx, startX, startY, bank);
-			if (isExternalFlowEnd) {
-				drawDot(ctx, endX, endY, 'yellow');
+			// Gambar panah pada titik yang baru (adjustedEndX, adjustedEndY)
+			if (!isExternalFlowEnd) {
+				drawArrow(ctx, adjustedEndX, adjustedEndY, startX, startY, controlX, controlY);
+			}
+			// Jika titik tujuan adalah external flow, tambahkan tanda titik kuning
+			if (isExternalFlowEnd || isExternalFlowStart) {
+				// drawDot(ctx, adjustedEndX, adjustedEndY, 'yellow');
 			} else {
-				drawArrow(ctx, endX, endY, startX, startY, controlX, controlY);
+				drawIcon(ctx, startX, startY, bank);
 			}
 		}
 
 		function drawArrow(ctx: CanvasRenderingContext2D, endX: number, endY: number, startX: number, startY: number, controlX: number, controlY: number) {
 			const headlen = 15; // panjang kepala panah
+			const stepsBeforeEnd = 0; // jumlah langkah sebelum mencapai tujuan
 			const dx = endX - controlX;
 			const dy = endY - controlY;
+			const distance = Math.sqrt(dx * dx + dy * dy);
 			const angle = Math.atan2(dy, dx);
+			// Hitung posisi panah sebelum sampai ke tujuan
+			const adjustedX = endX - (dx / distance) * stepsBeforeEnd;
+			const adjustedY = endY - (dy / distance) * stepsBeforeEnd;
+			// Gambar panah yang terletak beberapa langkah sebelum titik akhir
 			ctx.beginPath();
-			ctx.moveTo(endX, endY);
-			ctx.lineTo(endX - headlen * Math.cos(angle - Math.PI / 6), endY - headlen * Math.sin(angle - Math.PI / 6));
-			ctx.moveTo(endX, endY);
-			ctx.lineTo(endX - headlen * Math.cos(angle + Math.PI / 6), endY - headlen * Math.sin(angle + Math.PI / 6));
+			ctx.moveTo(adjustedX, adjustedY);
+			ctx.lineTo(adjustedX - headlen * Math.cos(angle - Math.PI / 6), adjustedY - headlen * Math.sin(angle - Math.PI / 6));
+			ctx.moveTo(adjustedX, adjustedY);
+			ctx.lineTo(adjustedX - headlen * Math.cos(angle + Math.PI / 6), adjustedY - headlen * Math.sin(angle + Math.PI / 6));
 			ctx.strokeStyle = '#01518B';
 			ctx.lineWidth = 3;
 			ctx.stroke();
@@ -440,35 +300,24 @@ export default function MapPola({ flow }: MapProps) {
 			const iconSize = 20; // Ukuran ikon
 			ctx.drawImage(document.getElementById('location') as CanvasImageSource, x - iconSize / 2, y - iconSize / 2, iconSize, iconSize);
 		}
-
-		function drawDot(
-			ctx: CanvasRenderingContext2D,
-			x: number,
-			y: number,
-			color: string,
-		) {
+		function drawDot(ctx: CanvasRenderingContext2D, x: number, y: number, color: string) {
 			ctx.beginPath();
 			ctx.arc(x, y, 5, 0, 2 * Math.PI, false);
 			ctx.fillStyle = color;
 			ctx.fill();
 		}
-
-		container.addEventListener('scroll', draw);
-		window.addEventListener('resize', draw); // Add resize event listener
-		externalFlow.forEach((el) => {
-			if (flow.some((e: any) => e.start === el || e.end === el)) {
-				const el1 = document.getElementById(el);
-				if (el1) {
-					el1.classList.remove('hidden');
-				}
-			}
-		});
 		draw();
+		const handleResize = () => {
+			canvas.width = container.scrollWidth;
+			canvas.height = container.scrollHeight;
+			draw();
+		};
+		window.addEventListener('resize', handleResize);
 		return () => {
-			container.removeEventListener('scroll', draw);
-			window.removeEventListener('resize', draw);
+			window.removeEventListener('resize', handleResize);
 		};
 	}, [flow]);
+
 	return (
 		<>
 			<div style={{ overflowX: 'hidden' }}>
@@ -488,56 +337,6 @@ export default function MapPola({ flow }: MapProps) {
 						}
 					`}</style>
 				<img src="/location.svg" id="location" className="hidden" alt="" />
-				<Tabs defaultValue="all">
-					<section className="px-4 sm:px-8 md:px-10 lg:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
-						<div className="flex flex-col sm:flex-row justify-between pt-10">
-							<div className="flex-col mb-3">
-								<h1 className="text-2xl sm:text-3xl md:text-4xl mb-3 font-extrabold">
-									COMMODITY FLOW
-								</h1>
-								<Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
-									<CounterClockwiseClockIcon /> Harga diperbaharui pada
-									tanggal 15 April 2024
-								</Badge>
-							</div>
-							<TabsList className="rounded-full  w-max p-4 py-6 w-max text-black">
-							<div
-								onClick={() => {
-									changeTab('all');
-								}}>
-								<TabsTrigger className="rounded-full text-md font-bold" value="all">
-									All
-								</TabsTrigger>
-							</div>
-							<div
-								onClick={() => {
-									changeTab('in');
-								}}>
-								<TabsTrigger className="rounded-full text-md font-bold" value="in">
-									In
-								</TabsTrigger>
-							</div>
-							<div
-								onClick={() => {
-									changeTab('intra');
-								}}>
-								<TabsTrigger className="rounded-full text-md font-bold" value="intra">
-									Intra
-								</TabsTrigger>
-							</div>
-
-							<div
-								onClick={() => {
-									changeTab('out');
-								}}>
-								<TabsTrigger className="rounded-full text-md font-bold" value="out">
-									Out
-								</TabsTrigger>
-							</div>
-						</TabsList>
-						</div>
-					</section>
-				</Tabs>
 				<center>
 					<div
 						className="container"
@@ -1195,6 +994,13 @@ export default function MapPola({ flow }: MapProps) {
 												GORONTALO
 											</tspan>
 										</text>
+										<circle
+											id="gorontalo-pinpoint"
+											cx="700"
+											cy="250"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="sulbar">
 										<rect
@@ -1220,7 +1026,15 @@ export default function MapPola({ flow }: MapProps) {
 												BARAT
 											</tspan>
 										</text>
+										<circle
+											id="sulbar-pinpoint"
+											cx="210"
+											cy="771"
+											r="5"
+											fill="red"
+										/>
 									</g>
+
 									<g className="hidden" id="sulsel">
 										<rect
 											id="Rectangle 130_3"
@@ -1245,6 +1059,13 @@ export default function MapPola({ flow }: MapProps) {
 												SELATAN
 											</tspan>
 										</text>
+										<circle
+											id="sulsel-pinpoint"
+											cx="370"
+											cy="871"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="sulteng">
 										<rect
@@ -1270,6 +1091,13 @@ export default function MapPola({ flow }: MapProps) {
 												TENGGARA
 											</tspan>
 										</text>
+										<circle
+											id="sulteng-pinpoint"
+											cx="905"
+											cy="855"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="manado">
 										<rect
@@ -1292,6 +1120,13 @@ export default function MapPola({ flow }: MapProps) {
 												MANADO
 											</tspan>
 										</text>
+										<circle
+											id="manado-pinpoint"
+											cx="890"
+											cy="278"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="papua">
 										<rect
@@ -1314,6 +1149,13 @@ export default function MapPola({ flow }: MapProps) {
 												Papua
 											</tspan>
 										</text>
+										<circle
+											id="papua-pinpoint"
+											cx="970"
+											cy="163"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="papua-pegunungan">
 										<rect
@@ -1339,6 +1181,13 @@ export default function MapPola({ flow }: MapProps) {
 												Pegunungan
 											</tspan>
 										</text>
+										<circle
+											id="papua-pegunungan-pinpoint"
+											cx="980"
+											cy="248"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="maluku">
 										<rect
@@ -1361,6 +1210,13 @@ export default function MapPola({ flow }: MapProps) {
 												Maluku
 											</tspan>
 										</text>
+										<circle
+											id="maluku-pinpoint"
+											cx="1052"
+											cy="800"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="papua-barat-daya">
 										<rect
@@ -1386,6 +1242,13 @@ export default function MapPola({ flow }: MapProps) {
 												Barat Daya
 											</tspan>
 										</text>
+										<circle
+											id="papua-barat-daya-pinpoint"
+											cx="1050"
+											cy="933"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="papua-selatan">
 										<rect
@@ -1411,6 +1274,13 @@ export default function MapPola({ flow }: MapProps) {
 												Selatan
 											</tspan>
 										</text>
+										<circle
+											id="papua-selatan-pinpoint"
+											cx="985"
+											cy="418"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="maluku-utara">
 										<rect
@@ -1436,6 +1306,13 @@ export default function MapPola({ flow }: MapProps) {
 												Utara
 											</tspan>
 										</text>
+										<circle
+											id="maluku-utara-pinpoint"
+											cx="989"
+											cy="528"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="papua-barat">
 										<rect
@@ -1461,6 +1338,13 @@ export default function MapPola({ flow }: MapProps) {
 												Barat
 											</tspan>
 										</text>
+										<circle
+											id="papua-barat-pinpoint"
+											cx="990"
+											cy="658"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="ntt">
 										<rect
@@ -1483,6 +1367,13 @@ export default function MapPola({ flow }: MapProps) {
 												NTT
 											</tspan>
 										</text>
+										<circle
+											id="ntt-pinpoint"
+											cx="670"
+											cy="1010"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="ntb">
 										<rect
@@ -1505,6 +1396,13 @@ export default function MapPola({ flow }: MapProps) {
 												NTB
 											</tspan>
 										</text>
+										<circle
+											id="ntb-pinpoint"
+											cx="815"
+											cy="1008"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="bali">
 										<rect
@@ -1527,6 +1425,13 @@ export default function MapPola({ flow }: MapProps) {
 												Bali
 											</tspan>
 										</text>
+										<circle
+											id="bali-pinpoint"
+											cx="515"
+											cy="1014"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="jatim">
 										<rect
@@ -1549,6 +1454,13 @@ export default function MapPola({ flow }: MapProps) {
 												Jawa Timur
 											</tspan>
 										</text>
+										<circle
+											id="jatim-pinpoint"
+											cx="233"
+											cy="697"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="yogya">
 										<rect
@@ -1572,6 +1484,13 @@ export default function MapPola({ flow }: MapProps) {
 												Yogyakarta
 											</tspan>
 										</text>
+										<circle
+											id="yogya-pinpoint"
+											cx="146"
+											cy="1013"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="jabar">
 										<rect
@@ -1594,6 +1513,13 @@ export default function MapPola({ flow }: MapProps) {
 												Jawa barat
 											</tspan>
 										</text>
+										<circle
+											id="jabar-pinpoint"
+											cx="214"
+											cy="570"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="jateng">
 										<rect
@@ -1616,6 +1542,13 @@ export default function MapPola({ flow }: MapProps) {
 												Jawa Tengah
 											</tspan>
 										</text>
+										<circle
+											id="jateng-pinpoint"
+											cx="184"
+											cy="460"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="jakarta">
 										<rect
@@ -1638,6 +1571,13 @@ export default function MapPola({ flow }: MapProps) {
 												DKI Jakarta
 											</tspan>
 										</text>
+										<circle
+											id="jakarta-pinpoint"
+											cx="234"
+											cy="275"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="bangka">
 										<rect
@@ -1663,6 +1603,13 @@ export default function MapPola({ flow }: MapProps) {
 												belitung
 											</tspan>
 										</text>
+										<circle
+											id="bangka-pinpoint"
+											cx="307"
+											cy="192"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="kepulauan-riau">
 										<rect
@@ -1688,6 +1635,13 @@ export default function MapPola({ flow }: MapProps) {
 												Riau
 											</tspan>
 										</text>
+										<circle
+											id="kepulauan-riau-pinpoint"
+											cx="395"
+											cy="158"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="jambi">
 										<rect
@@ -1710,6 +1664,13 @@ export default function MapPola({ flow }: MapProps) {
 												Jambi
 											</tspan>
 										</text>
+										<circle
+											id="jambi-pinpoint"
+											cx="207"
+											cy="373"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="banten">
 										<rect
@@ -1732,6 +1693,13 @@ export default function MapPola({ flow }: MapProps) {
 												Banten
 											</tspan>
 										</text>
+										<circle
+											id="banten-pinpoint"
+											cx="170"
+											cy="940"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="sumsel">
 										<rect
@@ -1750,13 +1718,22 @@ export default function MapPola({ flow }: MapProps) {
 											font-weight="900"
 											letter-spacing="0em">
 											<tspan x="399.111" y="25.5945">
-												Sumatera&#10;
+												Sumatera
 											</tspan>
 											<tspan x="408.64" y="46.5945">
 												Selatan
 											</tspan>
 										</text>
+
+										<circle
+											id="sumsel-pinpoint"
+											cx="442"
+											cy="65"
+											r="5"
+											fill="red"
+										/>
 									</g>
+
 									<g className="hidden" id="aceh">
 										<rect
 											id="Rectangle 130_26"
@@ -1778,6 +1755,13 @@ export default function MapPola({ flow }: MapProps) {
 												Aceh
 											</tspan>
 										</text>
+										<circle
+											id="aceh-pinpoint"
+											cx="185"
+											cy="120"
+											r="5"
+											fill="red"
+										/>
 									</g>
 									<g className="hidden" id="bengkulu">
 										<rect
@@ -1793,13 +1777,20 @@ export default function MapPola({ flow }: MapProps) {
 											id="Bengkulu"
 											fill="white"
 											font-family="Montserrat"
-											font-size="17"
+											font-size="17s"
 											font-weight="900"
 											letter-spacing="0em">
 											<tspan x="292.447" y="1041.73">
 												Bengkulu
 											</tspan>
 										</text>
+										<circle
+											id="bengkulu-pinpoint"
+											cx="335"
+											cy="1014"
+											r="5"
+											fill="red"
+										/>
 									</g>
 								</g>
 							</g>

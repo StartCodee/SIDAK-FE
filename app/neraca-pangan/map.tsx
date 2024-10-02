@@ -9,7 +9,7 @@ const CardContents = [
 		kebutuhan: '800 ton',
 		neraca: '200 ton',
 		color: 'red',
-        id: 'element1',
+		id: 'element1',
 	},
 	{
 		city: 'Kabupaten Boul',
@@ -17,7 +17,7 @@ const CardContents = [
 		kebutuhan: '700 ton',
 		neraca: '200 ton',
 		color: 'yellow',
-        id: 'element2',
+		id: 'element2',
 	},
 	{
 		city: 'Kabupaten Sigi',
@@ -25,7 +25,7 @@ const CardContents = [
 		kebutuhan: '950 ton',
 		neraca: '150 ton',
 		color: 'green',
-        id: 'element3',
+		id: 'element3',
 	},
 	{
 		city: 'Kabupaten Donggala',
@@ -33,7 +33,7 @@ const CardContents = [
 		kebutuhan: '1000 ton',
 		neraca: '200 ton',
 		color: 'red',
-        id: 'element4',
+		id: 'element4',
 	},
 	{
 		city: 'Kabupaten Morowali',
@@ -41,7 +41,7 @@ const CardContents = [
 		kebutuhan: '600 ton',
 		neraca: '200 ton',
 		color: 'yellow',
-        id: 'element5',
+		id: 'element5',
 	},
 	{
 		city: 'Kabupaten Parigi Moutong',
@@ -49,7 +49,7 @@ const CardContents = [
 		kebutuhan: '850 ton',
 		neraca: '200 ton',
 		color: 'green',
-        id: 'element6',
+		id: 'element6',
 	},
 	{
 		city: 'Kabupaten Toli-Toli',
@@ -57,7 +57,7 @@ const CardContents = [
 		kebutuhan: '750 ton',
 		neraca: '250 ton',
 		color: 'red',
-        id: 'element7',
+		id: 'element7',
 	},
 	{
 		city: 'Kabupaten Poso',
@@ -65,7 +65,7 @@ const CardContents = [
 		kebutuhan: '700 ton',
 		neraca: '250 ton',
 		color: 'yellow',
-        id: 'element8',
+		id: 'element8',
 	},
 	{
 		city: 'Kabupaten Banggai',
@@ -73,7 +73,7 @@ const CardContents = [
 		kebutuhan: '600 ton',
 		neraca: '250 ton',
 		color: 'green',
-        id: 'element9',
+		id: 'element9',
 	},
 	{
 		city: 'Kabupaten Tojo Una-Una',
@@ -81,7 +81,7 @@ const CardContents = [
 		kebutuhan: '780 ton',
 		neraca: '200 ton',
 		color: 'red',
-        id: 'element10',
+		id: 'element10',
 	},
 	{
 		city: 'Kabupaten Banggai Kepulauan',
@@ -89,7 +89,7 @@ const CardContents = [
 		kebutuhan: '720 ton',
 		neraca: '200 ton',
 		color: 'yellow',
-        id: 'element11',
+		id: 'element11',
 	},
 	{
 		city: 'Kabupaten Banggai Kepulauan',
@@ -97,7 +97,7 @@ const CardContents = [
 		kebutuhan: '730 ton',
 		neraca: '200 ton',
 		color: 'yellow',
-        id: 'element12',
+		id: 'element12',
 	},
 ];
 
@@ -117,34 +117,34 @@ export default function Map() {
 			path.location =
 				index === 0
 					? // index 1 to 13 kabupaten buol to banggai kepulauan
-					  'Kabupaten Buol'
+					'Kabupaten Buol'
 					: index === 1
-					? 'Kabupaten Banggai'
-					: index === 2
-					? 'Kabupaten Morowali'
-					: index === 3
-					? 'Kabupaten Poso'
-					: index === 4
-					? 'Kabupaten Tojo Una-Una'
-					: index === 5
-					? 'Kabupaten Parigi Moutong'
-					: index === 6
-					? 'Kabupaten Toli-Toli'
-					: index === 7
-					? 'Kabupaten Donggala'
-					: index === 8
-					? 'Kabupaten Sigi'
-					: index === 9
-					? 'Kabupaten Banggai Laut'
-					: index === 10
-					? 'Kabupaten Morowali Utara'
-					: index === 11
-					? 'Kabupaten Morowali Barat'
-					: index === 12
-					? 'Kabupaten Tojo Una-Una'
-					: index === 13
-					? 'Banggai Kepulauan'
-					: 'Kabupaten Banggai Kepulauan';
+						? 'Kabupaten Banggai'
+						: index === 2
+							? 'Kabupaten Morowali'
+							: index === 3
+								? 'Kabupaten Poso'
+								: index === 4
+									? 'Kabupaten Tojo Una-Una'
+									: index === 5
+										? 'Kabupaten Parigi Moutong'
+										: index === 6
+											? 'Kabupaten Toli-Toli'
+											: index === 7
+												? 'Kabupaten Donggala'
+												: index === 8
+													? 'Kabupaten Sigi'
+													: index === 9
+														? 'Kabupaten Banggai Laut'
+														: index === 10
+															? 'Kabupaten Morowali Utara'
+															: index === 11
+																? 'Kabupaten Morowali Barat'
+																: index === 12
+																	? 'Kabupaten Tojo Una-Una'
+																	: index === 13
+																		? 'Banggai Kepulauan'
+																		: 'Kabupaten Banggai Kepulauan';
 		});
 
 
@@ -153,8 +153,8 @@ export default function Map() {
 		paths.forEach((path) => {
 			path.addEventListener('mouseenter', () => {
 				const content = CardContents.find(
-                    (card) => card.id === path.id
-                );
+					(card) => card.id === path.id
+				);
 				const pathRect = path.getBoundingClientRect();
 				const pathTop = pathRect.top + window.scrollY; // Account for vertical scroll
 				const pathLeft = pathRect.left + window.scrollX;
@@ -165,13 +165,12 @@ export default function Map() {
 				card.style.top = `${pathTop}px`;
 				card.style.left = `${pathLeft}px`;
 				card.innerHTML = `
-                    <div class="h-full w-20 rounded-r-none rounded-md text-white mr-4 flex-shrink-0 ${
-                                    content?.color === 'red'
-                                        ? 'bg-red-500'
-                                        : content?.color === 'yellow'
-                                        ? 'bg-yellow-500'
-                                        : 'bg-green-500'
-                                }">
+                    <div class="h-full w-20 rounded-r-none rounded-md text-white mr-4 flex-shrink-0 ${content?.color === 'red'
+						? 'bg-red-500'
+						: content?.color === 'yellow'
+							? 'bg-yellow-500'
+							: 'bg-green-500'
+					}">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-20 mx-auto mt-0">
                         <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd"/>
                         </svg>
@@ -759,7 +758,7 @@ export default function Map() {
 					/>
 				</svg>
 			</div>
-			
+
 		</>
 	);
 }

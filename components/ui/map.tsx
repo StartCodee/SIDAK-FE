@@ -4,12 +4,18 @@
 import { useEffect, useState } from 'react';
 import Dialog from './modal-harga';
 import { Button } from './button';
-
+import Swal from "sweetalert2";
+import axios from "axios";
+import React from 'react';
 interface CardContent {
 	city: string;
+	item: string;
 	price: string;
 	color: string;
+	kabupaten_kota_id: string;
+	komoditas_id: string;
 	change: string;
+	bulan: string;
 	id: string;
 }
 
@@ -19,32 +25,65 @@ interface MapProps {
 
 export default function Map({ cardContents }: MapProps) {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
-	const [detailHarga, setDetailHarga] = useState(
-		{} as
-		| {
-			city: string;
-			price: string;
-			color: string;
-			change: string;
-			id: string;
+	const [detailHarga, setDetailHarga] = useState<any>();
+
+	const [detailData, setdetailData] = useState<any>([]);
+	const [linkExport, setLinkExport] = useState('');
+
+
+	const getDetailSupply = async (page: number = 1, limit: number = 2, kota: string, komoditas: string) => {
+		try {
+			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/detail-data?date=2024-06&komoditas=${komoditas}&kabupaten_kota_id=${kota}`, {
+				headers: {
+					'content-type': 'application/json',
+					'Authorization': `Bearer ${localStorage.getItem('token')}`,
+				},
+			});
+			if (response.data.data) {
+				setLinkExport(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/export-excel?komoditas=${komoditas}&kabupaten_kota_id=${kota}&export=1`);
+				console.log(response.data.data);
+				setdetailData(response.data.data);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500
+				});
+			}
 		}
-		| undefined,
-	);
+	};
 
 	const closeDialog = () => setIsDialogOpen(false);
 	const openDialog = (el: string) => {
-		setDetailHarga(cardContents.find((card) => card.id === el));
+		const detail = cardContents.find((item) => item.id === el);
+		setDetailHarga(detail);
+		getDetailSupply(1, 2, detail?.kabupaten_kota_id as any, detail?.komoditas_id as any);
 		setIsDialogOpen(true);
 	};
 
 	const showCardArea = (id: string) => {
-		// console.log(id);
 		const content = cardContents.find((card) => card.id === id);
-		const path = document.getElementById(id);
-		if (!path) return;
-		const pathRect = path.getBoundingClientRect();
-		const pathTop = pathRect.top + window.scrollY + 100; // Account for vertical scroll
+		const group = document.getElementById(id);
+
+		if (!group) return;
+
+		const groupElements = group.querySelectorAll('path');
+
+		const pathRect = group.getBoundingClientRect();
+		const pathTop = pathRect.top + window.scrollY + 100;
 		const pathLeft = pathRect.left + window.scrollX + 150;
+
 		const card = document.createElement('div');
 		let status = '';
 		switch (content?.color) {
@@ -61,19 +100,46 @@ export default function Map({ cardContents }: MapProps) {
 				break;
 		}
 
-
 		card.id = 'card-' + id;
-		card.className = 'absolute z-50 bg-white p-4 rounded-md shadow-md';
+		card.className = 'absolute z-50 bg-white p-4 rounded-md shadow-md hidden md:block';
 		card.style.top = `${pathTop}px`;
 		card.style.left = `${pathLeft}px`;
 		card.innerHTML = `
-						<h1 class='text-lg font-semibold'> ${content?.city}</h1>
-						<p class='text-xl font-bold'>${content?.price}</p>
-						<span class="inline-flex items-center rounded-full bg-[${content?.color}] px-2 py-1 mt-1 text-xs font-medium text-white ring-1 ring-inset ring-red-600/10">
-						<p class='text-sm '>${status} ${content?.change}</p>
-						</span>
-					`;
+        <h1 class='text-lg font-semibold'> ${content?.city}</h1>
+        <p class='text-xl font-bold'>Rp ${Math.round(content?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
+        <span class="inline-flex items-center rounded-full bg-[${content?.color}] px-2 py-1 mt-1 text-xs font-medium text-white ring-1 ring-inset ring-red-600/10">
+            <p class='text-sm '>${status} ${content?.change}</p>
+        </span>
+    `;
 		document.body.appendChild(card);
+
+		const originalColor = getColorByCity(id);
+		if (!originalColor) return;
+
+		const darkenColor = (color: string, percent: number): string => {
+			const num = parseInt(color.slice(1), 16),
+				amt = Math.round(2.55 * percent * 100),
+				R = (num >> 16) - amt,
+				G = (num >> 8 & 0x00FF) - amt,
+				B = (num & 0x0000FF) - amt;
+
+			return `#${(
+				0x1000000 +
+				(R < 255 ? (R < 0 ? 0 : R) : 255) * 0x10000 +
+				(G < 255 ? (G < 0 ? 0 : G) : 255) * 0x100 +
+				(B < 255 ? (B < 0 ? 0 : B) : 255)
+			).toString(16).slice(1).toUpperCase()}`;
+		};
+
+		groupElements.forEach((path) => {
+			if (path.parentElement && path.parentElement.tagName.toLowerCase() === 'mask') {
+				return;
+			}
+
+			path.style.fill = darkenColor(originalColor, 0.3);
+
+		});
+
 	};
 
 	const hideCardArea = (id: string) => {
@@ -81,12 +147,49 @@ export default function Map({ cardContents }: MapProps) {
 		if (card) {
 			card.remove();
 		}
+		const group = document.getElementById(id);
+
+		if (!group) return;
+		const originalColor = getColorByCity(id);
+		if (!originalColor) return;
+		const groupElements = group.querySelectorAll('path');
+		groupElements.forEach((path) => {
+			if (path.parentElement && path.parentElement.tagName.toLowerCase() === 'mask') {
+				return;
+			}
+
+			path.style.fill = originalColor;
+
+		});
 	};
 
 	const getColorByCity = (cityName: string) => {
 		const cityData = cardContents.find((item) => item.id === cityName);
-		// console.log(cityData, cityName);
+
+		try {
+			const card = document.getElementById('card-' + cityName);
+			if (card) {
+				card?.remove();
+			}
+			const group = document.getElementById(cityName);
+
+			if (!group) return;
+			const originalColor = cityData?.color;
+			if (!originalColor) return;
+			const groupElements = group.querySelectorAll('path');
+			groupElements.forEach((path) => {
+				if (path.parentElement && path.parentElement.tagName.toLowerCase() === 'mask') {
+					return;
+				}
+
+				path.style.fill = originalColor;
+
+			});
+		} catch (error) {
+
+		}
 		return cityData ? cityData.color : undefined;
+
 	};
 
 	return (
@@ -106,34 +209,26 @@ export default function Map({ cardContents }: MapProps) {
 								</button>
 							</div>
 							<div className="flex md:flex-row flex-wrap sm:flex-nowrap justify-around space-y-4 sm:space-y-0 gap-5">
-								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4 text-sm lg:text-lg flex flex-col rounded-lg">
-									<p className="text-[10px] lg:text-lg">
-										Harga rata - rata {detailHarga?.city}:{' '}
-									</p>
-									<h1 className="font-bold text-[10px] lg:text-lg">
-										{detailHarga?.price}
-									</h1>
+								<div className="shadow-lg w-full sm:w-[20rem] p-4 sm:text-lg text-md  flex flex-col rounded-lg">
+									<p>Harga rata - rata {detailHarga?.city}: </p>
+									<h1 className="font-bold">Rp {Math.round(detailHarga?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h1>
 								</div>
-								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
-									<p className="text-[10px] lg:text-lg">
-										Harga Pada {detailHarga?.city}:{' '}
-									</p>
-									<h1 className="font-bold text-[10px] lg:text-lg">
-										{detailHarga?.price}
-									</h1>
+								<div className="shadow-lg w-full sm:w-[20rem] p-4 sm:text-lg text-md  flex flex-col rounded-lg">
+									<p>Harga Pada {detailHarga?.city}: </p>
+									<h1 className="font-bold">Rp {Math.round(detailHarga?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h1>
 								</div>
 								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
 									<p className="text-[10px] lg:text-lg">Tanggal </p>
 									<h1 className="font-bold text-[10px] lg:text-lg">
-										20 Juni 2024
+										{detailHarga?.bulan}
 									</h1>
 								</div>
 								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
 									<p className="text-[10px] lg:text-lg">Komoditas </p>
-									<h1 className="font-bold text-[10px] lg:text-lg">Beras</h1>
+									<h1 className="font-bold text-[10px] lg:text-lg">{detailHarga?.item}</h1>
 								</div>
 							</div>
-							<Button
+							<Button onClick={() => { window.open(linkExport, '_blank'); }}
 								className="bg-[#f0fdf4] text-[#228848] hover:bg-green-200 rounded-full cursor-pointer"
 								asChild>
 								<span className="self-end inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
@@ -147,39 +242,45 @@ export default function Map({ cardContents }: MapProps) {
 								Tabel Harga Harian
 							</h1>
 							<div className="overflow-x-auto">
-								<table className="rounded-lg overflow-hidden w-full border border-gray-300">
+								<table className="min-w-full bg-white border border-1">
 									<thead>
-										<tr className="bg-blue-200">
-											<th className="px-4 py-2">Subjek</th>
-											<th className="px-4 py-2">02 April 2024</th>
-											<th className="px-4 py-2">03 April 2024</th>
-											<th className="px-4 py-2">04 April 2024</th>
+										<tr>
+											<th className="px-4 py-2 border border-1 bg-blue-200">Subjek</th>
+											{detailData.header != undefined && detailData.header.map((item: any, index: any) => (
+												<th key={index} className="px-4 py-2 border border-1 bg-blue-200">
+													{item}
+												</th>
+											))}
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td className="px-4 py-2">Kab Touna</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-										</tr>
-										<tr className="bg-blue-200">
-											<td
-												className="border-b-2 border-black px-4 py-2"
-												colSpan={4}></td>
-										</tr>
-										<tr>
-											<td className="px-4 py-2">Pasar Wajo</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-										</tr>
-										<tr className="bg-blue-200">
-											<td className="px-4 py-2">Pasar Sentral</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-											<td className="px-4 py-2">Rp. 12.572</td>
-										</tr>
+										{detailData.pasar != undefined && detailData.pasar.length > 0 ? (
+											detailData.pasar.map((pasarItem: any, pasarIndex: any) => (
+												<tr key={pasarIndex}>
+													<td className="px-4 py-2 border border-1">
+														<h2>{pasarItem.pasar_name != "null" ? pasarItem.pasar_name : detailHarga?.city}</h2>
+													</td>
+													{detailData.header != undefined && detailData.header.map((headerDate: any, headerIndex: any) => {
+														// Mencari data harga berdasarkan tanggal dari header
+														const dateItem = pasarItem.dates.find((date: any) => date.date === headerDate);
+
+														return (
+															<td className="px-4 py-2 border border-1" key={headerIndex}>
+																<h2>
+																	{dateItem ? `Rp ${dateItem.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}` : '-'}
+																</h2>
+															</td>
+														);
+													})}
+												</tr>
+											))
+										) : (
+											<tr key="1">
+												<td className="px-4 py-2 border border-1 text-center" colSpan={detailData.header != undefined && detailData.header.length + 1}>
+													Data Kosong
+												</td>
+											</tr>
+										)}
 									</tbody>
 								</table>
 							</div>
@@ -233,6 +334,7 @@ export default function Map({ cardContents }: MapProps) {
 									d="M210.373 95.0862C210.373 95.0862 213.56 93.0365 215.829 85.756C215.829 85.756 223.333 79.3856 229.47 78.7051C229.47 78.7051 233.107 77.1145 232.657 65.2837C232.657 65.2837 235.843 57.0931 234.025 53.6824C232.206 50.2718 232.19 50.7227 234.59 49.8126C236.99 48.9026 238.572 45.0327 238.572 45.0327C238.572 45.0327 244.708 42.9257 244.487 40.1135C244.265 37.3013 242.226 33.2019 244.487 30.4717C246.748 27.7416 251.983 26.151 252.212 22.9617C252.442 19.7724 255.17 17.7309 260.397 19.0919C265.624 20.4529 264.944 24.831 276.315 18.6655H286.998C286.998 18.6655 293.593 16.3617 294.502 11.1309C294.502 11.1309 304.055 11.59 297.46 18.1818L294.273 21.3711L293.364 29.1107C293.364 29.1107 304.276 47.5416 316.098 46.4019L330.419 46.1724C330.419 46.1724 335.875 42.5321 341.102 44.8032C341.102 44.8032 349.516 43.434 351.105 43.434C351.105 43.434 353.383 40.9334 359.969 43.6636C359.969 43.6636 367.924 39.3428 367.924 42.9831C367.924 46.6233 372.242 55.4944 380.656 50.034C380.656 50.034 386.112 46.6233 386.341 45.0245C386.341 45.0245 389.069 43.8849 397.483 47.3038C397.483 47.3038 401.35 49.1239 404.529 48.4434C407.708 47.7629 406.348 50.2636 399.753 51.8541C393.158 53.4447 384.973 55.4944 383.834 55.9535C382.696 56.4126 382.696 61.4139 376.33 64.1441C376.33 64.1441 377.698 73.2447 370.874 68.0139C370.874 68.0139 363.369 63.9145 363.369 61.873C363.369 59.8315 358.142 53.6824 352.907 59.8233C352.907 59.8233 345.403 64.8328 339.947 65.0541L330.173 69.834C330.173 69.834 324.037 69.834 319.031 73.4743H309.478C309.478 73.4743 308.34 78.9346 299.705 77.795H290.84C290.84 77.795 285.155 76.2044 282.427 76.8849C282.427 76.8849 281.747 82.1158 283.336 84.1654C283.336 84.1654 279.469 86.2151 277.65 86.2151C275.832 86.2151 267.418 81.6648 262.42 86.2151C257.423 90.7654 257.415 92.5856 257.415 92.5856C257.415 92.5856 258.553 98.956 254.006 101.916C254.006 101.916 244.921 99.7677 244.224 98.4887C244.224 98.4887 236.909 99.6529 232.378 97.3245C232.378 97.3245 225.062 101.744 220.065 99.6529C215.067 97.5622 210.356 96.8653 210.356 96.8653C210.356 96.8653 209.357 95.9963 210.356 95.0944L210.373 95.0862Z"
 									stroke="#FFFEFE"
 									stroke-width="8"
+									fill={getColorByCity('Buol')}
 									mask="url(#path-1-outside-1_0_1)"
 								/>
 							</g>

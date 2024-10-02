@@ -15,239 +15,136 @@ import {
 } from '@radix-ui/react-icons';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import Select from 'react-select';
-import React from 'react';
 import { format } from 'date-fns';
 import Hero from '@/components/ui/hero';
 import MonthPicker from '@/components/ui/monthpicker';
 import Footer from '@/components/ui/footer';
+import Swal from "sweetalert2";
+import axios from "axios";
+
+
+
+const formatDate = (date: any) => {
+	return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+};
 
 const FlowChart: React.FC = () => {
+	const today = new Date();
+	const formattedDate = formatDate(today);
 
-	const [selectedDate, setSelectedDate] = React.useState<Date>();
+	const [selectedDate, setSelectedDate] = useState<Date>();
 	const [selectedCommodity, setSelectedCommodity] = useState('');
+	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>([]);
 
-	const options = [
-		{ value: 'Beras', label: 'Beras' },
-		{ value: 'Bawang Merah', label: 'Bawang Merah' },
-		{ value: 'Telur Ayam', label: 'Telur Ayam' },
-		{ value: 'Daging Ayam', label: 'Daging Ayam' },
-		{ value: 'Minyak Goreng', label: 'Minyak Goreng' },
-		{ value: 'Gula Pasir', label: 'Gula Pasir' },
-	]
+	const [flow, setFlow] = useState<any>([]);
 
-	const mockData = [
-		{
-			"commodity": "Beras",
-			"start": "sulbar",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Beras",
-			"start": "sumsel",
-			"end": "Poso"
-		},
-		{
-			"commodity": "Beras",
-			"start": "Banggai",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Beras",
-			"start": "Donggala",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Beras",
-			"start": "Poso",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Beras",
-			"start": "Gorontalo",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Beras",
-			"start": "Parigi",
-			"end": "gorontalo"
-		},
-		{
-			"commodity": "Beras",
-			"start": "Parigi",
-			"end": "sulut"
-		},
-		{
-			"commodity": "Bawang Merah",
-			"start": "sulsel",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Bawang Merah",
-			"start": "Donggala",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Bawang Putih",
-			"start": "sulsel",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Telur Ayam",
-			"start": "sulsel",
-			"end": "Poso"
-		},
-		{
-			"commodity": "Telur Ayam",
-			"start": "Donggala",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Telur Ayam",
-			"start": "Parigi",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Daging Ayam",
-			"start": "sulsel",
-			"end": "Poso"
-		},
-		{
-			"commodity": "Daging Ayam",
-			"start": "sulbar",
-			"end": "Poso"
-		},
-		{
-			"commodity": "Minyak Goreng",
-			"start": "Parigi",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Minyak Goreng",
-			"start": "Parigi",
-			"end": "gorontalo"
-		},
-		{
-			"commodity": "Minyak Goreng",
-			"start": "Parigi",
-			"end": "sulut"
-		},
-		{
-			"commodity": "Gula Pasir",
-			"start": "gorontalo",
-			"end": "Parigi"
-		},
-		{
-			"commodity": "Gula Pasir",
-			"start": "gorontalo",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Gula Pasir",
-			"start": "sulut",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Gula Pasir",
-			"start": "sulut",
-			"end": "Parigi"
-		},
-		{
-			"commodity": "Gula Pasir",
-			"start": "Parigi",
-			"end": "Palu"
-		}
-	];
-
-	const [flow, setFlow] = useState<any>([
-		{
-			"commodity": "Beras",
-			"start": "sulbar",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Beras",
-			"start": "sumsel",
-			"end": "Poso"
-		},
-		{
-			"commodity": "Beras",
-			"start": "Banggai",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Beras",
-			"start": "Donggala",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Beras",
-			"start": "Poso",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Beras",
-			"start": "Gorontalo",
-			"end": "Palu"
-		},
-		{
-			"commodity": "Beras",
-			"start": "Parigi",
-			"end": "gorontalo"
-		},
-		{
-			"commodity": "Beras",
-			"start": "Parigi",
-			"end": "sulut"
-		},
-	]);
+	const [filteredFlow, setFilteredFlow] = useState<any>([]);
 
 	const handleChangeMonth = () => {
 		if (selectedDate) {
 			let commodity = selectedCommodity;
-			const filteredData = mockData.filter(data =>
-				data.commodity.includes(selectedCommodity)
-			);
-			setFlow(filteredData);
+			console.log(selectedCommodity);
+			getPolaPerdagangan(format(selectedDate, 'yyyy-MM'), commodity);
 		} else {
 			console.log('No date selected');
 		}
 	}
 
-
 	const containerRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
 
+
+	const getPolaPerdagangan = async (date: string = '', komoditas: string) => {
+		if (!date) {
+			const now = new Date();
+			const year = now.getFullYear();
+			const month = String(now.getMonth() + 1).padStart(2, '0'); // Ensure two digits for month
+			date = `${year}-${month}`;
+		}
+		try {
+			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/pola-perdagangan?date=${date}&komoditas=${komoditas}`, {
+				headers: {
+					'content-type': 'application/json',
+					'Authorization': `Bearer ${localStorage.getItem('token')}`,
+				},
+			});
+			if (response.data.data) {
+				setFlow(response.data.data);
+				setFilteredFlow(response.data.data);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500
+				});
+			}
+		}
+	};
+
+	const getCommodityOption = async (page: number = 1, limit: number = 2) => {
+		try {
+			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/commodities`, {
+				headers: {
+					'content-type': 'application/json',
+					'Authorization': `Bearer ${localStorage.getItem('token')}`,
+				},
+			});
+			if (response.data.data) {
+				const mappedOptions = response.data.data.map((kabupaten: { name: string, id: number }) => ({
+					value: kabupaten.id,
+					label: kabupaten.name,
+				}));
+				setSelectedCommodityOption(mappedOptions);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500
+				});
+			}
+		}
+	};
+
+	const filterByClassification = (classification: string) => {
+		if (classification === 'all') {
+			return flow;
+		} else {
+			return flow.filter((item: any) => item.classification == classification);
+		}
+	};
+
 	const changeTab = (tab: string) => {
-		if (tab === 'all') {
-			setFlow([
-				{ start: 'Buol', end: 'Tolitoli' },
-				{ start: 'Parigi', end: 'Morowali' },
-				{ start: 'Banggai', end: 'Morowali-Utara' },
-				{ start: 'Touna', end: 'Poso' },
-				{ start: 'Sigi', end: 'Donggala' },
-				{ start: 'Palu', end: 'Banggai-Laut' },
-				{ start: 'Palu', end: 'Banggai-Kepulauan' },
-				{ start: 'gorontalo', end: 'Buol' },
-			]);
-		} else if (tab === 'in') {
-			setFlow([
-				{ start: 'Sigi', end: 'Donggala' },
-				{ start: 'Palu', end: 'Banggai-Laut' },
-				{ start: 'Palu', end: 'Banggai-Kepulauan' },
-			]);
-		} else if (tab === 'intra') {
-			setFlow([
-				{ start: 'Buol', end: 'Tolitoli' },
-				{ start: 'Parigi', end: 'sumsel' },
-			]);
-		}
-		else if (tab === 'out') {
-			setFlow([
-				{ start: 'Buol', end: 'gorontalo' },
-			]);
-		}
-	}
+		const newFilteredFlow = filterByClassification(tab);
+		setFilteredFlow(newFilteredFlow);
+	};
+
+	useEffect(() => {
+		getPolaPerdagangan( '', '18');
+		getCommodityOption();
+	}, []);
 
 	useEffect(() => {
 		const container = containerRef.current;
@@ -257,335 +154,152 @@ const FlowChart: React.FC = () => {
 		if (!ctx) return;
 
 		const externalFlow = [
-			"gorontalo"
-			, "sulbar"
-			, "sulsel"
-			, "sulteng"
-			, "manado"
-			, "papua"
-			, "papua-pegunungan"
-			, "maluku"
-			, "papua-barat-daya"
-			, "papua-selatan"
-			, "maluku-utara"
-			, "papua-barat"
-			, "ntt"
-			, "ntb"
-			, "bali"
-			, "jatim"
-			, "yogya"
-			, "jabar"
-			, "jateng"
-			, "jakarta"
-			, "bangka"
-			, "kepulauan-riau"
-			, "jambi"
-			, "banten"
-			, "sumsel"
-			, "aceh"
-			, "bengkulu"
+			"gorontalo", "sulbar", "sulsel", "sulteng", "manado", "papua",
+			"papua-pegunungan", "maluku", "papua-barat-daya", "papua-selatan",
+			"maluku-utara", "papua-barat", "ntt", "ntb", "bali", "jatim",
+			"yogya", "jabar", "jateng", "jakarta", "bangka", "kepulauan-riau",
+			"jambi", "banten", "sumsel", "aceh", "bengkulu"
 		];
 
 		canvas.width = container.scrollWidth;
 		canvas.height = container.scrollHeight;
 
-		function getCoordinate(rect: DOMRect, el: string, offsetX: number, offsetY: number): [number, number] {
+		function getCoordinate(rect: any, el: any, offsetX: any, offsetY: any) {
 			const screenWidth = window.innerWidth;
-			let startX = 0;
-			let startY = 0;
+			let startX = offsetX + (rect.left + rect.width / 2);
+
+			let startY;
+
+			const pinpoint = document.getElementById(`${el}-pinpoint`);
+			if (pinpoint) {
+				const pinpoints = document.getElementById(`${el}`);
+
+				if (pinpoints) {
+					const pinpointRect = pinpoint.getBoundingClientRect();
+					startX = offsetX + pinpointRect.left + pinpointRect.width / 2;
+					startY = offsetY + pinpointRect.top + pinpointRect.height / 2;
+
+					return [startX, startY];
+				}
+			} else {
+				startY = offsetY + (rect.top + rect.height / 2);
+			}
+
 			if (screenWidth <= 450) {
 				switch (el) {
 					case 'Buol':
-						startX = offsetX + (rect.left + rect.width / 2) - 10;
-						startY = offsetY + rect.top + rect.height / 2;
+						startX -= 10;
 						break;
 					case 'Tolitoli':
-						startX = offsetX + (rect.left + rect.width / 2) + 5;
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 5;
 						break;
 					case 'Parigi':
-						startX = offsetX + (rect.left + rect.width / 2) + 20;
-						startY = offsetY + (rect.top + rect.height / 2) - 40;
-						break;
-					case 'Morowali':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai':
-						startX = offsetX + (rect.left + rect.width / 2) - 20;
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Morowali-Utara':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Touna':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Poso':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Sigi':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 20;
+						startY -= 40;
 						break;
 					case 'Donggala':
-						startX = offsetX + (rect.left + rect.width / 2) + 5;
-						startY = offsetY + (rect.top + rect.height / 2) - 20;
+						startX += 5;
+						startY -= 20;
 						break;
 					case 'Palu':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) + 5;
-						break;
-					case 'Banggai-Laut':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai-Kepulauan':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startY += 5;
 						break;
 					default:
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) + 10;
+						startY += 10;
 						break;
 				}
 			} else if (screenWidth <= 600) {
 				switch (el) {
 					case 'Buol':
-						startX = offsetX + (rect.left + rect.width / 2) - 20;
-						startY = offsetY + rect.top + rect.height / 2;
+						startX -= 20;
 						break;
 					case 'Tolitoli':
-						startX = offsetX + (rect.left + rect.width / 2) + 15;
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 15;
 						break;
 					case 'Parigi':
-						startX = offsetX + (rect.left + rect.width / 2) + 20;
-						startY = offsetY + (rect.top + rect.height / 2) - 50;
-						break;
-					case 'Morowali':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai':
-						startX = offsetX + (rect.left + rect.width / 2) - 20;
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Morowali-Utara':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Touna':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Poso':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Sigi':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 20;
+						startY -= 50;
 						break;
 					case 'Donggala':
-						startX = offsetX + (rect.left + rect.width / 2) + 5;
-						startY = offsetY + (rect.top + rect.height / 2) - 20;
+						startX += 5;
+						startY -= 20;
 						break;
 					case 'Palu':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) + 5;
-						break;
-					case 'Banggai-Laut':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai-Kepulauan':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startY += 5;
 						break;
 					default:
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) + 10;
+						startY += 10;
 						break;
 				}
 			} else if (screenWidth <= 800) {
 				switch (el) {
 					case 'Buol':
-						startX = offsetX + (rect.left + rect.width / 2) - 20;
-						startY = offsetY + rect.top + rect.height / 2;
+						startX -= 20;
 						break;
 					case 'Tolitoli':
-						startX = offsetX + (rect.left + rect.width / 2) + 15;
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 15;
 						break;
 					case 'Parigi':
-						startX = offsetX + (rect.left + rect.width / 2) + 40;
-						startY = offsetY + (rect.top + rect.height / 2) - 60;
-						break;
-					case 'Morowali':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai':
-						startX = offsetX + (rect.left + rect.width / 2) - 20;
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Morowali-Utara':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) - 20;
-						break;
-					case 'Touna':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Poso':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Sigi':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 40;
+						startY -= 60;
 						break;
 					case 'Donggala':
-						startX = offsetX + (rect.left + rect.width / 2) + 10;
-						startY = offsetY + (rect.top + rect.height / 2) - 40;
+						startX += 10;
+						startY -= 40;
 						break;
 					case 'Palu':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) + 5;
-						break;
-					case 'Banggai-Laut':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai-Kepulauan':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startY += 5;
 						break;
 					default:
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) + 10;
+						startY += 10;
 						break;
 				}
 			} else if (screenWidth <= 1050) {
 				switch (el) {
 					case 'Buol':
-						startX = offsetX + (rect.left + rect.width / 2) - 30;
-						startY = offsetY + rect.top + rect.height / 2;
+						startX -= 30;
 						break;
 					case 'Tolitoli':
-						startX = offsetX + (rect.left + rect.width / 2) + 30;
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 30;
 						break;
 					case 'Parigi':
-						startX = offsetX + (rect.left + rect.width / 2) + 60;
-						startY = offsetY + (rect.top + rect.height / 2) - 85;
-						break;
-					case 'Morowali':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai':
-						startX = offsetX + (rect.left + rect.width / 2) - 50;
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Morowali-Utara':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) - 20;
-						break;
-					case 'Touna':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Poso':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Sigi':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 60;
+						startY -= 85;
 						break;
 					case 'Donggala':
-						startX = offsetX + (rect.left + rect.width / 2) + 20;
-						startY = offsetY + (rect.top + rect.height / 2) - 60;
+						startX += 20;
+						startY -= 60;
 						break;
 					case 'Palu':
-						startX = offsetX + (rect.left + rect.width / 2) + 10;
-						startY = offsetY + (rect.top + rect.height / 2) + 15;
-						break;
-					case 'Banggai-Laut':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai-Kepulauan':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 10;
+						startY += 15;
 						break;
 					default:
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) + 10;
+						startY += 10;
 						break;
 				}
 			} else {
 				switch (el) {
 					case 'Buol':
-						startX = offsetX + (rect.left + rect.width / 2) - 30;
-						startY = offsetY + rect.top + rect.height / 2;
+						startX -= 30;
 						break;
 					case 'Tolitoli':
-						startX = offsetX + (rect.left + rect.width / 2) + 30;
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 30;
 						break;
 					case 'Parigi':
-						startX = offsetX + (rect.left + rect.width / 2) + 60;
-						startY = offsetY + (rect.top + rect.height / 2) - 120;
-						break;
-					case 'Morowali':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai':
-						startX = offsetX + (rect.left + rect.width / 2) - 50;
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Morowali-Utara':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) - 20;
-						break;
-					case 'Touna':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Poso':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Sigi':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 60;
+						startY -= 120;
 						break;
 					case 'Donggala':
-						startX = offsetX + (rect.left + rect.width / 2) + 20;
-						startY = offsetY + (rect.top + rect.height / 2) - 60;
+						startX += 20;
+						startY -= 60;
 						break;
 					case 'Palu':
-						startX = offsetX + (rect.left + rect.width / 2) + 10;
-						startY = offsetY + (rect.top + rect.height / 2) + 15;
-						break;
-					case 'Banggai-Laut':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
-						break;
-					case 'Banggai-Kepulauan':
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2);
+						startX += 10;
+						startY += 15;
 						break;
 					default:
-						startX = offsetX + (rect.left + rect.width / 2);
-						startY = offsetY + (rect.top + rect.height / 2) + 10;
+						startY += 10;
 						break;
 				}
 			}
@@ -593,24 +307,24 @@ const FlowChart: React.FC = () => {
 		}
 
 		function draw() {
-			externalFlow.forEach((el) => {
-				const el1 = document.getElementById(el);
-				if (el1) {
-					el1.classList.add('hidden');
+			externalFlow.forEach(el => {
+				const element = document.getElementById(el);
+				if (element) {
+					element.classList.add('hidden');
 				}
 			});
-
-			if (!ctx || !canvas || !container) return; // Add null check for ctx and canvas
+			if (!ctx || !canvas || !container) return;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			flow.forEach((el: any) => {
-				if (externalFlow.includes(el.start)) {
+			filteredFlow.forEach((el: any) => {
+				const isExternalFlowStart = externalFlow.includes(el.start);
+				const isExternalFlowEnd = externalFlow.includes(el.end);
+				if (isExternalFlowStart) {
 					const ext1 = document.getElementById(el.start);
 					if (ext1) {
 						ext1.classList.remove('hidden');
 					}
 				}
-
-				if (externalFlow.includes(el.end)) {
+				if (isExternalFlowEnd) {
 					const ext2 = document.getElementById(el.end);
 					if (ext2) {
 						ext2.classList.remove('hidden');
@@ -629,59 +343,77 @@ const FlowChart: React.FC = () => {
 				const ender = getCoordinate(rect2, el.end, offsetX, offsetY);
 				const controlX = (starter[0] + ender[0]) / 2;
 				const controlY = starter[1] - 100;
-				const isExternalFlowStart = externalFlow.includes(el.start);
-				const isExternalFlowEnd = externalFlow.includes(el.end);
-
-				if (isExternalFlowStart) {
-					const ext1 = document.getElementById(el.start);
-					if (ext1) {
-						ext1.classList.remove('hidden');
-					}
-				}
-
-				if (isExternalFlowEnd) {
-					const ext2 = document.getElementById(el.end);
-					if (ext2) {
-						ext2.classList.remove('hidden');
-					}
-				}
-
 				drawBentDashedLine(isExternalFlowStart, isExternalFlowEnd, ctx, starter[0], starter[1], ender[0], ender[1], controlX, controlY, el.start, el.end);
 			});
 		}
-
-		function drawBentDashedLine(isExternalFlowStart: boolean, isExternalFlowEnd: boolean, ctx: CanvasRenderingContext2D, startX: number, startY: number, endX: number, endY: number, controlX: number, controlY: number, startLabel: string, endLabel: string) {
+		function drawBentDashedLine(
+			isExternalFlowStart: any,
+			isExternalFlowEnd: any,
+			ctx: any,
+			startX: any,
+			startY: any,
+			endX: any,
+			endY: any,
+			controlX: any,
+			controlY: any,
+			startLabel: any,
+			endLabel: any
+		) {
 			const path = new Path2D();
+			let lineStepsBeforeEnd;
+			if (!isExternalFlowEnd) {
+				lineStepsBeforeEnd = 10; // Jumlah langkah sebelum akhir garis
+			} else {
+				lineStepsBeforeEnd = 1; // Jumlah langkah sebelum akhir garis
+			}
+			const dx = endX - startX;
+			const dy = endY - startY;
+			const distance = Math.sqrt(dx * dx + dy * dy);
+			// Hitung posisi akhir baru untuk garis (dikurangi 10 langkah)
+			const adjustedEndX = endX - (dx / distance) * lineStepsBeforeEnd;
+			const adjustedEndY = endY - (dy / distance) * lineStepsBeforeEnd;
+			// Jika start atau end adalah external flow, maka buat garis lurus
 			if (externalFlow.includes(startLabel) || externalFlow.includes(endLabel)) {
 				path.moveTo(startX, startY);
-				path.lineTo(endX, endY);
+				path.lineTo(adjustedEndX, adjustedEndY); // Garis berakhir pada titik yang dikurangi
 			} else {
+				// Gambar garis melengkung
 				path.moveTo(startX, startY);
-				path.quadraticCurveTo(controlX, controlY, endX, endY);
+				path.quadraticCurveTo(controlX, controlY, adjustedEndX, adjustedEndY); // Garis berakhir pada titik yang dikurangi
 			}
+			// Set properti garis
 			ctx.setLineDash([10, 5]);
 			ctx.lineWidth = 3;
 			ctx.strokeStyle = '#01518B';
 			ctx.stroke(path);
-			// drawDot(ctx, startX, startY, '#01518B');
-			drawIcon(ctx, startX, startY, bank);
+			// Gambar panah pada titik yang baru (adjustedEndX, adjustedEndY)
+			if (!isExternalFlowEnd) {
+				drawArrow(ctx, adjustedEndX, adjustedEndY, startX, startY, controlX, controlY);
+			}
+			// Jika titik tujuan adalah external flow, tambahkan tanda titik kuning
 			if (isExternalFlowEnd || isExternalFlowStart) {
-				drawDot(ctx, endX, endY, 'yellow');
+				// drawDot(ctx, adjustedEndX, adjustedEndY, 'yellow');
 			} else {
-				drawArrow(ctx, endX, endY, startX, startY, controlX, controlY);
+				drawIcon(ctx, startX, startY, bank);
 			}
 		}
 
 		function drawArrow(ctx: CanvasRenderingContext2D, endX: number, endY: number, startX: number, startY: number, controlX: number, controlY: number) {
 			const headlen = 15; // panjang kepala panah
+			const stepsBeforeEnd = 0; // jumlah langkah sebelum mencapai tujuan
 			const dx = endX - controlX;
 			const dy = endY - controlY;
+			const distance = Math.sqrt(dx * dx + dy * dy);
 			const angle = Math.atan2(dy, dx);
+			// Hitung posisi panah sebelum sampai ke tujuan
+			const adjustedX = endX - (dx / distance) * stepsBeforeEnd;
+			const adjustedY = endY - (dy / distance) * stepsBeforeEnd;
+			// Gambar panah yang terletak beberapa langkah sebelum titik akhir
 			ctx.beginPath();
-			ctx.moveTo(endX, endY);
-			ctx.lineTo(endX - headlen * Math.cos(angle - Math.PI / 6), endY - headlen * Math.sin(angle - Math.PI / 6));
-			ctx.moveTo(endX, endY);
-			ctx.lineTo(endX - headlen * Math.cos(angle + Math.PI / 6), endY - headlen * Math.sin(angle + Math.PI / 6));
+			ctx.moveTo(adjustedX, adjustedY);
+			ctx.lineTo(adjustedX - headlen * Math.cos(angle - Math.PI / 6), adjustedY - headlen * Math.sin(angle - Math.PI / 6));
+			ctx.moveTo(adjustedX, adjustedY);
+			ctx.lineTo(adjustedX - headlen * Math.cos(angle + Math.PI / 6), adjustedY - headlen * Math.sin(angle + Math.PI / 6));
 			ctx.strokeStyle = '#01518B';
 			ctx.lineWidth = 3;
 			ctx.stroke();
@@ -691,32 +423,23 @@ const FlowChart: React.FC = () => {
 			const iconSize = 20; // Ukuran ikon
 			ctx.drawImage(document.getElementById('location') as CanvasImageSource, x - iconSize / 2, y - iconSize / 2, iconSize, iconSize);
 		}
-
 		function drawDot(ctx: CanvasRenderingContext2D, x: number, y: number, color: string) {
 			ctx.beginPath();
 			ctx.arc(x, y, 5, 0, 2 * Math.PI, false);
 			ctx.fillStyle = color;
 			ctx.fill();
 		}
-
-		container.addEventListener('scroll', draw);
-		window.addEventListener('resize', draw); // Add resize event listener
-		externalFlow.forEach((el) => {
-			if (flow.some((e: any) => e.start === el || e.end === el)) {
-				const el1 = document.getElementById(el);
-				if (el1) {
-					el1.classList.remove('hidden');
-				}
-			}
-		});
 		draw();
-		return () => {
-			container.removeEventListener('scroll', draw);
-			window.removeEventListener('resize', draw);
+		const handleResize = () => {
+			canvas.width = container.scrollWidth;
+			canvas.height = container.scrollHeight;
+			draw();
 		};
-
-
-	}, [flow]);
+		window.addEventListener('resize', handleResize);
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
+	}, [filteredFlow, containerRef, canvasRef]);
 
 	return (
 		<div style={{ overflowX: 'hidden' }}>
@@ -744,9 +467,19 @@ const FlowChart: React.FC = () => {
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm mb-1">Komoditas</h1>
 					<Select
+						styles={{
+							control: (provided) => ({
+								...provided,
+								border: 'none',
+								boxShadow: 'none',
+							}),
+						}}
+						components={{
+							IndicatorSeparator: () => null
+						}}
 						onChange={(option) => setSelectedCommodity(option!.value)}
 						className=" basic-single w-[170px] border-none"
-						options={options}
+						options={selectedCommodityOption}
 					/>
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
@@ -769,8 +502,7 @@ const FlowChart: React.FC = () => {
 								COMMODITY FLOW
 							</h1>
 							<Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
-								<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal 15
-								April 2024
+								<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal {formattedDate}
 							</Badge>
 						</div>
 						<TabsList className="rounded-full   p-4 py-6 w-max text-black">
@@ -782,16 +514,6 @@ const FlowChart: React.FC = () => {
 									className="rounded-full text-md font-bold"
 									value="all">
 									All
-								</TabsTrigger>
-							</div>
-							<div
-								onClick={() => {
-									changeTab('in');
-								}}>
-								<TabsTrigger
-									className="rounded-full text-md font-bold"
-									value="in">
-									In
 								</TabsTrigger>
 							</div>
 							<div
@@ -818,7 +540,6 @@ const FlowChart: React.FC = () => {
 					</div>
 				</section>
 			</Tabs>
-
 			<center>
 				<div
 					className="container"
@@ -1476,6 +1197,13 @@ const FlowChart: React.FC = () => {
 											GORONTALO
 										</tspan>
 									</text>
+									<circle
+										id="gorontalo-pinpoint"
+										cx="700"
+										cy="250"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="sulbar">
 									<rect
@@ -1501,7 +1229,15 @@ const FlowChart: React.FC = () => {
 											BARAT
 										</tspan>
 									</text>
+									<circle
+										id="sulbar-pinpoint"
+										cx="210"
+										cy="771"
+										r="5"
+										fill="red"
+									/>
 								</g>
+
 								<g className="hidden" id="sulsel">
 									<rect
 										id="Rectangle 130_3"
@@ -1526,6 +1262,13 @@ const FlowChart: React.FC = () => {
 											SELATAN
 										</tspan>
 									</text>
+									<circle
+										id="sulsel-pinpoint"
+										cx="370"
+										cy="871"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="sulteng">
 									<rect
@@ -1551,6 +1294,13 @@ const FlowChart: React.FC = () => {
 											TENGGARA
 										</tspan>
 									</text>
+									<circle
+										id="sulteng-pinpoint"
+										cx="905"
+										cy="855"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="manado">
 									<rect
@@ -1573,6 +1323,13 @@ const FlowChart: React.FC = () => {
 											MANADO
 										</tspan>
 									</text>
+									<circle
+										id="manado-pinpoint"
+										cx="890"
+										cy="278"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="papua">
 									<rect
@@ -1595,6 +1352,13 @@ const FlowChart: React.FC = () => {
 											Papua
 										</tspan>
 									</text>
+									<circle
+										id="papua-pinpoint"
+										cx="970"
+										cy="163"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="papua-pegunungan">
 									<rect
@@ -1620,6 +1384,13 @@ const FlowChart: React.FC = () => {
 											Pegunungan
 										</tspan>
 									</text>
+									<circle
+										id="papua-pegunungan-pinpoint"
+										cx="980"
+										cy="248"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="maluku">
 									<rect
@@ -1642,6 +1413,13 @@ const FlowChart: React.FC = () => {
 											Maluku
 										</tspan>
 									</text>
+									<circle
+										id="maluku-pinpoint"
+										cx="1052"
+										cy="800"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="papua-barat-daya">
 									<rect
@@ -1667,6 +1445,13 @@ const FlowChart: React.FC = () => {
 											Barat Daya
 										</tspan>
 									</text>
+									<circle
+										id="papua-barat-daya-pinpoint"
+										cx="1050"
+										cy="933"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="papua-selatan">
 									<rect
@@ -1692,6 +1477,13 @@ const FlowChart: React.FC = () => {
 											Selatan
 										</tspan>
 									</text>
+									<circle
+										id="papua-selatan-pinpoint"
+										cx="985"
+										cy="418"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="maluku-utara">
 									<rect
@@ -1717,6 +1509,13 @@ const FlowChart: React.FC = () => {
 											Utara
 										</tspan>
 									</text>
+									<circle
+										id="maluku-utara-pinpoint"
+										cx="989"
+										cy="528"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="papua-barat">
 									<rect
@@ -1742,6 +1541,13 @@ const FlowChart: React.FC = () => {
 											Barat
 										</tspan>
 									</text>
+									<circle
+										id="papua-barat-pinpoint"
+										cx="990"
+										cy="658"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="ntt">
 									<rect
@@ -1764,6 +1570,13 @@ const FlowChart: React.FC = () => {
 											NTT
 										</tspan>
 									</text>
+									<circle
+										id="ntt-pinpoint"
+										cx="670"
+										cy="1010"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="ntb">
 									<rect
@@ -1786,6 +1599,13 @@ const FlowChart: React.FC = () => {
 											NTB
 										</tspan>
 									</text>
+									<circle
+										id="ntb-pinpoint"
+										cx="815"
+										cy="1008"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="bali">
 									<rect
@@ -1808,6 +1628,13 @@ const FlowChart: React.FC = () => {
 											Bali
 										</tspan>
 									</text>
+									<circle
+										id="bali-pinpoint"
+										cx="515"
+										cy="1014"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="jatim">
 									<rect
@@ -1830,6 +1657,13 @@ const FlowChart: React.FC = () => {
 											Jawa Timur
 										</tspan>
 									</text>
+									<circle
+										id="jatim-pinpoint"
+										cx="233"
+										cy="697"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="yogya">
 									<rect
@@ -1853,6 +1687,13 @@ const FlowChart: React.FC = () => {
 											Yogyakarta
 										</tspan>
 									</text>
+									<circle
+										id="yogya-pinpoint"
+										cx="146"
+										cy="1013"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="jabar">
 									<rect
@@ -1875,6 +1716,13 @@ const FlowChart: React.FC = () => {
 											Jawa barat
 										</tspan>
 									</text>
+									<circle
+										id="jabar-pinpoint"
+										cx="214"
+										cy="570"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="jateng">
 									<rect
@@ -1897,6 +1745,13 @@ const FlowChart: React.FC = () => {
 											Jawa Tengah
 										</tspan>
 									</text>
+									<circle
+										id="jateng-pinpoint"
+										cx="184"
+										cy="460"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="jakarta">
 									<rect
@@ -1919,6 +1774,13 @@ const FlowChart: React.FC = () => {
 											DKI Jakarta
 										</tspan>
 									</text>
+									<circle
+										id="jakarta-pinpoint"
+										cx="234"
+										cy="275"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="bangka">
 									<rect
@@ -1944,6 +1806,13 @@ const FlowChart: React.FC = () => {
 											belitung
 										</tspan>
 									</text>
+									<circle
+										id="bangka-pinpoint"
+										cx="307"
+										cy="192"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="kepulauan-riau">
 									<rect
@@ -1969,6 +1838,13 @@ const FlowChart: React.FC = () => {
 											Riau
 										</tspan>
 									</text>
+									<circle
+										id="kepulauan-riau-pinpoint"
+										cx="395"
+										cy="158"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="jambi">
 									<rect
@@ -1991,6 +1867,13 @@ const FlowChart: React.FC = () => {
 											Jambi
 										</tspan>
 									</text>
+									<circle
+										id="jambi-pinpoint"
+										cx="207"
+										cy="373"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="banten">
 									<rect
@@ -2013,6 +1896,13 @@ const FlowChart: React.FC = () => {
 											Banten
 										</tspan>
 									</text>
+									<circle
+										id="banten-pinpoint"
+										cx="170"
+										cy="940"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="sumsel">
 									<rect
@@ -2031,13 +1921,22 @@ const FlowChart: React.FC = () => {
 										font-weight="900"
 										letter-spacing="0em">
 										<tspan x="399.111" y="25.5945">
-											Sumatera&#10;
+											Sumatera
 										</tspan>
 										<tspan x="408.64" y="46.5945">
 											Selatan
 										</tspan>
 									</text>
+
+									<circle
+										id="sumsel-pinpoint"
+										cx="442"
+										cy="65"
+										r="5"
+										fill="red"
+									/>
 								</g>
+
 								<g className="hidden" id="aceh">
 									<rect
 										id="Rectangle 130_26"
@@ -2059,6 +1958,13 @@ const FlowChart: React.FC = () => {
 											Aceh
 										</tspan>
 									</text>
+									<circle
+										id="aceh-pinpoint"
+										cx="185"
+										cy="120"
+										r="5"
+										fill="red"
+									/>
 								</g>
 								<g className="hidden" id="bengkulu">
 									<rect
@@ -2074,13 +1980,20 @@ const FlowChart: React.FC = () => {
 										id="Bengkulu"
 										fill="white"
 										font-family="Montserrat"
-										font-size="17"
+										font-size="17s"
 										font-weight="900"
 										letter-spacing="0em">
 										<tspan x="292.447" y="1041.73">
 											Bengkulu
 										</tspan>
 									</text>
+									<circle
+										id="bengkulu-pinpoint"
+										cx="335"
+										cy="1014"
+										r="5"
+										fill="red"
+									/>
 								</g>
 							</g>
 						</g>
