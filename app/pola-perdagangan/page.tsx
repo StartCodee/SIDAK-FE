@@ -14,7 +14,7 @@ import {
 	CounterClockwiseClockIcon,
 } from '@radix-ui/react-icons';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import Select from 'react-select';
+import Select, { SingleValue }  from 'react-select';
 import { format } from 'date-fns';
 import Hero from '@/components/ui/hero';
 import MonthPicker from '@/components/ui/monthpicker';
@@ -32,8 +32,8 @@ const FlowChart: React.FC = () => {
 	const today = new Date();
 	const formattedDate = formatDate(today);
 
-	const [selectedDate, setSelectedDate] = useState<Date>();
-	const [selectedCommodity, setSelectedCommodity] = useState('');
+	const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+	const [selectedCommodity, setSelectedCommodity] = useState<SingleValue<{ value: string; label: string }> | null>(null);
 	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>([]);
 
 	const [flow, setFlow] = useState<any>([]);
@@ -42,9 +42,9 @@ const FlowChart: React.FC = () => {
 
 	const handleChangeMonth = () => {
 		if (selectedDate) {
-			let commodity = selectedCommodity;
-			console.log(selectedCommodity);
-			getPolaPerdagangan(format(selectedDate, 'yyyy-MM'), commodity);
+			let commodity = selectedCommodity ? selectedCommodity.value : '';
+			let val = format(selectedDate, 'yyyy-MM-dd');
+			getPolaPerdagangan(val, commodity);
 		} else {
 			console.log('No date selected');
 		}
@@ -56,12 +56,7 @@ const FlowChart: React.FC = () => {
 
 
 	const getPolaPerdagangan = async (date: string = '', komoditas: string) => {
-		if (!date) {
-			const now = new Date();
-			const year = now.getFullYear();
-			const month = String(now.getMonth() + 1).padStart(2, '0'); // Ensure two digits for month
-			date = `${year}-${month}`;
-		}
+		
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/pola-perdagangan?date=${date}&komoditas=${komoditas}`, {
 				headers: {
@@ -107,6 +102,8 @@ const FlowChart: React.FC = () => {
 					label: kabupaten.name,
 				}));
 				setSelectedCommodityOption(mappedOptions);
+				const defaultOption = mappedOptions.find((option: { value: number; label: string }) => option.value === 18);
+   				 setSelectedCommodity(defaultOption);
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
@@ -477,14 +474,15 @@ const FlowChart: React.FC = () => {
 						components={{
 							IndicatorSeparator: () => null
 						}}
-						onChange={(option) => setSelectedCommodity(option!.value)}
+						onChange={(option) => setSelectedCommodity(option)}
 						className=" basic-single w-[170px] border-none"
 						options={selectedCommodityOption}
+						value={selectedCommodity}
 					/>
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
-					<h1 className="font-bold text-sm ">Bulan</h1>
+					<h1 className="font-bold text-sm ">Tanggal</h1>
 					<MonthPicker date={selectedDate} setDate={setSelectedDate} />
 				</div>
 				<Button

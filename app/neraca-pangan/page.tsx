@@ -17,7 +17,7 @@ import Dialog from '@/components/ui/modal-harga';
 import React from 'react';
 import { format } from 'date-fns';
 import Hero from '@/components/ui/hero';
-import Select from 'react-select';
+import Select, { SingleValue } from 'react-select';
 import MonthPicker from '@/components/ui/monthpicker';
 import MapNeraca from '@/components/ui/map-neraca';
 import Swal from "sweetalert2";
@@ -36,13 +36,13 @@ interface cardContents {
 }
 
 export default function Home() {
-	const [selectedCommodity, setSelectedCommodity] = useState('');
+	const [selectedCommodity, setSelectedCommodity] = useState<SingleValue<{ value: string; label: string }> | null>(null);
 	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>(
 		[],
 	);
 
 	const [detailHarga, setDetailHarga] = useState<any>();
-	const [selectedDate, setSelectedDate] = React.useState<Date>();
+	const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
 
 	const [cardContents, setCardContents] = useState<cardContents[]>([]);
 
@@ -126,10 +126,11 @@ export default function Home() {
 
 	const handleChangeMonth = () => {
 		try {
-			console.log(selectedCommodity);
+			let commodity = selectedCommodity ? selectedCommodity.value : '';
+			let val = format(selectedDate ?? new Date(), 'yyyy-MM-dd');
 			getNeracaPangan(
-				format(selectedDate as Date, 'yyyy-MM'),
-				selectedCommodity,
+				val,
+				commodity,
 			);
 		} catch (error) { }
 	};
@@ -144,12 +145,7 @@ export default function Home() {
 		date: string,
 		komoditas: string,
 	) => {
-		if (!date) {
-			const now = new Date();
-			const year = now.getFullYear();
-			const month = String(now.getMonth() + 1).padStart(2, '0'); // Ensure two digits for month
-			date = `${year}-${month}`;
-		}
+		
 		try {
 			const response = await axios.get(
 				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/harga-pasokan?date=${date}&komoditas=${komoditas}`,
@@ -203,6 +199,8 @@ export default function Home() {
 					}),
 				);
 				setSelectedCommodityOption(mappedOptions);
+				const defaultOption = mappedOptions.find((option: { value: number; label: string }) => option.value === 18);
+   				 setSelectedCommodity(defaultOption);
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
@@ -249,14 +247,15 @@ export default function Home() {
 						 components={{
 							IndicatorSeparator: () => null
 						}}
-						onChange={(option) => setSelectedCommodity(option!.value)}
+						onChange={(option) => setSelectedCommodity(option)}
 						className=" basic-single w-[170px] border-none"
 						options={selectedCommodityOption}
+						value={selectedCommodity}
 					/>
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
-					<h1 className="font-bold text-sm ">Bulan</h1>
+					<h1 className="font-bold text-sm ">Tanggal</h1>
 					<MonthPicker date={selectedDate} setDate={setSelectedDate} />
 				</div>
 				<Button
