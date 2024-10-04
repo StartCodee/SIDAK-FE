@@ -22,13 +22,13 @@ export default function MonthPicker({ date, setDate }: DatePickerProps) {
 					ref={datePickerRef}
 					selected={date}
 					onChange={(date) => date && setDate(date)}
-					dateFormat="MM/yyyy"
-					showMonthYearPicker
+					dateFormat="dd/MM/yyyy"
+					peekNextMonth
+					showMonthDropdown
+					showYearDropdown
+					dropdownMode="select"
 					className="w-[100px] justify-between text-left mt-2 p-0 m-0 font-normal border-none"
-					showFullMonthYearPicker
-					placeholderText="Bulan"
 					popperPlacement="bottom-end"
-					popperClassName='rasta-stripes'					
 				/>
 				<ChevronDown className="h-4 w-4 mt-3 opacity-50" />
 			</div>

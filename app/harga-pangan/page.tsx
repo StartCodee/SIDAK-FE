@@ -20,7 +20,7 @@ import axios from "axios";
 import React from 'react';
 import Hero from '@/components/ui/hero';
 import Map from '@/components/ui/map';
-import Select from 'react-select';
+import Select, { SingleValue } from 'react-select';
 import HargaPanganSkeleton from '@/components/HargaPanganSkeleton';
 
 interface cardContents {
@@ -44,17 +44,17 @@ export default function Home() {
 	const formattedDate = formatDate(today);
 	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>([]);
 	const [cardContents, setCardContents] = useState<cardContents[]>([]);
-	const [selectedCommodity, setSelectedCommodity] = useState('');
+	const [selectedCommodity, setSelectedCommodity] = useState<SingleValue<{ value: string; label: string }> | null>(null);
 	const [monitoringVolatilitas, setMonitoringVolatilitas] = useState<any>([]);
-	const [selectedDate, setSelectedDate] = React.useState<Date>();
+	const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const closeDialog = () => setIsDialogOpen(false);
 	const [loading, setLoading] = useState(true);
 
 	const handleChangeMonth = () => {
 		if (selectedDate) {
-			let commodity = selectedCommodity;
-			let val = format(selectedDate, 'yyyy-MM');
+			let commodity = selectedCommodity ? selectedCommodity.value : '';
+			let val = format(selectedDate, 'yyyy-MM-dd');
 			getHargaPangan(val, commodity);
 		} else {
 			console.log('No date selected');
@@ -93,14 +93,9 @@ export default function Home() {
 	};
 
 	const getHargaPangan = async (date: string = '', komoditas: string = '') => {
-		if (!date) {
-			const now = new Date();
-			const year = now.getFullYear();
-			const month = String(now.getMonth() + 1).padStart(2, '0'); // Ensure two digits for month
-			date = `${year}-${month}`;
-		}
+		
 		try {
-			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/perubahan-harga?date=${date}&komoditas=${komoditas}`, {
+			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/perubahan-harga?end_date=${date}&komoditas=${komoditas}`, {
 				headers: {
 					'content-type': 'application/json',
 					'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -145,6 +140,9 @@ export default function Home() {
 					label: kabupaten.name,
 				}));
 				setSelectedCommodityOption(mappedOptions);
+				const defaultOption = mappedOptions.find((option: { value: number; label: string }) => option.value === 18);
+   				 setSelectedCommodity(defaultOption);
+
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
@@ -192,14 +190,15 @@ export default function Home() {
 						 components={{
 							IndicatorSeparator: () => null
 						}}
-						onChange={(option) => setSelectedCommodity(option!.value)}
+						onChange={(option) => setSelectedCommodity(option)}
 						className=" basic-single w-[170px] border-none"
 						options={selectedCommodityOption}
+						value={selectedCommodity}
 					/>
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
-					<h1 className="font-bold text-sm ">Bulan</h1>
+					<h1 className="font-bold text-sm ">Tanggal</h1>
 					<MonthPicker date={selectedDate} setDate={setSelectedDate} />
 				</div>
 				<Button

@@ -9,7 +9,7 @@ import MonthPicker from '@/components/ui/monthpicker';
 import MapNeraca from '@/components/ui/map-neraca';
 import Dialog from '@/components/ui/modal-harga';
 import { Button } from '@/components/ui/button';
-
+import { useToast } from '@/components/ui/use-toast';
 import MapPola from '@/components/ui/map-pola';
 import { Badge } from '@/components/ui/badge';
 import { useEffect, useState } from 'react';
@@ -17,9 +17,8 @@ import Navbar from '@/components/ui/navbar';
 import Footer from '@/components/ui/footer';
 import Hero from '@/components/ui/hero';
 import Map from '@/components/ui/map';
-import Select from 'react-select';
+import Select, { SingleValue } from 'react-select';
 import { format, set,subDays } from 'date-fns';
-import Swal from "sweetalert2";
 import Image from 'next/image';
 import Link from 'next/link';
 import axios from "axios";
@@ -30,6 +29,7 @@ import SmallLineChart from '@/components/SmallLineChart';
 import KomoditasSkeleton from '@/components/KomoditasSkeleton';
 import HargaSkeleton from '@/components/HargaSkeleton';
 import StatusIndicators from '@/components/ui/status_indicator';
+import HeroSearch from '@/components/hero-search';
 
 interface cardContents {
 	city: string;
@@ -58,6 +58,7 @@ const formatDate = (date: any) => {
 };
 
 export default function Home() {
+	const { toast } = useToast();
 	const today = new Date();
 	const formattedDate = formatDate(today);
 
@@ -67,12 +68,18 @@ export default function Home() {
 	const [detailHargaKonsumen, setDetailHargaKonsumen] = useState<any>();
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+
 	const [selectedCommodityKonsumen, setSelectedCommodityKonsumen] = useState('');
-	const [selectedCommodity, setSelectedCommodity] = useState('');
+	const [selectedCommodity, setSelectedCommodity] = useState<SingleValue<{ value: string; label: string }> | null>(null);
 	const [selectedKabupaten, setSelectedKabupaten] = useState('');
 
-	const [selectedDateKonsumen, setSelectedDateKonsumen] = React.useState<Date>();
-	const [selectedDate, setSelectedDate] = React.useState<Date>();
+	const [selectedDateKonsumen, setSelectedDateKonsumen] = useState<Date | undefined>(() => {
+	  const today = new Date();
+	  const oneMonthAgo = new Date(today.setMonth(today.getMonth() - 1));
+	  return oneMonthAgo;
+	});
+	const [selectedEndDateKonsumen, setSelectedEndDateKonsumen] = useState<Date | undefined>(new Date());
+	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 	const [selectedOption, setSelectedOption] = useState<any[]>([]);
 
 	const [cardContents, setCardContents] = useState<cardContents[]>([]);
@@ -113,19 +120,18 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-				Swal.fire({
-					icon: 'error',
-					title: error.response.data.message,
-					showConfirmButton: false,
-					timer: 1500
+				
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: error.response.data.message,	
 				});
 			} else {
-				Swal.fire({
-					icon: 'error',
-					title: 'error terjadi',
-					text: 'mohon coba lagi nanti.',
-					showConfirmButton: false,
-					timer: 1500
+				
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: 'mohon coba lagi nanti.',	
 				});
 			}
 		}
@@ -174,7 +180,7 @@ export default function Home() {
 	const handleChangeMonth = () => {
 		console.log('search');
 		if (selectedDate) {
-			let commodity = selectedCommodity;
+			let commodity = selectedCommodity ? selectedCommodity.value : '';
 			let val = format(selectedDate, 'yyyy-MM');
 			if (selectedValue === 'harga-pangan') {
 				getHargaPangan(val, commodity);
@@ -192,8 +198,9 @@ export default function Home() {
 	const handleChangeMonthKonsumen = () => {
 		if (selectedDateKonsumen) {
 			let commodity = selectedCommodityKonsumen;
-			let val = format(selectedDateKonsumen, 'yyyy-MM');
-			getHargaKonsumen(val, selectedKabupaten);
+			let val = format(selectedDateKonsumen, 'yyyy-MM-dd');
+			let val2 = format(selectedEndDateKonsumen ?? new Date(), 'yyyy-MM-dd');
+			getHargaKonsumen(val, val2, selectedKabupaten);
 		} else {
 			console.log('No date selected');
 		}
@@ -232,19 +239,18 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-				Swal.fire({
-					icon: 'error',
-					title: error.response.data.message,
-					showConfirmButton: false,
-					timer: 1500
+				
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: error.response.data.message,	
 				});
 			} else {
-				Swal.fire({
-					icon: 'error',
-					title: 'error terjadi',
-					text: 'mohon coba lagi nanti.',
-					showConfirmButton: false,
-					timer: 1500
+				
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: "mohon coba lagi nanti.",	
 				});
 			}
 		}
@@ -269,19 +275,19 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-				Swal.fire({
-					icon: 'error',
-					title: error.response.data.message,
-					showConfirmButton: false,
-					timer: 1500
+				
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: error.response.data.message,	
 				});
+				
 			} else {
-				Swal.fire({
-					icon: 'error',
-					title: 'error terjadi',
-					text: 'mohon coba lagi nanti.',
-					showConfirmButton: false,
-					timer: 1500
+				
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: "mohon coba lagi nanti.",	
 				});
 			}
 		}
@@ -307,19 +313,18 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-				Swal.fire({
-					icon: 'error',
-					title: error.response.data.message,
-					showConfirmButton: false,
-					timer: 1500
+				
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: error.response.data.message,	
 				});
 			} else {
-				Swal.fire({
-					icon: 'error',
-					title: 'error terjadi',
-					text: 'mohon coba lagi nanti.',
-					showConfirmButton: false,
-					timer: 1500
+				
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: "mohon coba lagi nanti.",	
 				});
 			}
 		}
@@ -339,22 +344,25 @@ export default function Home() {
 					label: kabupaten.name,
 				}));
 				setSelectedCommodityOption(mappedOptions);
+				 const defaultOption = mappedOptions.find((option: { value: number; label: string }) => option.value === 18);
+				 console.log(defaultOption)
+   				 setSelectedCommodity(defaultOption);
+				 
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-				Swal.fire({
-					icon: 'error',
-					title: error.response.data.message,
-					showConfirmButton: false,
-					timer: 1500
+			
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: error.response.data.message,	
 				});
 			} else {
-				Swal.fire({
-					icon: 'error',
-					title: 'error terjadi',
-					text: 'mohon coba lagi nanti.',
-					showConfirmButton: false,
-					timer: 1500
+				
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: "mohon coba lagi nanti.",	
 				});
 			}
 		}
@@ -377,19 +385,18 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-				Swal.fire({
-					icon: 'error',
-					title: error.response.data.message,
-					showConfirmButton: false,
-					timer: 1500
+				
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: error.response.data.message,	
 				});
 			} else {
-				Swal.fire({
-					icon: 'error',
-					title: 'error terjadi',
-					text: 'mohon coba lagi nanti.',
-					showConfirmButton: false,
-					timer: 1500
+				
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: "mohon coba lagi nanti.",	
 				});
 			}
 		}
@@ -408,19 +415,18 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-				Swal.fire({
-					icon: 'error',
-					title: error.response.data.message,
-					showConfirmButton: false,
-					timer: 1500
+				
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: error.response.data.message,	
 				});
 			} else {
-				Swal.fire({
-					icon: 'error',
-					title: 'error terjadi',
-					text: 'mohon coba lagi nanti.',
-					showConfirmButton: false,
-					timer: 1500
+				
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: "mohon coba lagi nanti.",	
 				});
 			}
 		}
@@ -440,33 +446,27 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-				Swal.fire({
-					icon: 'error',
-					title: error.response.data.message,
-					showConfirmButton: false,
-					timer: 1500
+				
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: error.response.data.message,	
 				});
 			} else {
-				Swal.fire({
-					icon: 'error',
-					title: 'error terjadi',
-					text: 'mohon coba lagi nanti.',
-					showConfirmButton: false,
-					timer: 1500
+				
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: "mohon coba lagi nanti.",	
 				});
 			}
 		}
 	};
 
-	const getHargaKonsumen = async (date: string = '', kabupaten_kota_id: string) => {
-		if (!date) {
-			const now = new Date();
-			const year = now.getFullYear();
-			const month = String(now.getMonth() + 1).padStart(2, '0'); // Ensure two digits for month
-			date = `${year}-${month}`;
-		}
+	const getHargaKonsumen = async (start_date: string = '', end_date: string = '', kabupaten_kota_id: string) => {
+
 		try {
-			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/harga-konsumen?date=${date}&kabupaten_kota_id=${kabupaten_kota_id}`, {
+			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/harga-konsumen?start_date=${start_date}&end_date=${end_date}&kabupaten_kota_id=${kabupaten_kota_id}`, {
 				headers: {
 					'content-type': 'application/json',
 					'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -479,19 +479,18 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-				Swal.fire({
-					icon: 'error',
-					title: error.response.data.message,
-					showConfirmButton: false,
-					timer: 1500
+				
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: error.response.data.message,	
 				});
 			} else {
-				Swal.fire({
-					icon: 'error',
-					title: 'error terjadi',
-					text: 'mohon coba lagi nanti.',
-					showConfirmButton: false,
-					timer: 1500
+				
+				toast({
+					variant: 'destructive',
+					title: 'Error',
+					description: "mohon coba lagi nanti.",	
 				});
 			}
 		}
@@ -499,7 +498,7 @@ export default function Home() {
 
 	useEffect(() => {
 		getHargaPangan('', '18');
-		getHargaKonsumen('', '7201');
+		getHargaKonsumen('','', '7201');
 		getCommodityOption();
 		getKabupatenOption();
 		getDashboard();
@@ -510,7 +509,7 @@ export default function Home() {
 		<main>
 			<Navbar />
 			<Hero />
-			<div
+			 <div
 				style={{ marginTop: '-40px' }}
 				className="mx-auto z-1 relative px-4 py-[0.4rem] sm:py-2 sm:px-8 shadow-xl w-[18rem] md:w-[40rem] sm:w-[40rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
 				<div className="flex-col flex-1">
@@ -529,6 +528,7 @@ export default function Home() {
 						onChange={(e) => handleValueChange(e)}
 						className=" basic-single w-[170px] border-none"
 						options={jenisInformasi}
+						defaultValue={jenisInformasi[0]}
 					/>
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
@@ -546,14 +546,15 @@ export default function Home() {
 							IndicatorSeparator: () => null
 						}}
 						className=" basic-single w-[170px] border-none"
-						onChange={(option) => setSelectedCommodity(option!.value)}
+						onChange={(option) => setSelectedCommodity(option)}
 						options={selectedCommodityOption}
+						value={selectedCommodity}
 					/>
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
-					<h1 className="font-bold text-sm mb-1 ">Bulan</h1>
-					<MonthPicker date={selectedDate} setDate={setSelectedDate} />
+					<h1 className="font-bold text-sm mb-1 ">Tanggal</h1>
+					<MonthPicker date={selectedDate} setDate={(date) => setSelectedDate(date as Date)} />
 				</div>
 				<Button
 					onClick={handleChangeMonth}
@@ -680,10 +681,10 @@ export default function Home() {
 				<h1 className="text-sm pb-10 p-0 sm:text-sm md:text-md">
 					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar
 				</h1>
-				<div className="h-1 rounded-lg  my-10 bg-black/10 z-0"></div>
-				<div className="mx-auto z-1 relative -mt-20 px-4 py-[0.4rem] sm:py-2 sm:px-8 shadow-xl w-[18rem] space-y-2 lg:w-[55rem] rounded-xl lg:rounded-full flex flex-col lg:flex-row items-center lg:justify-between bg-white ">
+				<div className="h-1 rounded-lg  my-10 w-full bg-black/10 z-0"></div>
+				<div className="mx-auto z-1 relative -mt-20 px-4 py-[0.4rem] sm:py-2 sm:px-8 shadow-xl w-[20rem] space-y-2 lg:w-[60rem] rounded-xl lg:rounded-full flex flex-col lg:flex-row items-center lg:justify-between bg-white ">
 					<div className="flex-col flex-1">
-						<h1 className="font-bold text-sm mb-1">Jenis Pasar</h1>
+						<h1 className="font-bold text-xs mb-1">Jenis Pasar</h1>
 						<Select
 							styles={{
 								control: (provided) => ({
@@ -701,7 +702,7 @@ export default function Home() {
 					</div>
 					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 					<div className="flex-col flex-1">
-						<h1 className="font-bold text-sm mb-1">Komoditas</h1>
+						<h1 className="font-bold text-xs mb-1">Komoditas</h1>
 						<Select
 							styles={{
 								control: (provided) => ({
@@ -718,9 +719,9 @@ export default function Home() {
 							options={selectedCommodityOption}
 						/>
 					</div>
-					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
+					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block"/>
 					<div className="flex-col flex-1">
-						<h1 className="font-bold text-sm mb-1 ">Kabupaten/Kota</h1>
+						<h1 className="font-bold text-xs mb-1 ">Kabupaten/Kota</h1>
 						<Select
 							styles={{
 								control: (provided) => ({
@@ -739,10 +740,18 @@ export default function Home() {
 					</div>
 					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 					<div className="flex-col flex-1">
-						<h1 className="font-bold text-sm mb-1 ">Bulan</h1>
+						<h1 className="font-bold text-xs mb-1 ">Dari Tanggal</h1>
 						<MonthPicker
 							date={selectedDateKonsumen}
 							setDate={setSelectedDateKonsumen}
+						/>
+					</div>
+					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
+					<div className="flex-col flex-1">
+						<h1 className="font-bold text-xs mb-1 ">Sampai Tanggal</h1>
+						<MonthPicker
+							date={selectedEndDateKonsumen}
+							setDate={setSelectedEndDateKonsumen}
 						/>
 					</div>
 					<Button
