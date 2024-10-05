@@ -1,13 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import Chart from '@/app/neraca-pangan/chart';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Footer from '@/components/ui/footer';
-import { Badge } from '@/components/ui/badge';
-import {
-	CounterClockwiseClockIcon,
-} from '@radix-ui/react-icons';
 import {
 	MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
@@ -23,6 +17,8 @@ import MapNeraca from '@/components/ui/map-neraca';
 import Swal from "sweetalert2";
 import axios from "axios";
 import NeracaPanganSkeleton from '@/components/NeracaPanganSkeleton';
+import { Datepicker } from "flowbite-react";
+import type { CustomFlowbiteTheme } from "flowbite-react";
 
 interface cardContents {
 	city: string;
@@ -34,6 +30,109 @@ interface cardContents {
 	color: string;
 	id: string;
 }
+
+const customTheme: CustomFlowbiteTheme["datepicker"] = {
+	"root": {
+		"base": "relative",
+		"input": {
+			field: {
+				input: {
+					withIcon: { on: "block", off: "hidden" },
+					base: "block w-full bg-white !important border-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-50  text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 p-2.5 text-sm pl-10 rounded-lg"
+				},
+				icon: {
+					base: "hidden"
+				}
+			}
+		}
+	},
+
+	"popup": {
+		"root": {
+			"base": "absolute top-10 z-50 block pt-2",
+			"inline": "relative top-0 z-auto",
+			"inner": "inline-block rounded-lg bg-white p-4 shadow-lg dark:bg-gray-700"
+		},
+		"header": {
+			"base": "",
+			"title": "px-2 py-3 text-center font-semibold text-gray-900 dark:text-white",
+			"selectors": {
+				"base": "mb-2 flex justify-between",
+				"button": {
+					"base": "rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600",
+					"prev": "",
+					"next": "",
+					"view": ""
+				}
+			}
+		},
+		"view": {
+			"base": "p-1"
+		},
+		"footer": {
+			"base": "mt-2 flex space-x-2",
+			"button": {
+				"base": "w-full rounded-lg px-5 py-2 text-center text-sm font-medium focus:ring-4 focus:ring-cyan-300",
+				"today": "bg-cyan-700 text-white hover:bg-cyan-800 dark:bg-cyan-600 dark:hover:bg-cyan-700",
+				"clear": "border border-gray-300 bg-white text-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+			}
+		}
+	},
+	"views": {
+		"days": {
+			"header": {
+				"base": "mb-1 grid grid-cols-7",
+				"title": "h-6 text-center text-sm font-medium leading-6 text-gray-500 dark:text-gray-400"
+			},
+			"items": {
+				"base": "grid w-64 grid-cols-7",
+				"item": {
+					"base": "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-cyan-600 hover:text-white",
+					"selected": "bg-cyan-700 text-white hover:bg-cyan-600",
+					"disabled": "text-gray-500 bg-gray-200 cursor-not-allowed"
+				}
+			}
+		},
+		"months": {
+			"items": {
+				"base": "grid w-64 grid-cols-4",
+				"item": {
+					"base": "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-cyan-600 hover:text-white",
+					"selected": "bg-cyan-700 text-white hover:bg-cyan-600",
+					"disabled": "text-gray-500 bg-gray-200 cursor-not-allowed"
+				}
+			}
+		},
+		"years": {
+			"items": {
+				"base": "grid w-64 grid-cols-4",
+				"item": {
+					"base": "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-cyan-600 hover:text-white",
+					"selected": "bg-cyan-700 text-white hover:bg-cyan-600",
+					"disabled": "text-gray-500 bg-gray-200 cursor-not-allowed"
+				}
+			}
+		},
+		"decades": {
+			"items": {
+				"base": "grid w-64 grid-cols-4",
+				"item": {
+					"base": "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-cyan-600 hover:text-white",
+					"selected": "bg-cyan-700 text-white hover:bg-cyan-600",
+					"disabled": "text-gray-500 bg-gray-200 cursor-not-allowed"
+				}
+			}
+		}
+	}
+};
+
+const getCurrentDate = (): string => {
+	const today = new Date();
+	const year = today.getFullYear();
+	const month = String(today.getMonth() + 1).padStart(2, '0'); // Bulan mulai dari 0, jadi perlu ditambah 1
+	const day = String(today.getDate()).padStart(2, '0');
+	return `${year}-${month}-${day}`;
+};
 
 export default function Home() {
 	const [selectedCommodity, setSelectedCommodity] = useState<SingleValue<{ value: string; label: string }> | null>(null);
@@ -145,7 +244,7 @@ export default function Home() {
 		date: string,
 		komoditas: string,
 	) => {
-		
+
 		try {
 			const response = await axios.get(
 				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/harga-pasokan?date=${date}&komoditas=${komoditas}`,
@@ -200,7 +299,7 @@ export default function Home() {
 				);
 				setSelectedCommodityOption(mappedOptions);
 				const defaultOption = mappedOptions.find((option: { value: number; label: string }) => option.value === 18);
-   				 setSelectedCommodity(defaultOption);
+				setSelectedCommodity(defaultOption);
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
@@ -223,7 +322,8 @@ export default function Home() {
 	};
 
 	useEffect(() => {
-		getNeracaPangan('', '18');
+		const today = getCurrentDate();
+		getNeracaPangan(today, '18');
 		getCommodityOption();
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -239,16 +339,29 @@ export default function Home() {
 					<Select
 						styles={{
 							control: (provided) => ({
-							...provided,
-							border: 'none',
-							boxShadow: 'none',
+								...provided,
+								border: 'none',
+								boxShadow: 'none',
+								fontSize: '14px',
+							}),
+							input: (provided) => ({
+								...provided,
+								fontSize: '14px',
+							}),
+							singleValue: (provided) => ({
+								...provided,
+								fontSize: '14px',
+							}),
+							placeholder: (provided) => ({
+								...provided,
+								fontSize: '14px',
 							}),
 						}}
-						 components={{
-							IndicatorSeparator: () => null
+						components={{
+							IndicatorSeparator: () => null,
 						}}
 						onChange={(option) => setSelectedCommodity(option)}
-						className=" basic-single w-[170px] border-none"
+						className="basic-single w-[170px] border-none"
 						options={selectedCommodityOption}
 						value={selectedCommodity}
 					/>
@@ -256,7 +369,11 @@ export default function Home() {
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm ">Tanggal</h1>
-					<MonthPicker date={selectedDate} setDate={setSelectedDate} />
+					<Datepicker theme={customTheme} onChange={
+						(date) => {
+							setSelectedDate(date as any);
+						}
+					} value={selectedDate} maxDate={new Date()} />
 				</div>
 				<Button
 					className="bg-blue-300 rounded-full p-2"

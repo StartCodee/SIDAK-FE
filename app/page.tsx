@@ -18,7 +18,7 @@ import Footer from '@/components/ui/footer';
 import Hero from '@/components/ui/hero';
 import Map from '@/components/ui/map';
 import Select, { SingleValue } from 'react-select';
-import { format, set,subDays } from 'date-fns';
+import { format, set, subDays } from 'date-fns';
 import Image from 'next/image';
 import Link from 'next/link';
 import axios from "axios";
@@ -30,16 +30,17 @@ import KomoditasSkeleton from '@/components/KomoditasSkeleton';
 import HargaSkeleton from '@/components/HargaSkeleton';
 import StatusIndicators from '@/components/ui/status_indicator';
 import HeroSearch from '@/components/hero-search';
-
+import { Datepicker } from "flowbite-react";
+import type { CustomFlowbiteTheme } from "flowbite-react";
 interface cardContents {
 	city: string;
 	item: string;
 	price: string;
 	color: string;
-	kabupaten_kota_id: string;
-	komoditas_id: string;
 	change: string;
 	bulan: string;
+	kabupaten_kota_id: string;
+	komoditas_id: string;
 	id: string;
 }
 
@@ -49,6 +50,22 @@ const jenisInformasi = [
 	{ value: 'perdagangan-pangan', label: 'Pola Perdagangan Pangan' },
 ];
 
+const getCurrentDate = (): string => {
+	const today = new Date();
+	const year = today.getFullYear();
+	const month = String(today.getMonth() + 1).padStart(2, '0'); // Bulan mulai dari 0, jadi perlu ditambah 1
+	const day = String(today.getDate()).padStart(2, '0');
+	return `${year}-${month}-${day}`;
+};
+
+const back7days = (): string => {
+	const today = new Date();
+	const year = today.getFullYear();
+	const month = String(today.getMonth() + 1).padStart(2, '0'); // Bulan mulai dari 0, jadi perlu ditambah 1
+	const day = String(today.getDate() - 7).padStart(2, '0');
+	return `${year}-${month}-${day}`;
+}
+
 const jenisPasar = [
 	{ value: 'semua-pasar', label: 'Semua Pasar' },
 ];
@@ -56,6 +73,102 @@ const jenisPasar = [
 const formatDate = (date: any) => {
 	return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 };
+
+const customTheme: CustomFlowbiteTheme["datepicker"] = {
+	"root": {
+		"base": "relative",
+		"input": {
+			field: {
+				input: {
+					withIcon: { on: "block", off: "hidden" },
+					base: "block w-full bg-white !important border-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-50  text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 p-2.5 text-sm pl-10 rounded-lg"
+				},
+				icon: {
+					base: "hidden"
+				}
+			}
+		}
+	},
+
+	"popup": {
+		"root": {
+			"base": "absolute top-10 z-50 block pt-2",
+			"inline": "relative top-0 z-auto",
+			"inner": "inline-block rounded-lg bg-white p-4 shadow-lg dark:bg-gray-700"
+		},
+		"header": {
+			"base": "",
+			"title": "px-2 py-3 text-center font-semibold text-gray-900 dark:text-white",
+			"selectors": {
+				"base": "mb-2 flex justify-between",
+				"button": {
+					"base": "rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600",
+					"prev": "",
+					"next": "",
+					"view": ""
+				}
+			}
+		},
+		"view": {
+			"base": "p-1"
+		},
+		"footer": {
+			"base": "mt-2 flex space-x-2",
+			"button": {
+				"base": "w-full rounded-lg px-5 py-2 text-center text-sm font-medium focus:ring-4 focus:ring-cyan-300",
+				"today": "bg-cyan-700 text-white hover:bg-cyan-800 dark:bg-cyan-600 dark:hover:bg-cyan-700",
+				"clear": "border border-gray-300 bg-white text-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+			}
+		}
+	},
+	"views": {
+		"days": {
+			"header": {
+				"base": "mb-1 grid grid-cols-7",
+				"title": "h-6 text-center text-sm font-medium leading-6 text-gray-500 dark:text-gray-400"
+			},
+			"items": {
+				"base": "grid w-64 grid-cols-7",
+				"item": {
+					"base": "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-cyan-600 hover:text-white",
+					"selected": "bg-cyan-700 text-white hover:bg-cyan-600",
+					"disabled": "text-gray-500 bg-gray-200 cursor-not-allowed"
+				}
+			}
+		},
+		"months": {
+			"items": {
+				"base": "grid w-64 grid-cols-4",
+				"item": {
+					"base": "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-cyan-600 hover:text-white",
+					"selected": "bg-cyan-700 text-white hover:bg-cyan-600",
+					"disabled": "text-gray-500 bg-gray-200 cursor-not-allowed"
+				}
+			}
+		},
+		"years": {
+			"items": {
+				"base": "grid w-64 grid-cols-4",
+				"item": {
+					"base": "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-cyan-600 hover:text-white",
+					"selected": "bg-cyan-700 text-white hover:bg-cyan-600",
+					"disabled": "text-gray-500 bg-gray-200 cursor-not-allowed"
+				}
+			}
+		},
+		"decades": {
+			"items": {
+				"base": "grid w-64 grid-cols-4",
+				"item": {
+					"base": "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-cyan-600 hover:text-white",
+					"selected": "bg-cyan-700 text-white hover:bg-cyan-600",
+					"disabled": "text-gray-500 bg-gray-200 cursor-not-allowed"
+				}
+			}
+		}
+	}
+};
+
 
 export default function Home() {
 	const { toast } = useToast();
@@ -74,9 +187,9 @@ export default function Home() {
 	const [selectedKabupaten, setSelectedKabupaten] = useState('');
 
 	const [selectedDateKonsumen, setSelectedDateKonsumen] = useState<Date | undefined>(() => {
-	  const today = new Date();
-	  const oneMonthAgo = new Date(today.setMonth(today.getMonth() - 1));
-	  return oneMonthAgo;
+		const today = new Date();
+		const oneMonthAgo = new Date(today.setMonth(today.getMonth() - 1));
+		return oneMonthAgo;
 	});
 	const [selectedEndDateKonsumen, setSelectedEndDateKonsumen] = useState<Date | undefined>(new Date());
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -108,7 +221,7 @@ export default function Home() {
 
 	const getDetailSupply = async (date: string, komoditas: string, kota: string) => {
 		try {
-			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/detail-data?date=${date}&komoditas=${komoditas}&kabupaten_kota_id=${kota}`, {
+			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/detail-data?end_date=${date}&komoditas=${komoditas}&kabupaten_kota_id=${kota}`, {
 				headers: {
 					'content-type': 'application/json',
 					'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -120,18 +233,16 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-				
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: error.response.data.message,	
+					description: error.response.data.message,
 				});
 			} else {
-				
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: 'mohon coba lagi nanti.',	
+					description: 'mohon coba lagi nanti.',
 				});
 			}
 		}
@@ -140,22 +251,22 @@ export default function Home() {
 	const closeDialog = () => setIsDialogOpen(false);
 
 	const openDialog = (el: string, komoditas: string) => {
-
 		try {
-			let val = format(selectedDateKonsumen as any, 'yyyy-MM')
+			let val = format(selectedDateKonsumen as any, 'yyyy-MM-dd');
 			const detail = hargaKonsumen.find((item) => item.city === el && item.item === komoditas);
+			console.log('ini val', val);
 			setDetailHargaKonsumen(detail);
-
 			getDetailSupply(val, detail?.komoditas_id, detail?.kabupaten_kota_id);
-			setLinkExportHg(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/export-excel?komoditas=${detail?.komoditas_id}&kabupaten_kota_id=${detail?.kabupaten_kota_id}&export=1`);
+			setLinkExportHg(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/export-excel?date=${val}&komoditas=${detail?.komoditas_id}&kabupaten_kota_id=${detail?.kabupaten_kota_id}&export=1`);
 			setIsDialogOpen(true);
 		} catch (error) {
 			const detail = hargaKonsumen.find((item) => item.city === el && item.item === komoditas);
 			setDetailHargaKonsumen(detail);
-			let val = format(new Date(), 'yyyy-MM');
+			let val = format(selectedDateKonsumen as any, 'yyyy-mm-dd');
+
 
 			getDetailSupply(val, detail?.komoditas_id, detail?.kabupaten_kota_id);
-			setLinkExportHg(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/export-excel?komoditas=${detail?.komoditas_id}&kabupaten_kota_id=${detail?.kabupaten_kota_id}&export=1`);
+			setLinkExportHg(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/export-excel?date=${val}&komoditas=${detail?.komoditas_id}&kabupaten_kota_id=${detail?.kabupaten_kota_id}&export=1`);
 			setIsDialogOpen(true);
 		}
 
@@ -163,13 +274,14 @@ export default function Home() {
 
 	const handleValueChange = (e: any) => {
 		setSelectedValue(e.value);
+		let today = getCurrentDate();
 		if (e.value === 'neraca-pangan') {
-			getNeracaPangan('', '18');
+			getNeracaPangan(today, '18');
 		}
 		else if (e.value === 'perdagangan-pangan') {
-			getPolaPerdagangan('', '18');
+			getPolaPerdagangan(today, '18');
 		} else {
-			getHargaPangan('', '18');
+			getHargaPangan(today, '18');
 		}
 	};
 
@@ -239,18 +351,18 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-				
+
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: error.response.data.message,	
+					description: error.response.data.message,
 				});
 			} else {
-				
+
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: "mohon coba lagi nanti.",	
+					description: "mohon coba lagi nanti.",
 				});
 			}
 		}
@@ -275,19 +387,19 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-				
+
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: error.response.data.message,	
+					description: error.response.data.message,
 				});
-				
+
 			} else {
-				
+
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: "mohon coba lagi nanti.",	
+					description: "mohon coba lagi nanti.",
 				});
 			}
 		}
@@ -313,18 +425,18 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-				
+
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: error.response.data.message,	
+					description: error.response.data.message,
 				});
 			} else {
-				
+
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: "mohon coba lagi nanti.",	
+					description: "mohon coba lagi nanti.",
 				});
 			}
 		}
@@ -344,25 +456,25 @@ export default function Home() {
 					label: kabupaten.name,
 				}));
 				setSelectedCommodityOption(mappedOptions);
-				 const defaultOption = mappedOptions.find((option: { value: number; label: string }) => option.value === 18);
-				 console.log(defaultOption)
-   				 setSelectedCommodity(defaultOption);
-				 
+				const defaultOption = mappedOptions.find((option: { value: number; label: string }) => option.value === 18);
+				console.log(defaultOption)
+				setSelectedCommodity(defaultOption);
+
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-			
+
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: error.response.data.message,	
+					description: error.response.data.message,
 				});
 			} else {
-				
+
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: "mohon coba lagi nanti.",	
+					description: "mohon coba lagi nanti.",
 				});
 			}
 		}
@@ -385,18 +497,18 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-				
+
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: error.response.data.message,	
+					description: error.response.data.message,
 				});
 			} else {
-				
+
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: "mohon coba lagi nanti.",	
+					description: "mohon coba lagi nanti.",
 				});
 			}
 		}
@@ -415,18 +527,18 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-				
+
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: error.response.data.message,	
+					description: error.response.data.message,
 				});
 			} else {
-				
+
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: "mohon coba lagi nanti.",	
+					description: "mohon coba lagi nanti.",
 				});
 			}
 		}
@@ -446,18 +558,18 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-				
+
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: error.response.data.message,	
+					description: error.response.data.message,
 				});
 			} else {
-				
+
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: "mohon coba lagi nanti.",	
+					description: "mohon coba lagi nanti.",
 				});
 			}
 		}
@@ -479,26 +591,31 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-				
+
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: error.response.data.message,	
+					description: error.response.data.message,
 				});
 			} else {
-				
+
 				toast({
 					variant: 'destructive',
 					title: 'Error',
-					description: "mohon coba lagi nanti.",	
+					description: "mohon coba lagi nanti.",
 				});
 			}
 		}
 	};
 
 	useEffect(() => {
-		getHargaPangan('', '18');
-		getHargaKonsumen('','', '7201');
+		let today = getCurrentDate();
+
+
+		getHargaPangan(today, '18');
+
+		let daysAgo = back7days();
+		getHargaKonsumen(today, today, '7201');
 		getCommodityOption();
 		getKabupatenOption();
 		getDashboard();
@@ -509,7 +626,7 @@ export default function Home() {
 		<main>
 			<Navbar />
 			<Hero />
-			 <div
+			<div
 				style={{ marginTop: '-40px' }}
 				className="mx-auto z-1 relative px-4 py-[0.4rem] sm:py-2 sm:px-8 shadow-xl w-[18rem] md:w-[40rem] sm:w-[40rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
 				<div className="flex-col flex-1">
@@ -520,6 +637,19 @@ export default function Home() {
 								...provided,
 								border: 'none',
 								boxShadow: 'none',
+								fontSize: '14px',
+							}),
+							input: (provided) => ({
+								...provided,
+								fontSize: '14px',
+							}),
+							singleValue: (provided) => ({
+								...provided,
+								fontSize: '14px',
+							}),
+							placeholder: (provided) => ({
+								...provided,
+								fontSize: '14px',
 							}),
 						}}
 						components={{
@@ -540,13 +670,26 @@ export default function Home() {
 								...provided,
 								border: 'none',
 								boxShadow: 'none',
+								fontSize: '14px',
+							}),
+							input: (provided) => ({
+								...provided,
+								fontSize: '14px',
+							}),
+							singleValue: (provided) => ({
+								...provided,
+								fontSize: '14px',
+							}),
+							placeholder: (provided) => ({
+								...provided,
+								fontSize: '14px',
 							}),
 						}}
 						components={{
-							IndicatorSeparator: () => null
+							IndicatorSeparator: () => null,
 						}}
-						className=" basic-single w-[170px] border-none"
 						onChange={(option) => setSelectedCommodity(option)}
+						className="basic-single w-[170px] border-none"
 						options={selectedCommodityOption}
 						value={selectedCommodity}
 					/>
@@ -554,7 +697,7 @@ export default function Home() {
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm mb-1 ">Tanggal</h1>
-					<MonthPicker date={selectedDate} setDate={(date) => setSelectedDate(date as Date)} />
+					<Datepicker theme={customTheme} maxDate={new Date()} />
 				</div>
 				<Button
 					onClick={handleChangeMonth}
@@ -698,10 +841,12 @@ export default function Home() {
 							}}
 							className=" basic-single w-[170px] border-none"
 							options={jenisPasar}
+							defaultValue={jenisPasar[0]}
+							isDisabled
 						/>
 					</div>
-					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
-					<div className="flex-col flex-1">
+					{/* <div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" /> */}
+					{/* <div className="flex-col flex-1">
 						<h1 className="font-bold text-xs mb-1">Komoditas</h1>
 						<Select
 							styles={{
@@ -718,8 +863,8 @@ export default function Home() {
 							className=" basic-single w-[170px] border-none"
 							options={selectedCommodityOption}
 						/>
-					</div>
-					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block"/>
+					</div> */}
+					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-xs mb-1 ">Kabupaten/Kota</h1>
 						<Select
@@ -741,18 +886,20 @@ export default function Home() {
 					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-xs mb-1 ">Dari Tanggal</h1>
-						<MonthPicker
-							date={selectedDateKonsumen}
-							setDate={setSelectedDateKonsumen}
-						/>
+						<Datepicker theme={customTheme} onChange={
+							(date) => {
+								setSelectedDateKonsumen(date as any);
+							}
+						} value={selectedDateKonsumen} maxDate={new Date()} />
 					</div>
 					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 					<div className="flex-col flex-1">
 						<h1 className="font-bold text-xs mb-1 ">Sampai Tanggal</h1>
-						<MonthPicker
-							date={selectedEndDateKonsumen}
-							setDate={setSelectedEndDateKonsumen}
-						/>
+						<Datepicker theme={customTheme} onChange={
+							(date) => {
+								setSelectedEndDateKonsumen(date as any);
+							}
+						} value={selectedEndDateKonsumen} maxDate={new Date()} />
 					</div>
 					<Button
 						onClick={handleChangeMonthKonsumen}
@@ -838,7 +985,7 @@ export default function Home() {
 							)}
 						</div>
 					</center>
-					
+
 					<StatusIndicators />
 					<p className="text-center w-full sm:w-11/12 mx-auto m-8">
 						Perubahan harga telah terjadi pada beberapa komoditas pangan
@@ -1027,57 +1174,57 @@ export default function Home() {
 											<th className="border border-1 px-4 py-2 bg-blue-200">
 												Subjek
 											</th>
-											{detailData.header != undefined &&
-												detailData.header.map((item: any, index: any) => (
-													<th
-														key={index}
-														className="border border-1 px-4 py-2 bg-blue-200">
-														{item}
-													</th>
-												))}
+											{detailData.headers != undefined && detailData.headers.map((item: any, index: any) => (
+												<th key={index} className="px-4 py-2 border border-1 bg-blue-200">
+													{item}
+												</th>
+											))}
 										</tr>
 									</thead>
 									<tbody>
-										{detailData.pasar != undefined && detailData.pasar.length > 0 ? (
-											detailData.pasar.map(
-												(pasarItem: any, pasarIndex: any) => (
-													<tr key={pasarIndex}>
-														<td className="px-4 py-2 border border-1">
-															<h2>
-																{pasarItem.pasar_name != 'null'
-																	? pasarItem.pasar_name
-																	: detailHargaKonsumen?.city}
-															</h2>
-														</td>
-														{pasarItem.dates != undefined &&
-															pasarItem.dates.map(
-																(dateItem: any, dateIndex: any) => (
-																	<td
-																		className="border border-1 px-4 py-2"
-																		key={dateIndex}>
-																		<h2>
-																			Rp{' '}
-																			{dateItem.harga
-																				.toString()
-																				.replace(
-																					/\B(?=(\d{3})+(?!\d))/g,
-																					',',
-																				) || ''}
-																		</h2>
-																	</td>
-																),
-															)}
-													</tr>
-												),
-											)
+										{detailData.kabupatenData != undefined && detailData.kabupatenData.dates.length > 0 ? (
+											<tr>
+												<td className="px-4 py-2 border border-1">
+													<h2>{detailHargaKonsumen?.city}</h2>
+												</td>
+												{detailData.kabupatenData.dates.map((kabupatenDate: any, index: number) => (
+													<td className="px-4 py-2 border border-1" key={index}>
+														<h2>{kabupatenDate.harga}</h2>
+													</td>
+												))}
+											</tr>
+										) : null}
+										<tr>
+											<td className="px-4 py-2 border border-1 bg-blue-300" colSpan={9}>
+											</td>
+										</tr>
+										{detailData.pasarData != undefined && Object.keys(detailData.pasarData).length > 0 ? (
+											Object.entries(detailData.pasarData).map(([pasarName, pasarDetails]: [string, any], pasarIndex: number) => (
+												<tr key={pasarIndex}>
+													<td className="px-4 py-2 border border-1">
+														<h2>{pasarName !== "null" ? pasarName : detailHargaKonsumen?.city}</h2>
+													</td>
+													{detailData.headers != undefined && detailData.headers.map((headerDate: any, headerIndex: any) => {
+														const dateItem = pasarDetails.dates.find((date: any) => date.date === headerDate);
+														return (
+															<td className="px-4 py-2 border border-1" key={headerIndex}>
+																<h2>
+																	{dateItem && dateItem.harga !== "-"
+																		? `Rp ${dateItem.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+																		: '-'}
+																</h2>
+															</td>
+														);
+													})}
+												</tr>
+											))
 										) : (
 											<tr key="1">
-												<td className="px-4 py-2 border border-1 text-center">
+												<td className="px-4 py-2 border border-1 text-center" colSpan={detailData.header != undefined && detailData.header.length + 1}>
 													Data Kosong
 												</td>
 											</tr>
-										)
-										}
+										)}
 									</tbody>
 								</table>
 							</div>

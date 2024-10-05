@@ -31,16 +31,16 @@ export default function Map({ cardContents }: MapProps) {
 	const [linkExport, setLinkExport] = useState('');
 
 
-	const getDetailSupply = async (page: number = 1, limit: number = 2, kota: string, komoditas: string) => {
+	const getDetailSupply = async (page: number = 1, limit: number = 2, kota: string, komoditas: string, date: string) => {
 		try {
-			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/detail-data?date=2024-06&komoditas=${komoditas}&kabupaten_kota_id=${kota}`, {
+			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/detail-data?end_date=${date}&komoditas=${komoditas}&kabupaten_kota_id=${kota}`, {
 				headers: {
 					'content-type': 'application/json',
 					'Authorization': `Bearer ${localStorage.getItem('token')}`,
 				},
 			});
 			if (response.data.data) {
-				setLinkExport(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/export-excel?komoditas=${komoditas}&kabupaten_kota_id=${kota}&export=1`);
+				setLinkExport(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/export-excel?date=${date}&komoditas=${komoditas}&kabupaten_kota_id=${kota}&export=1`);
 				console.log(response.data.data);
 				setdetailData(response.data.data);
 			}
@@ -67,8 +67,9 @@ export default function Map({ cardContents }: MapProps) {
 	const closeDialog = () => setIsDialogOpen(false);
 	const openDialog = (el: string) => {
 		const detail = cardContents.find((item) => item.id === el);
+		console.log('ini detail', cardContents, detail);
 		setDetailHarga(detail);
-		getDetailSupply(1, 2, detail?.kabupaten_kota_id as any, detail?.komoditas_id as any);
+		getDetailSupply(1, 2, detail?.kabupaten_kota_id as any, detail?.komoditas_id as any, detail?.bulan as any);
 		setIsDialogOpen(true);
 	};
 
@@ -210,7 +211,7 @@ export default function Map({ cardContents }: MapProps) {
 							</div>
 							<div className="flex md:flex-row flex-wrap sm:flex-nowrap justify-around space-y-4 sm:space-y-0 gap-5">
 								<div className="shadow-lg w-full sm:w-[20rem] p-4 sm:text-lg text-md  flex flex-col rounded-lg">
-									<p>Harga rata - rata {detailHarga?.city}: </p>
+									<p>Rata Rata {detailHarga?.city}: </p>
 									<h1 className="font-bold">Rp {Math.round(detailHarga?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h1>
 								</div>
 								<div className="shadow-lg w-full sm:w-[20rem] p-4 sm:text-lg text-md  flex flex-col rounded-lg">
@@ -246,7 +247,7 @@ export default function Map({ cardContents }: MapProps) {
 									<thead>
 										<tr>
 											<th className="px-4 py-2 border border-1 bg-blue-200">Subjek</th>
-											{detailData.header != undefined && detailData.header.map((item: any, index: any) => (
+											{detailData.headers != undefined && detailData.headers.map((item: any, index: any) => (
 												<th key={index} className="px-4 py-2 border border-1 bg-blue-200">
 													{item}
 												</th>
@@ -254,20 +255,36 @@ export default function Map({ cardContents }: MapProps) {
 										</tr>
 									</thead>
 									<tbody>
-										{detailData.pasar != undefined && detailData.pasar.length > 0 ? (
-											detailData.pasar.map((pasarItem: any, pasarIndex: any) => (
+										{detailData.kabupatenData != undefined && detailData.kabupatenData.dates.length > 0 ? (
+											<tr>
+												<td className="px-4 py-2 border border-1">
+													<h2>{detailHarga?.city}</h2>
+												</td>
+												{detailData.kabupatenData.dates.map((kabupatenDate: any, index: number) => (
+													<td className="px-4 py-2 border border-1" key={index}>
+														<h2>{kabupatenDate.harga}</h2>
+													</td>
+												))}
+											</tr>
+										) : null}
+										<tr>
+											<td className="px-4 py-2 border border-1 bg-blue-300" colSpan={9}>
+											</td>
+										</tr>
+										{detailData.pasarData != undefined && Object.keys(detailData.pasarData).length > 0 ? (
+											Object.entries(detailData.pasarData).map(([pasarName, pasarDetails]: [string, any], pasarIndex: number) => (
 												<tr key={pasarIndex}>
 													<td className="px-4 py-2 border border-1">
-														<h2>{pasarItem.pasar_name != "null" ? pasarItem.pasar_name : detailHarga?.city}</h2>
+														<h2>{pasarName !== "null" ? pasarName : detailHarga?.city}</h2>
 													</td>
-													{detailData.header != undefined && detailData.header.map((headerDate: any, headerIndex: any) => {
-														// Mencari data harga berdasarkan tanggal dari header
-														const dateItem = pasarItem.dates.find((date: any) => date.date === headerDate);
-
+													{detailData.headers != undefined && detailData.headers.map((headerDate: any, headerIndex: any) => {
+														const dateItem = pasarDetails.dates.find((date: any) => date.date === headerDate);
 														return (
 															<td className="px-4 py-2 border border-1" key={headerIndex}>
 																<h2>
-																	{dateItem ? `Rp ${dateItem.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}` : '-'}
+																	{dateItem && dateItem.harga !== "-"
+																		? `Rp ${dateItem.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+																		: '-'}
 																</h2>
 															</td>
 														);
