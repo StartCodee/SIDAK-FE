@@ -577,6 +577,15 @@ export default function Home() {
 
 	const getHargaKonsumen = async (start_date: string = '', end_date: string = '', kabupaten_kota_id: string) => {
 
+		if(!kabupaten_kota_id) {
+			toast({
+				variant: 'warning',
+				title: 'Warning',
+				description: "Pilih Kabupaten Kota terlebih dahulu.",
+			});
+			return;
+		}
+
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/harga-konsumen?start_date=${start_date}&end_date=${end_date}&kabupaten_kota_id=${kabupaten_kota_id}`, {
 				headers: {
