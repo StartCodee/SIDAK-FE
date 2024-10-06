@@ -3,8 +3,8 @@
 <rect x="4" y="-54" width="836" height="542" fill="url(#pattern0_790_4137)" shape-rendering="crispEdges"/>
 </g>
 <defs>
-<filter id="filter0_d_790_4137" x="0" y="-54" width="844" height="550" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<filter id="filter0_d_790_4137" x="0" y="-54" width="844" height="550" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+<feFlood floodOpacity="0" result="BackgroundImageFix"/>
 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
 <feOffset dy="4"/>
 <feGaussianBlur stdDeviation="2"/>
