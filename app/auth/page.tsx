@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Logo from '@/public/logo sidak.svg';
+import Logo from '@/public/Group.png';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
@@ -56,7 +56,7 @@ export default function Page() {
 					<div className="absolute inset-0 bg-gradient-to-bl from-slate-600 via-teal-600 to-blue-700" />
 					<div className="relative z-20 flex items-center text-lg font-medium">
 						<Link href='/'>
-							<Image src={Logo} alt="SIDAK" width={200} height={200} />
+							<Image src={Logo} alt="SIDAK" className='rounded-lg bg-white/15 p-3 shadow-xl hover:bg-white  transition-all duration-300 ease-in-out' width={200} height={200} />
 						</Link>
 					</div>
 					<div className="relative z-20 mt-auto">
