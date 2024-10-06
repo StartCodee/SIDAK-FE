@@ -32,6 +32,7 @@ import StatusIndicators from '@/components/ui/status_indicator';
 import HeroSearch from '@/components/hero-search';
 import { Datepicker } from "flowbite-react";
 import type { CustomFlowbiteTheme } from "flowbite-react";
+import db from '@/lib/db';
 interface cardContents {
 	city: string;
 	item: string;
@@ -177,23 +178,28 @@ export default function Home() {
 
 	const [visitorCount, setVisitorCount] = useState(0);
 
-	useEffect(() => {
-		// Function to fetch visitor count
-		const fetchVisitorCount = async () => {
-		const response = await fetch('/api/visitor-count');
-		const data = await response.json();
-		setVisitorCount(data.count);
-		};
+  useEffect(() => {
+    // Function to fetch visitor count
+    const fetchVisitorCount = async () => {
+      const count = await db.visitorCount.get(1);
+	  if (count) {
+		setVisitorCount(count.count);
+	  }
+    };
 
-		// Function to increment visitor count
-		const incrementVisitorCount = async () => {
-		await fetch('/api/visitor-count', { method: 'POST' });
+    // Function to increment visitor count
+    const incrementVisitorCount = async () => {
+      const count = await db.visitorCount.get(1);
+	  if (count) {
+		const newCount = count.count + 1;
+		await db.visitorCount.update(1, { count: newCount });
 		fetchVisitorCount();
-		};
+	  }
+    };
 
-		// Increment visitor count on page load
-		incrementVisitorCount();
-	}, []);
+    // Increment visitor count on page load
+    incrementVisitorCount();
+  }, []);
 
 	const [selectedKabupatenOption, setSelectedKabupatenOption] = useState<any[]>([]);
 	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>([]);
