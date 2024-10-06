@@ -184,7 +184,7 @@ export default function Home() {
 
 	const [selectedCommodityKonsumen, setSelectedCommodityKonsumen] = useState('');
 	const [selectedCommodity, setSelectedCommodity] = useState<SingleValue<{ value: string; label: string }> | null>(null);
-	const [selectedKabupaten, setSelectedKabupaten] = useState('');
+	const [selectedKabupaten, setSelectedKabupaten] = useState<SingleValue<{ value: string; label: string }> | null>(null);
 
 	const [selectedDateKonsumen, setSelectedDateKonsumen] = useState<Date | undefined>(() => {
 		const today = new Date();
@@ -312,7 +312,7 @@ export default function Home() {
 			let commodity = selectedCommodityKonsumen;
 			let val = format(selectedDateKonsumen, 'yyyy-MM-dd');
 			let val2 = format(selectedEndDateKonsumen ?? new Date(), 'yyyy-MM-dd');
-			getHargaKonsumen(val, val2, selectedKabupaten);
+			getHargaKonsumen(val, val2, selectedKabupaten?.value);
 		} else {
 			console.log('No date selected');
 		}
@@ -494,6 +494,7 @@ export default function Home() {
 					label: kabupaten.name,
 				}));
 				setSelectedKabupatenOption(mappedOptions);
+				setSelectedKabupaten(mappedOptions[0]);
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
@@ -575,7 +576,16 @@ export default function Home() {
 		}
 	};
 
-	const getHargaKonsumen = async (start_date: string = '', end_date: string = '', kabupaten_kota_id: string) => {
+	const getHargaKonsumen = async (start_date: string = '', end_date: string = '', kabupaten_kota_id: string | undefined = undefined) => {
+
+		if(!kabupaten_kota_id) {
+			toast({
+				variant: 'warning',
+				title: 'Warning',
+				description: "Pilih Kabupaten Kota terlebih dahulu.",
+			});
+			return;
+		}
 
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/harga-konsumen?start_date=${start_date}&end_date=${end_date}&kabupaten_kota_id=${kabupaten_kota_id}`, {
@@ -884,9 +894,10 @@ export default function Home() {
 							components={{
 								IndicatorSeparator: () => null
 							}}
-							onChange={(option) => setSelectedKabupaten(option!.value)}
+							onChange={(option) => setSelectedKabupaten(option)}
 							className=" basic-single w-[170px] border-none"
 							options={selectedKabupatenOption}
+							value={selectedKabupaten}
 						/>
 					</div>
 					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
