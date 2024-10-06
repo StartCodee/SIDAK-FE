@@ -32,6 +32,7 @@ import StatusIndicators from '@/components/ui/status_indicator';
 import HeroSearch from '@/components/hero-search';
 import { Datepicker } from "flowbite-react";
 import type { CustomFlowbiteTheme } from "flowbite-react";
+
 interface cardContents {
 	city: string;
 	item: string;
@@ -578,7 +579,7 @@ export default function Home() {
 
 	const getHargaKonsumen = async (start_date: string = '', end_date: string = '', kabupaten_kota_id: string | undefined = undefined) => {
 
-		if(!kabupaten_kota_id) {
+		if (!kabupaten_kota_id) {
 			toast({
 				variant: 'warning',
 				title: 'Warning',
@@ -618,6 +619,22 @@ export default function Home() {
 		}
 	};
 
+	const [hargaKonsumenDesc, setHargaKonsumenDesc] = useState<string>('');
+
+	const fetchDescription = async () => {
+		try {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/description`);
+			if (!response.ok) {
+				throw new Error('Failed to fetch description');
+			}
+			const data = await response.json();
+			setHargaKonsumenDesc(data.description);
+		} catch (error) {
+			console.error('Error fetching description:', error);
+		}
+	};
+
+
 	useEffect(() => {
 		let today = getCurrentDate();
 
@@ -630,6 +647,9 @@ export default function Home() {
 		getKabupatenOption();
 		getDashboard();
 		getBerita();
+		fetchDescription();
+
+
 	}, []);
 
 	return (
@@ -713,7 +733,7 @@ export default function Home() {
 								setSelectedDate(date as any);
 							}
 						}
-					maxDate={new Date()} />
+						maxDate={new Date()} />
 				</div>
 				<Button
 					onClick={handleChangeMonth}
@@ -934,84 +954,97 @@ export default function Home() {
 					</h1>
 					<center>
 						<div className="flex lg:justify-center justify-center items-start self-center  flex-wrap gap-10 ">
-							{loadingKomoditas ? (
-								<KomoditasSkeleton />
-							) : (
-								hargaKonsumen.map((content, index) => {
-									const last7DaysData = Array.from({ length: 7 }, (_, i) => {
-										const date = format(subDays(new Date(), i), 'yyyy-MM-dd');
-										return content.last7DaysPrices[date] || 0;
-									}).reverse(); // Reverse to start with the oldest date first
+						{loadingKomoditas ? (
+    <KomoditasSkeleton />
+) : (
+    hargaKonsumen.map((content, index) => {
+        const last7DaysData = Array.from({ length: 8 }, (_, i) => {
+            const date = format(subDays(selectedEndDateKonsumen as any, i), 'yyyy-MM-dd');
+            return content.last7DaysPrices[date] || 0;
+        }).reverse(); // Reverse to start with the oldest date first
 
-									return (
-										<Card
-											onClick={() => {
-												openDialog(content.city, content.item);
-											}}
-											key={index}
-											className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl cursor-pointer relative">
-											<div className="flex items-center space-x-4">
-												<div>
-													<Image
-														src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${content.image}`}
-														alt="user"
-														width={50}
-														height={50}
-														className="rounded-full"
-													/>
-												</div>
-												<div className="" style={{ height: '80px' }}>
-													<h1 className="ms-2 text-left font-bold text-lg">
-														{content.item.split(' ')[0]}
-													</h1>
-													<p className="text-left ms-2">
-														{content.item.split(' ').slice(1).join(' ')}
-													</p>
-													<p className="text-left ms-2 font-bold">
-														Rp{' '}
-														{Math.round(content?.price as any)
-															.toString()
-															.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-													</p>
-												</div>
-												<div className="absolute top-2 right-2">
-													<SmallLineChart data={last7DaysData} />
-												</div>
-											</div>
-											<div className="h-1 rounded-lg bg-black/10 my-2"></div>
-											<div className="flex justify-between items-center">
-												<p>50</p>
-												<p className="text-xs font-thin">
-													DAY IN HIGH VOLATILITY
-												</p>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24"
-													fill="currentColor"
-													className="size-4 fill-red-500">
-													<path
-														fillRule="evenodd"
-														d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
-														clipRule="evenodd"
-													/>
-												</svg>
-											</div>
-										</Card>
-									);
-								})
-							)}
+        // Menghitung persentase volatilitas per hari
+        const volatilityPercentages = last7DaysData.map((price, i, arr) => {
+            if (i > 0 && arr[i - 1] !== 0) {
+                // Hitung persentase perubahan jika hari sebelumnya bukan 0
+                return ((price - arr[i - 1]) / arr[i - 1]) * 100;
+            }
+            return 0; // Jika tidak ada hari sebelumnya, set persentase ke 0
+        });
+
+        // Menghitung volatilitas tertinggi (maksimum persentase perubahan)
+        const highestVolatility = Math.max(...volatilityPercentages.map(Math.abs));
+
+        // Menentukan warna lonceng berdasarkan tingkat volatilitas
+        let bellColor = 'fill-green-500'; // Default hijau untuk volatilitas rendah
+        if (highestVolatility > 10) {
+            bellColor = 'fill-red-500'; // Merah untuk volatilitas tinggi
+        } else if (highestVolatility > 5) {
+            bellColor = 'fill-yellow-500'; // Kuning untuk volatilitas sedang
+        }
+
+        return (
+            <Card
+                onClick={() => {
+                    openDialog(content.city, content.item);
+                }}
+                key={index}
+                className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl cursor-pointer relative">
+                <div className="flex items-center space-x-4">
+                    <div>
+                        <Image
+                            src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${content.image}`}
+                            alt="user"
+                            width={50}
+                            height={50}
+                            className="rounded-full"
+                        />
+                    </div>
+                    <div className="" style={{ height: '80px' }}>
+                        <h1 className="ms-2 text-left font-bold text-lg">
+                            {content.item.split(' ')[0]}
+                        </h1>
+                        <p className="text-left ms-2">
+                            {content.item.split(' ').slice(1).join(' ')}
+                        </p>
+                        <p className="text-left ms-2 font-bold">
+                            Rp{' '}
+                            {Math.round(content?.price as any)
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        </p>
+                    </div>
+                    <div className="absolute top-2 right-2">
+                        <SmallLineChart data={last7DaysData} />
+                    </div>
+                </div>
+                <div className="h-1 rounded-lg bg-black/10 my-2"></div>
+                <div className="flex justify-between items-center">
+                    <p style={{fontSize:'12px'}}>{highestVolatility.toFixed(0)}%</p> {/* Tampilkan persentase volatilitas */}
+                    <p className="text-xs font-thin">PERCENTAGE VOLATILITY</p>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className={`size-4 ${bellColor}`}>
+                        <path
+                            fillRule="evenodd"
+                            d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
+                            clipRule="evenodd"
+                        />
+                    </svg>
+                </div>
+            </Card>
+        );
+    })
+)}
+
 						</div>
 					</center>
 
 					<StatusIndicators />
 					<p className="text-center w-full sm:w-11/12 mx-auto m-8">
-						Perubahan harga telah terjadi pada beberapa komoditas pangan
-						strategis di beberapa kota/kabupaten di Provinsi Sulawesi Tengah
-						sehingga mempengaruhi harga rata-rata pangan strategis Provinsi
-						Sulawesi Tengah. Berdasarkan informasi diatas, pada tanggal
-						24/06/2024 kenaikan dialami oleh komoditas . Untuk mengetahui detail
-						harga per kota/kabupaten pada masing-masing komoditas dapat diakses
-						dengan mengklik komoditas yang ingin diketahui.
+						{hargaKonsumenDesc}
 					</p>
 				</div>
 			</section>
@@ -1207,8 +1240,8 @@ export default function Home() {
 												{detailData.kabupatenData.dates.map((kabupatenDate: any, index: number) => (
 													<td className="px-4 py-2 border border-1" key={index}>
 														<h2>{kabupatenDate.harga !== "-"
-																? `Rp ${kabupatenDate.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
-																: '-'}</h2>
+															? `Rp ${kabupatenDate.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+															: '-'}</h2>
 													</td>
 												))}
 											</tr>

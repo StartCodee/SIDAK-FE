@@ -12,9 +12,10 @@ const StatusIndicators = () => {
 
 
         <div className="flex gap-4">
+        Volatilitas
           <div className="flex gap-2">
             <div className="w-5 h-5 rounded-sm bg-[#76bf70]"></div>
-            <p>Surplus</p>
+            <p>Tinggi</p>
           </div>
           <div className="flex gap-2">
             <div className="w-5 h-5 rounded-sm bg-[#f1be5b]"></div>
@@ -22,7 +23,7 @@ const StatusIndicators = () => {
           </div>
           <div className="flex gap-2">
             <div className="w-5 h-5 rounded-sm bg-red-500"></div>
-            <p>Defisit</p>
+            <p> Rendah</p>
           </div>
         </div>
       </div>
