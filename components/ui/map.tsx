@@ -1085,8 +1085,8 @@ export default function Map({ cardContents }: MapProps) {
 							width="730.998"
 							height="722.15"
 							filterUnits="userSpaceOnUse"
-							color-interpolation-filters="sRGB">
-							<feFlood flood-opacity="0" result="BackgroundImageFix" />
+							colorInterpolationFilters="sRGB">
+							<feFlood floodOpacity="0" result="BackgroundImageFix" />
 							<feColorMatrix
 								in="SourceAlpha"
 								type="matrix"

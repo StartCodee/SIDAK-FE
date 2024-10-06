@@ -1084,9 +1084,9 @@ export default function MapNeraca({ cardContents }: MapProps) {
 													width="730.998"
 													height="722.15"
 													filterUnits="userSpaceOnUse"
-													color-interpolation-filters="sRGB">
+													colorInterpolationFilters="sRGB">
 													<feFlood
-														flood-opacity="0"
+														floodOpacity="0"
 														result="BackgroundImageFix"
 													/>
 													<feColorMatrix
