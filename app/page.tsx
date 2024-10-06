@@ -176,6 +176,26 @@ export default function Home() {
 	const today = new Date();
 	const formattedDate = formatDate(today);
 
+	const [visitorCount, setVisitorCount] = useState(0);
+
+	useEffect(() => {
+		// Function to fetch visitor count
+		const fetchVisitorCount = async () => {
+		const response = await fetch('/api/visitor-count');
+		const data = await response.json();
+		setVisitorCount(data.count);
+		};
+
+		// Function to increment visitor count
+		const incrementVisitorCount = async () => {
+		await fetch('/api/visitor-count', { method: 'POST' });
+		fetchVisitorCount();
+		};
+
+		// Increment visitor count on page load
+		incrementVisitorCount();
+	}, []);
+
 	const [selectedKabupatenOption, setSelectedKabupatenOption] = useState<any[]>([]);
 	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>([]);
 	const [selectedValue, setSelectedValue] = useState<string>('harga-pangan');
@@ -1095,7 +1115,7 @@ export default function Home() {
 								<p>Jumlah Kunjungan User di Sulawesi Tengah</p>
 							</div>
 						</div>
-						<h1 className="text-4xl font-bold">3928</h1>
+						<h1 className="text-4xl font-bold">{visitorCount}</h1>
 					</Card>
 					<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
 						<div className="flex items-center gap-4">
