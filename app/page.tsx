@@ -32,6 +32,7 @@ import StatusIndicators from '@/components/ui/status_indicator';
 import HeroSearch from '@/components/hero-search';
 import { Datepicker } from "flowbite-react";
 import type { CustomFlowbiteTheme } from "flowbite-react";
+import db from '@/lib/db';
 
 interface cardContents {
 	city: string;
