@@ -252,7 +252,7 @@ export default function Home() {
 
 	const openDialog = (el: string, komoditas: string) => {
 		try {
-			let val = format(selectedDateKonsumen as any, 'yyyy-MM-dd');
+			let val = format(selectedEndDateKonsumen as any, 'yyyy-MM-dd');
 			const detail = hargaKonsumen.find((item) => item.city === el && item.item === komoditas);
 			console.log('ini val', val);
 			setDetailHargaKonsumen(detail);
@@ -262,7 +262,7 @@ export default function Home() {
 		} catch (error) {
 			const detail = hargaKonsumen.find((item) => item.city === el && item.item === komoditas);
 			setDetailHargaKonsumen(detail);
-			let val = format(selectedDateKonsumen as any, 'yyyy-mm-dd');
+			let val = format(selectedEndDateKonsumen as any, 'yyyy-mm-dd');
 
 
 			getDetailSupply(val, detail?.komoditas_id, detail?.kabupaten_kota_id);
@@ -274,7 +274,7 @@ export default function Home() {
 
 	const handleValueChange = (e: any) => {
 		setSelectedValue(e.value);
-		let today = getCurrentDate();
+		let today = format(selectedDate, 'yyyy-MM-dd');
 		if (e.value === 'neraca-pangan') {
 			getNeracaPangan(today, '18');
 		}
@@ -293,7 +293,7 @@ export default function Home() {
 		console.log('search');
 		if (selectedDate) {
 			let commodity = selectedCommodity ? selectedCommodity.value : '';
-			let val = format(selectedDate, 'yyyy-MM');
+			let val = format(selectedDate, 'yyyy-MM-dd');
 			if (selectedValue === 'harga-pangan') {
 				getHargaPangan(val, commodity);
 			} else if (selectedValue == 'neraca-pangan') {
@@ -697,7 +697,13 @@ export default function Home() {
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm mb-1 ">Tanggal</h1>
-					<Datepicker theme={customTheme} maxDate={new Date()} />
+					<Datepicker theme={customTheme}
+						onChange={
+							(date) => {
+								setSelectedDate(date as any);
+							}
+						}
+					maxDate={new Date()} />
 				</div>
 				<Button
 					onClick={handleChangeMonth}
@@ -1189,7 +1195,9 @@ export default function Home() {
 												</td>
 												{detailData.kabupatenData.dates.map((kabupatenDate: any, index: number) => (
 													<td className="px-4 py-2 border border-1" key={index}>
-														<h2>{kabupatenDate.harga}</h2>
+														<h2>{kabupatenDate.harga !== "-"
+																? `Rp ${kabupatenDate.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+																: '-'}</h2>
 													</td>
 												))}
 											</tr>
