@@ -36,7 +36,8 @@ const config = {
 				bodydark1: "#DEE4EE",
 				bodydark2: "#8A99AF",
 				stroke: "#E2E8F0",
-				
+				"b-gray": "#F3F4F6",
+				"gray": "#F9FAFC",
 				whiten: "#F1F5F9",
 				whiter: "#F5F7FD",
 				boxdark: "#24303F",

@@ -39,6 +39,8 @@ const SmallLineChart = ({ data } : any) => {
         }
     };
 
+    console.log(chartData);
+
     return (
         <div style={{ width: '40px', height: '25px' }}>
             <Line data={chartData} options={options} />

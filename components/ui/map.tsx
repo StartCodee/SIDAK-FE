@@ -262,7 +262,12 @@ export default function Map({ cardContents }: MapProps) {
 												</td>
 												{detailData.kabupatenData.dates.map((kabupatenDate: any, index: number) => (
 													<td className="px-4 py-2 border border-1" key={index}>
-														<h2>{kabupatenDate.harga}</h2>
+														<h2>
+															{kabupatenDate.harga !== "-"
+																? `Rp ${kabupatenDate.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+																: '-'}
+
+														</h2>
 													</td>
 												))}
 											</tr>

@@ -9,7 +9,7 @@ import NextTopLoader from 'nextjs-toploader';
 const montserrat = Montserrat({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-	title: 'SIDAK ',
+	title: 'SIDAK - Sistem Informasi Pengendalian Harga dan Pasokan',
 	description: 'Sistem Informasi Data Kebutuhan Pangan',
 };
 

@@ -160,6 +160,8 @@ export default function Home() {
 			let commodity = selectedCommodity ? selectedCommodity.value : '';
 			let val = format(selectedDate, 'yyyy-MM-dd');
 			getHargaPangan(val, commodity);
+			getMonitoringVolatilitas(commodity);
+
 		} else {
 			console.log('No date selected');
 		}
