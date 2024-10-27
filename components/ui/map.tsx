@@ -31,16 +31,16 @@ export default function Map({ cardContents }: MapProps) {
 	const [linkExport, setLinkExport] = useState('');
 
 
-	const getDetailSupply = async (page: number = 1, limit: number = 2, kota: string, komoditas: string, date: string) => {
+	const getDetailSupply = async (page: number = 1, limit: number = 2, kota: string, komoditas: string) => {
 		try {
-			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/detail-data?end_date=${date}&komoditas=${komoditas}&kabupaten_kota_id=${kota}`, {
+			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/detail-data?date=2024-06&komoditas=${komoditas}&kabupaten_kota_id=${kota}`, {
 				headers: {
 					'content-type': 'application/json',
 					'Authorization': `Bearer ${localStorage.getItem('token')}`,
 				},
 			});
 			if (response.data.data) {
-				setLinkExport(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/export-excel?date=${date}&komoditas=${komoditas}&kabupaten_kota_id=${kota}&export=1`);
+				setLinkExport(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/export-excel?komoditas=${komoditas}&kabupaten_kota_id=${kota}&export=1`);
 				console.log(response.data.data);
 				setdetailData(response.data.data);
 			}
@@ -67,9 +67,8 @@ export default function Map({ cardContents }: MapProps) {
 	const closeDialog = () => setIsDialogOpen(false);
 	const openDialog = (el: string) => {
 		const detail = cardContents.find((item) => item.id === el);
-		console.log('ini detail', cardContents, detail);
 		setDetailHarga(detail);
-		getDetailSupply(1, 2, detail?.kabupaten_kota_id as any, detail?.komoditas_id as any, detail?.bulan as any);
+		getDetailSupply(1, 2, detail?.kabupaten_kota_id as any, detail?.komoditas_id as any);
 		setIsDialogOpen(true);
 	};
 
@@ -166,33 +165,8 @@ export default function Map({ cardContents }: MapProps) {
 
 	const getColorByCity = (cityName: string) => {
 		const cityData = cardContents.find((item) => item.id === cityName);
-
-		try {
-			const card = document.getElementById('card-' + cityName);
-			if (card) {
-				card?.remove();
-			}
-			const group = document.getElementById(cityName);
-
-			if (!group) return;
-			const originalColor = cityData?.color;
-			if (!originalColor) return;
-			const groupElements = group.querySelectorAll('path');
-			groupElements.forEach((path) => {
-				if (path.parentElement && path.parentElement.tagName.toLowerCase() === 'mask') {
-					return;
-				}
-
-				path.style.fill = originalColor;
-
-			});
-		} catch (error) {
-
-		}
 		return cityData ? cityData.color : undefined;
-
 	};
-
 	return (
 		<>
 			<Dialog isOpen={isDialogOpen} onClose={closeDialog}>

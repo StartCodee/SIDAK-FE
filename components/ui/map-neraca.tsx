@@ -110,7 +110,7 @@ export default function MapNeraca({ cardContents }: MapProps) {
                         </svg>
                     </div>
                     <div class="flex-1">
-                        <h1 class="text-md font-bold">${content?.city} </h1>
+                        <h1 class="text-md font-bold mt-3 mb-3">${content?.city} </h1>
                         <table class="w-full mt-2">
                         <tbody class="text-sm">
                             <tr>
@@ -190,32 +190,9 @@ export default function MapNeraca({ cardContents }: MapProps) {
 
 	const getColorByCity = (cityName: string) => {
 		const cityData = cardContents.find((item) => item.id === cityName);
-
-		try {
-			const card = document.getElementById('card-' + cityName);
-			if (card) {
-				card?.remove();
-			}
-			const group = document.getElementById(cityName);
-
-			if (!group) return;
-			const originalColor = cityData?.color;
-			if (!originalColor) return;
-			const groupElements = group.querySelectorAll('path');
-			groupElements.forEach((path) => {
-				if (path.parentElement && path.parentElement.tagName.toLowerCase() === 'mask') {
-					return;
-				}
-
-				path.style.fill = originalColor;
-
-			});
-		} catch (error) {
-
-		}
 		return cityData ? cityData.color : undefined;
-
 	};
+
 
 	return (
 		<>

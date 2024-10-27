@@ -67,12 +67,6 @@ const formSchema = z.object({
 	harga: z.string().nonempty({
 		message: 'Harga harus diisi',
 	}),
-	jumlah_kebutuhan: z.string().nonempty({
-		message: 'Jumlah Kebutuhan harus diisi',
-	}),
-	jumlah_ketersediaan: z.string().nonempty({
-		message: 'Jumlah Ketersediaan harus diisi',
-	}),
 	tanggal: z.string().nonempty({
 		message: 'Tanggal harus diisi',
 	}),
@@ -250,8 +244,6 @@ export default function InputDataForm() {
 			kecamatan: '',
 			komoditas: 0,
 			harga: '',
-			jumlah_kebutuhan: '',
-			jumlah_ketersediaan: '',
 			tanggal: '',
 		},
 	});
@@ -274,8 +266,6 @@ export default function InputDataForm() {
 					komoditas_id: values.komoditas,
 					pasar_id: values.pasar,
 					harga: parseInt(values.harga),
-					jumlah_kebutuhan: parseInt(values.jumlah_kebutuhan),
-					jumlah_ketersediaan: parseInt(values.jumlah_ketersediaan),
 					tanggal: values.tanggal,
 				},
 				{
@@ -574,7 +564,7 @@ export default function InputDataForm() {
 							/>
 						</FormControl>
 					</div>
-					<div className="flex flex-wrap justify-between gap-4 px-8">
+					<div className="flex flex-wrap justify-start gap-18 px-8">
 						<FormControl>
 							<FormField
 								control={form.control}
@@ -611,42 +601,7 @@ export default function InputDataForm() {
 								)}
 							/>
 						</FormControl>
-						<FormControl>
-							<FormField
-								control={form.control}
-								name="jumlah_kebutuhan"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Jumlah Kebutuhan</FormLabel>
-										<Input
-											{...field}
-											type="number"
-											className="w-[22rem]"
-											placeholder="Jumlah Kebutuhan"
-										/>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</FormControl>
-						<FormControl>
-							<FormField
-								control={form.control}
-								name="jumlah_ketersediaan"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Jumlah Ketersediaan</FormLabel>
-										<Input
-											{...field}
-											type="number"
-											className="w-[22rem]"
-											placeholder="Jumlah Ketersediaan"
-										/>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</FormControl>
+
 					</div>
 					<FormControl>
 						<FormItem>

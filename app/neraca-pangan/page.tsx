@@ -7,18 +7,18 @@ import {
 } from '@heroicons/react/24/outline';
 import Navbar from '@/components/ui/navbar';
 import { useEffect, useState } from 'react';
-import Dialog from '@/components/ui/modal-harga';
 import React from 'react';
-import { format } from 'date-fns';
+import { format, set } from 'date-fns';
 import Hero from '@/components/ui/hero';
 import Select, { SingleValue } from 'react-select';
-import MonthPicker from '@/components/ui/monthpicker';
 import MapNeraca from '@/components/ui/map-neraca';
 import Swal from "sweetalert2";
 import axios from "axios";
 import NeracaPanganSkeleton from '@/components/NeracaPanganSkeleton';
-import { Datepicker } from "flowbite-react";
-import type { CustomFlowbiteTheme } from "flowbite-react";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 interface cardContents {
 	city: string;
@@ -31,101 +31,6 @@ interface cardContents {
 	id: string;
 }
 
-const customTheme: CustomFlowbiteTheme["datepicker"] = {
-	"root": {
-		"base": "relative",
-		"input": {
-			field: {
-				input: {
-					withIcon: { on: "block", off: "hidden" },
-					base: "block w-full bg-white !important border-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-50  text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 p-2.5 text-sm pl-10 rounded-lg"
-				},
-				icon: {
-					base: "hidden"
-				}
-			}
-		}
-	},
-
-	"popup": {
-		"root": {
-			"base": "absolute top-10 z-50 block pt-2",
-			"inline": "relative top-0 z-auto",
-			"inner": "inline-block rounded-lg bg-white p-4 shadow-lg dark:bg-gray-700"
-		},
-		"header": {
-			"base": "",
-			"title": "px-2 py-3 text-center font-semibold text-gray-900 dark:text-white",
-			"selectors": {
-				"base": "mb-2 flex justify-between",
-				"button": {
-					"base": "rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600",
-					"prev": "",
-					"next": "",
-					"view": ""
-				}
-			}
-		},
-		"view": {
-			"base": "p-1"
-		},
-		"footer": {
-			"base": "mt-2 flex space-x-2",
-			"button": {
-				"base": "w-full rounded-lg px-5 py-2 text-center text-sm font-medium focus:ring-4 focus:ring-cyan-300",
-				"today": "bg-cyan-700 text-white hover:bg-cyan-800 dark:bg-cyan-600 dark:hover:bg-cyan-700",
-				"clear": "border border-gray-300 bg-white text-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
-			}
-		}
-	},
-	"views": {
-		"days": {
-			"header": {
-				"base": "mb-1 grid grid-cols-7",
-				"title": "h-6 text-center text-sm font-medium leading-6 text-gray-500 dark:text-gray-400"
-			},
-			"items": {
-				"base": "grid w-64 grid-cols-7",
-				"item": {
-					"base": "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-cyan-600 hover:text-white",
-					"selected": "bg-cyan-700 text-white hover:bg-cyan-600",
-					"disabled": "text-gray-500 bg-gray-200 cursor-not-allowed"
-				}
-			}
-		},
-		"months": {
-			"items": {
-				"base": "grid w-64 grid-cols-4",
-				"item": {
-					"base": "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-cyan-600 hover:text-white",
-					"selected": "bg-cyan-700 text-white hover:bg-cyan-600",
-					"disabled": "text-gray-500 bg-gray-200 cursor-not-allowed"
-				}
-			}
-		},
-		"years": {
-			"items": {
-				"base": "grid w-64 grid-cols-4",
-				"item": {
-					"base": "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-cyan-600 hover:text-white",
-					"selected": "bg-cyan-700 text-white hover:bg-cyan-600",
-					"disabled": "text-gray-500 bg-gray-200 cursor-not-allowed"
-				}
-			}
-		},
-		"decades": {
-			"items": {
-				"base": "grid w-64 grid-cols-4",
-				"item": {
-					"base": "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-cyan-600 hover:text-white",
-					"selected": "bg-cyan-700 text-white hover:bg-cyan-600",
-					"disabled": "text-gray-500 bg-gray-200 cursor-not-allowed"
-				}
-			}
-		}
-	}
-};
-
 const getCurrentDate = (): string => {
 	const today = new Date();
 	const year = today.getFullYear();
@@ -136,115 +41,31 @@ const getCurrentDate = (): string => {
 
 export default function Home() {
 	const [selectedCommodity, setSelectedCommodity] = useState<SingleValue<{ value: string; label: string }> | null>(null);
-	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>(
-		[],
-	);
+	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>([]);
 
-	const [detailHarga, setDetailHarga] = useState<any>();
-	const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+	const [selectedDate, setSelectedDate] = useState<any>();
 
 	const [cardContents, setCardContents] = useState<cardContents[]>([]);
 
-	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [loading, setLoading] = useState(true);
-
-	const closeDialog = () => setIsDialogOpen(false);
-
-	const openDialog = (el: string) => {
-		setDetailHarga(cardContents.find((card) => card.id === el));
-		setIsDialogOpen(true);
-	};
-
-	const showCardArea = (id: string) => {
-		console.log(id);
-		const content = cardContents.find((card) => card.id === id);
-		const path = document.getElementById(id);
-		const pathRect = path ? path.getBoundingClientRect() : null;
-		const pathTop = pathRect ? pathRect.top + window.scrollY + 120 : 0;
-		const pathLeft = pathRect ? pathRect.left + window.scrollX + 150 : 0;
-		const card = document.createElement('div');
-		card.id = 'card-' + id;
-		card.className =
-			'absolute z-50 bg-white p-4 rounded-lg shadow-md flex items-center hidden md:block';
-		card.style.top = `${pathTop}px`;
-		card.style.left = `${pathLeft}px`;
-		card.innerHTML = `
-                    <div class="h-full w-20  rounded-md text-white mr-4 flex-shrink-0 bg-[${content?.color
-			}]">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-20 mx-auto mt-0">
-                        <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <h1 class="text-md font-bold">${content?.city} </h1>
-                        <table class="w-full mt-2">
-                        <tbody class="text-sm">
-                            <tr>
-                            <td class="pr-2">Ketersediaan:</td>
-                            <td class="text-right">${Math.round(
-				content?.ketersediaan as any,
-			)
-				.toString()
-				.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
-                            </tr>
-                            <tr>
-                            <td class="pr-2">Kebutuhan:</td>
-                            <td class="text-right">${Math.round(
-					content?.kebutuhan as any,
-				)
-				.toString()
-				.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
-                            </tr>
-                            <tr>
-                            <td colspan="2">
-                                <hr class="my-1" />
-                            </td>
-                            </tr>
-                            <tr class="font-bold">
-                            <td class="pr-2">Neraca Pangan:</td>
-                            <td class="text-right">${Math.round(
-					content?.neraca as any,
-				)
-				.toString()
-				.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
-                            </tr>
-                        </tbody>
-                        </table>
-                    </div>
-                    `;
-		console.log(card);
-		document.body.appendChild(card);
-	};
-
-	const hideCardArea = (id: string) => {
-		const card = document.getElementById('card-' + id);
-		if (card) {
-			card.remove();
-		}
-	};
 
 	const handleChangeMonth = () => {
 		try {
 			let commodity = selectedCommodity ? selectedCommodity.value : '';
-			let val = format(selectedDate ?? new Date(), 'yyyy-MM-dd');
+			let val = selectedDate.format('YYYY-MM');
 			getNeracaPangan(
 				val,
 				commodity,
 			);
-		} catch (error) { }
-	};
-
-	const getColorByCity = (cityName: string) => {
-		const cityData = cardContents.find((item) => item.id === cityName);
-		console.log(cityData, cityName);
-		return cityData ? cityData.color : undefined;
+		} catch (error) {
+			console.log(error)
+		}
 	};
 
 	const getNeracaPangan = async (
 		date: string,
 		komoditas: string,
 	) => {
-
 		try {
 			const response = await axios.get(
 				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/harga-pasokan?date=${date}&komoditas=${komoditas}`,
@@ -322,8 +143,9 @@ export default function Home() {
 	};
 
 	useEffect(() => {
-		const today = getCurrentDate();
-		getNeracaPangan(today, '18');
+		const date = dayjs();
+		setSelectedDate(date);
+		getNeracaPangan(date.format('YYYY-MM'), '18');
 		getCommodityOption();
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -335,7 +157,7 @@ export default function Home() {
 				style={{ marginTop: '-40px' }}
 				className="mx-auto z-1 relative px-4 py-[0.4rem] sm:py-2 sm:px-8 shadow-xl w-[18rem] md:w-[30rem] sm:w-[30rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
 				<div className="flex-col flex-1">
-					<h1 className="font-bold text-sm mb-1">Komoditas</h1>
+					<h1 className="font-bold text-sm ">Komoditas</h1>
 					<Select
 						styles={{
 							control: (provided) => ({
@@ -368,12 +190,10 @@ export default function Home() {
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
-					<h1 className="font-bold text-sm ">Tanggal</h1>
-					<Datepicker theme={customTheme} onChange={
-						(date) => {
-							setSelectedDate(date as any);
-						}
-					} value={selectedDate} maxDate={new Date()} />
+					<h1 className="font-bold text-sm ">Bulan</h1>
+					<LocalizationProvider dateAdapter={AdapterDayjs}>
+						<DatePicker value={selectedDate} onChange={(newValue) => setSelectedDate(newValue as any)} views={['month', 'year']} />
+					</LocalizationProvider>
 				</div>
 				<Button
 					className="bg-blue-300 rounded-full p-2"
@@ -381,9 +201,7 @@ export default function Home() {
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 				</Button>
 			</div>
-			{/* content */}
 			<MapNeraca cardContents={cardContents} />
-
 			<section className="px-4 sm:px-8 lg:px-50 md:px-10 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col items-center space-y-8">
 					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 px-10 lg:grid-cols-3 xl:grid-cols-4 gap-[2rem] w-full ">

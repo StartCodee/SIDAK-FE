@@ -84,3 +84,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+.MuiOutlinedInput-notchedOutline {
+  border: none !important;
+}
+
+.MuiInputBase-input {
+  font-size: 15px !important;
+  padding-right: 2px;
+}

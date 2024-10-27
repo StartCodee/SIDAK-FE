@@ -422,8 +422,8 @@ export default function Home() {
 			);
 			if (response.data.data) {
 				const mappedOptions = response.data.data.map(
-					(kecamatan: { name: string; id: number }) => ({
-						value: kecamatan.id,
+					(kecamatan: { name: string; code: number }) => ({
+						value: kecamatan.code,
 						label: kecamatan.name,
 					}),
 				);

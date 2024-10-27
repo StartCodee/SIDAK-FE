@@ -21,7 +21,12 @@ import MonthPicker from '@/components/ui/monthpicker';
 import Footer from '@/components/ui/footer';
 import Swal from "sweetalert2";
 import axios from "axios";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
+
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 
 const formatDate = (date: any) => {
@@ -32,7 +37,10 @@ const FlowChart: React.FC = () => {
 	const today = new Date();
 	const formattedDate = formatDate(today);
 
-	const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+	// const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+	const [selectedDate, setSelectedDate] = useState<any>();
+
+	
 	const [selectedCommodity, setSelectedCommodity] = useState<SingleValue<{ value: string; label: string }> | null>(null);
 	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>([]);
 
@@ -139,6 +147,8 @@ const FlowChart: React.FC = () => {
 	};
 
 	useEffect(() => {
+		const date = dayjs();
+		setSelectedDate(date);
 		getPolaPerdagangan( '', '18');
 		getCommodityOption();
 	}, []);
@@ -482,8 +492,10 @@ const FlowChart: React.FC = () => {
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
-					<h1 className="font-bold text-sm ">Tanggal</h1>
-					<MonthPicker date={selectedDate} setDate={setSelectedDate} />
+					<h1 className="font-bold text-sm ">Bulan</h1>
+					<LocalizationProvider dateAdapter={AdapterDayjs}>
+						<DatePicker value={selectedDate} onChange={(newValue) => setSelectedDate(newValue as any)} views={['month', 'year']} />
+					</LocalizationProvider>
 				</div>
 				<Button
 					className="bg-blue-300 rounded-full p-2"

@@ -33,6 +33,10 @@ import HeroSearch from '@/components/hero-search';
 import { Datepicker } from "flowbite-react";
 import type { CustomFlowbiteTheme } from "flowbite-react";
 import db from '@/lib/db';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 interface cardContents {
 	city: string;
@@ -179,35 +183,31 @@ export default function Home() {
 
 	const [visitorCount, setVisitorCount] = useState(0);
 
-  useEffect(() => {
-    // Function to fetch visitor count
-    const fetchVisitorCount = async () => {
-      const count = await db.visitorCount.get(1);
-	  if (count) {
-		setVisitorCount(count.count);
-	  }
-    };
+	useEffect(() => {
+		const fetchVisitorCount = async () => {
+			const count = await db.visitorCount.get(1);
+			if (count) {
+				setVisitorCount(count.count);
+			}
+		};
 
-    // Function to increment visitor count
-    const incrementVisitorCount = async () => {
-      const count = await db.visitorCount.get(1);
-	  if (count) {
-		const newCount = count.count + 1;
-		await db.visitorCount.update(1, { count: newCount });
-		fetchVisitorCount();
-	  }
-    };
+		const incrementVisitorCount = async () => {
+			const count = await db.visitorCount.get(1);
+			if (count) {
+				const newCount = count.count + 1;
+				await db.visitorCount.update(1, { count: newCount });
+				fetchVisitorCount();
+			}
+		};
 
-    // Increment visitor count on page load
-    incrementVisitorCount();
-  }, []);
+		incrementVisitorCount();
+	}, []);
 
 	const [selectedKabupatenOption, setSelectedKabupatenOption] = useState<any[]>([]);
 	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>([]);
 	const [selectedValue, setSelectedValue] = useState<string>('harga-pangan');
 	const [detailHargaKonsumen, setDetailHargaKonsumen] = useState<any>();
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
-
 
 	const [selectedCommodityKonsumen, setSelectedCommodityKonsumen] = useState('');
 	const [selectedCommodity, setSelectedCommodity] = useState<SingleValue<{ value: string; label: string }> | null>(null);
@@ -220,7 +220,8 @@ export default function Home() {
 	});
 	const [selectedEndDateKonsumen, setSelectedEndDateKonsumen] = useState<Date | undefined>(new Date());
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-	const [selectedOption, setSelectedOption] = useState<any[]>([]);
+
+	const [selectedMonth, setSelectedMonth] = useState<any>();
 
 	const [cardContents, setCardContents] = useState<cardContents[]>([]);
 	const [loadingCard, setLoadingCard] = useState(true);
@@ -244,7 +245,6 @@ export default function Home() {
 	const [loading, setLoading] = useState(true);
 	const [loadingKomoditas, setLoadingKomoditas] = useState(true);
 	const [linkExportHg, setLinkExportHg] = useState('');
-
 
 	const getDetailSupply = async (date: string, komoditas: string, kota: string) => {
 		try {
@@ -290,43 +290,40 @@ export default function Home() {
 			const detail = hargaKonsumen.find((item) => item.city === el && item.item === komoditas);
 			setDetailHargaKonsumen(detail);
 			let val = format(selectedEndDateKonsumen as any, 'yyyy-mm-dd');
-
-
 			getDetailSupply(val, detail?.komoditas_id, detail?.kabupaten_kota_id);
 			setLinkExportHg(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/export-excel?date=${val}&komoditas=${detail?.komoditas_id}&kabupaten_kota_id=${detail?.kabupaten_kota_id}&export=1`);
 			setIsDialogOpen(true);
 		}
-
 	};
 
 	const handleValueChange = (e: any) => {
 		setSelectedValue(e.value);
-		let today = format(selectedDate, 'yyyy-MM-dd');
 		if (e.value === 'neraca-pangan') {
+			let today = selectedMonth.format('YYYY-MM');
 			getNeracaPangan(today, '18');
-		}
-		else if (e.value === 'perdagangan-pangan') {
+		} else if (e.value === 'perdagangan-pangan') {
+			let today = selectedMonth.format('YYYY-MM');
 			getPolaPerdagangan(today, '18');
 		} else {
+			console.log(selectedDate)
+			let today = format(selectedDate, 'yyyy-MM-dd');
 			getHargaPangan(today, '18');
 		}
 	};
 
-	const handleValueChangeKonsumen = (e: any) => {
-		setSelectedKabupaten(e.value);
-	};
-
 	const handleChangeMonth = () => {
 		console.log('search');
-		if (selectedDate) {
+		if (selectedDate || selectedMonth) {
 			let commodity = selectedCommodity ? selectedCommodity.value : '';
-			let val = format(selectedDate, 'yyyy-MM-dd');
 			if (selectedValue === 'harga-pangan') {
+			let val = format(selectedDate, 'yyyy-MM-dd');
 				getHargaPangan(val, commodity);
 			} else if (selectedValue == 'neraca-pangan') {
+				let val = selectedMonth.format('YYYY-MM');
 				getNeracaPangan(val, commodity);
 			}
 			else if (selectedValue == 'perdagangan-pangan') {
+				let val = selectedMonth.format('YYYY-MM');
 				getPolaPerdagangan(val, commodity);
 			}
 		} else {
@@ -378,14 +375,12 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-
 				toast({
 					variant: 'destructive',
 					title: 'Error',
 					description: error.response.data.message,
 				});
 			} else {
-
 				toast({
 					variant: 'destructive',
 					title: 'Error',
@@ -414,15 +409,12 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-
 				toast({
 					variant: 'destructive',
 					title: 'Error',
 					description: error.response.data.message,
 				});
-
 			} else {
-
 				toast({
 					variant: 'destructive',
 					title: 'Error',
@@ -452,14 +444,12 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-
 				toast({
 					variant: 'destructive',
 					title: 'Error',
 					description: error.response.data.message,
 				});
 			} else {
-
 				toast({
 					variant: 'destructive',
 					title: 'Error',
@@ -486,18 +476,15 @@ export default function Home() {
 				const defaultOption = mappedOptions.find((option: { value: number; label: string }) => option.value === 18);
 				console.log(defaultOption)
 				setSelectedCommodity(defaultOption);
-
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-
 				toast({
 					variant: 'destructive',
 					title: 'Error',
 					description: error.response.data.message,
 				});
 			} else {
-
 				toast({
 					variant: 'destructive',
 					title: 'Error',
@@ -525,14 +512,12 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-
 				toast({
 					variant: 'destructive',
 					title: 'Error',
 					description: error.response.data.message,
 				});
 			} else {
-
 				toast({
 					variant: 'destructive',
 					title: 'Error',
@@ -555,14 +540,12 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-
 				toast({
 					variant: 'destructive',
 					title: 'Error',
 					description: error.response.data.message,
 				});
 			} else {
-
 				toast({
 					variant: 'destructive',
 					title: 'Error',
@@ -586,14 +569,12 @@ export default function Home() {
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-
 				toast({
 					variant: 'destructive',
 					title: 'Error',
 					description: error.response.data.message,
 				});
 			} else {
-
 				toast({
 					variant: 'destructive',
 					title: 'Error',
@@ -604,7 +585,6 @@ export default function Home() {
 	};
 
 	const getHargaKonsumen = async (start_date: string = '', end_date: string = '', kabupaten_kota_id: string | undefined = undefined) => {
-
 		if (!kabupaten_kota_id) {
 			toast({
 				variant: 'warning',
@@ -613,7 +593,6 @@ export default function Home() {
 			});
 			return;
 		}
-
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/harga-konsumen?start_date=${start_date}&end_date=${end_date}&kabupaten_kota_id=${kabupaten_kota_id}`, {
 				headers: {
@@ -624,18 +603,15 @@ export default function Home() {
 			if (response.data.data) {
 				setHargaKonsumen(response.data.data);
 				setLoadingKomoditas(false);
-
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
-
 				toast({
 					variant: 'destructive',
 					title: 'Error',
 					description: error.response.data.message,
 				});
 			} else {
-
 				toast({
 					variant: 'destructive',
 					title: 'Error',
@@ -665,8 +641,10 @@ export default function Home() {
 		let today = getCurrentDate();
 
 
-		getHargaPangan(today, '18');
+		const date = dayjs();
+		setSelectedMonth(date);
 
+		getHargaPangan(today, '18');
 		let daysAgo = back7days();
 		getHargaKonsumen(today, today, '7201');
 		getCommodityOption();
@@ -674,8 +652,6 @@ export default function Home() {
 		getDashboard();
 		getBerita();
 		fetchDescription();
-
-
 	}, []);
 
 	return (
@@ -752,14 +728,28 @@ export default function Home() {
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
-					<h1 className="font-bold text-sm mb-1 ">Tanggal</h1>
-					<Datepicker theme={customTheme}
-						onChange={
-							(date) => {
-								setSelectedDate(date as any);
-							}
-						}
-						maxDate={new Date()} />
+					{selectedValue === 'harga-pangan' ? (
+						<>
+							<h1 className="font-bold text-sm mb-1 ">Tanggal</h1>
+
+							<Datepicker theme={customTheme}
+								onChange={
+									(date) => {
+										setSelectedDate(date as any);
+									}
+								}
+								maxDate={new Date()} />
+						</>
+					) : (
+						<>
+							<h1 className="font-bold text-sm ">Bulan</h1>
+							<LocalizationProvider dateAdapter={AdapterDayjs}>
+								<DatePicker value={selectedMonth} onChange={(newValue) => setSelectedMonth(newValue as any)} views={['month', 'year']} />
+							</LocalizationProvider>
+						</>
+
+					)}
+
 				</div>
 				<Button
 					onClick={handleChangeMonth}
@@ -980,90 +970,90 @@ export default function Home() {
 					</h1>
 					<center>
 						<div className="flex lg:justify-center justify-center items-start self-center  flex-wrap gap-10 ">
-						{loadingKomoditas ? (
-    <KomoditasSkeleton />
-) : (
-    hargaKonsumen.map((content, index) => {
-        const last7DaysData = Array.from({ length: 8 }, (_, i) => {
-            const date = format(subDays(selectedEndDateKonsumen as any, i), 'yyyy-MM-dd');
-            return content.last7DaysPrices[date] || 0;
-        }).reverse(); // Reverse to start with the oldest date first
+							{loadingKomoditas ? (
+								<KomoditasSkeleton />
+							) : (
+								hargaKonsumen.map((content, index) => {
+									const last7DaysData = Array.from({ length: 8 }, (_, i) => {
+										const date = format(subDays(selectedEndDateKonsumen as any, i), 'yyyy-MM-dd');
+										return content.last7DaysPrices[date] || 0;
+									}).reverse(); // Reverse to start with the oldest date first
 
-        // Menghitung persentase volatilitas per hari
-        const volatilityPercentages = last7DaysData.map((price, i, arr) => {
-            if (i > 0 && arr[i - 1] !== 0) {
-                // Hitung persentase perubahan jika hari sebelumnya bukan 0
-                return ((price - arr[i - 1]) / arr[i - 1]) * 100;
-            }
-            return 0; // Jika tidak ada hari sebelumnya, set persentase ke 0
-        });
+									// Menghitung persentase volatilitas per hari
+									const volatilityPercentages = last7DaysData.map((price, i, arr) => {
+										if (i > 0 && arr[i - 1] !== 0) {
+											// Hitung persentase perubahan jika hari sebelumnya bukan 0
+											return ((price - arr[i - 1]) / arr[i - 1]) * 100;
+										}
+										return 0; // Jika tidak ada hari sebelumnya, set persentase ke 0
+									});
 
-        // Menghitung volatilitas tertinggi (maksimum persentase perubahan)
-        const highestVolatility = Math.max(...volatilityPercentages.map(Math.abs));
+									// Menghitung volatilitas tertinggi (maksimum persentase perubahan)
+									const highestVolatility = Math.max(...volatilityPercentages.map(Math.abs));
 
-        // Menentukan warna lonceng berdasarkan tingkat volatilitas
-        let bellColor = 'fill-green-500'; // Default hijau untuk volatilitas rendah
-        if (highestVolatility > 10) {
-            bellColor = 'fill-red-500'; // Merah untuk volatilitas tinggi
-        } else if (highestVolatility > 5) {
-            bellColor = 'fill-yellow-500'; // Kuning untuk volatilitas sedang
-        }
+									// Menentukan warna lonceng berdasarkan tingkat volatilitas
+									let bellColor = 'fill-green-500'; // Default hijau untuk volatilitas rendah
+									if (highestVolatility > 10) {
+										bellColor = 'fill-red-500'; // Merah untuk volatilitas tinggi
+									} else if (highestVolatility > 5) {
+										bellColor = 'fill-yellow-500'; // Kuning untuk volatilitas sedang
+									}
 
-        return (
-            <Card
-                onClick={() => {
-                    openDialog(content.city, content.item);
-                }}
-                key={index}
-                className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl cursor-pointer relative">
-                <div className="flex items-center space-x-4">
-                    <div>
-                        <Image
-                            src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${content.image}`}
-                            alt="user"
-                            width={50}
-                            height={50}
-                            className="rounded-full"
-                        />
-                    </div>
-                    <div className="" style={{ height: '80px' }}>
-                        <h1 className="ms-2 text-left font-bold text-lg">
-                            {content.item.split(' ')[0]}
-                        </h1>
-                        <p className="text-left ms-2">
-                            {content.item.split(' ').slice(1).join(' ')}
-                        </p>
-                        <p className="text-left ms-2 font-bold">
-                            Rp{' '}
-                            {Math.round(content?.price as any)
-                                .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        </p>
-                    </div>
-                    <div className="absolute top-2 right-2">
-                        <SmallLineChart data={last7DaysData} />
-                    </div>
-                </div>
-                <div className="h-1 rounded-lg bg-black/10 my-2"></div>
-                <div className="flex justify-between items-center">
-                    <p style={{fontSize:'12px'}}>{highestVolatility.toFixed(0)}%</p> {/* Tampilkan persentase volatilitas */}
-                    <p className="text-xs font-thin">PERCENTAGE VOLATILITY</p>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className={`size-4 ${bellColor}`}>
-                        <path
-                            fillRule="evenodd"
-                            d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
-                            clipRule="evenodd"
-                        />
-                    </svg>
-                </div>
-            </Card>
-        );
-    })
-)}
+									return (
+										<Card
+											onClick={() => {
+												openDialog(content.city, content.item);
+											}}
+											key={index}
+											className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl cursor-pointer relative">
+											<div className="flex items-center space-x-4">
+												<div>
+													<Image
+														src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${content.image}`}
+														alt="user"
+														width={50}
+														height={50}
+														className="rounded-full"
+													/>
+												</div>
+												<div className="" style={{ height: '80px' }}>
+													<h1 className="ms-2 text-left font-bold text-lg">
+														{content.item.split(' ')[0]}
+													</h1>
+													<p className="text-left ms-2">
+														{content.item.split(' ').slice(1).join(' ')}
+													</p>
+													<p className="text-left ms-2 font-bold">
+														Rp{' '}
+														{Math.round(content?.price as any)
+															.toString()
+															.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+													</p>
+												</div>
+												<div className="absolute top-2 right-2">
+													<SmallLineChart data={last7DaysData} />
+												</div>
+											</div>
+											<div className="h-1 rounded-lg bg-black/10 my-2"></div>
+											<div className="flex justify-between items-center">
+												<p style={{ fontSize: '12px' }}>{highestVolatility.toFixed(0)}%</p> {/* Tampilkan persentase volatilitas */}
+												<p className="text-xs font-thin">PERCENTAGE VOLATILITY</p>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													viewBox="0 0 24 24"
+													fill="currentColor"
+													className={`size-4 ${bellColor}`}>
+													<path
+														fillRule="evenodd"
+														d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
+														clipRule="evenodd"
+													/>
+												</svg>
+											</div>
+										</Card>
+									);
+								})
+							)}
 
 						</div>
 					</center>

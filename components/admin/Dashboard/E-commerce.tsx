@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 
-import TableOne from"../Tables/TableOne";
+import TableOne from "../Tables/TableOne";
 import CardDataStats from "../CardDataStats";
 import newsImg from "@/public/admin/images/cards/news.png";
 import Image from 'next/image'
@@ -13,7 +13,7 @@ import {
 	UserIcon,
 	ScaleIcon,
 	BuildingLibraryIcon,
-	
+
 } from '@heroicons/react/24/outline';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -29,24 +29,24 @@ interface Dashboard {
 }
 
 const ECommerce: React.FC = () => {
-  const username = Cookies.get('userName');
-  const [dashboard, setDashboard] = useState<Dashboard>();
+	const username = Cookies.get('userName');
+	const [dashboard, setDashboard] = useState<Dashboard>();
 	const [berita, setBerita] = useState<any[]>([]);
-	const [loading, setLoading] = useState(true); 
+	const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    getDashboard().then((data) => {
-      setDashboard(data);
-    })
-	getBerita(1, 2).then((data) => {
-		setBerita(data.data);
-		setLoading(false);
-	}
-	)
-  }, []);
+	useEffect(() => {
+		getDashboard().then((data) => {
+			setDashboard(data);
+		})
+		getBerita(1, 2).then((data) => {
+			setBerita(data.data);
+			setLoading(false);
+		}
+		)
+	}, []);
 
 
-  return (
+	return (
 		<>
 			<div className="flex gap-10 w-full">
 				<div className=" h-full justify-center" style={{ flex: '5' }}>
@@ -133,30 +133,30 @@ const ECommerce: React.FC = () => {
 						</div>
 					))} */}
 					{loading ? (
-						<SkeletonCard /> ) 
+						<SkeletonCard />)
 						: (
 							berita.map((item) => (
-						<div
-							key={item.id}
-							className="w-full mb-7 rounded-xl border border-stroke bg-white shadow-default">
-							<div className="aspect-video relative bg-white/50  backdrop-blur-md rounded-lg ">
-								<Image
-									src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${item.image}`}
-									className="rounded-t-xl object-contain"
-									alt="news"
-									fill
-								/>
-							</div>
-							<div className="p-4">
-								<h1 className="text-2xl text-black font-bold line-clamp-2">
-									{item.title}
-								</h1>
-								<p className="text-[10px]">{item.date}</p>
-								<p className="mt-2 line-clamp-3">{item.content}</p>
-							</div>
-						</div>
-					))
-					)
+								<div
+									key={item.id}
+									className="w-full mb-7 rounded-xl border border-stroke bg-white shadow-default">
+									<div className="aspect-video relative bg-white/50  backdrop-blur-md rounded-lg ">
+										<Image
+											src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${item.image}`}
+											className="rounded-t-xl object-contain"
+											alt="news"
+											fill
+										/>
+									</div>
+									<div className="p-4">
+										<h1 className="text-2xl text-black font-bold line-clamp-2">
+											{item.title}
+										</h1>
+										<p className="text-[10px]">{item.date}</p>
+										<p className="mt-2 line-clamp-3">{item.content}</p>
+									</div>
+								</div>
+							))
+						)
 					}
 					<div className="mt-4  flex justify-end">
 						<Link href="/admin/berita">
