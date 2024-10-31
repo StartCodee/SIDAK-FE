@@ -3,37 +3,37 @@
 
 import * as React from "react";
 import {
-    ColumnDef,
-    ColumnFiltersState,
-    SortingState,
-    VisibilityState,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
+	ColumnDef,
+	ColumnFiltersState,
+	SortingState,
+	VisibilityState,
+	flexRender,
+	getCoreRowModel,
+	getFilteredRowModel,
+	getPaginationRowModel,
+	getSortedRowModel,
+	useReactTable,
 } from "@tanstack/react-table";
 import { ChevronDown } from "lucide-react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { useToast } from '@/components/ui/use-toast';
 
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
 } from "@/components/ui/table";
 import DefaultLayout from "@/components/admin/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/admin/Breadcrumbs/Breadcrumb";
@@ -49,25 +49,25 @@ import { DateRange } from "react-day-picker"
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
 } from "@/components/ui/popover"
 
 export type Commodity = {
-    commodity: string;
-    dates: Record<string, number>;
+	commodity: string;
+	dates: Record<string, number>;
 };
 
 export type CommodityNeraca = {
-    commodity: string;
-    dates: Record<string, { kebutuhan: number, ketersediaan: number; defisit: number }>;
+	commodity: string;
+	months: Record<string, { kebutuhan: number, ketersediaan: number; defisit: number }>;
 };
 // Sample data
 
 interface CommodityOption {
-    value: number;
-    label: string;
+	value: number;
+	label: string;
 }
 
 type ShowHeaderKeys = 'kebutuhan' | 'ketersediaan' | 'defisit';
@@ -271,7 +271,7 @@ export default function Home() {
 	) => {
 		try {
 			const response = await axios.get(
-				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/neraca-pangan?start_date=${start_date}&end_date=${end_date}&komoditas=${komoditas}&kabupaten_kota_id=${kota}&kecamatan_id=${kecamatan}`,
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/neraca-pangan?start_date=${start_date}&end_date=${end_date}&komoditas=${komoditas}&kabupaten_kota_id=${kota}`,
 				{
 					headers: {
 						'content-type': 'application/json',
@@ -614,11 +614,10 @@ export default function Home() {
 					<div style={{ flex: 2 }} className=" ">
 						<div className="flex gap-4 justify-between">
 							<button
-								className={`flex-1 inline-flex ${
-									activeTab === 'profile'
+								className={`flex-1 inline-flex ${activeTab === 'profile'
 										? 'bg-[#37B5FE] text-white'
 										: 'text-[#37B5FE] border-2 border-[#37B5FE]'
-								}  justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md   hover:-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+									}  justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md   hover:-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
 								id="profile-tab"
 								type="button"
 								role="tab"
@@ -628,11 +627,10 @@ export default function Home() {
 								Harga Pangan
 							</button>
 							<button
-								className={`flex-1 inline-flex ${
-									activeTab === 'dashboard'
+								className={`flex-1 inline-flex ${activeTab === 'dashboard'
 										? 'bg-[#37B5FE] text-white'
 										: 'text-[#37B5FE] border-2 border-[#37B5FE]'
-								}  justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md   hover:-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+									}  justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md   hover:-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
 								id="dashboard-tab"
 								type="button"
 								role="tab"
@@ -645,9 +643,8 @@ export default function Home() {
 						<div>
 							<div id="default-tab-content">
 								<div
-									className={`mt-6 rounded-lg bg-gray-50 dark:bg-gray-800 ${
-										activeTab === 'profile' ? '' : 'hidden'
-									}`}
+									className={`mt-6 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'profile' ? '' : 'hidden'
+										}`}
 									id="profile"
 									role="tabpanel"
 									aria-labelledby="profile-tab">
@@ -668,9 +665,8 @@ export default function Home() {
 												disabled={role == 'KABUPATEN' ? true : false}
 												id="location"
 												name="location"
-												className={`mt-2 block w-full ${
-													role == 'KABUPATEN' ? 'bg-gray' : ''
-												} rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6`}>
+												className={`mt-2 block w-full ${role == 'KABUPATEN' ? 'bg-gray' : ''
+													} rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6`}>
 												<option>Kabupaten/Kota</option>
 												{selectedKabupatenOption.map((option) => (
 													<option
@@ -778,9 +774,8 @@ export default function Home() {
 									</div>
 								</div>
 								<div
-									className={`mt-6 rounded-lg bg-gray-50 dark:bg-gray-800 ${
-										activeTab === 'dashboard' ? '' : 'hidden'
-									}`}
+									className={`mt-6 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'dashboard' ? '' : 'hidden'
+										}`}
 									id="dashboard"
 									role="tabpanel"
 									aria-labelledby="dashboard-tab">
@@ -801,9 +796,8 @@ export default function Home() {
 													);
 												}}
 												disabled={role == 'KABUPATEN' ? true : false}
-												className={`mt-2 block w-full ${
-													role == 'KABUPATEN' ? 'bg-gray' : ''
-												} rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6`}>
+												className={`mt-2 block w-full ${role == 'KABUPATEN' ? 'bg-gray' : ''
+													} rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6`}>
 												<option>Kabupaten/Kota</option>
 												{selectedKabupatenOption.map((option) => (
 													<option
@@ -1004,9 +998,9 @@ export default function Home() {
 														{header.isPlaceholder
 															? null
 															: flexRender(
-																	header.column.columnDef.header,
-																	header.getContext(),
-															  )}
+																header.column.columnDef.header,
+																header.getContext(),
+															)}
 													</TableHead>
 												))}
 											</TableRow>
@@ -1032,7 +1026,7 @@ export default function Home() {
 																<TableCell key={cell.id}>
 																	{
 																		row.original.dates[
-																			cell.column.columnDef.header as string
+																		cell.column.columnDef.header as string
 																		]
 																	}
 																</TableCell>
@@ -1076,9 +1070,8 @@ export default function Home() {
 							</div>
 						</div>
 						<div
-							className={`w-full  ${
-								activeTab === 'dashboard' ? '' : 'hidden'
-							}`}>
+							className={`w-full  ${activeTab === 'dashboard' ? '' : 'hidden'
+								}`}>
 							<h1 className="text-2xl font-bold">Neraca Pangan</h1>
 							<div className="flex items-center py-4">
 								<Input
@@ -1136,7 +1129,7 @@ export default function Home() {
 																header.id === 'commodity'
 																	? 1
 																	: Object.values(showHeader).filter(Boolean)
-																			.length
+																		.length
 															} // Mengatur rowSpan berdasarkan kondisi
 														>
 															{header.column.columnDef.header as string}
@@ -1154,9 +1147,9 @@ export default function Home() {
 																			showHeader.kebutuhan
 																				? { border: '1px solid black' }
 																				: {
-																						border: '1px solid black',
-																						display: 'none',
-																				  }
+																					border: '1px solid black',
+																					display: 'none',
+																				}
 																		}
 																		key={`${header.id}-kebutuhan`}>
 																		Kebutuhan
@@ -1166,9 +1159,9 @@ export default function Home() {
 																			showHeader.ketersediaan
 																				? { border: '1px solid black' }
 																				: {
-																						border: '1px solid black',
-																						display: 'none',
-																				  }
+																					border: '1px solid black',
+																					display: 'none',
+																				}
 																		}
 																		key={`${header.id}-ketersediaan`}>
 																		Ketersediaan
@@ -1178,9 +1171,9 @@ export default function Home() {
 																			showHeader.defisit
 																				? { border: '1px solid black' }
 																				: {
-																						border: '1px solid black',
-																						display: 'none',
-																				  }
+																					border: '1px solid black',
+																					display: 'none',
+																				}
 																		}
 																		key={`${header.id}-defisit`}>
 																		Defisit
@@ -1201,44 +1194,44 @@ export default function Home() {
 													<TableCell style={{ border: '1px solid black' }}>
 														{row.original.commodity}
 													</TableCell>
-													{row.original.dates &&
-														Object.keys(row.original.dates).map((date) => (
+													{row.original.months &&
+														Object.keys(row.original.months).map((date) => (
 															<>
 																<TableCell
 																	style={
 																		showHeader.kebutuhan
 																			? { border: '1px solid black' }
 																			: {
-																					border: '1px solid black',
-																					display: 'none',
-																			  }
+																				border: '1px solid black',
+																				display: 'none',
+																			}
 																	}
 																	className="text-right">
-																	{row.original.dates[date].kebutuhan}
+																	{row.original.months[date].kebutuhan}
 																</TableCell>
 																<TableCell
 																	style={
 																		showHeader.ketersediaan
 																			? { border: '1px solid black' }
 																			: {
-																					border: '1px solid black',
-																					display: 'none',
-																			  }
+																				border: '1px solid black',
+																				display: 'none',
+																			}
 																	}
 																	className="text-right">
-																	{row.original.dates[date].ketersediaan}
+																	{row.original.months[date].ketersediaan}
 																</TableCell>
 																<TableCell
 																	style={
 																		showHeader.defisit
 																			? { border: '1px solid black' }
 																			: {
-																					border: '1px solid black',
-																					display: 'none',
-																			  }
+																				border: '1px solid black',
+																				display: 'none',
+																			}
 																	}
 																	className="text-right">
-																	{row.original.dates[date].defisit}
+																	{row.original.months[date].defisit}
 																</TableCell>
 															</>
 														))}
