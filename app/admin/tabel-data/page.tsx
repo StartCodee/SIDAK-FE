@@ -3,639 +3,1278 @@
 
 import * as React from "react";
 import {
-    ColumnDef,
-    ColumnFiltersState,
-    SortingState,
-    VisibilityState,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
+	ColumnDef,
+	ColumnFiltersState,
+	SortingState,
+	VisibilityState,
+	flexRender,
+	getCoreRowModel,
+	getFilteredRowModel,
+	getPaginationRowModel,
+	getSortedRowModel,
+	useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
-
+import { ChevronDown } from "lucide-react";
+import Swal from "sweetalert2";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { useToast } from '@/components/ui/use-toast';
+
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
 } from "@/components/ui/table";
 import DefaultLayout from "@/components/admin/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/admin/Breadcrumbs/Breadcrumb";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-import CheckboxFive from "@/components/admin/Checkboxes/CheckboxFive";
-import CheckboxFour from "@/components/admin/Checkboxes/CheckboxFour";
 import CheckboxOne from "@/components/admin/Checkboxes/CheckboxOne";
-import CheckboxThree from "@/components/admin/Checkboxes/CheckboxThree";
-import CheckboxTwo from "@/components/admin/Checkboxes/CheckboxTwo";
+import Cookies from 'js-cookie';
+
+import { addDays, format } from "date-fns"
+import { Calendar as CalendarIcon } from "lucide-react"
+import { DateRange } from "react-day-picker"
+
+import { cn } from "@/lib/utils"
+import { Calendar } from "@/components/ui/calendar"
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover"
 
 export type Commodity = {
-    commodity: string;
-    dates: Record<string, number>;
+	commodity: string;
+	dates: Record<string, number>;
 };
 
 export type CommodityNeraca = {
-    commodity: string;
-    dates: Record<string, { kebutuhan: number, ketersediaan: number; defisit: number }>;
+	commodity: string;
+	months: Record<string, { kebutuhan: number, ketersediaan: number; defisit: number }>;
 };
 // Sample data
-const data: Commodity[] = [
-    {
-        commodity: "Beras Premium",
-        dates: {
-            "10/02/2023": 0,
-            "11/02/2023": 0,
-            "12/02/2023": 0,
-            "13/02/2023": 0,
-            "14/02/2023": 0,
-            "15/02/2023": 0,
-        },
-    },
-    {
-        commodity: "Daging Ayam",
-        dates: {
-            "10/02/2023": 0,
-            "11/02/2023": 0,
-            "12/02/2023": 0,
-            "13/02/2023": 0,
-            "14/02/2023": 0,
-            "15/02/2023": 0,
-        },
-    },
-    // Add other commodities similarly...
-];
 
+interface CommodityOption {
+	value: number;
+	label: string;
+}
 
-const dataNeraca: CommodityNeraca[] = [
-    {
-        commodity: "Beras Premium",
-        dates: {
-            "10/02/2022": { kebutuhan: 1, ketersediaan: 150, defisit: 200 },
-            "11/02/2022": { kebutuhan: 1, ketersediaan: 0, defisit: 0 },
-            "12/02/2022": { kebutuhan: 1, ketersediaan: 0, defisit: 0 },
-        },
-    },
-    {
-        commodity: "Daging",
-        dates: {
-            "10/02/2022": { kebutuhan: 1, ketersediaan: 150, defisit: 200 },
-            "11/02/2022": { kebutuhan: 1, ketersediaan: 0, defisit: 0 },
-            "12/02/2022": { kebutuhan: 1, ketersediaan: 0, defisit: 0 },
-        },
-    },
-    // Add other commodities similarly...
-];
+type ShowHeaderKeys = 'kebutuhan' | 'ketersediaan' | 'defisit';
 
 
 export default function Home() {
+	const { toast } = useToast();
 
-    // Define columns based on the data structure
-    const columns: ColumnDef<Commodity>[] = [
-        {
-            accessorKey: "commodity",
-            header: "Komoditas",
-        },
-        {
-            accessorKey: "dates['10/02/2023']",
-            header: "10/02/2023",
-        },
-        {
-            accessorKey: "dates['11/02/2023']",
-            header: "11/02/2023",
-        },
-        {
-            accessorKey: "dates['12/02/2023']",
-            header: "12/02/2023",
-        },
+	const [checkboxState, setCheckboxState] = useState<{
+		[key: string]: boolean;
+	}>({}); // Menggunakan index signature
+	const [checkboxStateNeraca, setCheckboxStateNeraca] = useState<{
+		[key: string]: boolean;
+	}>({}); // Menggunakan index signature
 
-    ];
+	const [date, setDate] = React.useState<DateRange | undefined>({
+		from: new Date(),
+		to: addDays(new Date(), 20),
+	});
 
-    const columnsNeraca: ColumnDef<CommodityNeraca>[] = [
+	const [dateNeraca, setDateNeraca] = React.useState<DateRange | undefined>({
+		from: new Date(),
+		to: addDays(new Date(), 20),
+	});
 
-        {
-            accessorKey: "dates['10/02/2022']",
-            header: "10/02/2022",
-        },
-        {
-            accessorKey: "dates['11/02/2022']",
-            header: "11/02/2022",
-        },
+	const [dateRange, setDateRange] = useState([null, null]);
+	const [startDate, endDate] = dateRange;
 
-        {
-            accessorKey: "dates['12/02/2022']",
-            header: "12/02/2022",
-        },
+	const [selectedKabupaten, setSelectedKabupaten] = useState('');
+	const [selectedKecamatan, setSelectedKecamatan] = useState('');
 
+	const [columns, setColumns] = useState<ColumnDef<Commodity>[]>([]);
+	const [columnsNeraca, setColumnsNeraca] = useState<
+		ColumnDef<CommodityNeraca>[]
+	>([]);
 
-    ];
+	const [data, setData] = useState<Commodity[]>([]);
+	const [dataNeraca, setDataNeraca] = useState<CommodityNeraca[]>([]);
 
-    const [activeTab, setActiveTab] = useState('profile');
+	const [activeTab, setActiveTab] = useState('profile');
 
-    const handleTabClick = (tab: string): void => {
-        setActiveTab(tab);
-    };
+	const [selectedKabupatenOption, setSelectedKabupatenOption] = useState<any[]>(
+		[],
+	);
+	const [selectedKecamatanOption, setSelectedKecamatanOption] = useState<any[]>(
+		[],
+	);
+	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>(
+		[],
+	);
 
-    const [sorting, setSorting] = React.useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-    const [rowSelection, setRowSelection] = React.useState({});
+	const [selectedKabupatenOptionNeraca, setSelectedKabupatenOptionNeraca] =
+		useState<any[]>([]);
+	const [selectedKecamatanOptionNeraca, setSelectedKecamatanOptionNeraca] =
+		useState<any[]>([]);
+	const [selectedCommodityOptionNeraca, setSelectedCommodityOptionNeraca] =
+		useState<any[]>([]);
 
-    const table = useReactTable({
-        data,
-        columns,
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
-        state: {
-            sorting,
-            columnFilters,
-            columnVisibility,
-            rowSelection,
-        },
-    });
+	const [selectedKabupatenNeraca, setSelectedKabupatenNeraca] = useState('');
+	const [selectedKecamatanNeraca, setSelectedKecamatanNeraca] = useState('');
 
+	const [role, setRole] = useState('');
+	const [userKabupaten, setUserKabupaten] = useState<number>();
 
-    const [sortingNeraca, setSortingNeraca] = React.useState<SortingState>([]);
-    const [columnFiltersNeraca, setColumnFiltersNeraca] = React.useState<ColumnFiltersState>([]);
-    const [columnVisibilityNeraca, setColumnVisibilityNeraca] = React.useState<VisibilityState>({});
-    const [rowSelectionNeraca, setRowSelectionNeraca] = React.useState({});
+	const [showHeader, setShowHeader] = useState<{
+		kebutuhan: boolean;
+		ketersediaan: boolean;
+		defisit: boolean;
+	}>({
+		kebutuhan: true,
+		ketersediaan: true,
+		defisit: true,
+	});
 
-    const tableNeraca = useReactTable({
-        data: dataNeraca,
-        columns: columnsNeraca,
-        onSortingChange: setSortingNeraca,
-        onColumnFiltersChange: setColumnFiltersNeraca,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        onColumnVisibilityChange: setColumnVisibilityNeraca,
-        onRowSelectionChange: setRowSelectionNeraca,
-        state: {
-            sorting: sortingNeraca,
-            columnFilters: columnFiltersNeraca,
-            columnVisibility: columnVisibilityNeraca,
-            rowSelection: rowSelectionNeraca,
-        },
-    });
+	const handleTabClick = (tab: string): void => {
+		setActiveTab(tab);
+	};
 
-    const handleCheckboxChange = (key: string) => {
-        setColumnVisibilityNeraca((prev) => ({
-            ...prev,
-            [key]: !prev[key],
-        }));
-    };
+	const [sorting, setSorting] = React.useState<SortingState>([]);
+	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+		[],
+	);
+	const [columnVisibility, setColumnVisibility] =
+		React.useState<VisibilityState>({});
+	const [rowSelection, setRowSelection] = React.useState({});
 
-    return (
-        <>
-            <DefaultLayout>
-                <Breadcrumb pageName="Tabel Data" />
-                <div className=" grid grid-cols-4 gap-4">
-                    <div style={{ flex: 2 }} className=" ">
-                        <div className="flex gap-4 justify-between">
-                            <button
-                                className={`flex-1 inline-flex ${activeTab === 'profile' ? 'bg-[#37B5FE] text-white' : 'text-[#37B5FE] border-2 border-[#37B5FE]'}  justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md   hover:-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
-                                id="profile-tab"
-                                type="button"
-                                role="tab"
-                                aria-controls="profile"
-                                aria-selected={activeTab === 'profile'}
-                                onClick={() => handleTabClick('profile')}
-                            >
-                                Harga Pangan
-                            </button>
-                            <button
-                                className={`flex-1 inline-flex ${activeTab === 'dashboard' ? 'bg-[#37B5FE] text-white' : 'text-[#37B5FE] border-2 border-[#37B5FE]'}  justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md   hover:-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
-                                id="dashboard-tab"
-                                type="button"
-                                role="tab"
-                                aria-controls="dashboard"
-                                aria-selected={activeTab === 'dashboard'}
-                                onClick={() => handleTabClick('dashboard')}
-                            >
-                                Neraca Pangan
-                            </button>
-                        </div>
-                        <div>
-                            <div id="default-tab-content">
-                                <div
-                                    className={`mt-6 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'profile' ? '' : 'hidden'}`}
-                                    id="profile"
-                                    role="tabpanel"
-                                    aria-labelledby="profile-tab"
-                                >
-                                    <div className=" bg-white rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
-                                        <div>
-                                            <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
-                                                Kabupaten/Kota
-                                            </label>
-                                            <select
-                                                id="location"
-                                                name="location"
-                                                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            >
-                                                <option>Kabupaten/Kota</option>
-                                            </select>
-                                        </div>
-                                        <div className="mt-5">
-                                            <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
-                                                Kecamatan
-                                            </label>
-                                            <select
-                                                id="location"
-                                                name="location"
-                                                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            >
-                                                <option>Kecamatan</option>
-                                            </select>
-                                        </div>
-                                        <div className="mt-5">
-                                            <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
-                                                Periode
-                                            </label>
-                                            <select
-                                                id="location"
-                                                name="location"
-                                                defaultValue="Canada"
-                                                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            >
-                                                <option>Periode</option>
-                                            </select>
-                                        </div>
-                                        <div className="mt-5">
-                                            <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
-                                                Komoditas
-                                            </label>
-                                            <div className="mt-2">
-                                                <CheckboxOne text="Beras Premium" />
-                                            </div>
-                                            <div className="mt-2">
-                                                <CheckboxOne text="Daging Sapi" />
-                                            </div>
-                                            <div className="mt-2">
-                                                <CheckboxOne text="Daging Ayam" />
-                                            </div>
-                                        </div>
-                                        <button className="mt-5 bg-[#37B5FE] w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white  hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                            Submit
-                                        </button>
-                                    </div>
-                                </div>
-                                <div
-                                    className={`mt-6 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'dashboard' ? '' : 'hidden'}`}
-                                    id="dashboard"
-                                    role="tabpanel"
-                                    aria-labelledby="dashboard-tab"
-                                >
-                                    <div className=" bg-white rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
-                                        <div>
-                                            <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
-                                                Kabupaten/Kota
-                                            </label>
-                                            <select
-                                                id="location"
-                                                name="location"
-                                                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            >
-                                                <option>Kabupaten/Kota</option>
-                                            </select>
-                                        </div>
-                                        <div className="mt-5">
-                                            <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
-                                                Kecamatan
-                                            </label>
-                                            <select
-                                                id="location"
-                                                name="location"
-                                                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            >
-                                                <option>Kecamatan</option>
-                                            </select>
-                                        </div>
-                                        <div className="mt-5">
-                                            <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
-                                                Periode
-                                            </label>
-                                            <select
-                                                id="location"
-                                                name="location"
-                                                defaultValue="Canada"
-                                                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                            >
-                                                <option>Periode</option>
-                                            </select>
-                                        </div>
-                                        <div className="mt-5">
-                                            <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
-                                                Komoditas
-                                            </label>
-                                            <div className="mt-2">
-                                                <CheckboxOne text="Beras Premium" />
-                                            </div>
-                                            <div className="mt-2">
-                                                <CheckboxOne text="Daging Sapi" />
-                                            </div>
-                                            <div className="mt-2">
-                                                <CheckboxOne text="Daging Ayam" />
-                                            </div>
-                                        </div>
-                                        <hr className="w-full h-1 mx-auto my-4 bg-slate-500 border-0 rounded md:my-10 dark:bg-gray-700" />
-                                        <div className="">
-                                            <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
-                                                Tampilkan
-                                            </label>
-                                            <div className="mt-2">
-                                                <CheckboxOne text="Kebutuhan" />
-                                            </div>
-                                            <div className="mt-2">
-                                                <CheckboxOne text="Ketersediaan" />
-                                            </div>
-                                            <div className="mt-2">
-                                                <CheckboxOne text="Defisit" />
-                                            </div>
-                                        </div>
-                                        <button className="mt-5 bg-[#37B5FE] w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white  hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                            Submit
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div  className="col-span-3 bg-white rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
-                        <div className={`w-full  ${activeTab === 'profile' ? '' : 'hidden'}`}>
-                            <h1 className="text-2xl font-bold">Harga Pangan</h1>
-                            <div className="flex items-center py-4">
-                                <Input
-                                    placeholder="Filter commodities..."
-                                    value={(table.getColumn("commodity")?.getFilterValue() as string) ?? ""}
-                                    onChange={(event) =>
-                                        table.getColumn("commodity")?.setFilterValue(event.target.value)
-                                    }
-                                    className="max-w-sm"
-                                />
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" className="ml-auto">
-                                            Columns <ChevronDown className="ml-2 h-4 w-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                        {table.getAllColumns().filter((column) => column.getCanHide()).map((column) => (
-                                            <DropdownMenuCheckboxItem
-                                                key={column.id}
-                                                className="capitalize"
-                                                checked={column.getIsVisible()}
-                                                onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                                            >
-                                                {column.id}
-                                            </DropdownMenuCheckboxItem>
-                                        ))}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
-                            <div className="rounded-md border">
-                                <Table>
-                                    <TableHeader>
-                                        {table.getHeaderGroups().map((headerGroup) => (
-                                            <TableRow key={headerGroup.id}>
-                                                {headerGroup.headers.map((header) => (
-                                                    <TableHead key={header.id}>
-                                                        {header.isPlaceholder ? null : flexRender(
-                                                            header.column.columnDef.header,
-                                                            header.getContext()
-                                                        )}
-                                                    </TableHead>
-                                                ))}
-                                            </TableRow>
-                                        ))}
-                                    </TableHeader>
-                                    <TableBody>
-                                        {table.getRowModel().rows?.length ? (
-                                            table.getRowModel().rows.map((row) => (
-                                                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                                                    {row.getVisibleCells().map((cell, key) => (
-                                                        key === 0 ? (
-                                                            <TableCell key={cell.id}>
-                                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                                            </TableCell>
-                                                        ) : (
-                                                            <TableCell key={cell.id}>
-                                                                {row.original.dates[cell.column.columnDef.header as string]}
-                                                            </TableCell>
-                                                        )
-                                                    ))}
-                                                </TableRow>
-                                            ))
-                                        ) : (
-                                            <TableRow>
-                                                <TableCell colSpan={columns.length} className="h-24 text-center">
-                                                    No results.
-                                                </TableCell>
-                                            </TableRow>
-                                        )}
-                                    </TableBody>
-                                </Table>
-                            </div>
-                            <div className="flex items-center justify-end space-x-2 py-4">
-                                <div className="flex-1 text-sm text-muted-foreground">
-                                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                                    {table.getFilteredRowModel().rows.length} row(s) selected.
-                                </div>
-                                <div className="space-x-2">
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => table.previousPage()}
-                                        disabled={!table.getCanPreviousPage()}
-                                    >
-                                        Previous
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => table.nextPage()}
-                                        disabled={!table.getCanNextPage()}
-                                    >
-                                        Next
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className={`w-full  ${activeTab === 'dashboard' ? '' : 'hidden'}`}>
-                            <h1 className="text-2xl font-bold">Neraca Pangan</h1>
-                            <div className="flex items-center py-4">
-                                <Input
-                                    placeholder="Filter commodities..."
-                                    value={(table.getColumn("commodity")?.getFilterValue() as string) ?? ""}
-                                    onChange={(event) =>
-                                        table.getColumn("commodity")?.setFilterValue(event.target.value)
-                                    }
-                                    className="max-w-sm"
-                                />
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" className="ml-auto">
-                                            Columns <ChevronDown className="ml-2 h-4 w-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                        {table.getAllColumns().filter((column) => column.getCanHide()).map((column) => (
-                                            <DropdownMenuCheckboxItem
-                                                key={column.id}
-                                                className="capitalize"
-                                                checked={column.getIsVisible()}
-                                                onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                                            >
-                                                {column.id}
-                                            </DropdownMenuCheckboxItem>
-                                        ))}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
-                            <div className="rounded-md border">
-                                <Table>
-                                    <TableHeader>
-                                        {tableNeraca.getHeaderGroups().map((headerGroup) => (
-                                            <>
-                                                {/* Header for Komoditas */}
-                                                <TableRow key={headerGroup.id}>
-                                                    <TableHead style={{ border: '1px solid black' }} key="komoditas-header" rowSpan={2}>
-                                                        Komoditas
-                                                    </TableHead>
-                                                    {headerGroup.headers.map((header) => (
-                                                        <TableHead style={{ border: '1px solid black' }} key={header.id} colSpan={3} className="text-center">
-                                                            {header.column.columnDef.header as string}
-                                                        </TableHead>
-                                                    ))}
-                                                </TableRow>
-                                                {/* Header for Tanggal, Ketersediaan, and Defisit */}
-                                                <TableRow key={`${headerGroup.id}-subheader`}>
-                                                    {headerGroup.headers.map((header) => (
-                                                        <>
-                                                            <TableHead style={{ border: '1px solid black' }} key={`${header.id}-kebutuhan`}>
-                                                                Kebutuhan
-                                                            </TableHead>
-                                                            <TableHead style={{ border: '1px solid black' }} key={`${header.id}-ketersediaan`}>
-                                                                Ketersediaan
-                                                            </TableHead>
-                                                            <TableHead style={{ border: '1px solid black' }} key={`${header.id}-defisit`}>
-                                                                Defisit
-                                                            </TableHead>
-                                                        </>
-                                                    ))}
-                                                </TableRow>
-                                            </>
-                                        ))}
-                                    </TableHeader>
-                                    <TableBody>
-                                        {tableNeraca.getRowModel().rows?.length ? (
-                                            tableNeraca.getRowModel().rows.map((row) => (
-                                                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                                                    <TableCell style={{ border: '1px solid black' }}>
-                                                        {row.original.commodity}
-                                                    </TableCell>
-                                                    {
-                                                        row.original.dates && Object.keys(row.original.dates).map((date) => (
-                                                            <>
-                                                                <TableCell style={{ border: '1px solid black' }} className="text-right">
-                                                                    {row.original.dates[date].kebutuhan}
-                                                                </TableCell>
-                                                                <TableCell style={{ border: '1px solid black' }} className="text-right">
-                                                                    {row.original.dates[date].ketersediaan}
-                                                                </TableCell>
-                                                                <TableCell style={{ border: '1px solid black' }} className="text-right">
-                                                                    {row.original.dates[date].defisit}
-                                                                </TableCell>
-                                                            </>
-                                                        ))
-                                                    }
-                                                </TableRow>
-                                            ))
-                                        ) : (
-                                            <TableRow>
-                                                <TableCell colSpan={columnsNeraca.length} className="h-24 text-center">
-                                                    No results.
-                                                </TableCell>
-                                            </TableRow>
-                                        )}
-                                    </TableBody>
-                                    {/* <TableBody>
-                                        {table.getRowModel().rows?.length ? (
-                                            table.getRowModel().rows.map((row) => (
-                                                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                                                    {row.getVisibleCells().map((cell, key) => (
-                                                        key === 0 ? (
-                                                            <TableCell key={cell.id}>
-                                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                                            </TableCell>
-                                                        ) : (
-                                                            <TableCell key={cell.id}>
-                                                                {row.original.dates[cell.column.columnDef.header as string]}
-                                                            </TableCell>
-                                                        )
-                                                    ))}
-                                                </TableRow>
-                                            ))
-                                        ) : (
-                                            <TableRow>
-                                                <TableCell colSpan={columns.length} className="h-24 text-center">
-                                                    No results.
-                                                </TableCell>
-                                            </TableRow>
-                                        )}
-                                    </TableBody> */}
-                                </Table>
-                            </div>
-                            <div className="flex items-center justify-end space-x-2 py-4">
-                                <div className="flex-1 text-sm text-muted-foreground">
-                                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                                    {table.getFilteredRowModel().rows.length} row(s) selected.
-                                </div>
-                                <div className="space-x-2">
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => table.previousPage()}
-                                        disabled={!table.getCanPreviousPage()}
-                                    >
-                                        Previous
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => table.nextPage()}
-                                        disabled={!table.getCanNextPage()}
-                                    >
-                                        Next
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </DefaultLayout>
-        </>
-    );
+	const table = useReactTable({
+		data,
+		columns,
+		onSortingChange: setSorting,
+		onColumnFiltersChange: setColumnFilters,
+		getCoreRowModel: getCoreRowModel(),
+		getPaginationRowModel: getPaginationRowModel(),
+		getSortedRowModel: getSortedRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
+		onColumnVisibilityChange: setColumnVisibility,
+		onRowSelectionChange: setRowSelection,
+		state: {
+			sorting,
+			columnFilters,
+			columnVisibility,
+			rowSelection,
+		},
+	});
+
+	const [sortingNeraca, setSortingNeraca] = React.useState<SortingState>([]);
+	const [columnFiltersNeraca, setColumnFiltersNeraca] =
+		React.useState<ColumnFiltersState>([]);
+	const [columnVisibilityNeraca, setColumnVisibilityNeraca] =
+		React.useState<VisibilityState>({});
+	const [rowSelectionNeraca, setRowSelectionNeraca] = React.useState({});
+
+	const tableNeraca = useReactTable({
+		data: dataNeraca,
+		columns: columnsNeraca,
+		onSortingChange: setSortingNeraca,
+		onColumnFiltersChange: setColumnFiltersNeraca,
+		getCoreRowModel: getCoreRowModel(),
+		getPaginationRowModel: getPaginationRowModel(),
+		getSortedRowModel: getSortedRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
+		onColumnVisibilityChange: setColumnVisibilityNeraca,
+		onRowSelectionChange: setRowSelectionNeraca,
+		state: {
+			sorting: sortingNeraca,
+			columnFilters: columnFiltersNeraca,
+			columnVisibility: columnVisibilityNeraca,
+			rowSelection: rowSelectionNeraca,
+		},
+	});
+
+	const handleCheckboxChange = (key: ShowHeaderKeys) => {
+		setShowHeader((prevState) => ({
+			...prevState,
+			[key]: !prevState[key as keyof typeof prevState],
+		}));
+	};
+
+	const getHargaPanganData = async (
+		page: number = 1,
+		limit: number = 2,
+		start_date: string,
+		end_date: string,
+		komoditas: string,
+		kota: string,
+		kecamatan: string,
+	) => {
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/harga-pangan?start_date=${start_date}&end_date=${end_date}&komoditas=${komoditas}&kabupaten_kota_id=${kota}&kecamatan_id=${kecamatan}`,
+				{
+					headers: {
+						'content-type': 'application/json',
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
+					},
+				},
+			);
+			if (response.data.data) {
+				let headers = response.data.data.header;
+				const columns = [
+					{
+						accessorKey: 'commodity',
+						header: 'Komoditas',
+					},
+					...headers.map((date: any) => ({
+						accessorKey: `dates['${date}']`,
+						header: date,
+					})),
+				];
+				setColumns(columns);
+				setData(response.data.data.body[0]);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			}
+		}
+	};
+
+	const getNeracaPanganData = async (
+		page: number = 1,
+		limit: number = 2,
+		start_date: string,
+		end_date: string,
+		komoditas: string,
+		kota: string,
+		kecamatan: string,
+	) => {
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/neraca-pangan?start_date=${start_date}&end_date=${end_date}&komoditas=${komoditas}&kabupaten_kota_id=${kota}`,
+				{
+					headers: {
+						'content-type': 'application/json',
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
+					},
+				},
+			);
+			if (response.data.data) {
+				let headers = response.data.data.header;
+
+				const columns = [
+					{
+						accessorKey: 'commodity',
+						header: 'Komoditas',
+					},
+					...headers.map((date: any) => ({
+						accessorKey: `dates['${date}']`,
+						header: date,
+					})),
+				];
+
+				setDataNeraca(response.data.data.body);
+				setColumnsNeraca(columns);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			}
+		}
+	};
+
+	const getCommodityOption = async (page: number = 1, limit: number = 2) => {
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/commodities`,
+				{
+					headers: {
+						'content-type': 'application/json',
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
+					},
+				},
+			);
+			if (response.data.data) {
+				const mappedOptions = response.data.data.map(
+					(kabupaten: { name: string; id: number }) => ({
+						value: kabupaten.id,
+						label: kabupaten.name,
+					}),
+				);
+				setSelectedCommodityOption(mappedOptions);
+				setSelectedCommodityOptionNeraca(mappedOptions);
+
+				const initialCheckboxState: { [key: number]: boolean } = {}; // Mendefinisikan tipe untuk initialCheckboxState
+				mappedOptions.forEach((option: CommodityOption) => {
+					initialCheckboxState[option.value] = true; // Set all checkboxes to unchecked initially
+				});
+				setCheckboxState(initialCheckboxState);
+				setCheckboxStateNeraca(initialCheckboxState);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			}
+		}
+	};
+
+	const getKabupatenOption = async (page: number = 1, limit: number = 2) => {
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kabupaten`,
+				{
+					headers: {
+						'content-type': 'application/json',
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
+					},
+				},
+			);
+			if (response.data.data) {
+				const mappedOptions = response.data.data.map(
+					(kabupaten: { name: string; id: number }) => ({
+						value: kabupaten.id,
+						label: kabupaten.name,
+					}),
+				);
+				setSelectedKabupatenOption(mappedOptions);
+				setSelectedKabupatenOptionNeraca(mappedOptions);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			}
+		}
+	};
+
+	const getKecamatanOption = async (
+		page: number = 1,
+		limit: number = 2,
+		kabupatenId: string,
+	) => {
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kecamatan?kabupaten_id=${kabupatenId}`,
+				{
+					headers: {
+						'content-type': 'application/json',
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
+					},
+				},
+			);
+			if (response.data.data) {
+				const mappedOptions = response.data.data.map(
+					(kecamatan: { name: string; code: number }) => ({
+						value: kecamatan.code,
+						label: kecamatan.name,
+					}),
+				);
+				setSelectedKecamatanOption(mappedOptions);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			}
+		}
+	};
+
+	const getKecamatanOptionNeraca = async (
+		page: number = 1,
+		limit: number = 2,
+		kabupatenId: string,
+	) => {
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kecamatan?kabupaten_id=${kabupatenId}`,
+				{
+					headers: {
+						'content-type': 'application/json',
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
+					},
+				},
+			);
+			if (response.data.data) {
+				const mappedOptions = response.data.data.map(
+					(kecamatan: { name: string; id: number }) => ({
+						value: kecamatan.id,
+						label: kecamatan.name,
+					}),
+				);
+				setSelectedKecamatanOption(mappedOptions);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			}
+		}
+	};
+
+	const handleCheckboxChangeCommodity = (value: number) => {
+		// Ubah tipe value ke number
+		setCheckboxState((prevState) => ({
+			...prevState,
+			[value]: !prevState[value], // Toggle checkbox state
+		}));
+	};
+
+	const handleCheckboxChangeCommodityNeraca = (value: number) => {
+		console.log('masuknya kesini');
+		// Ubah tipe value ke number
+		setCheckboxStateNeraca((prevState) => ({
+			...prevState,
+			[value]: !prevState[value], // Toggle checkbox state
+		}));
+	};
+
+	const handleSubmitHargaPangan = () => {
+		// console.log(selectedKabupaten, selectedKecamatan, date, checkboxState);
+		if (date) {
+			const start_date = date.from?.toISOString().split('T')[0]; // Format YYYY-MM-DD
+			const end_date = date.to?.toISOString().split('T')[0]; // Format YYYY-MM-DD
+
+			const checkedKeys = Object.keys(checkboxState)
+				.filter((key) => checkboxState[key]) // Memfilter hanya yang bernilai true
+				.join(',');
+			console.log(
+				checkedKeys,
+				selectedKabupaten,
+				selectedKecamatan,
+				start_date,
+				end_date,
+			);
+
+			getHargaPanganData(
+				1,
+				2,
+				start_date as any,
+				end_date as any,
+				checkedKeys,
+				selectedKabupaten,
+				selectedKecamatan,
+			);
+		}
+	};
+
+	const handleSubmitNeracaPangan = () => {
+		if (dateNeraca) {
+			const start_date = dateNeraca.from?.toISOString().split('T')[0]; // Format YYYY-MM-DD
+			const end_date = dateNeraca.to?.toISOString().split('T')[0]; // Format YYYY-MM-DD
+			const checkedKeys = Object.keys(checkboxStateNeraca)
+				.filter((key) => checkboxStateNeraca[key]) // Memfilter hanya yang bernilai true
+				.join(',');
+			getNeracaPanganData(
+				1,
+				2,
+				start_date as any,
+				end_date as any,
+				checkedKeys,
+				selectedKabupatenNeraca,
+				selectedKecamatanNeraca,
+			);
+		}
+	};
+
+	const logout = () => {
+		Cookies.remove('token');
+		Cookies.remove('userEmail');
+		Cookies.remove('userName');
+		Cookies.remove('userId');
+		window.location.href = '/auth';
+	};
+
+	const getRole = () => {
+		axios
+			.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/auth/me`, {
+				headers: { Authorization: `Bearer ${Cookies.get('token')}` },
+			})
+			.then((res) => {
+				setRole(res.data.role);
+				setUserKabupaten(res.data.kabupaten_id);
+			})
+			.catch((err) => {
+				if (err.response && err.response.status === 401) {
+					toast({
+						variant: 'destructive',
+						title: 'Unauthorized',
+						description: 'You are not authorized to perform this action',
+					});
+					logout();
+				} else {
+					toast({
+						title: 'Gagal input data',
+						description: 'Data gagal diinput ke dalam database',
+						variant: 'destructive',
+					});
+				}
+			});
+	};
+
+	useEffect(() => {
+		getHargaPanganData(1, 10, '', '', '', '', '');
+		getNeracaPanganData(1, 10, '', '', '', '', '');
+		getKabupatenOption();
+		getCommodityOption();
+		getRole();
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+	useEffect(() => {
+		if (userKabupaten) {
+			getKecamatanOption(1, 1, userKabupaten as unknown as string);
+		}
+	}, [userKabupaten]);
+	return (
+		<>
+			<DefaultLayout>
+				<Breadcrumb pageName="Tabel Data" />
+				<div className=" grid grid-cols-4 gap-4">
+					<div style={{ flex: 2 }} className=" ">
+						<div className="flex gap-4 justify-between">
+							<button
+								className={`flex-1 inline-flex ${activeTab === 'profile'
+										? 'bg-[#37B5FE] text-white'
+										: 'text-[#37B5FE] border-2 border-[#37B5FE]'
+									}  justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md   hover:-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+								id="profile-tab"
+								type="button"
+								role="tab"
+								aria-controls="profile"
+								aria-selected={activeTab === 'profile'}
+								onClick={() => handleTabClick('profile')}>
+								Harga Pangan
+							</button>
+							<button
+								className={`flex-1 inline-flex ${activeTab === 'dashboard'
+										? 'bg-[#37B5FE] text-white'
+										: 'text-[#37B5FE] border-2 border-[#37B5FE]'
+									}  justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md   hover:-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+								id="dashboard-tab"
+								type="button"
+								role="tab"
+								aria-controls="dashboard"
+								aria-selected={activeTab === 'dashboard'}
+								onClick={() => handleTabClick('dashboard')}>
+								Neraca Pangan
+							</button>
+						</div>
+						<div>
+							<div id="default-tab-content">
+								<div
+									className={`mt-6 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'profile' ? '' : 'hidden'
+										}`}
+									id="profile"
+									role="tabpanel"
+									aria-labelledby="profile-tab">
+									<div className="rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
+										<div>
+											<label
+												htmlFor="location"
+												className="block text-sm font-medium leading-6 text-gray-900">
+												Kabupaten/Kota
+											</label>
+											<select
+												onChange={(e) => {
+													getKecamatanOption(1, 2, e.target.value);
+													setSelectedKabupaten(
+														(e.target as HTMLSelectElement).value,
+													);
+												}}
+												disabled={role == 'KABUPATEN' ? true : false}
+												id="location"
+												name="location"
+												className={`mt-2 block w-full ${role == 'KABUPATEN' ? 'bg-gray' : ''
+													} rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6`}>
+												<option>Kabupaten/Kota</option>
+												{selectedKabupatenOption.map((option) => (
+													<option
+														key={option.value}
+														selected={
+															option.value == userKabupaten ? true : false
+														}
+														value={option.value}>
+														{option.label}
+													</option>
+												))}
+											</select>
+										</div>
+										<div className="mt-5">
+											<label
+												htmlFor="location"
+												className="block text-sm font-medium leading-6 text-gray-900">
+												Kecamatan
+											</label>
+											<select
+												id="location"
+												name="location"
+												onChange={(e) =>
+													setSelectedKecamatan(
+														(e.target as HTMLSelectElement).value,
+													)
+												}
+												className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+												<option>Kecamatan</option>
+												{selectedKecamatanOption.map((option) => (
+													<option key={option.value} value={option.value}>
+														{option.label}
+													</option>
+												))}
+											</select>
+										</div>
+										<div className="mt-5">
+											<label
+												htmlFor="location"
+												className="block text-sm font-medium leading-6 text-gray-900">
+												Periode
+											</label>
+											<div>
+												<Popover>
+													<PopoverTrigger asChild>
+														<Button
+															id="date"
+															variant={'outline'}
+															className={cn(
+																'w-full justify-start text-left font-normal',
+																!date && 'text-muted-foreground',
+															)}>
+															<CalendarIcon className="mr-2 h-4 w-4" />
+															{date?.from ? (
+																date.to ? (
+																	<>
+																		{format(date.from, 'LLL dd, y')} -{' '}
+																		{format(date.to, 'LLL dd, y')}
+																	</>
+																) : (
+																	format(date.from, 'LLL dd, y')
+																)
+															) : (
+																<span>Pick a date</span>
+															)}
+														</Button>
+													</PopoverTrigger>
+													<PopoverContent className="w-auto p-0" align="start">
+														<Calendar
+															initialFocus
+															mode="range"
+															defaultMonth={date?.from}
+															selected={date}
+															onSelect={setDate}
+															numberOfMonths={2}
+														/>
+													</PopoverContent>
+												</Popover>
+											</div>
+										</div>
+										<div className="mt-5">
+											<label
+												htmlFor="location"
+												className="block text-sm font-medium leading-6 text-gray-900">
+												Komoditas
+											</label>
+											{selectedCommodityOption.map((option) => (
+												<CheckboxOne
+													key={option.value}
+													text={option.label}
+													name={'komoditas'}
+													value={option.value}
+													checked={checkboxState[option.value] || false} // Use checkboxState to determine if checked
+													onChange={() =>
+														handleCheckboxChangeCommodity(option.value)
+													}
+												/>
+											))}
+										</div>
+										<button
+											onClick={handleSubmitHargaPangan}
+											className="mt-5 bg-[#37B5FE] w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white  hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+											Submit
+										</button>
+									</div>
+								</div>
+								<div
+									className={`mt-6 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'dashboard' ? '' : 'hidden'
+										}`}
+									id="dashboard"
+									role="tabpanel"
+									aria-labelledby="dashboard-tab">
+									<div className="  rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
+										<div>
+											<label
+												htmlFor="location"
+												className="block text-sm font-medium leading-6 text-gray-900">
+												Kabupaten/Kota
+											</label>
+											<select
+												id="location"
+												name="location"
+												onChange={(e) => {
+													getKecamatanOptionNeraca(1, 2, e.target.value);
+													setSelectedKabupatenNeraca(
+														(e.target as HTMLSelectElement).value,
+													);
+												}}
+												disabled={role == 'KABUPATEN' ? true : false}
+												className={`mt-2 block w-full ${role == 'KABUPATEN' ? 'bg-gray' : ''
+													} rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6`}>
+												<option>Kabupaten/Kota</option>
+												{selectedKabupatenOption.map((option) => (
+													<option
+														key={option.value}
+														selected={
+															option.value == userKabupaten ? true : false
+														}
+														value={option.value}>
+														{option.label}
+													</option>
+												))}
+											</select>
+										</div>
+										<div className="mt-5">
+											<label
+												htmlFor="location"
+												className="block text-sm font-medium leading-6 text-gray-900">
+												Kecamatan
+											</label>
+											<select
+												id="location"
+												name="location"
+												onChange={(e) =>
+													setSelectedKecamatanNeraca(
+														(e.target as HTMLSelectElement).value,
+													)
+												}
+												className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+												<option>Kecamatan</option>
+												{selectedKecamatanOption.map((option) => (
+													<option key={option.value} value={option.value}>
+														{option.label}
+													</option>
+												))}
+											</select>
+										</div>
+										<div className="mt-5">
+											<label
+												htmlFor="location"
+												className="block text-sm font-medium leading-6 text-gray-900">
+												Periode
+											</label>
+											<div>
+												<Popover>
+													<PopoverTrigger asChild>
+														<Button
+															id="date"
+															variant={'outline'}
+															className={cn(
+																'w-full justify-start text-left font-normal',
+																!dateNeraca && 'text-muted-foreground',
+															)}>
+															<CalendarIcon className="mr-2 h-4 w-4" />
+															{dateNeraca?.from ? (
+																dateNeraca.to ? (
+																	<>
+																		{format(dateNeraca.from, 'LLL dd, y')} -{' '}
+																		{format(dateNeraca.to, 'LLL dd, y')}
+																	</>
+																) : (
+																	format(dateNeraca.from, 'LLL dd, y')
+																)
+															) : (
+																<span>Pick a date</span>
+															)}
+														</Button>
+													</PopoverTrigger>
+													<PopoverContent className="w-auto p-0" align="start">
+														<Calendar
+															initialFocus
+															mode="range"
+															defaultMonth={dateNeraca?.from}
+															selected={dateNeraca}
+															onSelect={setDateNeraca}
+															numberOfMonths={2}
+														/>
+													</PopoverContent>
+												</Popover>
+											</div>
+										</div>
+										<div className="mt-5">
+											<label
+												htmlFor="location"
+												className="block text-sm font-medium leading-6 text-gray-900">
+												Komoditas
+											</label>
+											{selectedCommodityOptionNeraca.map((option) => (
+												<CheckboxOne
+													key={option.value}
+													text={option.label}
+													name={'komoditas-neraca'}
+													value={option.value}
+													checked={checkboxStateNeraca[option.value] || false} // Use checkboxState to determine if checked
+													onChange={() =>
+														handleCheckboxChangeCommodityNeraca(option.value)
+													}
+												/>
+											))}
+										</div>
+										<hr className="w-full h-1 mx-auto my-4 bg-slate-500 border-0 rounded md:my-10 dark:bg-gray-700" />
+										<div className="">
+											<label
+												htmlFor="location"
+												className="block text-sm font-medium leading-6 text-gray-900">
+												Tampilkan
+											</label>
+											<div className="mt-2">
+												<CheckboxOne
+													key={'kebutuhan'}
+													text={'kebutuhan'}
+													name={'showHideHeader'}
+													value={'kebutuhan'}
+													checked={showHeader.kebutuhan}
+													onChange={() => handleCheckboxChange('kebutuhan')}
+												/>
+											</div>
+											<div className="mt-2">
+												<CheckboxOne
+													key={'ketersediaan'}
+													text={'ketersediaan'}
+													name={'showHideHeader'}
+													value={'ketersediaan'}
+													checked={showHeader.ketersediaan}
+													onChange={() => handleCheckboxChange('ketersediaan')}
+												/>
+											</div>
+											<div className="mt-2">
+												<CheckboxOne
+													key={'defisit'}
+													text={'defisit'}
+													name={'showHideHeader'}
+													value={'defisit'}
+													checked={showHeader.defisit}
+													onChange={() => handleCheckboxChange('defisit')}
+												/>
+											</div>
+										</div>
+										<button
+											onClick={handleSubmitNeracaPangan}
+											className="mt-5 bg-[#37B5FE] w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white  hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+											Submit
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className="col-span-3 rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
+						<div
+							className={`w-full  ${activeTab === 'profile' ? '' : 'hidden'}`}>
+							<h1 className="text-2xl font-bold">Harga Pangan</h1>
+							<div className="flex items-center py-4">
+								<Input
+									placeholder="Filter commodities..."
+									value={
+										(table
+											.getColumn('commodity')
+											?.getFilterValue() as string) ?? ''
+									}
+									onChange={(event) =>
+										table
+											.getColumn('commodity')
+											?.setFilterValue(event.target.value)
+									}
+									className="max-w-sm"
+								/>
+								<DropdownMenu>
+									<DropdownMenuTrigger asChild>
+										<Button variant="outline" className="ml-auto">
+											Columns <ChevronDown className="ml-2 h-4 w-4" />
+										</Button>
+									</DropdownMenuTrigger>
+									<DropdownMenuContent align="end">
+										{table
+											.getAllColumns()
+											.filter((column) => column.getCanHide())
+											.map((column) => (
+												<DropdownMenuCheckboxItem
+													key={column.id}
+													className="capitalize"
+													checked={column.getIsVisible()}
+													onCheckedChange={(value) =>
+														column.toggleVisibility(!!value)
+													}>
+													{column.id}
+												</DropdownMenuCheckboxItem>
+											))}
+									</DropdownMenuContent>
+								</DropdownMenu>
+							</div>
+							<div className="rounded-md border">
+								<Table>
+									<TableHeader>
+										{table.getHeaderGroups().map((headerGroup) => (
+											<TableRow key={headerGroup.id}>
+												{headerGroup.headers.map((header) => (
+													<TableHead key={header.id}>
+														{header.isPlaceholder
+															? null
+															: flexRender(
+																header.column.columnDef.header,
+																header.getContext(),
+															)}
+													</TableHead>
+												))}
+											</TableRow>
+										))}
+									</TableHeader>
+									<TableBody>
+										{table.getRowModel().rows?.length ? (
+											table.getRowModel().rows.map((row) => (
+												<TableRow
+													key={row.id}
+													data-state={row.getIsSelected() && 'selected'}>
+													{row
+														.getVisibleCells()
+														.map((cell, key) =>
+															key === 0 ? (
+																<TableCell key={cell.id}>
+																	{flexRender(
+																		cell.column.columnDef.cell,
+																		cell.getContext(),
+																	)}
+																</TableCell>
+															) : (
+																<TableCell key={cell.id}>
+																	{
+																		row.original.dates[
+																		cell.column.columnDef.header as string
+																		]
+																	}
+																</TableCell>
+															),
+														)}
+												</TableRow>
+											))
+										) : (
+											<TableRow>
+												<TableCell
+													colSpan={columns.length}
+													className="h-24 text-center">
+													No results.
+												</TableCell>
+											</TableRow>
+										)}
+									</TableBody>
+								</Table>
+							</div>
+							<div className="flex items-center justify-end space-x-2 py-4">
+								<div className="flex-1 text-sm text-muted-foreground">
+									{table.getFilteredSelectedRowModel().rows.length} of{' '}
+									{table.getFilteredRowModel().rows.length} row(s) selected.
+								</div>
+								<div className="space-x-2">
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => table.previousPage()}
+										disabled={!table.getCanPreviousPage()}>
+										Previous
+									</Button>
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => table.nextPage()}
+										disabled={!table.getCanNextPage()}>
+										Next
+									</Button>
+								</div>
+							</div>
+						</div>
+						<div
+							className={`w-full  ${activeTab === 'dashboard' ? '' : 'hidden'
+								}`}>
+							<h1 className="text-2xl font-bold">Neraca Pangan</h1>
+							<div className="flex items-center py-4">
+								<Input
+									placeholder="Filter commodities..."
+									value={
+										(tableNeraca
+											.getColumn('commodity')
+											?.getFilterValue() as string) ?? ''
+									}
+									onChange={(event) =>
+										tableNeraca
+											.getColumn('commodity')
+											?.setFilterValue(event.target.value)
+									}
+									className="max-w-sm"
+								/>
+								<DropdownMenu>
+									<DropdownMenuTrigger asChild>
+										<Button variant="outline" className="ml-auto">
+											Columns <ChevronDown className="ml-2 h-4 w-4" />
+										</Button>
+									</DropdownMenuTrigger>
+									<DropdownMenuContent align="end">
+										{tableNeraca
+											.getAllColumns()
+											.filter((column) => column.getCanHide())
+											.map((column) => (
+												<DropdownMenuCheckboxItem
+													key={column.id}
+													className="capitalize"
+													checked={column.getIsVisible()}
+													onCheckedChange={(value) =>
+														column.toggleVisibility(!!value)
+													}>
+													{column.id}
+												</DropdownMenuCheckboxItem>
+											))}
+									</DropdownMenuContent>
+								</DropdownMenu>
+							</div>
+							<div className="rounded-md border">
+								<Table>
+									<TableHeader>
+										{tableNeraca.getHeaderGroups().map((headerGroup) => (
+											<>
+												{/* Header for Komoditas */}
+												<TableRow key={headerGroup.id}>
+													{headerGroup.headers.map((header, index) => (
+														<TableHead
+															style={{ border: '1px solid black' }}
+															key={header.id}
+															className="text-center"
+															rowSpan={header.id === 'commodity' ? 2 : 1}
+															colSpan={
+																header.id === 'commodity'
+																	? 1
+																	: Object.values(showHeader).filter(Boolean)
+																		.length
+															} // Mengatur rowSpan berdasarkan kondisi
+														>
+															{header.column.columnDef.header as string}
+														</TableHead>
+													))}
+												</TableRow>
+												{/* Header for Tanggal, Ketersediaan, and Defisit */}
+												<TableRow key={`${headerGroup.id}-subheader`}>
+													{headerGroup.headers.map(
+														(header, index) =>
+															index < headerGroup.headers.length - 1 && ( // Memastikan hanya iterasi hingga panjang - 1
+																<>
+																	<TableHead
+																		style={
+																			showHeader.kebutuhan
+																				? { border: '1px solid black' }
+																				: {
+																					border: '1px solid black',
+																					display: 'none',
+																				}
+																		}
+																		key={`${header.id}-kebutuhan`}>
+																		Kebutuhan
+																	</TableHead>
+																	<TableHead
+																		style={
+																			showHeader.ketersediaan
+																				? { border: '1px solid black' }
+																				: {
+																					border: '1px solid black',
+																					display: 'none',
+																				}
+																		}
+																		key={`${header.id}-ketersediaan`}>
+																		Ketersediaan
+																	</TableHead>
+																	<TableHead
+																		style={
+																			showHeader.defisit
+																				? { border: '1px solid black' }
+																				: {
+																					border: '1px solid black',
+																					display: 'none',
+																				}
+																		}
+																		key={`${header.id}-defisit`}>
+																		Defisit
+																	</TableHead>
+																</>
+															),
+													)}
+												</TableRow>
+											</>
+										))}
+									</TableHeader>
+									<TableBody>
+										{tableNeraca.getRowModel().rows?.length ? (
+											tableNeraca.getRowModel().rows.map((row) => (
+												<TableRow
+													key={row.id}
+													data-state={row.getIsSelected() && 'selected'}>
+													<TableCell style={{ border: '1px solid black' }}>
+														{row.original.commodity}
+													</TableCell>
+													{row.original.months &&
+														Object.keys(row.original.months).map((date) => (
+															<>
+																<TableCell
+																	style={
+																		showHeader.kebutuhan
+																			? { border: '1px solid black' }
+																			: {
+																				border: '1px solid black',
+																				display: 'none',
+																			}
+																	}
+																	className="text-right">
+																	{row.original.months[date].kebutuhan}
+																</TableCell>
+																<TableCell
+																	style={
+																		showHeader.ketersediaan
+																			? { border: '1px solid black' }
+																			: {
+																				border: '1px solid black',
+																				display: 'none',
+																			}
+																	}
+																	className="text-right">
+																	{row.original.months[date].ketersediaan}
+																</TableCell>
+																<TableCell
+																	style={
+																		showHeader.defisit
+																			? { border: '1px solid black' }
+																			: {
+																				border: '1px solid black',
+																				display: 'none',
+																			}
+																	}
+																	className="text-right">
+																	{row.original.months[date].defisit}
+																</TableCell>
+															</>
+														))}
+												</TableRow>
+											))
+										) : (
+											<TableRow>
+												<TableCell
+													colSpan={columnsNeraca.length}
+													className="h-24 text-center">
+													No results.
+												</TableCell>
+											</TableRow>
+										)}
+									</TableBody>
+								</Table>
+							</div>
+							<div className="flex items-center justify-end space-x-2 py-4">
+								<div className="flex-1 text-sm text-muted-foreground">
+									{table.getFilteredSelectedRowModel().rows.length} of{' '}
+									{table.getFilteredRowModel().rows.length} row(s) selected.
+								</div>
+								<div className="space-x-2">
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => table.previousPage()}
+										disabled={!table.getCanPreviousPage()}>
+										Previous
+									</Button>
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => table.nextPage()}
+										disabled={!table.getCanNextPage()}>
+										Next
+									</Button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</DefaultLayout>
+		</>
+	);
 }
