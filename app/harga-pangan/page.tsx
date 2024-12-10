@@ -337,7 +337,7 @@ export default function Home() {
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 				</Button>
 			</div>
-			<section className="px-4 sm:px-8 md:px-10 lg:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+			<section className="px-4 sm:px-8 md:px-10 lg:px-20 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col sm:flex-row justify-between pt-10">
 					<div className="flex-col">
 						<h1 className="text-2xl sm:text-3xl md:text-4xl mb-1 font-extrabold">
@@ -360,15 +360,16 @@ export default function Home() {
 					</div>
 				</div>
 				<br />
-				<h1 className="text-sm m-0 p-0 sm:text-sm md:text-md">
-					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar
-				</h1>
-				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
+				<Badge className="bg-[#3AC1DF] text-xs sm:text-sm md:text-base rounded-full text-white">
+					<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal {formattedDate}
+				</Badge>
 			</section>
-			<section className="px-4 sm:px-8 md:px-10 lg:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+			<section className="px-4 sm:px-8 md:px-10 lg:px-20 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col items-center space-y-8">
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-6xl">
-						{cardContents.map((content, index) => (
+						{loading ? (
+							<HargaPanganSkeleton />
+						) : ( cardContents.map((content, index) => (
 							<div
 								key={index}
 								className="border border-gray-200 p-4 flex justify-between gap-6 rounded-lg shadow-md">
@@ -424,7 +425,7 @@ export default function Home() {
 									)}
 								</div>
 							</div>
-						))}
+						)))}
 					</div>
 					<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
 						Indikator Daerah

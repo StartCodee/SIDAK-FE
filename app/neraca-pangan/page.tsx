@@ -46,7 +46,13 @@ const getCurrentDate = (): string => {
 	return `${year}-${month}-${day}`;
 };
 
+const formatDate = (date: any) => {
+	return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+};
+
 export default function Home() {
+	const today = new Date();
+	const formattedDate = formatDate(today);
 	const [selectedCommodity, setSelectedCommodity] = useState<SingleValue<{ value: string; label: string }> | null>(null);
 	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>([]);
 
@@ -209,10 +215,14 @@ export default function Home() {
 				</Button>
 			</div>
 			<MapNeraca cardContents={cardContents} />
+			
 			<section className="px-4 sm:px-8 lg:px-20 md:px-10 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col items-center space-y-8">
+				<Badge className="bg-[#3AC1DF] self-start text-xs sm:text-sm md:text-base rounded-full text-white">
+					<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal {formattedDate}
+				</Badge>
 					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 px-10 lg:grid-cols-3 xl:grid-cols-4 gap-[2rem] w-full ">
-						{cardContents.map((content, index) => (
+						{loading ? (<NeracaPanganSkeleton />) : ( cardContents.map((content, index) => (
 							
 							<div
 								key={index}
@@ -288,13 +298,10 @@ export default function Home() {
 									)}
 								</div>
 							</div>
-						))}
+						)))}
 					</div>
 				</div>
-				<h1 className="text-sm m-0 p-0 sm:text-sm md:text-md">
-					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar
-				</h1>
-				<div className="h-1 rounded-lg bg-black/10"></div>
+				
 			</section>
 			<Footer />
 		</main>
