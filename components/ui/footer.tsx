@@ -6,7 +6,7 @@ import sulaw from '@/public/sulaw.svg';
 export default function Footer() {
     return (
 			<>
-				<footer className="mt-10 px-4 sm:px-10 py-6 bg-no-repeat bg-cover bg-[url('/footer.png')] text-white">
+			<footer className="mt-10 px-4 sm:px-10 py-6 bg-gradient-to-t from-[#26728B] to-[#3AC1DF] text-white">
 					<div className="flex flex-col md:flex-row justify-between items-center gap-6">
 						<div className="flex flex-col sm:flex-row gap-6 sm:gap-8 w-full lg:w-8/12">
 							<div className="flex items-center gap-4 ">

@@ -1,32 +1,14 @@
-import Image from 'next/image';
-import vector1 from '@/public/vect1.svg';
-import vector2 from '@/public/vect2.svg';
+
 
 export default function Hero () {
     return (
 			<>
-				<div className="relative h-[12rem] flex items-center bg-blend-multiply bg-slate-500 justify-center bg-no-repeat bg-cover bg-[url('/bgg.png')]">
-					<div className="hidden lg:block">
-						<Image
-							src={vector1}
-							alt="vector1"
-							width={300}
-							height={300}
-							objectFit="cover"
-							className="absolute opacity-60 right-0 top-0"
-						/>
-						<Image
-							src={vector2}
-							alt="vector2"
-							width={300}
-							height={300}
-							objectFit="cover"
-							className="absolute drop-shadow-md opacity-25 right-0 top-0"
-						/>
-					</div>
-
+				<div className="relative h-[23rem] flex items-center bg-blend-multiply bg-[#1B8BB673] justify-center bg-no-repeat bg-cover bg-[url('/bgg.png')]">
 					<div className="flex-col mx-auto z-1 items-center ">
-						<p className="text-lg text-center sm:text-2xl md:text-3xl lg:text-3xl  text-white font-semibold">
+						<h1 className="text-lg text-center sm:text-2xl md:text-3xl lg:text-3xl  text-white font-semibold">
+							Selamat Datang di SIDAK
+						</h1>
+						<p className="text-md text-center sm:text-lg md:text-xl lg:text-xl  text-white font-semibold">
 							Sistem Informasi Pengendalian Harga dan Pasokan
 						</p>
 					</div>
