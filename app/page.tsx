@@ -37,6 +37,12 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import {
+	Carousel,
+	CarouselContent,
+	CarouselItem,
+} from "@/components/ui/carousel"
+import Autoplay from "embla-carousel-autoplay"
 
 interface cardContents {
 	city: string;
@@ -758,67 +764,85 @@ export default function Home() {
 				</Button>
 			</div>
 			{selectedValue === 'harga-pangan' && (
-				<section className="px-4 sm:px-8 md:px-10 lg:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
-					<div className="flex flex-col sm:flex-row justify-between pt-10">
+				<section className="px-4 sm:px-2 md:px-4 lg:px-14 pt-4 space-y-4 sm:space-y-4 md:space-y-6">
+					{/* <div className="flex flex-col sm:flex-row justify-between pt-10">
 						<div className="flex-col">
 							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-1 font-extrabold">
 								PETA PERUBAHAN HARGA
 							</h1>
 							<Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
-								<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal{' '}
-								{formattedDate}
+								<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal 22
+								Juli 2024
 							</Badge>
 						</div>
 						<div></div>
-					</div>
-					<div className="flex gap-10 flex-col lg:flex-row justify-around items-center">
+					</div> */}
+					<div className="flex flex-col lg:flex-row items-center">
 						<div className="h-full w-full ">
 							<Map cardContents={cardContents} />
 						</div>
-						<div className="lg:flex-col  flex-col self-center flex flex-wrap gap-4 lg:self-start">
-							{loadingCard ? (
-								<HargaSkeleton />
-							) : (
-								cardContents.slice(0, 5).map((content, index) => (
+					</div>
+					<Badge className="bg-[#3AC1DF] text-xs sm:text-sm md:text-base rounded-full text-white">
+						<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal {formattedDate}
+					</Badge>
+					<Carousel
+						opts={{
+							align: "start",
+						}}
+						plugins={[
+							Autoplay({
+								delay: 2000,
+							}),
+						]}
+						className="w-full"
+					>
+						<CarouselContent>
+
+							{cardContents.map((content, index) => (
+								<CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
 									<Card
 										key={index}
-										className="flex rounded-2xl px-6 py-4 space-x-4 w-[350px]  justify-between placeholder-sky-400 ">
+										className="flex rounded-2xl px-6 items-center shadow-md h-[139px] w-[358px] justify-between placeholder-sky-400 ">
 										<div style={{ flex: 2 }}>
-											<h1 className="text-xs">{content.city}</h1>
-											<p className="text-2xl font-bold">
-												Rp{' '}
-												{Math.round(content?.price as any)
-													.toString()
-													.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-												/Kg
-											</p>
+											<h1 className="text-md">{content.city}</h1>
+											<p className="text-[20px] font-bold">Rp {content.price}/Kg</p>
+											{content.color === '#bf7070' ? (
+												<p>Increase</p>
+											) : content.color === '#f1be5b' ? (
+												<p>Decrease</p>
+											) : (
+												<p>Stable</p>
+											)}
+
 										</div>
-										<div style={{ flex: 1 }} className="flex justify-end">
+										<div className="flex flex-col">
 											<div
-												className={`rounded-md p-0 px-2 m-0 font-bold text-[12px] items-center flex text-white`}
+												className={`rounded-xl p-2 self-center text-center  font-bold text-[12px] items-center flex text-white`}
 												style={{ background: content.color }}>
 												{content.color === '#bf7070' ? (
-													<ArrowUpIcon width={20} height={20} />
+													<ArrowUpIcon width={42} height={42} />
 												) : content.color === '#f1be5b' ? (
-													<ArrowDownIcon width={20} height={20} />
+													<ArrowDownIcon width={42} height={42} />
 												) : (
-													<SymbolIcon width={20} height={20} />
+													<SymbolIcon width={42} height={42} />
 												)}
-												<span className="ml-1">{content.change}</span>
 											</div>
+											{content.change}
 										</div>
+
 									</Card>
-								))
-							)}
-							<Link href="/harga-pangan" className="self-start sm:self-end">
-								<p className="text-xs sm:text-sm self-end md:text-md text-blue-900 font-bold flex items-center">
-									Data Selengkapnya
-									<ChevronRightIcon width={20} height={20} />
-								</p>
-							</Link>
-						</div>
-					</div>
+								</CarouselItem>
+							))}
+						</CarouselContent>
+					</Carousel>
+					<Link href="/harga-pangan" className=" self-start sm:self-end">
+						<p className="text-xs sm:text-sm self-end md:text-md text-blue-900 font-bold flex items-center">
+							Data Selengkapnya
+							<ChevronRightIcon width={20} height={20} />
+						</p>
+					</Link>
 				</section>
+				
 			)}
 			{selectedValue === 'neraca-pangan' && (
 				<>
@@ -871,7 +895,7 @@ export default function Home() {
 					<MapPola flow={filteredFlow} />
 				</>
 			)}
-			<section className=" px-4 sm:px-8 md:px-10 lg:px-50 pt-4 ">
+			<section className=" px-4 sm:px-8 md:px-10 lg:px-20 pt-4 ">
 				<br />
 				<h1 className="text-sm pb-10 p-0 sm:text-sm md:text-md">
 					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar
@@ -969,7 +993,7 @@ export default function Home() {
 						Harga Konsumen Pangan Strategis Sulawesi Tengah
 					</h1>
 					<center>
-						<div className="flex lg:justify-center justify-center items-start self-center  flex-wrap gap-10 ">
+						<div className="flex  justify-center items-start  flex-wrap gap-5 ">
 							{loadingKomoditas ? (
 								<KomoditasSkeleton />
 							) : (
@@ -1000,55 +1024,94 @@ export default function Home() {
 									}
 
 									return (
-										<Card
-											onClick={() => {
-												openDialog(content.city, content.item);
-											}}
-											key={index}
-											className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl cursor-pointer relative">
-											<div className="flex items-center space-x-4">
-												<div>
-													<Image
-														src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${content.image}`}
-														alt="user"
-														width={50}
-														height={50}
-														className="rounded-full"
-													/>
-												</div>
-												<div className="" style={{ height: '80px' }}>
-													<h1 className="ms-2 text-left font-bold text-lg">
-														{content.item.split(' ')[0]}
-													</h1>
-													<p className="text-left ms-2">
-														{content.item.split(' ').slice(1).join(' ')}
-													</p>
-													<p className="text-left ms-2 font-bold">
-														Rp{' '}
+										// <Card
+										// 	onClick={() => {
+										// 		openDialog(content.city, content.item);
+										// 	}}
+										// 	key={index}
+										// 	className="flex-col rounded-3xl w-[18rem] p-4 shadow-xl cursor-pointer relative">
+										// 	<div className="flex items-center space-x-4">
+										// 		<div>
+										// 			<Image
+										// 				src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${content.image}`}
+										// 				alt="user"
+										// 				width={50}
+										// 				height={50}
+										// 				className="rounded-full"
+										// 			/>
+										// 		</div>
+										// 		<div className="" style={{ height: '80px' }}>
+										// 			<h1 className="ms-2 text-left font-bold text-lg">
+										// 				{content.item.split(' ')[0]}
+										// 			</h1>
+										// 			<p className="text-left ms-2">
+										// 				{content.item.split(' ').slice(1).join(' ')}
+										// 			</p>
+										// 			<p className="text-left ms-2 font-bold">
+														// Rp{' '}
+														// {Math.round(content?.price as any)
+														// 	.toString()
+														// 	.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+										// 			</p>
+										// 		</div>
+										// 		<div className="absolute top-2 right-2">
+										// 			<SmallLineChart data={last7DaysData} />
+										// 		</div>
+										// 	</div>
+										// 	<div className="h-1 rounded-lg bg-black/10 my-2"></div>
+										// 	<div className="flex justify-between items-center">
+										// 		<p style={{ fontSize: '12px' }}>{highestVolatility.toFixed(0)}%</p> {/* Tampilkan persentase volatilitas */}
+										// 		<p className="text-xs font-thin">PERCENTAGE VOLATILITY</p>
+										// 		<svg
+										// 			xmlns="http://www.w3.org/2000/svg"
+										// 			viewBox="0 0 24 24"
+										// 			fill="currentColor"
+										// 			className={`size-4 ${bellColor}`}>
+										// 			<path
+										// 				fillRule="evenodd"
+										// 				d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
+										// 				clipRule="evenodd"
+										// 			/>
+										// 		</svg>
+										// 	</div>
+										// </Card>
+										<Card onClick={() => {
+											openDialog(content.city, content.item);
+										}}
+											key={index} className="rounded-3xl p-6 bg-white shadow-lg w-[300px] cursor-pointer">
+											<div className="flex items-center gap-4">
+												<Image
+													src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${content.image}`}
+													alt="user"
+													width={50}
+													height={50}
+													className="rounded-lg"
+												/>
+												<div className='text-left'>
+													<h2 className="text-2xl font-bold">{content.item.split(' ')[0]}</h2>
+													<p className="text-xl font-medium">Rp{' '}
 														{Math.round(content?.price as any)
 															.toString()
-															.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-													</p>
-												</div>
-												<div className="absolute top-2 right-2">
-													<SmallLineChart data={last7DaysData} />
+															.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
 												</div>
 											</div>
-											<div className="h-1 rounded-lg bg-black/10 my-2"></div>
-											<div className="flex justify-between items-center">
-												<p style={{ fontSize: '12px' }}>{highestVolatility.toFixed(0)}%</p> {/* Tampilkan persentase volatilitas */}
-												<p className="text-xs font-thin">PERCENTAGE VOLATILITY</p>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24"
-													fill="currentColor"
-													className={`size-4 ${bellColor}`}>
-													<path
-														fillRule="evenodd"
-														d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
-														clipRule="evenodd"
-													/>
-												</svg>
+
+											<div className="mt-6">
+
+												{/* progress bar */}
+												<div className='w-full bg-gray rounded-md h-2'></div>
+												<div className="flex justify-between text-sm mb-2">
+													<span>0%</span>
+													<span>Rp{' '}
+														{Math.round(content?.price as any)
+															.toString()
+															.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+													<span className='flex'><SmallLineChart data={last7DaysData} /> Neutral</span>
+												</div>
+												<div className="h-2 bg-gray-200 rounded-full">
+													<div className="h-full w-0 bg-gray-400 rounded-full"></div>
+												</div>
+												<p className="text-gray-600 mt-2">Volatile Percentage</p>
 											</div>
 										</Card>
 									);
@@ -1064,7 +1127,7 @@ export default function Home() {
 					</p>
 				</div>
 			</section>
-			<section className="px-4 sm:px-8 md:px-10 lg:px-10 pt-4 space-y-4">
+			<section className="px-4 sm:px-4 md:px-5 lg:px-5 pt-4 space-y-4">
 				<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
 					Berita Hari Ini
 				</h1>
@@ -1099,53 +1162,48 @@ export default function Home() {
 				</div>
 				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
 			</section>
-			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4">
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-					<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
-						<div className="flex items-center gap-4">
-							<div className="bg-blue-400 p-2 rounded-md">
-								<UserIcon width={30} height={30} className="text-white" />
-							</div>
-							<div>
-								<h1 className="text-md font-bold">Kunjungan User</h1>
-								<p>Jumlah Kunjungan User di Sulawesi Tengah</p>
-							</div>
-						</div>
-						<h1 className="text-4xl font-bold">{visitorCount}</h1>
-					</Card>
-					<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
-						<div className="flex items-center gap-4">
-							<div className="bg-blue-400 p-2 rounded-md">
-								<ScaleIcon width={30} height={30} className="text-white" />
-							</div>
-							<div>
-								<h1 className="text-md font-bold">Jumlah Komoditas</h1>
-								<p>Jumlah Komoditas di Sulawesi Tengah</p>
-							</div>
-						</div>
-						<h1 className="text-4xl font-bold">
-							{dashboardData.totalCommodities}
-						</h1>
-					</Card>
-					<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
-						<div className="flex items-center gap-4">
-							<div className="bg-blue-400 p-2 rounded-md">
-								<BuildingLibraryIcon
-									width={30}
-									height={30}
-									className="text-white"
-								/>
-							</div>
-							<div>
-								<h1 className="text-md font-bold">Jumlah Pasar</h1>
-								<p>Jumlah Pasar di Sulawesi Tengah</p>
-							</div>
-						</div>
-						<h1 className="text-4xl font-bold">{dashboardData.totalPasar}</h1>
-					</Card>
-				</div>
-				<Separator className="shadow-lg" />
+			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4 h-[180px] bg-[#3AC1DF] mb-35">
+				<h1 className='text-3xl font-bold text-white my-10 text-center'>Statistik Kunjungan, Komoditas, dan Pasar</h1>
 			</section>
+			<div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-30 -mt-50 px-10 relative">
+				<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
+					<div className="flex items-center gap-4">
+						<div className="bg-[#3AC1DF] p-2 rounded-md">
+							<UserIcon width={30} height={30} className="text-white" />
+						</div>
+						<div>
+							<h1 className="text-md font-bold">3928 Kunjungan</h1>
+							<p>Jumlah user yang mengunjungi Sidak</p>
+						</div>
+					</div>
+				</Card>
+				<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
+					<div className="flex items-center gap-4">
+						<div className="bg-[#3AC1DF] p-2 rounded-md">
+							<ScaleIcon width={30} height={30} className="text-white" />
+						</div>
+						<div>
+							<h1 className="text-md font-bold">30 Komoditas</h1>
+							<p>Jumlah Komoditas di sulawesi Tengah</p>
+						</div>
+					</div>
+				</Card>
+				<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
+					<div className="flex items-center gap-4">
+						<div className="bg-[#3AC1DF] p-2 rounded-md">
+							<BuildingLibraryIcon
+								width={30}
+								height={30}
+								className="text-white"
+							/>
+						</div>
+						<div>
+							<h1 className="text-md font-bold">60 Pasar</h1>
+							<p>Jumlah Pasar di sulawesi Tengah</p>
+						</div>
+					</div>
+				</Card>
+			</div>
 			<Footer />
 			<Dialog isOpen={isDialogOpen} onClose={closeDialog}>
 				<div className="mt-2 overflow-y-auto max-h-132.5 md:max-h-full">

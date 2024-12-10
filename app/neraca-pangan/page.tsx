@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import Footer from '@/components/ui/footer';
+import { Badge } from '@/components/ui/badge';
 import {
 	MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
@@ -12,6 +13,12 @@ import { format, set } from 'date-fns';
 import Hero from '@/components/ui/hero';
 import Select, { SingleValue } from 'react-select';
 import MapNeraca from '@/components/ui/map-neraca';
+import {
+	CounterClockwiseClockIcon,
+	ArrowUpIcon,
+	ArrowDownIcon,
+	SymbolIcon,
+} from '@radix-ui/react-icons';
 import Swal from "sweetalert2";
 import axios from "axios";
 import NeracaPanganSkeleton from '@/components/NeracaPanganSkeleton';
@@ -39,7 +46,13 @@ const getCurrentDate = (): string => {
 	return `${year}-${month}-${day}`;
 };
 
+const formatDate = (date: any) => {
+	return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+};
+
 export default function Home() {
+	const today = new Date();
+	const formattedDate = formatDate(today);
 	const [selectedCommodity, setSelectedCommodity] = useState<SingleValue<{ value: string; label: string }> | null>(null);
 	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>([]);
 
@@ -202,78 +215,93 @@ export default function Home() {
 				</Button>
 			</div>
 			<MapNeraca cardContents={cardContents} />
-			<section className="px-4 sm:px-8 lg:px-50 md:px-10 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+			
+			<section className="px-4 sm:px-8 lg:px-20 md:px-10 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col items-center space-y-8">
+				<Badge className="bg-[#3AC1DF] self-start text-xs sm:text-sm md:text-base rounded-full text-white">
+					<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal {formattedDate}
+				</Badge>
 					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 px-10 lg:grid-cols-3 xl:grid-cols-4 gap-[2rem] w-full ">
-						{loading ? (
-							<NeracaPanganSkeleton />
-						) : (
-							cardContents.map((content, index) => (
+						{loading ? (<NeracaPanganSkeleton />) : ( cardContents.map((content, index) => (
+							
+							<div
+								key={index}
+								className="border border-gray-200 p-4 flex justify-between gap-6 rounded-lg shadow-md">
 								<div
-									key={index}
-									className="border border-gray-200  rounded-lg p-2 shadow-md flex items-center">
+									className="flex flex-col gap-4"
+								>
+									<div>
+										<h1 className="text-sm font-bold ">
+											{content.city}
+										</h1>
+										<table className="w-full mt-2">
+											<tbody className="text-[10px]">
+											<tr className="font-bold">
+										<td className="pr-2">Neraca Pangan:</td>
+										<td className="text-right">{content.neraca}</td>
+										</tr>
+									</tbody>
+									</table>
+									</div>
+									<div>
+										<table className="w-full mt-2">
+										<tbody className="text-xs">
+											<tr>
+												<td className="pr-2">Ketersediaan:</td>
+												<td className="text-right">{content.ketersediaan}</td>
+											</tr>
+											<tr>
+												<td className="pr-2">Kebutuhan:</td>
+												<td className="text-right">{content.kebutuhan}</td>
+											</tr>
+											
+											
+										</tbody>
+									</table>
+									</div>
+								</div>
+								<div className="flex flex-col self-center">
 									<div
-										className={` w-10 rounded-r-none rounded-md  text-white mr-4 flex-shrink-0 `}
+										className={`rounded-xl p-2 self-center text-center  font-bold text-[12px] items-center flex text-white`}
 										style={{
 											background: content.color,
 										}}>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 24 24"
-											fill="currentColor"
-											className="size-10 mx-auto my-5">
-											<path
-												fillRule="evenodd"
-												d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-												clipRule="evenodd"
-											/>
-										</svg>
+										{content.color === '#bf7070' ? (
+											<div className="flex gap-2">
+												<ArrowUpIcon width={42} height={42} />
+
+											</div>
+										) : content.color === '#f1be5b' ? (
+											<div className="flex gap-2">
+												<ArrowDownIcon width={42} height={42} />
+
+											</div>
+										) : (
+											<div className="flex gap-2">
+												<SymbolIcon width={42} height={42} />
+
+											</div>
+										)}
 									</div>
-									<div className="flex-1">
-										<h1 className="text-sm  font-bold">{content.city}</h1>
-										<table className="w-full mt-2">
-											<tbody className="text-xs">
-												<tr>
-													<td className="pr-2">Ketersediaan:</td>
-													<td className="text-right">
-														{Math.round(content?.ketersediaan as any)
-															.toString()
-															.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-													</td>
-												</tr>
-												<tr>
-													<td className="pr-2">Kebutuhan:</td>
-													<td className="text-right">
-														{Math.round(content?.kebutuhan as any)
-															.toString()
-															.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-													</td>
-												</tr>
-												<tr>
-													<td colSpan={2}>
-														<hr className="my-1" />
-													</td>
-												</tr>
-												<tr className="font-bold">
-													<td className="pr-2">Neraca Pangan:</td>
-													<td className="text-right">
-														{Math.round(content?.neraca as any)
-															.toString()
-															.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
+									{content.color === '#bf7070' ? (
+										<div className="flex gap-2">
+											Naik
+										</div>
+									) : content.color === '#f1be5b' ? (
+										<div className="flex gap-2">
+											Turun
+										</div>
+									) : (
+										<div className="flex gap-2">
+											Stabil
+										</div>
+									)}
 								</div>
-							))
-						)}
+							</div>
+						)))}
 					</div>
 				</div>
-				<h1 className="text-sm m-0 p-0 sm:text-sm md:text-md">
-					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar
-				</h1>
-				<div className="h-1 rounded-lg bg-black/10"></div>
+				
 			</section>
 			<Footer />
 		</main>

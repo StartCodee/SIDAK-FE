@@ -20,6 +20,13 @@ import axios from "axios";
 import React from 'react';
 import Hero from '@/components/ui/hero';
 import Map from '@/components/ui/map';
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+} from '@/components/ui/card';
 import Select, { SingleValue } from 'react-select';
 import HargaPanganSkeleton from '@/components/HargaPanganSkeleton';
 import { Datepicker } from "flowbite-react";
@@ -330,7 +337,7 @@ export default function Home() {
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 				</Button>
 			</div>
-			<section className="px-4 sm:px-8 md:px-10 lg:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+			<section className="px-4 sm:px-8 md:px-10 lg:px-20 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col sm:flex-row justify-between pt-10">
 					<div className="flex-col">
 						<h1 className="text-2xl sm:text-3xl md:text-4xl mb-1 font-extrabold">
@@ -353,94 +360,124 @@ export default function Home() {
 					</div>
 				</div>
 				<br />
-				<h1 className="text-sm m-0 p-0 sm:text-sm md:text-md">
-					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar
-				</h1>
-				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
+				<Badge className="bg-[#3AC1DF] text-xs sm:text-sm md:text-base rounded-full text-white">
+					<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal {formattedDate}
+				</Badge>
 			</section>
-			<section className="px-4 sm:px-8 md:px-10 lg:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+			<section className="px-4 sm:px-8 md:px-10 lg:px-20 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col items-center space-y-8">
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-6xl">
 						{loading ? (
 							<HargaPanganSkeleton />
-						) : (
-							cardContents.map((content, index) => (
+						) : ( cardContents.map((content, index) => (
+							<div
+								key={index}
+								className="border border-gray-200 p-4 flex justify-between gap-6 rounded-lg shadow-md">
 								<div
-									key={index}
-									style={{ alignContent: 'center' }}
-									className="border border-gray-200 p-4 flex flex-col justify-between rounded-lg shadow-md">
-									<div
-										className="flex flex-col items-center justify-between space-y-2"
-										style={{ flex: 1 }}>
-										<h1 className="text-md font-light text-center">
+									className="flex flex-col gap-4"
+								>
+									<div>
+										<h1 className="text-sm font-bold ">
 											{content.city}
 										</h1>
-										<p className="font-bold text-2xl">
-											Rp{' '}
-											{Math.round(content?.price as any)
-												.toString()
-												.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-										</p>
-										<div
-											className={`rounded-md p-2 flex items-center justify-center text-white`}
-											style={{
-												background: content.color,
-											}}>
-											{content.color === '#bf7070' ? (
-												<div className="flex gap-2">
-													<ArrowUpIcon width={20} height={20} />
-													Naik {content.change}
-												</div>
-											) : content.color === '#f1be5b' ? (
-												<div className="flex gap-2">
-													<ArrowDownIcon width={20} height={20} />
-													Turun {content.change}
-												</div>
-											) : (
-												<div className="flex gap-2">
-													<SymbolIcon width={20} height={20} />
-													Stabil
-												</div>
-											)}
-										</div>
+										<p className="font-light text-lg">{content.price}</p>
 									</div>
-									<div className="flex flex-col mt-6">
-										<p className="text-md font-semibold">
-											Rp{' '}
-											{Math.round(content?.price as any)
-												.toString()
-												.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-										</p>
-										<p className="text-xs font-thin">DAY IN HIGH VOLATILITY</p>
+									<div>
+										<p className="text-md font-semibold">{content.change}</p>
+										<p className="text-[8px] font-light">DAY IN HIGH VOLATILITY</p>
 									</div>
 								</div>
-							))
-						)}
+								<div className="flex flex-col self-center">
+									<div
+										className={`rounded-xl p-2 self-center text-center  font-bold text-[12px] items-center flex text-white`}
+										style={{
+											background: content.color,
+										}}>
+										{content.color === '#bf7070' ? (
+											<div className="flex gap-2">
+												<ArrowUpIcon width={42} height={42} />
+
+											</div>
+										) : content.color === '#f1be5b' ? (
+											<div className="flex gap-2">
+												<ArrowDownIcon width={42} height={42} />
+
+											</div>
+										) : (
+											<div className="flex gap-2">
+												<SymbolIcon width={42} height={42} />
+
+											</div>
+										)}
+									</div>
+									{content.color === '#bf7070' ? (
+										<div className="flex gap-2">
+											Naik
+										</div>
+									) : content.color === '#f1be5b' ? (
+										<div className="flex gap-2">
+											Turun
+										</div>
+									) : (
+										<div className="flex gap-2">
+											Stabil
+										</div>
+									)}
+								</div>
+							</div>
+						)))}
 					</div>
+					<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
+						Indikator Daerah
+					</h1>
 					<div className="flex flex-wrap justify-center gap-4 mt-5">
 						<div className="text-center w-48 md:w-60">
-							<p className="font-bold text-2xl mt-4 mb-4">
-								{cardContents.filter((item) => item.color === '#bf7070').length}{' '}
-								Daerah
-							</p>
-							<div className="py-3 bg-red-500 rounded-t-md"></div>
-							<p className="font-semibold text-lg mt-4 mb-4">Harga Naik</p>
+							<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
+								<div className="flex items-center gap-4">
+									<div className="bg-[#ED4527] p-2 rounded-md">
+										<ArrowUpIcon width={30} height={30} className="text-white" />
+									</div>
+									<div>
+										<h1 className="text-md font-bold">{cardContents.filter((item) => item.color === '#bf7070').length}{' '}
+											Daerah</h1>
+										<p>Harga Naik</p>
+									</div>
+								</div>
+							</Card>
 						</div>
 						<div className="text-center w-48 md:w-60">
-							<p className="font-bold text-2xl mt-4 mb-4">
-								{cardContents.filter((item) => item.color === '#f1be5b').length}{' '}
-								Daerah
-							</p>
-							<div className="py-3 bg-yellow-500 rounded-t-md"></div>
-							<p className="font-semibold text-lg mt-4 mb-4">Harga Turun</p>
+							
+							<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
+								<div className="flex items-center gap-4">
+									<div className="bg-[#17D6A9] p-2 rounded-md">
+										<ArrowDownIcon width={30} height={30} className="text-white" />
+									</div>
+									<div>
+										<h1 className="text-md font-bold">{cardContents.filter((item) => item.color === '#f1be5b').length}{' '}
+											Daerah</h1>
+										<p>Harga Turun</p>
+									</div>
+								</div>
+							</Card>
 						</div>
 						<div className="text-center w-48 md:w-60">
-							<p className="font-bold text-2xl mt-4 mb-4">
-								{cardContents.filter((item) => item.color === '#76bf70').length}{' '}
-								Daerah
-							</p>
-							<div className="py-3 bg-green-500 rounded-t-md"></div>
-							<p className="font-semibold text-lg mt-4 mb-4">Stabil</p>
+							
+							<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
+								<div className="flex items-center gap-4">
+									<div className="bg-[#3AC1DF] p-2 rounded-md">
+										<SymbolIcon
+											width={30}
+											height={30}
+											className="text-white"
+										/>
+									</div>
+									<div>
+										<h1 className="text-md font-bold">{cardContents.filter((item) => item.color === '#76bf70').length}{' '}
+											Daerah</h1>
+										<p>Stabil</p>
+									</div>
+								</div>
+							</Card>
 						</div>
 					</div>
 				</div>
