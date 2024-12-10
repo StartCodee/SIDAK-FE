@@ -8,6 +8,9 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/button';
 import logo from '@/public/Group.png';
 import Link from 'next/link';
+import { Open_Sans } from 'next/font/google';
+
+const openSans = Open_Sans({ subsets: ['latin'] });
 
 const navigation = [
 	{ name: 'Home', path: '/' },
@@ -24,13 +27,13 @@ export default function Navbar() {
 
 	return (
 		<>
-			<header className="bg-white">
+			<header className={openSans.className}>
 				<nav
 					aria-label="Global"
-					className="mx-auto flex max-w-7xl items-center justify-between p-2 lg:px-8">
+					className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8">
 					<a href="#" className=" ">
 						<span className="sr-only">SIDAK</span>
-						<Image src={logo} alt="" width={250} height={110} />
+						<Image src={logo} alt="" width={160} height={36} />
 					</a>
 					<div className="flex lg:hidden">
 						<button
@@ -41,25 +44,23 @@ export default function Navbar() {
 							<Bars3Icon aria-hidden="true" className="h-6 w-6" />
 						</button>
 					</div>
-					<div className="hidden lg:flex gap-4 lg:gap-7">
+					<div className="hidden lg:flex gap-4 justify-between lg:gap-7">
 						{navigation.map((item) => (
 							<Link
 								key={item.name}
 								href={item.path}
 								className={`md:text-[16px] text-[10px] font-bold leading-6 ${
-									pathname === item.path ? 'text-blue-500' : 'text-gray-900'
+									pathname === item.path ? 'text-[#3AC1DF]' : 'text-gray-900'
 								}`}>
 								{item.name}
 							</Link>
 						))}
+					</div>
 						<Link
 							href="/auth"
-							className={`text-[16px] font-bold leading-6 ${
-								pathname === '/auth' ? 'text-blue-500' : 'text-gray-900'
-							}`}>
+							className={`text-[16px] font-bold leading-6 px-4 py-1 hover:opacity-55 rounded-full bg-[#3AC1DF] text-white`}>
 							Log in
 						</Link>
-					</div>
 				</nav>
 				<Dialog
 					open={mobileMenuOpen}
@@ -89,7 +90,7 @@ export default function Navbar() {
 											href={item.path}
 											className={`-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 hover:bg-gray-50 ${
 												pathname === item.path
-													? 'text-blue-500'
+													? 'text-[#3AC1DF]'
 													: 'text-gray-900'
 											}`}>
 											{item.name}
@@ -100,7 +101,7 @@ export default function Navbar() {
 									<Link
 										href="/auth"
 										className={`-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 hover:bg-gray-50 ${
-											pathname === '/auth' ? 'text-blue-500' : 'text-gray-900'
+											pathname === '/auth' ? 'text-[#3AC1DF]' : 'text-gray-900'
 										}`}>
 										Log in
 									</Link>

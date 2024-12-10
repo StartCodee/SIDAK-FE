@@ -6,9 +6,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Footer from '@/components/ui/footer';
 import { Badge } from '@/components/ui/badge';
 import {
-	CounterClockwiseClockIcon,
-} from '@radix-ui/react-icons';
-import {
 	MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
 import Navbar from '@/components/ui/navbar';
@@ -20,6 +17,12 @@ import Hero from '@/components/ui/hero';
 import Select from 'react-select';
 import MonthPicker from '@/components/ui/monthpicker';
 import MapNeraca from '@/components/ui/map-neraca';
+import {
+	CounterClockwiseClockIcon,
+	ArrowUpIcon,
+	ArrowDownIcon,
+	SymbolIcon,
+} from '@radix-ui/react-icons';
 
 interface cardContents {
 	city: string;
@@ -1937,33 +1940,32 @@ export default function Home() {
 				</section>
 			</Tabs>
 
-			<section className="px-4 sm:px-8 lg:px-50 md:px-10 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+			<section className="px-4 sm:px-8 lg:px-20 md:px-10 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col items-center space-y-8">
 					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 px-10 lg:grid-cols-3 xl:grid-cols-4 gap-[2rem] w-full ">
 						{cardContents.map((content, index) => (
+							
 							<div
 								key={index}
-								className="border border-gray-200  rounded-lg p-2 shadow-md flex items-center">
+								className="border border-gray-200 p-4 flex justify-between gap-6 rounded-lg shadow-md">
 								<div
-									className={` w-10 rounded-r-none rounded-md  text-white mr-4 flex-shrink-0 `}
-									style={{
-										background: content.color,
-									}}>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										viewBox="0 0 24 24"
-										fill="currentColor"
-										className="size-10 mx-auto my-5">
-										<path
-											fillRule="evenodd"
-											d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-											clipRule="evenodd"
-										/>
-									</svg>
-								</div>
-								<div className="flex-1">
-									<h1 className="text-sm  font-bold">{content.city}</h1>
-									<table className="w-full mt-2">
+									className="flex flex-col gap-4"
+								>
+									<div>
+										<h1 className="text-sm font-bold ">
+											{content.city}
+										</h1>
+										<table className="w-full mt-2">
+											<tbody className="text-[10px]">
+											<tr className="font-bold">
+										<td className="pr-2">Neraca Pangan:</td>
+										<td className="text-right">{content.neraca}</td>
+										</tr>
+									</tbody>
+									</table>
+									</div>
+									<div>
+										<table className="w-full mt-2">
 										<tbody className="text-xs">
 											<tr>
 												<td className="pr-2">Ketersediaan:</td>
@@ -1973,17 +1975,48 @@ export default function Home() {
 												<td className="pr-2">Kebutuhan:</td>
 												<td className="text-right">{content.kebutuhan}</td>
 											</tr>
-											<tr>
-												<td colSpan={2}>
-													<hr className="my-1" />
-												</td>
-											</tr>
-											<tr className="font-bold">
-												<td className="pr-2">Neraca Pangan:</td>
-												<td className="text-right">{content.neraca}</td>
-											</tr>
+											
+											
 										</tbody>
 									</table>
+									</div>
+								</div>
+								<div className="flex flex-col self-center">
+									<div
+										className={`rounded-xl p-2 self-center text-center  font-bold text-[12px] items-center flex text-white`}
+										style={{
+											background: content.color,
+										}}>
+										{content.color === '#bf7070' ? (
+											<div className="flex gap-2">
+												<ArrowUpIcon width={42} height={42} />
+
+											</div>
+										) : content.color === '#f1be5b' ? (
+											<div className="flex gap-2">
+												<ArrowDownIcon width={42} height={42} />
+
+											</div>
+										) : (
+											<div className="flex gap-2">
+												<SymbolIcon width={42} height={42} />
+
+											</div>
+										)}
+									</div>
+									{content.color === '#bf7070' ? (
+										<div className="flex gap-2">
+											Naik
+										</div>
+									) : content.color === '#f1be5b' ? (
+										<div className="flex gap-2">
+											Turun
+										</div>
+									) : (
+										<div className="flex gap-2">
+											Stabil
+										</div>
+									)}
 								</div>
 							</div>
 						))}
