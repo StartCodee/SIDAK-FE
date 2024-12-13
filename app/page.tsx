@@ -799,13 +799,13 @@ export default function Home() {
 						<CarouselContent>
 
 							{cardContents.map((content, index) => (
-								<CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+								<CarouselItem key={index} className="md:basis-1/2 lg:basis-1/4">
 									<Card
 										key={index}
 										className="flex rounded-2xl px-6 items-center shadow-md h-[139px] w-[358px] justify-between placeholder-sky-400 ">
 										<div style={{ flex: 2 }}>
 											<h1 className="text-md">{content.city}</h1>
-											<p className="text-[20px] font-bold">Rp {content.price}/Kg</p>
+											<p className="text-[20px] font-bold">Rp {parseInt(content.price).toLocaleString()}/Kg</p>
 											{content.color === '#bf7070' ? (
 												<p>Increase</p>
 											) : content.color === '#f1be5b' ? (
@@ -836,7 +836,7 @@ export default function Home() {
 						</CarouselContent>
 					</Carousel>
 					<Link href="/harga-pangan" className=" self-start sm:self-end">
-						<p className="text-xs sm:text-sm self-end md:text-md text-blue-900 font-bold flex items-center">
+						<p className="mt-4 text-xs sm:text-sm self-end md:text-md text-blue-900 font-bold flex items-center">
 							Data Selengkapnya
 							<ChevronRightIcon width={20} height={20} />
 						</p>
