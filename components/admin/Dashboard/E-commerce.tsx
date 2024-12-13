@@ -55,7 +55,7 @@ const ECommerce: React.FC = () => {
 						<div>
 							<h1 className="text-2xl font-bold">Hello {username} !</h1>
 							<p className="mt-4">
-								Selamat Datang di Tampilan Dashboard Admin SIDAK
+							Selamat Datang di Tampilan Dashboard Admin SIDAK. Dashboard ini membantu Anda mengelola dan menganalisis data pangan, neraca pangan, dan pola perdagangan di Sulawesi Tengah. Fitur intuitif memudahkan pelacakan dan evaluasi kinerja, mendukung keputusan berbasis data dan pertumbuhan ekonomi berkelanjutan.
 							</p>
 						</div>
 						<div style={{ position: 'relative' }}>
