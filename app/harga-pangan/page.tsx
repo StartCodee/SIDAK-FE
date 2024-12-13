@@ -380,7 +380,7 @@ export default function Home() {
 										<h1 className="text-sm font-bold ">
 											{content.city}
 										</h1>
-										<p className="font-light text-lg">{content.price}</p>
+										<p className="font-light text-lg">Rp. {parseInt(content.price).toLocaleString()}</p>
 									</div>
 									<div>
 										<p className="text-md font-semibold">{content.change}</p>
