@@ -1160,11 +1160,13 @@ export default function Home() {
 						))
 					)}
 				</div>
-				<div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div>
+				{/* <div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div> */}
 			</section>
-			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-4 h-[180px] bg-[#3AC1DF] mb-35">
-				<h1 className='text-3xl font-bold text-white my-10 text-center'>Statistik Kunjungan, Komoditas, dan Pasar</h1>
-			</section>
+			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-8 py-8 mb-35">
+				<h1 className='text-3xl font-bold text-[#3AC1DF] text-center'>Statistik Kunjungan, Komoditas, dan Pasar</h1>
+				<div className="flex justify-center">
+				<p className='text-center w-2/3'>Jelajahi opsi statistik kunjungan, komoditas, dan pasar yang dirancang untuk memenuhi kebutuhan Anda. Temukan keseimbangan sempurna antara kualitas dan keandalan.</p>
+				</div>
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-30 -mt-50 px-10 relative">
 				<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
 					<div className="flex items-center gap-4">
@@ -1204,6 +1206,7 @@ export default function Home() {
 					</div>
 				</Card>
 			</div>
+			</section>
 			<Footer />
 			<Dialog isOpen={isDialogOpen} onClose={closeDialog}>
 				<div className="mt-2 overflow-y-auto max-h-132.5 md:max-h-full">
