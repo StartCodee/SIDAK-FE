@@ -322,7 +322,7 @@ export default function Home() {
 		if (selectedDate || selectedMonth) {
 			let commodity = selectedCommodity ? selectedCommodity.value : '';
 			if (selectedValue === 'harga-pangan') {
-			let val = format(selectedDate, 'yyyy-MM-dd');
+				let val = format(selectedDate, 'yyyy-MM-dd');
 				getHargaPangan(val, commodity);
 			} else if (selectedValue == 'neraca-pangan') {
 				let val = selectedMonth.format('YYYY-MM');
@@ -666,7 +666,7 @@ export default function Home() {
 			<Hero />
 			<div
 				style={{ marginTop: '-40px' }}
-				className="mx-auto z-1 relative px-4 py-[0.4rem] sm:py-2 sm:px-8 shadow-xl w-[18rem] md:w-[40rem] sm:w-[40rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
+				className="mx-auto z-1 relative px-4 py-[0.4rem] sm:py-6 sm:px-8 shadow-xl w-[18rem] md:w-[44rem] sm:w-[40rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm mb-1">Jenis Informasi</h1>
 					<Select
@@ -759,7 +759,7 @@ export default function Home() {
 				</div>
 				<Button
 					onClick={handleChangeMonth}
-					className="bg-blue-300 rounded-full p-2">
+					className="bg-blue-300 w-12 h-12 rounded-full p-2">
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 				</Button>
 			</div>
@@ -842,7 +842,7 @@ export default function Home() {
 						</p>
 					</Link>
 				</section>
-				
+
 			)}
 			{selectedValue === 'neraca-pangan' && (
 				<>
@@ -900,29 +900,33 @@ export default function Home() {
 				<h1 className="text-sm pb-10 p-0 sm:text-sm md:text-md">
 					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar
 				</h1>
-				<div className="h-1 rounded-lg  my-10 w-full bg-black/10 z-0"></div>
-				<div className="mx-auto z-1 relative -mt-20 px-4 py-[0.4rem] sm:py-2 sm:px-8 shadow-xl w-[20rem] space-y-2 lg:w-[60rem] rounded-xl lg:rounded-full flex flex-col lg:flex-row items-center lg:justify-between bg-white ">
-					<div className="flex-col flex-1">
-						<h1 className="font-bold text-xs mb-1">Jenis Pasar</h1>
-						<Select
-							styles={{
-								control: (provided) => ({
-									...provided,
-									border: 'none',
-									boxShadow: 'none',
-								}),
-							}}
-							components={{
-								IndicatorSeparator: () => null
-							}}
-							className=" basic-single w-[170px] border-none"
-							options={jenisPasar}
-							defaultValue={jenisPasar[0]}
-							isDisabled
-						/>
-					</div>
-					{/* <div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" /> */}
-					{/* <div className="flex-col flex-1">
+				{/* <div className="h-1 rounded-lg  my-10 w-full bg-black/10 z-0"></div> */}
+				<div style={{ marginTop: '60px' }}>
+					<h1 className="font-semibold text-center px-8 mt-1 mb-8 text-blue-800 text-lg sm:text-xl md:text-2xl items-center">
+						Harga Konsumen Pangan Strategis Sulawesi Tengah
+					</h1>
+					<div className="mx-auto mb-12 z-1 relative px-4 py-[0.4rem] sm:py-6 sm:px-8 shadow-md w-[20rem] space-y-2 lg:w-[60rem] rounded-xl lg:rounded-full flex flex-col lg:flex-row items-center lg:justify-between bg-white ">
+						<div className="flex-col flex-1">
+							<h1 className="font-bold text-xs mb-1">Jenis Pasar</h1>
+							<Select
+								styles={{
+									control: (provided) => ({
+										...provided,
+										border: 'none',
+										boxShadow: 'none',
+									}),
+								}}
+								components={{
+									IndicatorSeparator: () => null
+								}}
+								className=" basic-single w-[170px] border-none"
+								options={jenisPasar}
+								defaultValue={jenisPasar[0]}
+								isDisabled
+							/>
+						</div>
+						{/* <div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" /> */}
+						{/* <div className="flex-col flex-1">
 						<h1 className="font-bold text-xs mb-1">Komoditas</h1>
 						<Select
 							styles={{
@@ -940,58 +944,55 @@ export default function Home() {
 							options={selectedCommodityOption}
 						/>
 					</div> */}
-					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
-					<div className="flex-col flex-1">
-						<h1 className="font-bold text-xs mb-1 ">Kabupaten/Kota</h1>
-						<Select
-							styles={{
-								control: (provided) => ({
-									...provided,
-									border: 'none',
-									boxShadow: 'none',
-								}),
-							}}
-							components={{
-								IndicatorSeparator: () => null
-							}}
-							onChange={(option) => setSelectedKabupaten(option)}
-							className=" basic-single w-[170px] border-none"
-							options={selectedKabupatenOption}
-							value={selectedKabupaten}
-						/>
+						<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
+						<div className="flex-col flex-1">
+							<h1 className="font-bold text-xs mb-1 ">Kabupaten/Kota</h1>
+							<Select
+								styles={{
+									control: (provided) => ({
+										...provided,
+										border: 'none',
+										boxShadow: 'none',
+									}),
+								}}
+								components={{
+									IndicatorSeparator: () => null
+								}}
+								onChange={(option) => setSelectedKabupaten(option)}
+								className=" basic-single w-[170px] border-none"
+								options={selectedKabupatenOption}
+								value={selectedKabupaten}
+							/>
+						</div>
+						<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
+						<div className="flex-col flex-1">
+							<h1 className="font-bold text-xs mb-1 ">Dari Tanggal</h1>
+							<Datepicker theme={customTheme} onChange={
+								(date) => {
+									setSelectedDateKonsumen(date as any);
+								}
+							} value={selectedDateKonsumen} maxDate={new Date()} />
+						</div>
+						<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
+						<div className="flex-col flex-1">
+							<h1 className="font-bold text-xs mb-1 ">Sampai Tanggal</h1>
+							<Datepicker theme={customTheme} onChange={
+								(date) => {
+									setSelectedEndDateKonsumen(date as any);
+								}
+							} value={selectedEndDateKonsumen} maxDate={new Date()} />
+						</div>
+						<Button
+							onClick={handleChangeMonthKonsumen}
+							className="bg-blue-300 w-12 h-12 rounded-full p-2">
+							<MagnifyingGlassIcon
+								className="text-white"
+								width={24}
+								height={24}
+							/>
+						</Button>
 					</div>
-					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
-					<div className="flex-col flex-1">
-						<h1 className="font-bold text-xs mb-1 ">Dari Tanggal</h1>
-						<Datepicker theme={customTheme} onChange={
-							(date) => {
-								setSelectedDateKonsumen(date as any);
-							}
-						} value={selectedDateKonsumen} maxDate={new Date()} />
-					</div>
-					<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
-					<div className="flex-col flex-1">
-						<h1 className="font-bold text-xs mb-1 ">Sampai Tanggal</h1>
-						<Datepicker theme={customTheme} onChange={
-							(date) => {
-								setSelectedEndDateKonsumen(date as any);
-							}
-						} value={selectedEndDateKonsumen} maxDate={new Date()} />
-					</div>
-					<Button
-						onClick={handleChangeMonthKonsumen}
-						className="bg-blue-300 rounded-full p-2">
-						<MagnifyingGlassIcon
-							className="text-white"
-							width={24}
-							height={24}
-						/>
-					</Button>
-				</div>
-				<div style={{ marginTop: '60px' }}>
-					<h1 className="text-center px-8 mt-1 mb-10 text-blue-800 text-lg sm:text-xl md:text-2xl items-center">
-						Harga Konsumen Pangan Strategis Sulawesi Tengah
-					</h1>
+
 					<center>
 						<div className="flex  justify-center items-start  flex-wrap gap-5 ">
 							{loadingKomoditas ? (
@@ -1048,10 +1049,10 @@ export default function Home() {
 										// 				{content.item.split(' ').slice(1).join(' ')}
 										// 			</p>
 										// 			<p className="text-left ms-2 font-bold">
-														// Rp{' '}
-														// {Math.round(content?.price as any)
-														// 	.toString()
-														// 	.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+										// Rp{' '}
+										// {Math.round(content?.price as any)
+										// 	.toString()
+										// 	.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
 										// 			</p>
 										// 		</div>
 										// 		<div className="absolute top-2 right-2">
@@ -1165,47 +1166,47 @@ export default function Home() {
 			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-8 py-8 mb-35">
 				<h1 className='text-3xl font-bold text-[#3AC1DF] text-center'>Statistik Kunjungan, Komoditas, dan Pasar</h1>
 				<div className="flex justify-center">
-				<p className='text-center w-2/3'>Jelajahi opsi statistik kunjungan, komoditas, dan pasar yang dirancang untuk memenuhi kebutuhan Anda. Temukan keseimbangan sempurna antara kualitas dan keandalan.</p>
+					<p className='text-center w-2/3'>Jelajahi opsi statistik kunjungan, komoditas, dan pasar yang dirancang untuk memenuhi kebutuhan Anda. Temukan keseimbangan sempurna antara kualitas dan keandalan.</p>
 				</div>
-			<div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-30 -mt-50 px-10 relative">
-				<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
-					<div className="flex items-center gap-4">
-						<div className="bg-[#3AC1DF] p-2 rounded-md">
-							<UserIcon width={30} height={30} className="text-white" />
+				<div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-30 -mt-50 px-10 relative">
+					<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
+						<div className="flex items-center gap-4">
+							<div className="bg-[#3AC1DF] p-2 rounded-md">
+								<UserIcon width={30} height={30} className="text-white" />
+							</div>
+							<div>
+								<h1 className="text-md font-bold">3928 Kunjungan</h1>
+								<p>Jumlah user yang mengunjungi Sidak</p>
+							</div>
 						</div>
-						<div>
-							<h1 className="text-md font-bold">3928 Kunjungan</h1>
-							<p>Jumlah user yang mengunjungi Sidak</p>
+					</Card>
+					<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
+						<div className="flex items-center gap-4">
+							<div className="bg-[#3AC1DF] p-2 rounded-md">
+								<ScaleIcon width={30} height={30} className="text-white" />
+							</div>
+							<div>
+								<h1 className="text-md font-bold">30 Komoditas</h1>
+								<p>Jumlah Komoditas di sulawesi Tengah</p>
+							</div>
 						</div>
-					</div>
-				</Card>
-				<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
-					<div className="flex items-center gap-4">
-						<div className="bg-[#3AC1DF] p-2 rounded-md">
-							<ScaleIcon width={30} height={30} className="text-white" />
+					</Card>
+					<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
+						<div className="flex items-center gap-4">
+							<div className="bg-[#3AC1DF] p-2 rounded-md">
+								<BuildingLibraryIcon
+									width={30}
+									height={30}
+									className="text-white"
+								/>
+							</div>
+							<div>
+								<h1 className="text-md font-bold">60 Pasar</h1>
+								<p>Jumlah Pasar di sulawesi Tengah</p>
+							</div>
 						</div>
-						<div>
-							<h1 className="text-md font-bold">30 Komoditas</h1>
-							<p>Jumlah Komoditas di sulawesi Tengah</p>
-						</div>
-					</div>
-				</Card>
-				<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
-					<div className="flex items-center gap-4">
-						<div className="bg-[#3AC1DF] p-2 rounded-md">
-							<BuildingLibraryIcon
-								width={30}
-								height={30}
-								className="text-white"
-							/>
-						</div>
-						<div>
-							<h1 className="text-md font-bold">60 Pasar</h1>
-							<p>Jumlah Pasar di sulawesi Tengah</p>
-						</div>
-					</div>
-				</Card>
-			</div>
+					</Card>
+				</div>
 			</section>
 			<Footer />
 			<Dialog isOpen={isDialogOpen} onClose={closeDialog}>
