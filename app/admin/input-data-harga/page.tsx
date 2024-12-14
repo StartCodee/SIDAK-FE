@@ -90,7 +90,7 @@ export default function Home() {
                 <Breadcrumb pageName="Data Pangan" />
                 <div className="w-full rounded-lg border border-stroke bg-white px-5 py-10 shadow-default">
                     <h1 className="text-2xl font-bold">Import Data</h1>
-                    <div className="mt-5  ">
+                    <div className="mt-5">
                         <div className="flex gap-10">
                             <div>
                                 <label className="block mb-2 text-sm font-medium text-gray-900">Komoditas</label>

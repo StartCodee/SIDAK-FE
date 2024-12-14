@@ -499,15 +499,13 @@ export default function InputDataForm() {
 								)}
 							/>
 						</FormControl>
-
-
 						<FormControl>
 							<FormField
 								control={form.control}
 								name="komoditas"
 								render={({ field }) => (
-									<FormItem className="flex flex-col">
-										<FormLabel>Komoditas </FormLabel>
+									<FormItem className="flex flex-col mt-2">
+										<FormLabel className='mb-1'>Komoditas </FormLabel>
 										<Popover
 											open={openKomoditas}
 											onOpenChange={setOpenKomoditas}>
@@ -563,8 +561,6 @@ export default function InputDataForm() {
 								)}
 							/>
 						</FormControl>
-					</div>
-					<div className="flex flex-wrap justify-start gap-18 px-8">
 						<FormControl>
 							<FormField
 								control={form.control}
@@ -601,7 +597,6 @@ export default function InputDataForm() {
 								)}
 							/>
 						</FormControl>
-
 					</div>
 					<FormControl>
 						<FormItem>
