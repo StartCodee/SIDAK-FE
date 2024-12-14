@@ -7,6 +7,7 @@ import { Button } from './button';
 import Swal from "sweetalert2";
 import axios from "axios";
 import React from 'react';
+import { ArrowDownTrayIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 interface CardContent {
 	city: string;
 	item: string;
@@ -167,13 +168,36 @@ export default function Map({ cardContents }: MapProps) {
 		const cityData = cardContents.find((item) => item.id === cityName);
 		return cityData ? cityData.color : undefined;
 	};
+
+	const [currentPage, setCurrentPage] = useState(1);
+	const itemsPerPage = 10;
+
+	// detailData.header != undefined
+	// console.log(detailData?.headers)
+	const totalPages = Math.ceil(detailData?.headers?.length / itemsPerPage);
+
+	const handlePreviousPage = () => {
+		if (currentPage > 1) {
+			setCurrentPage(currentPage - 1);
+		}
+	};
+
+	const handleNextPage = () => {
+		if (currentPage < totalPages) {
+			setCurrentPage(currentPage + 1);
+		}
+	};
+
+	const startIndex = (currentPage - 1) * itemsPerPage;
+	const endIndex = startIndex + itemsPerPage;
+	const currentItems = detailData?.header?.slice(startIndex, endIndex);
 	return (
 		<>
 			<Dialog isOpen={isDialogOpen} onClose={closeDialog}>
-				<div className="mt-2 overflow-y-auto max-h-132.5 md:max-h-full">
-					<div className="shadow-lg overflow-hidden px-4 sm:px-10 rounded-lg p-4">
-						<div className="flex flex-col space-y-10">
-							<div className="flex justify-between">
+				<div className=" max-h-[800px] md:max-h-full p-4">
+					<div className="flex flex-col gap-4 ">
+						<div className="flex flex-col space-y-8">
+							<div className="flex justify-between items-center">
 								<h1 className="sm:text-2xl text-lg font-bold">
 									{detailHarga?.city}
 								</h1>
@@ -184,58 +208,62 @@ export default function Map({ cardContents }: MapProps) {
 								</button>
 							</div>
 							<div className="flex md:flex-row flex-wrap sm:flex-nowrap justify-around space-y-4 sm:space-y-0 gap-5">
-								<div className="shadow-lg w-full sm:w-[20rem] p-4 sm:text-lg text-md  flex flex-col rounded-lg">
-									<p>Rata Rata {detailHarga?.city}: </p>
-									<h1 className="font-bold">Rp {Math.round(detailHarga?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h1>
+								<div className="shadow-lg sm:w-[20rem] p-4 sm:text-lg  flex flex-col rounded-lg">
+									<p className='font-bold text-[20px]'>Rata Rata {detailHarga?.city}: </p>
+									<h1 className="">Rp {Math.round(detailHarga?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h1>
 								</div>
-								<div className="shadow-lg w-full sm:w-[20rem] p-4 sm:text-lg text-md  flex flex-col rounded-lg">
-									<p>Harga Pada {detailHarga?.city}: </p>
-									<h1 className="font-bold">Rp {Math.round(detailHarga?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h1>
+								<div className="shadow-lg sm:w-[20rem] p-4 sm:text-lg  flex flex-col rounded-lg">
+									<p className='font-bold text-[20px]'>Harga di {detailHarga?.city}: </p>
+									<h1 className="">Rp {Math.round(detailHarga?.price as any).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h1>
 								</div>
 								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
-									<p className="text-[10px] lg:text-lg">Tanggal </p>
-									<h1 className="font-bold text-[10px] lg:text-lg">
+									<p className="text-[10px] font-bold lg:text-lg">Tanggal </p>
+									<h1 className=" text-[10px] lg:text-lg">
 										{detailHarga?.bulan}
 									</h1>
 								</div>
 								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
-									<p className="text-[10px] lg:text-lg">Komoditas </p>
-									<h1 className="font-bold text-[10px] lg:text-lg">{detailHarga?.item}</h1>
+									<p className="text-[10px] font-bold lg:text-lg">Komoditas </p>
+									<h1 className=" text-[10px] lg:text-lg">{detailHarga?.item}</h1>
 								</div>
 							</div>
-							<Button onClick={() => { window.open(linkExport, '_blank'); }}
-								className="bg-[#f0fdf4] text-[#228848] hover:bg-green-200 rounded-full cursor-pointer"
-								asChild>
-								<span className="self-end inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-									Export
-								</span>
-							</Button>
+							
 						</div>
-						<div className="h-1 rounded-lg my-10 bg-black/10 z-0"></div>
-						<div className="flex flex-col ">
+						<div className="flex flex-col gap-4 mt-11">
+							<div className='flex justify-between items-center'>
 							<h1 className="sm:text-2xl text-lg font-bold mb-3">
 								Tabel Harga Harian
 							</h1>
+							<Button onClick={() => { window.open(linkExport, '_blank'); }}
+									className="bg-[#17D6A9] text-white hover:scale-110 hover:bg-green-300 rounded-full cursor-pointer"
+								asChild>
+
+									<span className="self-end inline-flex items-center rounded-full bg-[#17D6A9] px-2 py-1 text-xs font-medium text-white  ring-1 ring-inset ring-green-600/20">
+										<ArrowDownTrayIcon />
+									Export
+								</span>
+							</Button>
+							</div>
 							<div className="overflow-x-auto">
-								<table className="min-w-full bg-white border border-1">
-									<thead>
-										<tr>
-											<th className="px-4 py-2 border border-1 bg-blue-200">Subjek</th>
+								<table className="min-w-full bg-white text-[16px] rounded-md">
+									<thead className='text-[16px] font-thin border-none rounded-md'>
+										<tr className='border-none text-[16px] font-light'>
+											<th className="px-4 py-2  bg-[#F6F9FA] font-normal">Subjek</th>
 											{detailData.headers != undefined && detailData.headers.map((item: any, index: any) => (
-												<th key={index} className="px-4 py-2 border border-1 bg-blue-200">
+												<th key={index} className="px-4 py-2 font-normal bg-[#F6F9FA]">
 													{item}
 												</th>
 											))}
 										</tr>
 									</thead>
-									<tbody>
+									<tbody className='border-none rounded-md'>
 										{detailData.kabupatenData != undefined && detailData.kabupatenData.dates.length > 0 ? (
 											<tr>
-												<td className="px-4 py-2 border border-1">
+												<td className="px-4 py-2 ">
 													<h2>{detailHarga?.city}</h2>
 												</td>
 												{detailData.kabupatenData.dates.map((kabupatenDate: any, index: number) => (
-													<td className="px-4 py-2 border border-1" key={index}>
+													<td className="px-4 py-2 " key={index}>
 														<h2>
 															{kabupatenDate.harga !== "-"
 																? `Rp ${kabupatenDate.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
@@ -247,19 +275,19 @@ export default function Map({ cardContents }: MapProps) {
 											</tr>
 										) : null}
 										<tr>
-											<td className="px-4 py-2 border border-1 bg-blue-300" colSpan={9}>
+											<td className="px-4 py-2  bg-[#F6F9FA]" colSpan={9}>
 											</td>
 										</tr>
 										{detailData.pasarData != undefined && Object.keys(detailData.pasarData).length > 0 ? (
 											Object.entries(detailData.pasarData).map(([pasarName, pasarDetails]: [string, any], pasarIndex: number) => (
 												<tr key={pasarIndex}>
-													<td className="px-4 py-2 border border-1">
+													<td className="px-4 py-2 ">
 														<h2>{pasarName !== "null" ? pasarName : detailHarga?.city}</h2>
 													</td>
 													{detailData.headers != undefined && detailData.headers.map((headerDate: any, headerIndex: any) => {
 														const dateItem = pasarDetails.dates.find((date: any) => date.date === headerDate);
 														return (
-															<td className="px-4 py-2 border border-1" key={headerIndex}>
+															<td className="px-4 py-2 " key={headerIndex}>
 																<h2>
 																	{dateItem && dateItem.harga !== "-"
 																		? `Rp ${dateItem.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
@@ -272,12 +300,30 @@ export default function Map({ cardContents }: MapProps) {
 											))
 										) : (
 											<tr key="1">
-												<td className="px-4 py-2 border border-1 text-center" colSpan={detailData.header != undefined && detailData.header.length + 1}>
+												<td className="px-4 py-2  text-center" colSpan={detailData.headers != undefined && detailData.headers.length + 1}>
 													Data Kosong
 												</td>
 											</tr>
 										)}
 									</tbody>
+									<tfoot className='bg-[#F6F9FA]'>
+										<tr >
+											<td colSpan={detailData.headers != undefined ? detailData.headers.length - 1 : undefined} className="px-4 py-2 ">
+												<span className=''>{currentPage} - 10 of {totalPages}</span>
+											</td>
+											<td>
+												<button onClick={handlePreviousPage} disabled={currentPage === 1} className="px-4 py-2 bg-gray-200 rounded-md mr-2">
+													Previous
+												</button>
+											</td><td>
+												<button onClick={handleNextPage} disabled={currentPage === totalPages} className="px-4 py-2 bg-gray-200 rounded-md ml-2">
+													Next
+												</button>
+											</td>
+
+												
+										</tr>
+									</tfoot>
 								</table>
 							</div>
 						</div>
