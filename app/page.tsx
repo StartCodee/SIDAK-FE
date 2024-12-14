@@ -767,20 +767,28 @@ export default function Home() {
 			</div>
 			{selectedValue === 'harga-pangan' && (
 				<section className="px-4 sm:px-2 md:px-4 lg:px-14 pt-4 space-y-4 sm:space-y-4 md:space-y-6">
-					{/* <div className="flex flex-col sm:flex-row justify-between pt-10">
-						<div className="flex-col">
-							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-1 font-extrabold">
-								PETA PERUBAHAN HARGA
+					<div className="flex flex-col sm:flex-row justify-between pt-10">
+						<div className="flex flex-col w-full gap-4">
+							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-1 font-semibold">
+								Peta Perubahan Harga
 							</h1>
-							<Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
+							{/* <Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
 								<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal 22
 								Juli 2024
-							</Badge>
+							</Badge> */}
+							<div className="flex w-full bg-gray-200 rounded-lg overflow-hidden h-4">
+								<div className="bg-[#17D6A9] h-full" style={{ width: "40%" }}></div>
+								<div className="bg-[#F17A64] h-full" style={{ width: "60%" }}></div>
+								<div className="bg-[#ED4527] h-full" style={{ width: "60%" }}></div>
+							</div>
+							<div className="flex justify-between">
+								<p>Harga Terendah</p>
+								<p>Harga Tertinggi</p>
+							</div>
 						</div>
-						<div></div>
-					</div> */}
-					<div className="flex flex-col lg:flex-row items-center">
-						<div className="h-full w-full ">
+					</div>
+					<div className="flex flex-col lg:flex-row items-center md:px-40 lg:px-96">
+						<div className="h-full w-full">
 							<Map cardContents={cardContents} />
 						</div>
 					</div>
@@ -897,14 +905,14 @@ export default function Home() {
 					<MapPola flow={filteredFlow} />
 				</>
 			)}
-			<section className=" px-4 sm:px-8 md:px-10 lg:px-20 pt-4 ">
+			<section className=" px-4 sm:px-8 md:px-10 lg:px-16 pt-4 ">
 				<br />
-				<h1 className="text-sm pb-10 p-0 sm:text-sm md:text-md">
+				{/* <h1 className="text-sm pb-10 p-0 sm:text-sm md:text-md">
 					*Statistik Kunjungan, Jumlah Komoditas dan Jumlah Pasar
-				</h1>
+				</h1> */}
 				{/* <div className="h-1 rounded-lg  my-10 w-full bg-black/10 z-0"></div> */}
 				<div style={{ marginTop: '60px' }}>
-					<h1 className="font-semibold text-center px-8 mt-1 mb-8 text-blue-800 text-lg sm:text-xl md:text-2xl items-center">
+					<h1 className="font-semibold text-center px-8 mt-1 mb-8 text-lg sm:text-xl md:text-2xl lg:text-3xl items-center">
 						Harga Konsumen Pangan Strategis Sulawesi Tengah
 					</h1>
 					<div className="mx-auto mb-12 z-1 relative px-4 py-[0.4rem] sm:py-6 sm:px-8 shadow-md w-[20rem] space-y-2 lg:w-[60rem] rounded-xl lg:rounded-full flex flex-col lg:flex-row items-center lg:justify-between bg-white ">
@@ -1099,22 +1107,35 @@ export default function Home() {
 												</div>
 											</div>
 
-											<div className="mt-6">
+											<div className="mt-4 flex flex-col gap-2">
 
 												{/* progress bar */}
-												<div className='w-full bg-gray rounded-md h-2'></div>
-												<div className="flex justify-between text-sm mb-2">
-													<span>0%</span>
-													<span>Rp{' '}
-														{Math.round(content?.price as any)
-															.toString()
-															.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
-													<span className='flex'><SmallLineChart data={last7DaysData} /> Neutral</span>
+												{/* <div className='w-full bg-gray rounded-md h-2'></div> */}
+												<div className="flex w-full bg-gray-200 rounded-lg overflow-hidden h-2">
+													<div className="h-full" style={{ width: content.change, background: content.color }}></div>
+													<div className="bg-[#D9D9D9] h-full" style={{ width: "100%" }}></div>
 												</div>
-												<div className="h-2 bg-gray-200 rounded-full">
-													<div className="h-full w-0 bg-gray-400 rounded-full"></div>
+												<div className="flex justify-between" style={{ color: content.color }}>
+													<div className="flex items-center gap-2 text-sm">
+														<span>0%</span>
+														<span className='w-2 h-2 rounded-full' style={{ background: content.color }}></span>
+														<span>Rp{' '}
+															{Math.round(content?.price as any)
+																.toString()
+																.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+
+													</div>
+													<span className='flex items-center gap-1' >
+														{/* <SmallLineChart data={last7DaysData} />  */}
+														{content.color === '#bf7070' ? (
+															<ArrowUpIcon width={15} height={15} />
+														) : content.color === '#f1be5b' ? (
+															<ArrowDownIcon width={15} height={15} />
+														) : (
+															<SymbolIcon width={15} height={15} />
+														)}Neutral</span>
 												</div>
-												<p className="text-gray-600 mt-2">Volatile Percentage</p>
+												<p className="text-gray-600">Volatile Percentage</p>
 											</div>
 										</Card>
 									);
