@@ -737,17 +737,15 @@ export default function Home() {
 				<div className="flex-col flex-1">
 					{selectedValue === 'harga-pangan' ? (
 						<>
-							<h1 className="font-bold text-sm mb-1 ">Tanggal</h1>
-
-							<div className="h-8">
-								<Datepicker theme={customTheme}
+							<h1 className="font-bold text-sm">Tanggal</h1>
+							<Datepicker theme={customTheme}
 									onChange={
 										(date) => {
 											setSelectedDate(date as any);
 										}
 									}
 									maxDate={new Date()} />
-							</div>
+							
 						</>
 					) : (
 						<>
