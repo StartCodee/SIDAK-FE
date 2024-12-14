@@ -1,7 +1,7 @@
 'use client';
 
-import { CounterClockwiseClockIcon, ChevronRightIcon, ArrowDownIcon, ArrowUpIcon, SymbolIcon, TriangleDownIcon, TriangleUpIcon, BellIcon } from '@radix-ui/react-icons';
-import { UserIcon, ScaleIcon, BuildingLibraryIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { CounterClockwiseClockIcon, ChevronRightIcon, ArrowDownIcon, ArrowUpIcon, ArrowRightIcon, SymbolIcon, TriangleDownIcon, TriangleUpIcon, BellIcon } from '@radix-ui/react-icons';
+import { UserIcon, ScaleIcon, BuildingLibraryIcon, MagnifyingGlassIcon, CalendarIcon } from '@heroicons/react/24/outline';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
@@ -565,7 +565,7 @@ export default function Home() {
 
 	const getBerita = async () => {
 		try {
-			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news?limit=3`, {
+			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news?limit=4`, {
 				headers: {
 					'content-type': 'application/json',
 					'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -739,13 +739,13 @@ export default function Home() {
 						<>
 							<h1 className="font-bold text-sm">Tanggal</h1>
 							<Datepicker theme={customTheme}
-									onChange={
-										(date) => {
-											setSelectedDate(date as any);
-										}
+								onChange={
+									(date) => {
+										setSelectedDate(date as any);
 									}
-									maxDate={new Date()} />
-							
+								}
+								maxDate={new Date()} />
+
 						</>
 					) : (
 						<>
@@ -1150,42 +1150,54 @@ export default function Home() {
 					</p>
 				</div>
 			</section>
-			<section className="px-4 sm:px-4 md:px-5 lg:px-5 pt-4 space-y-4">
+			<section className="px-4 sm:px-2 md:px-4 lg:px-14 pt-4 space-y-4 sm:space-y-4 md:space-y-6">
+				<div className="flex justify-between">
 				<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
-					Berita Hari Ini
+					Berita Terbaru
 				</h1>
-				<div className="flex flex-wrap justify-center md:gap-10 lg:gap-24 gap-4 px-2 py-8">
+				<Link href={`/berita`} className='flex gap-2 items-center text-[#3AC1DF]'>
+				Lihat Semua <ArrowRightIcon/>
+				</Link>
+				</div>
+				<div className="flex flex-wrap justify-center">
 					{loading ? (
 						<BeritaSkeleton />
 					) : (
 						beritaData.map((item) => (
-							<Card key={item.id} className="md:w-[13rem] lg:w-[23rem]">
-								<CardHeader>
+							<Link href={`/berita/${item.id}`} passHref key={item.id} className="w-1/4 flex flex-col gap-4 first:ps-0 last:pe-0	 px-2.5 py-1 items-center">
+								<div className="w-full h-full">
 									<Image
 										src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${item.image}`}
-										className="rounded-2xl"
+										className="rounded-2xl w-full h-full object-cover"
 										alt="berita"
-										width={300}
-										height={200}
+										width={500}
+										height={250}
 									/>
-								</CardHeader>
-								<CardContent>
-									<CardDescription className="mdtext-sm">
+								</div>
+								<div className="flex flex-col gap-2 w-full">
+									<p className="flex gap-2 items-center">
+										<span className="w-2 h-2 rounded-full bg-[#3AC1DF]"></span>
+										<CalendarIcon className="text-[#3AC1DF]" width={20} height={20} />
+										{new Date(item.created_at).toLocaleDateString('id-ID', {
+											year: 'numeric',
+											month: 'long',
+											day: 'numeric',
+										})}
+									</p>
+									<h2 className="text-lg lg:text-xxl font-semibold text-black line-clamp-3">
 										{item.title}
-									</CardDescription>
-								</CardContent>
-								<CardFooter className="flex justify-between">
-									<Button asChild className="md:w-30 md:text-[10px]">
-										<Link href={`/berita/${item.id}`}>Baca Selengkapnya</Link>
-									</Button>
-								</CardFooter>
-							</Card>
+									</h2>
+									<p className="text-md lg:text-base line-clamp-3">
+										{item.content}
+									</p>
+								</div>
+							</Link>
 						))
 					)}
 				</div>
 				{/* <div className="h-1 rounded-lg mt-10 bg-black/10 z-0"></div> */}
 			</section>
-			<section className="px-4 sm:px-8 md:px-20 pt-4 space-y-8 py-8 mb-35">
+			<section className="mt-12 px-4 sm:px-8 md:px-20 pt-4 space-y-8 py-8 mb-35">
 				<h1 className='text-3xl font-bold text-[#3AC1DF] text-center'>Statistik Kunjungan, Komoditas, dan Pasar</h1>
 				<div className="flex justify-center">
 					<p className='text-center w-2/3'>Jelajahi opsi statistik kunjungan, komoditas, dan pasar yang dirancang untuk memenuhi kebutuhan Anda. Temukan keseimbangan sempurna antara kualitas dan keandalan.</p>
