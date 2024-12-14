@@ -1107,7 +1107,7 @@ export default function Home() {
 												</div>
 											</div>
 
-											<div className="mt-4 flex flex-col gap-2">
+											<div className="mt-4 flex flex-col gap-4">
 
 												{/* progress bar */}
 												{/* <div className='w-full bg-gray rounded-md h-2'></div> */}
