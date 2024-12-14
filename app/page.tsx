@@ -667,8 +667,7 @@ export default function Home() {
 			<Navbar />
 			<Hero />
 			<div
-				style={{ marginTop: '-40px' }}
-				className="mx-auto z-1 relative px-4 py-[0.4rem] sm:py-6 sm:px-8 shadow-xl w-[18rem] md:w-[44rem] sm:w-[40rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
+				className="mx-auto -mt-10 relative px-4 py-[0.4rem] sm:py-6 sm:px-8 shadow-xl w-[18rem] md:w-[44rem] sm:w-[40rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm mb-1">Jenis Informasi</h1>
 					<Select
@@ -740,13 +739,15 @@ export default function Home() {
 						<>
 							<h1 className="font-bold text-sm mb-1 ">Tanggal</h1>
 
-							<Datepicker theme={customTheme}
-								onChange={
-									(date) => {
-										setSelectedDate(date as any);
+							<div className="h-8">
+								<Datepicker theme={customTheme}
+									onChange={
+										(date) => {
+											setSelectedDate(date as any);
+										}
 									}
-								}
-								maxDate={new Date()} />
+									maxDate={new Date()} />
+							</div>
 						</>
 					) : (
 						<>
@@ -862,7 +863,7 @@ export default function Home() {
 			{selectedValue === 'perdagangan-pangan' && (
 				<>
 					<Tabs defaultValue="all">
-						<section className="px-4 sm:px-8 md:px-10 lg:px-50 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+						<section className="px-4 sm:px-2 md:px-4 lg:px-14 pt-4 space-y-4 sm:space-y-4 md:space-y-6">
 							<div className="flex flex-col sm:flex-row justify-between pt-10">
 								<div className="flex-col mb-3">
 									<h1 className="text-2xl sm:text-3xl md:text-4xl mb-3 font-extrabold">
