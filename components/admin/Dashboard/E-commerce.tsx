@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 
 import TableOne from "../Tables/TableOne";
+import TableThree from "../Tables/TableThree";
 import CardDataStats from "../CardDataStats";
 import newsImg from "@/public/admin/images/cards/news.png";
 import Image from 'next/image'
@@ -54,7 +55,7 @@ const ECommerce: React.FC = () => {
 						<div>
 							<h1 className="text-2xl font-bold">Hello {username} !</h1>
 							<p className="mt-4">
-								Selamat Datang di Tampilan Dashboard Admin SIDAK
+							Selamat Datang di Tampilan Dashboard Admin SIDAK. Dashboard ini membantu Anda mengelola dan menganalisis data pangan, neraca pangan, dan pola perdagangan di Sulawesi Tengah. Fitur intuitif memudahkan pelacakan dan evaluasi kinerja, mendukung keputusan berbasis data dan pertumbuhan ekonomi berkelanjutan.
 							</p>
 						</div>
 						<div style={{ position: 'relative' }}>
@@ -96,12 +97,18 @@ const ECommerce: React.FC = () => {
 							<TabsTrigger className="rounded-full" value="harga-pangan">
 								Harga Pangan
 							</TabsTrigger>
+							<TabsTrigger className="rounded-full" value="neraca-pangan">
+								Neraca Pangan
+							</TabsTrigger>
 							<TabsTrigger className="rounded-full" value="flow">
 								Flow
 							</TabsTrigger>
 						</TabsList>
 						<TabsContent value="harga-pangan">
 							<TableOne />
+						</TabsContent>
+						<TabsContent value="neraca-pangan">
+							<TableThree />
 						</TabsContent>
 						<TabsContent value="flow">
 							<TableTwo />

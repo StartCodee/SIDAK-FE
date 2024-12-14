@@ -176,6 +176,10 @@ const { toast } = useToast();
 			accessorKey: 'kecamatan_name',
 		},
 		{
+			header: 'Harga',
+			accessorKey: 'harga',
+		},
+		{
 			header: 'Status',
 			accessorKey: 'approved',
 			cell: (info) => {

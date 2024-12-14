@@ -63,8 +63,7 @@ export default function Page() {
 						<blockquote className="space-y-2">
 							<p className="text-lg">
 								&ldquo;
-								<span className="font-bold">SIDAK</span> adalah sistem yang
-								sangat keren untuk memudahkan anda.&rdquo;
+								<span className="font-bold">SIDAK</span> memungkinkan Anda untuk mengatur berbagai data dengan lebih sistematis dan terstruktur. Fitur-fitur canggihnya mempermudah pengawasan, analisis, dan evaluasi kinerja, sehingga Anda dapat membuat keputusan yang lebih tepat dan efisien dalam menjalankan bisnis atau proyek Anda. Khususnya dalam konteks pangan, neraca pangan, dan pola perdagangan di Sulawesi Tengah, SIDAK menyediakan solusi yang memungkinkan Anda untuk melihat, menganalisis, dan mengoptimalkan aliran data pangan dengan lebih efektif, memastikan ketahanan pangan yang lebih baik dan mendukung keberlanjutan ekonomi di wilayah tersebut.&rdquo;
 							</p>
 							<footer className="text-sm">Admin</footer>
 						</blockquote>
