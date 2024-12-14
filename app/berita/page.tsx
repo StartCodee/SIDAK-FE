@@ -318,39 +318,39 @@ const BeritaPage: React.FC = () => {
 							<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 						</Button>
 					</div> */}
-					<CardContent className="flex flex-col gap-4">
+					<CardContent className="flex w-full">
 						{loading ? (
 							<UserBeritaSkeleton />
 						) : (
 							berita.map((item) => (
-								<Card
-									key={item.id}
-									className="w-full flex flex-col lg:flex-row items-center mb-4">
-									<CardHeader className="w-full lg:w-1/3 ">
+								<Link href={`/berita/${item.id}`} passHref key={item.id} className="w-full lg:w-1/4 flex flex-col gap-4 px-2 py-1 items-center">
+									<div className="w-full h-full">
 										<Image
 											src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${item.image}`}
-											className="rounded-2xl w-full "
+											className="rounded-2xl w-full h-full object-cover"
 											alt="berita"
-											width={350}
-											height={200}
-											layout="responsive"
+											width={500}
+											height={250}
 										/>
-									</CardHeader>
-									<CardContent className="w-full lg:w-2/3 p-4 lg:p-6 ">
-										<div>
-											<h1 className="text-xl lg:text-2xl font-semibold text-black">
-												{item.title}
-											</h1>
-											<div className="my-4 border-b border-black w-full" />
-											<p className="text-lg lg:text-base line-clamp-3">
-												{item.content}
-											</p>
-										</div>
-										<Button asChild className="mt-4">
-											<Link href={`/berita/${item.id}`}>Baca Selengkapnya</Link>
-										</Button>
-									</CardContent>
-								</Card>
+									</div>
+									<div className="flex flex-col gap-2 w-full">
+										<p className="flex gap-2 items-center">
+										<span className="w-2 h-2 rounded-full bg-[#3AC1DF]"></span>
+											<CalendarIcon className="text-[#3AC1DF]" width={20} height={20} />
+											{new Date(item.created_at).toLocaleDateString('id-ID', {
+												year: 'numeric',
+												month: 'long',
+												day: 'numeric',
+											})}
+										</p>
+										<h2 className="text-xl lg:text-2xl font-semibold text-black line-clamp-3">
+											{item.title}
+										</h2>
+										<p className="text-lg lg:text-base line-clamp-3">
+											{item.content}
+										</p>
+									</div>
+								</Link>
 							))
 						)}
 
