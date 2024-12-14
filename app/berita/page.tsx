@@ -273,7 +273,7 @@ const BeritaPage: React.FC = () => {
 						<h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold">
 							Semua Berita
 						</h1>
-						<div className="flex ml-auto h-full lg:ml-0 flex-row w-max lg:w-96">
+						<div className="flex h-full flex-row w-max lg:w-96">
 							<div className="w-full mx-auto mt-4">
 								<label
 									htmlFor="default-search"
@@ -318,7 +318,7 @@ const BeritaPage: React.FC = () => {
 							<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 						</Button>
 					</div> */}
-					<div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 justify-center">
+					<CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 justify-center">
 						{loading ? (
 							<UserBeritaSkeleton />
 						) : (
@@ -400,7 +400,7 @@ const BeritaPage: React.FC = () => {
 								</PaginationContent>
 							</Pagination>
 						</div>
-					</div>
+					</CardContent>
 				</Card>
 			</section>
 
