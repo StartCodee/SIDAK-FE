@@ -318,12 +318,12 @@ const BeritaPage: React.FC = () => {
 							<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 						</Button>
 					</div> */}
-					<CardContent className="flex w-full">
+					<div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 justify-center">
 						{loading ? (
 							<UserBeritaSkeleton />
 						) : (
 							berita.map((item) => (
-								<Link href={`/berita/${item.id}`} passHref key={item.id} className="w-full lg:w-1/4 flex flex-col gap-4 px-2 py-1 items-center">
+								<Link href={`/berita/${item.id}`} passHref key={item.id} className="w-full flex flex-col gap-4 items-center">
 									<div className="w-full h-full">
 										<Image
 											src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${item.image}`}
@@ -335,7 +335,7 @@ const BeritaPage: React.FC = () => {
 									</div>
 									<div className="flex flex-col gap-2 w-full">
 										<p className="flex gap-2 items-center">
-										<span className="w-2 h-2 rounded-full bg-[#3AC1DF]"></span>
+											<span className="w-2 h-2 rounded-full bg-[#3AC1DF]"></span>
 											<CalendarIcon className="text-[#3AC1DF]" width={20} height={20} />
 											{new Date(item.created_at).toLocaleDateString('id-ID', {
 												year: 'numeric',
@@ -343,10 +343,10 @@ const BeritaPage: React.FC = () => {
 												day: 'numeric',
 											})}
 										</p>
-										<h2 className="text-xl lg:text-2xl font-semibold text-black line-clamp-3">
+										<h2 className="text-lg lg:text-xxl font-semibold text-black line-clamp-3">
 											{item.title}
 										</h2>
-										<p className="text-lg lg:text-base line-clamp-3">
+										<p className="text-md lg:text-base line-clamp-3">
 											{item.content}
 										</p>
 									</div>
@@ -400,7 +400,7 @@ const BeritaPage: React.FC = () => {
 								</PaginationContent>
 							</Pagination>
 						</div>
-					</CardContent>
+					</div>
 				</Card>
 			</section>
 
