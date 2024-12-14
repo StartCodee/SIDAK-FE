@@ -54,12 +54,12 @@ const ECommerce: React.FC = () => {
 					<div className="flex justify-between w-full  rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
 						<div>
 							<h1 className="text-2xl font-bold">Hello {username} !</h1>
-							<p className="mt-4">
-							Selamat Datang di Tampilan Dashboard Admin SIDAK. Dashboard ini membantu Anda mengelola dan menganalisis data pangan, neraca pangan, dan pola perdagangan di Sulawesi Tengah. Fitur intuitif memudahkan pelacakan dan evaluasi kinerja, mendukung keputusan berbasis data dan pertumbuhan ekonomi berkelanjutan.
+							<p className="mt-4" style={{'width':"80%"}}>
+							Selamat Datang di Tampilan Dashboard Admin SIDAK. Dashboard ini membantu Anda mengelola dan menganalisis data pangan, neraca pangan, dan pola perdagangan.
 							</p>
 						</div>
 						<div style={{ position: 'relative' }}>
-							<Image src={heroAdmin} width={150} height={200} alt="hero" />
+							<Image src={heroAdmin} width={300} height={200} alt="hero" />
 						</div>
 					</div>
 					<div className="flex gap-3 my-5">

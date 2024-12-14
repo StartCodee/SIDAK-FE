@@ -297,7 +297,8 @@ export default function FLowForm() {
 							/>
 						</FormControl>
 						{/* line  */}
-						<div className="bg-black h-2 w-[40%] rounded-full"></div>
+						<div className="bg-black h-2 w-[40%] mt-6 rounded-full"></div>
+						{/* line  */}
 						<FormControl>
 							<FormField
 								control={form.control}

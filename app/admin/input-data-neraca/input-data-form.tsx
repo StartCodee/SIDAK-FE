@@ -511,8 +511,8 @@ export default function InputDataForm() {
 								control={form.control}
 								name="komoditas"
 								render={({ field }) => (
-									<FormItem className="flex flex-col">
-										<FormLabel>Komoditas </FormLabel>
+									<FormItem className="flex flex-col mt-2">
+										<FormLabel className='mb-1'>Komoditas </FormLabel>
 										<Popover
 											open={openKomoditas}
 											onOpenChange={setOpenKomoditas}>
@@ -568,16 +568,6 @@ export default function InputDataForm() {
 								)}
 							/>
 						</FormControl>
-					</div>
-					<div className="flex flex-wrap justify-between gap-4 px-8">
-						<FormControl>
-							<FormItem>
-								<h1 className="font-bold text-sm ">Bulan</h1>
-								<LocalizationProvider dateAdapter={AdapterDayjs}>
-									<DatePicker value={selectedDate} onChange={(newValue) => setSelectedDate(newValue as any)} views={['month', 'year']} />
-								</LocalizationProvider>
-							</FormItem>
-						</FormControl>
 						<FormControl>
 							<FormField
 								control={form.control}
@@ -613,6 +603,23 @@ export default function InputDataForm() {
 									</FormItem>
 								)}
 							/>
+						</FormControl>
+					</div>
+					<div className="flex flex-wrap justify-between gap-4 px-8">
+						<FormControl>
+							<FormItem>
+								<h1 className="font-bold text-sm ">Bulan</h1>
+								<LocalizationProvider dateAdapter={AdapterDayjs}>
+									<div className="border border-[#e2e8f0] rounded-lg p-1"> {/* Border styling here */}
+										<DatePicker
+											value={selectedDate}
+											onChange={(newValue) => setSelectedDate(newValue as any)}
+											views={['month', 'year']}
+											className="w-full"
+										/>
+									</div>
+								</LocalizationProvider>
+							</FormItem>
 						</FormControl>
 					</div>
 					<FormControl>
