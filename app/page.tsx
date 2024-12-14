@@ -1159,12 +1159,12 @@ export default function Home() {
 				Lihat Semua <ArrowRightIcon/>
 				</Link>
 				</div>
-				<div className="flex flex-wrap justify-center">
+				<div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 justify-center">
 					{loading ? (
 						<BeritaSkeleton />
 					) : (
 						beritaData.map((item) => (
-							<Link href={`/berita/${item.id}`} passHref key={item.id} className="w-1/4 flex flex-col gap-4 first:ps-0 last:pe-0	 px-2.5 py-1 items-center">
+							<Link href={`/berita/${item.id}`} passHref key={item.id} className="w-full flex flex-col gap-4 items-center">
 								<div className="w-full h-full">
 									<Image
 										src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${item.image}`}
