@@ -250,6 +250,7 @@ export default function Home() {
 	const [beritaData, setBeritaData] = useState<any[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [loadingKomoditas, setLoadingKomoditas] = useState(true);
+	const [loadingDetail, setLoadingDetail] = useState(true);
 	const [linkExportHg, setLinkExportHg] = useState('');
 
 	const getDetailSupply = async (date: string, komoditas: string, kota: string) => {
@@ -263,6 +264,7 @@ export default function Home() {
 			if (response.data.data) {
 				console.log(response.data.data);
 				setdetailData(response.data.data);
+				setLoadingDetail(false);
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
@@ -1310,50 +1312,63 @@ export default function Home() {
 										</tr>
 									</thead>
 									<tbody>
-										{detailData.kabupatenData != undefined && detailData.kabupatenData.dates.length > 0 ? (
+										{loadingDetail ? (
+											// Tampilkan loading jika data sedang dimuat
 											<tr>
-												<td className="px-4 py-2 border border-1">
-													<h2>{detailHargaKonsumen?.city}</h2>
+												<td colSpan={9} className="px-4 py-2 border border-1 text-center">
+													Loading...
 												</td>
-												{detailData.kabupatenData.dates.map((kabupatenDate: any, index: number) => (
-													<td className="px-4 py-2 border border-1" key={index}>
-														<h2>{kabupatenDate.harga !== "-"
-															? `Rp ${kabupatenDate.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
-															: '-'}</h2>
-													</td>
-												))}
 											</tr>
-										) : null}
-										<tr>
-											<td className="px-4 py-2 border border-1 bg-blue-300" colSpan={9}>
-											</td>
-										</tr>
-										{detailData.pasarData != undefined && Object.keys(detailData.pasarData).length > 0 ? (
-											Object.entries(detailData.pasarData).map(([pasarName, pasarDetails]: [string, any], pasarIndex: number) => (
-												<tr key={pasarIndex}>
-													<td className="px-4 py-2 border border-1">
-														<h2>{pasarName !== "null" ? pasarName : detailHargaKonsumen?.city}</h2>
-													</td>
-													{detailData.headers != undefined && detailData.headers.map((headerDate: any, headerIndex: any) => {
-														const dateItem = pasarDetails.dates.find((date: any) => date.date === headerDate);
-														return (
-															<td className="px-4 py-2 border border-1" key={headerIndex}>
+										) : (
+											<>
+												{detailData.kabupatenData != undefined && detailData.kabupatenData.dates.length > 0 ? (
+													<tr>
+														<td className="px-4 py-2 border border-1">
+															<h2>{detailHargaKonsumen?.city}</h2>
+														</td>
+														{detailData.kabupatenData.dates.map((kabupatenDate: any, index: number) => (
+															<td className="px-4 py-2 border border-1" key={index}>
 																<h2>
-																	{dateItem && dateItem.harga !== "-"
-																		? `Rp ${dateItem.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
-																		: '-'}
+																	{kabupatenDate.harga !== "-"
+																		? `Rp ${kabupatenDate.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+																		: "-"}
 																</h2>
 															</td>
-														);
-													})}
+														))}
+													</tr>
+												) : null}
+												<tr>
+													<td className="px-4 py-2 border border-1 bg-blue-300" colSpan={9}></td>
 												</tr>
-											))
-										) : (
-											<tr key="1">
-												<td className="px-4 py-2 border border-1 text-center" colSpan={detailData.header != undefined && detailData.header.length + 1}>
-													Data Kosong
-												</td>
-											</tr>
+												{detailData.pasarData != undefined && Object.keys(detailData.pasarData).length > 0 ? (
+													Object.entries(detailData.pasarData).map(([pasarName, pasarDetails]: [string, any], pasarIndex: number) => (
+														<tr key={pasarIndex}>
+															<td className="px-4 py-2 border border-1">
+																<h2>{pasarName !== "null" ? pasarName : detailHargaKonsumen?.city}</h2>
+															</td>
+															{detailData.headers != undefined &&
+																detailData.headers.map((headerDate: any, headerIndex: any) => {
+																	const dateItem = pasarDetails.dates.find((date: any) => date.date === headerDate);
+																	return (
+																		<td className="px-4 py-2 border border-1" key={headerIndex}>
+																			<h2>
+																				{dateItem && dateItem.harga !== "-"
+																					? `Rp ${dateItem.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+																					: "-"}
+																			</h2>
+																		</td>
+																	);
+																})}
+														</tr>
+													))
+												) : (
+													<tr key="1">
+														<td className="px-4 py-2 border border-1 text-center" colSpan={detailData.headers?.length + 1}>
+															Data Kosong
+														</td>
+													</tr>
+												)}
+											</>
 										)}
 									</tbody>
 								</table>
