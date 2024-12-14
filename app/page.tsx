@@ -777,9 +777,9 @@ export default function Home() {
 								Juli 2024
 							</Badge> */}
 							<div className="flex w-full bg-gray-200 rounded-lg overflow-hidden h-4">
-								<div className="bg-[#17D6A9] h-full" style={{ width: "40%" }}></div>
-								<div className="bg-[#F17A64] h-full" style={{ width: "60%" }}></div>
-								<div className="bg-[#ED4527] h-full" style={{ width: "60%" }}></div>
+								<div className="bg-[#17D6A9] h-full" style={{ width: "33.33%" }}></div>
+								<div className="bg-[#F17A64] h-full" style={{ width: "33.33%" }}></div>
+								<div className="bg-[#ED4527] h-full" style={{ width: "33.33%" }}></div>
 							</div>
 							<div className="flex justify-between">
 								<p>Harga Terendah</p>
