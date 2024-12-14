@@ -28,7 +28,7 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from "@/components/ui/pagination"
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, CalendarIcon } from '@heroicons/react/24/outline';
 
 import Footer from '@/components/ui/footer';
 
@@ -182,165 +182,90 @@ const BeritaPage: React.FC = () => {
 			<Hero />
 
 			<section className="min-h-screen">
-				
+
 				<Card className="m-4 sm:m-6 lg:m-10 border-none">
 					<CardHeader>
 						<h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold">
 							Berita Terbaru
 						</h1>
-	
+
 					</CardHeader>
-
-					<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-					{/* Kolom Kiri: Berita Utama */}
-					{berita.length > 0 && (
-						<div className="w-full">
-							<Card className="w-full flex flex-col">
-								<CardHeader className="w-full">
-									<Image
-										src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${berita[0].image}`}
-										className="rounded-2xl w-full"
-										alt="berita utama"
-										width={700}
-										height={400}
-										layout="responsive"
-									/>
-								</CardHeader>
-								<CardContent className="w-full p-4 lg:p-6">
-									<div>
-										<h1 className="text-2xl lg:text-3xl font-semibold text-black">
-											{berita[0].title}
-										</h1>
-										<div className="my-4 border-b border-black w-full" />
-										<p className="text-lg lg:text-base line-clamp-3">
-											{berita[0].content}
-										</p>
-									</div>
-									<Button asChild className="mt-4">
-										<Link href={`/berita/${berita[0].id}`}>Baca Selengkapnya</Link>
-									</Button>
-								</CardContent>
-							</Card>
-						</div>
-					)}
-
-					{/* Kolom Kanan: Berita Tambahan */}
-					<div className="w-full flex flex-col gap-6">
-						{berita.slice(1, 4).map((item) => (
-							<Card
-								key={item.id}
-								className="w-full flex flex-col lg:flex-row items-center">
-								<CardHeader className="w-full lg:w-1/3">
-									<Image
-										src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${item.image}`}
-										className="rounded-2xl w-full"
-										alt="berita"
-										width={350}
-										height={200}
-										layout="responsive"
-									/>
-								</CardHeader>
-								<CardContent className="w-full lg:w-2/3 p-4 lg:p-6">
-									<div>
-										<h2 className="text-xl lg:text-2xl font-semibold text-black">
-											{item.title}
-										</h2>
-										<div className="my-4 border-b border-black w-full" />
-										<p className="text-lg lg:text-base line-clamp-3">
-											{item.content}
-										</p>
-									</div>
-									<Button asChild className="mt-4">
-										<Link href={`/berita/${item.id}`}>Baca Selengkapnya</Link>
-									</Button>
-								</CardContent>
-							</Card>
-						))}
-					</div>
-				</div>
-					<CardContent className="flex flex-col gap-4">
-						{loading ? (
-							<UserBeritaSkeleton />
-						) : (
-							berita.map((item) => (
-								<Card
-									key={item.id}
-									className="w-full flex flex-col lg:flex-row items-center mb-4">
-									<CardHeader className="w-full lg:w-1/3 ">
-										<Image
-											src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${item.image}`}
-											className="rounded-2xl w-full "
-											alt="berita"
-											width={350}
-											height={200}
-											layout="responsive"
-										/>
-									</CardHeader>
-									<CardContent className="w-full lg:w-2/3 p-4 lg:p-6 ">
-										<div>
-											<h1 className="text-xl lg:text-2xl font-semibold text-black">
-												{item.title}
-											</h1>
-											<div className="my-4 border-b border-black w-full" />
-											<p className="text-lg lg:text-base line-clamp-3">
-												{item.content}
-											</p>
+					<CardContent>
+						<div className="flex flex-col lg:flex-row gap-8">
+							{/* Kolom Kiri: Berita Utama */}
+							{berita.length > 0 && (
+								<div className="w-full relative h-full flex flex-col">
+									<Link href={`/berita/${berita[0].id}`} passHref>
+										<div className="w-full flex flex-col h-full">
+											<div className="w-full relative">
+												<Image
+													src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${berita[0].image}`}
+													className="rounded-2xl w-full"
+													alt="berita utama"
+													width={700}
+													height={400}
+													layout="responsive"
+												/>
+												{/* Layer transparan */}
+												<div className="absolute top-0 left-0 right-0 bottom-0 bg-black opacity-50 rounded-2xl" />
+												{/* Layer untuk title dan content di bawah gambar */}
+												<div className="absolute bottom-0 left-0 right-0 p-4 flex flex-col items-start space-y-2">
+													<h1 className="text-2xl lg:text-3xl font-semibold text-white line-clamp-3">{berita[0].title}</h1>
+													<p className="text-lg lg:text-base text-white line-clamp-3">{berita[0].content}</p>
+													<p className="flex gap-2 items-center text-white">
+														<span className="w-2 h-2 rounded-full bg-[#3AC1DF]"></span>
+														<CalendarIcon width={20} height={20} />
+														{new Date(berita[0].created_at).toLocaleDateString('id-ID', {
+															year: 'numeric',
+															month: 'long',
+															day: 'numeric',
+														})}
+													</p>
+												</div>
+											</div>
 										</div>
-										<Button asChild className="mt-4">
-											<Link href={`/berita/${item.id}`}>Baca Selengkapnya</Link>
-										</Button>
-									</CardContent>
-								</Card>
-							))
-						)}
+									</Link>
+								</div>
+							)}
 
-						<div className="flex justify-end">
-							<Pagination>
-								<PaginationContent>
-									{paginationInfo?.links.map((link, index) => {
-										if (link.label == 'Next &raquo;') {
-											return (
-												<PaginationItem key={index}>
-													<PaginationNext
-														href="#"
-														onClick={() =>
-															handlePageChange(
-																paginationInfo?.next_page_url as string,
-															)
-														}
-													/>
-												</PaginationItem>
-											);
-										} else if (link.label == '&laquo; Previous') {
-											return (
-												<PaginationItem key={index}>
-													<PaginationPrevious
-														href="#"
-														onClick={() =>
-															handlePageChange(
-																paginationInfo?.prev_page_url as string,
-															)
-														}
-													/>
-												</PaginationItem>
-											);
-										} else {
-											return (
-												<PaginationItem key={index}>
-													<PaginationLink
-														href="#"
-														isActive={link.active}
-														onClick={() => handlePageChange(link.url)}>
-														{link.label}
-													</PaginationLink>
-												</PaginationItem>
-											);
-										}
-									})}
-								</PaginationContent>
-							</Pagination>
+							{/* Kolom Kanan: Berita Tambahan */}
+							<div className="flex flex-col gap-4 w-full min-h-full">
+								{berita.slice(1, 4).map((item) => (
+									<Link href={`/berita/${item.id}`} passHref key={item.id}>
+										<div className="w-full flex flex-col lg:flex-row items-center">
+											<div className="w-full lg:w-1/3 h-full">
+												<Image
+													src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${item.image}`}
+													className="rounded-2xl w-full h-full object-cover"
+													alt="berita"
+													width={500}
+													height={250}
+												/>
+											</div>
+											<div className="flex flex-col w-full lg:w-2/3 px-4 lg:px-6">
+												<h2 className="text-xl lg:text-2xl font-semibold text-black line-clamp-3">
+													{item.title}
+												</h2>
+												<p className="text-lg lg:text-base line-clamp-3">
+													{item.content}
+												</p>
+												<p className="flex gap-2">
+													<CalendarIcon className="text-[#3AC1DF]" width={20} height={20} />
+													{new Date(item.created_at).toLocaleDateString('id-ID', {
+														year: 'numeric',
+														month: 'long',
+														day: 'numeric',
+													})}
+												</p>
+											</div>
+										</div>
+									</Link>
+								))}
+							</div>
 						</div>
 					</CardContent>
+
+
 				</Card>
 
 				<Card className="m-4 sm:m-6 lg:m-10 border-none">
