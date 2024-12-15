@@ -2,13 +2,7 @@
 
 
 import { useEffect, useState } from 'react';
-import Dialog from './modal-harga';
-import { Button } from './button';
-import Swal from "sweetalert2";
-import axios from "axios";
 import React from 'react';
-import { LocateIcon } from 'lucide-react';
-import ReactDOM from 'react-dom';
 interface CardContent {
 	id: number;
 	commodity: string;
@@ -34,12 +28,6 @@ interface CityColor {
 
 
 export default function Map({ cardContents }: MapProps) {
-	const [isDialogOpen, setIsDialogOpen] = useState(false);
-	const [detailHarga, setDetailHarga] = useState<any>();
-
-	const [detailData, setdetailData] = useState<any>([]);
-	const [linkExport, setLinkExport] = useState('');
-
 	const showCardArea = (id: number, start: string, end: string) => {
 		// Menampilkan kartu untuk 'start'
 		const content = cardContents.find((card) => card.id === id);
@@ -229,64 +217,6 @@ export default function Map({ cardContents }: MapProps) {
 		{ x: 570, y: 430, name: 'BanggaiKepulauan' },
 	];
 
-	// const getCoordinate = (start: string, end: string) => {
-	// 	// Cari koordinat berdasarkan nama yang diberikan
-	// 	const startCoord = coordinatesArray.find(coord => coord.name === start);
-	// 	const endCoord = coordinatesArray.find(coord => coord.name === end);
-
-	// 	if (startCoord && endCoord) {
-	// 		// Koordinat awal dan akhir
-	// 		const startX = startCoord.x;
-	// 		const startY = startCoord.y;
-	// 		const endX = endCoord.x;
-	// 		const endY = endCoord.y;
-
-	// 		// Titik kontrol untuk kelengkungan
-	// 		const controlX = (startX + endX) / 2;
-	// 		const controlY = Math.min(startY, endY) - 20;  // Menentukan ketinggian lengkungan (misalnya 20 piksel di atas titik tengah)
-
-	// 		// Menghasilkan perintah path Bezier dengan kelengkungan
-	// 		return `M ${startX} ${startY} C ${controlX} ${controlY}, ${controlX} ${controlY}, ${endX} ${endY}`;
-	// 	}
-
-	// 	return 'M 0 0'; // Default jika tidak ditemukan
-	// };
-
-	// const usedCoordinates = new Set<string>(); // Menyimpan koordinat yang sudah digunakan
-
-	// const getAdjustedCoordinates = (start: string, end: string): string => {
-	// 	// Dapatkan koordinat yang belum disesuaikan
-	// 	let coordinates = getCoordinate(start, end);
-
-	// 	// Cek apakah koordinat tersebut sudah ada
-	// 	if (usedCoordinates.has(coordinates)) {
-	// 		// Geser sedikit, misalnya tambah offset pada koordinat
-	// 		const offsetX = 10; // Geser 10px pada sumbu X
-	// 		const offsetY = 10; // Geser 10px pada sumbu Y
-
-	// 		// Ambil koordinat dan geser titik-titiknya
-	// 		const regex = /M (\d+) (\d+) C (\d+) (\d+), (\d+) (\d+), (\d+) (\d+)/;
-	// 		const match = coordinates.match(regex);
-
-	// 		if (match) {
-	// 			const [_, startX, startY, controlX, controlY, controlX2, controlY2, endX, endY] = match;
-
-	// 			// Geser koordinat dengan offset
-	// 			const adjustedCoordinates = `M ${parseInt(startX) + offsetX} ${parseInt(startY) + offsetY} 
-	// 				C ${parseInt(controlX) + offsetX} ${parseInt(controlY) + offsetY}, 
-	// 				${parseInt(controlX2) + offsetX} ${parseInt(controlY2) + offsetY}, 
-	// 				${parseInt(endX) + offsetX} ${parseInt(endY) + offsetY}`;
-
-	// 			// Update koordinat yang sudah disesuaikan
-	// 			coordinates = adjustedCoordinates;
-	// 		}
-	// 	}
-
-	// 	// Menambahkan koordinat yang sudah digunakan
-	// 	usedCoordinates.add(coordinates);
-	// 	return coordinates;
-	// };
-
 	const usedCoordinates = new Set<string>(); // Menyimpan koordinat yang sudah digunakan
 
 	const getCoordinate = (start: string, end: string) => {
@@ -296,109 +226,119 @@ export default function Map({ cardContents }: MapProps) {
 
 		// Pastikan startCoord dan endCoord ada
 		if (startCoord && endCoord) {
-			// Buat key koordinat untuk pengecekan apakah sudah digunakan
-			const startKey = `${startCoord.x}-${startCoord.y}`;
-			const endKey = `${endCoord.x}-${endCoord.y}`;
+			// Inisialisasi koordinat awal
+			let startX = startCoord.x;
+			let startY = startCoord.y;
+			let endX = endCoord.x;
+			let endY = endCoord.y;
 
-			// Cek apakah koordinat sudah digunakan
-			if (usedCoordinates.has(startKey)) {
-				// Geser koordinat start jika sudah digunakan
-				const startX = startCoord.x - 10;
-				const startY = startCoord.y - 10;
-				const endX = endCoord.x;
-				const endY = endCoord.y;
+			// Loop untuk mencari koordinat yang belum digunakan
+			let found = false;
+			let offsetX = 10; // Geser 10px pada koordinat X
+			let offsetY = 10; // Geser 10px pada koordinat Y
+			let maxAttempts = 10; // Batasi jumlah percobaan
 
-				// Titik kontrol untuk kelengkungan
-				const controlX = (startX + endX) / 2;
-				const controlY = Math.min(startY, endY) - 20;  // Menentukan ketinggian lengkungan
-
+			// Mencari koordinat yang belum digunakan
+			for (let i = 0; i < maxAttempts; i++) {
 				const startKey = `${startX}-${startY}`;
 				const endKey = `${endX}-${endY}`;
 
-				// Menambahkan koordinat yang sudah digunakan
-				usedCoordinates.add(startKey);
-				usedCoordinates.add(endKey);
+				// Jika kedua koordinat belum digunakan
+				if (!usedCoordinates.has(startKey) && !usedCoordinates.has(endKey)) {
+					// Tandai koordinat sebagai sudah digunakan
+					usedCoordinates.add(startKey);
+					usedCoordinates.add(endKey);
+					found = true;
+					break;
+				}
 
-				// Menghasilkan perintah path Bezier dengan kelengkungan
-				return `M ${startX} ${startY} C ${controlX} ${controlY}, ${controlX} ${controlY}, ${endX} ${endY}`;
-			} else if (usedCoordinates.has(endKey)) {
-				// Geser koordinat start jika sudah digunakan
-				const startX = startCoord.x;
-				const startY = startCoord.y;
-				const endX = endCoord.x - 10;
-				const endY = endCoord.y - 10;
+				// Jika X sudah digunakan, geser Y
+				if (usedCoordinates.has(startKey)) {
+					startY += offsetY;  // Geser Y jika X sudah digunakan
+				}
 
-				// Titik kontrol untuk kelengkungan
-				const controlX = (startX + endX) / 2;
-				const controlY = Math.min(startY, endY) - 20;  // Menentukan ketinggian lengkungan
+				if (usedCoordinates.has(endKey)) {
+					endY += offsetY;  // Geser Y jika X sudah digunakan
+				}
 
-				const startKey = `${startX}-${startY}`;
-				const endKey = `${endX}-${endY}`;
+				// Geser koordinat X untuk percobaan berikutnya
+				startX += offsetX;
+				endX += offsetX;
+			}
 
-				// Menambahkan koordinat yang sudah digunakan
-				usedCoordinates.add(startKey);
-				usedCoordinates.add(endKey);
-
-				// Menghasilkan perintah path Bezier dengan kelengkungan
-				return `M ${startX} ${startY} C ${controlX} ${controlY}, ${controlX} ${controlY}, ${endX} ${endY}`;
-			} else {
-				// Koordinat awal dan akhir jika belum digunakan
-				const startX = startCoord.x;
-				const startY = startCoord.y;
-				const endX = endCoord.x;
-				const endY = endCoord.y;
-
-				// Titik kontrol untuk kelengkungan
+			// Jika koordinat ditemukan, buat path Bezier
+			if (found) {
 				const controlX = (startX + endX) / 2;
 				const controlY = Math.min(startY, endY) - 20;  // Menentukan ketinggian lengkungan
 
 				// Menghasilkan perintah path Bezier dengan kelengkungan
-				const path = `M ${startX} ${startY} C ${controlX} ${controlY}, ${controlX} ${controlY}, ${endX} ${endY}`;
-
-				// Menambahkan koordinat yang sudah digunakan
-				usedCoordinates.add(startKey);
-				usedCoordinates.add(endKey);
-
-				return path;
+				return `M ${startX} ${startY} C ${controlX} ${controlY}, ${controlX} ${controlY}, ${endX} ${endY}`;
 			}
 		}
 
 		return 'M 0 0'; // Default jika tidak ditemukan
 	};
 
+	//   const getCoordinate = (start: string, end: string) => {
+	// 	// Cari koordinat berdasarkan nama yang diberikan
+	// 	const startCoord = coordinatesArray.find(coord => coord.name === start);
+	// 	const endCoord = coordinatesArray.find(coord => coord.name === end);
 
-	const getAdjustedCoordinates = (start: string, end: string): string => {
-		// Dapatkan koordinat yang belum disesuaikan
-		let coordinates = getCoordinate(start, end);
+	// 	// Pastikan startCoord dan endCoord ada
+	// 	if (startCoord && endCoord) {
+	// 	  // Inisialisasi koordinat awal
+	// 	  let startX = startCoord.x;
+	// 	  let startY = startCoord.y;
+	// 	  let endX = endCoord.x;
+	// 	  let endY = endCoord.y;
 
-		// Cek apakah koordinat tersebut sudah ada
-		if (usedCoordinates.has(coordinates)) {
-			// Geser sedikit, misalnya tambah offset pada koordinat
-			const offsetX = 10; // Geser 10px pada sumbu X
-			const offsetY = 10; // Geser 10px pada sumbu Y
+	// 	  // Loop untuk mencari koordinat yang belum digunakan
+	// 	  let found = false;
+	// 	  let offsetX = 10; // Geser 10px pada koordinat X
+	// 	  let offsetY = 10; // Geser 10px pada koordinat Y
+	// 	  let maxAttempts = 10; // Batasi jumlah percobaan
 
-			// Ambil koordinat dan geser titik-titiknya
-			const regex = /M (\d+) (\d+) C (\d+) (\d+), (\d+) (\d+), (\d+) (\d+)/;
-			const match = coordinates.match(regex);
+	// 	  // Mencari koordinat yang belum digunakan
+	// 	  for (let i = 0; i < maxAttempts; i++) {
+	// 		const startKey = `${startX}-${startY}`;
+	// 		const endKey = `${endX}-${endY}`;
 
-			if (match) {
-				const [_, startX, startY, controlX, controlY, controlX2, controlY2, endX, endY] = match;
+	// 		// Jika kedua koordinat belum digunakan
+	// 		if (!usedCoordinates.has(startKey) && !usedCoordinates.has(endKey)) {
+	// 		  // Tandai koordinat sebagai sudah digunakan
+	// 		  usedCoordinates.add(startKey);
+	// 		  usedCoordinates.add(endKey);
+	// 		  found = true;
+	// 		  break;
+	// 		}
 
-				// Geser koordinat dengan offset
-				const adjustedCoordinates = `M ${parseInt(startX) + offsetX} ${parseInt(startY) + offsetY} 
-					C ${parseInt(controlX) + offsetX} ${parseInt(controlY) + offsetY}, 
-					${parseInt(controlX2) + offsetX} ${parseInt(controlY2) + offsetY}, 
-					${parseInt(endX) + offsetX} ${parseInt(endY) + offsetY}`;
+	// 		// Jika X sudah digunakan, geser Y
+	// 		if (usedCoordinates.has(startKey)) {
+	// 		  startY += offsetY;  // Geser Y jika X sudah digunakan
+	// 		}
 
-				// Update koordinat yang sudah disesuaikan
-				coordinates = adjustedCoordinates;
-			}
-		}
+	// 		if (usedCoordinates.has(endKey)) {
+	// 		  endY += offsetY;  // Geser Y jika X sudah digunakan
+	// 		}
 
-		// Menambahkan koordinat yang sudah digunakan
-		usedCoordinates.add(coordinates);
-		return coordinates;
-	};
+	// 		// Geser koordinat X untuk percobaan berikutnya
+	// 		startX += offsetX;
+	// 		endX += offsetX;
+	// 	  }
+
+	// 	  // Jika koordinat ditemukan, buat path Bezier
+	// 	  if (found) {
+	// 		const controlX = (startX + endX) / 2;
+	// 		const controlY = Math.min(startY, endY) - 20;  // Menentukan ketinggian lengkungan
+
+	// 		// Menghasilkan perintah path Bezier dengan kelengkungan
+	// 		return `M ${startX} ${startY} C ${controlX} ${controlY}, ${controlX} ${controlY}, ${endX} ${endY}`;
+	// 	  }
+	// 	}
+
+	// 	return 'M 0 0'; // Default jika tidak ditemukan
+	//   };
+
 
 
 	return (
