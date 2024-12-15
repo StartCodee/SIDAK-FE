@@ -1041,9 +1041,10 @@ export default function Map({ cardContents }: MapProps) {
 						</marker>
 
 						{/* <!-- Marker for Arrow --> */}
-						<marker id="arrow" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
-							<path d="M 0 0 L 5 2.5 L 0 5 z" fill="black" />
+						<marker id="arrow" markerWidth="3" markerHeight="3" refX="2.5" refY="1.5" orient="auto">
+							<path d="M 0 0 L 3 1.5 L 0 3 z" fill="black" />
 						</marker>
+
 
 					</defs>
 
