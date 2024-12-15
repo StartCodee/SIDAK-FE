@@ -207,7 +207,7 @@ const menuGroups = [
 					{
 						icon: (
 							<svg
-								className="fill-current"
+								className="fill-current size-6"
 								width="18"
 								height="18"
 								viewBox="0 0 18 18"
