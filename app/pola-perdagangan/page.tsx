@@ -14,7 +14,7 @@ import {
 	CounterClockwiseClockIcon,
 } from '@radix-ui/react-icons';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import Select, { SingleValue }  from 'react-select';
+import Select, { SingleValue } from 'react-select';
 import { format } from 'date-fns';
 import Hero from '@/components/ui/hero';
 import MonthPicker from '@/components/ui/monthpicker';
@@ -22,7 +22,7 @@ import Footer from '@/components/ui/footer';
 import Swal from "sweetalert2";
 import axios from "axios";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
+import Map from '@/components/ui/map-pola-perdagangan';
 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -40,7 +40,7 @@ const FlowChart: React.FC = () => {
 	// const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
 	const [selectedDate, setSelectedDate] = useState<any>();
 
-	
+
 	const [selectedCommodity, setSelectedCommodity] = useState<SingleValue<{ value: string; label: string }> | null>(null);
 	const [selectedCommodityOption, setSelectedCommodityOption] = useState<any[]>([]);
 
@@ -64,7 +64,7 @@ const FlowChart: React.FC = () => {
 
 
 	const getPolaPerdagangan = async (date: string = '', komoditas: string) => {
-		
+
 		try {
 			const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/supply/pola-perdagangan?date=${date}&komoditas=${komoditas}`, {
 				headers: {
@@ -111,7 +111,7 @@ const FlowChart: React.FC = () => {
 				}));
 				setSelectedCommodityOption(mappedOptions);
 				const defaultOption = mappedOptions.find((option: { value: number; label: string }) => option.value === 18);
-   				 setSelectedCommodity(defaultOption);
+				setSelectedCommodity(defaultOption);
 			}
 		} catch (error: any) {
 			if (error.response && error.response.status === 401) {
@@ -149,7 +149,7 @@ const FlowChart: React.FC = () => {
 	useEffect(() => {
 		const date = dayjs();
 		setSelectedDate(date);
-		getPolaPerdagangan( '', '18');
+		getPolaPerdagangan('', '18');
 		getCommodityOption();
 	}, []);
 
@@ -554,9 +554,10 @@ const FlowChart: React.FC = () => {
 				<div
 					className="container"
 					id="container"
-					ref={containerRef}
-					style={{ position: 'relative' }}>
-					<canvas id="myCanvas" ref={canvasRef}></canvas>
+				// ref={containerRef}
+				// style={{ position: 'relative' }}
+				>
+					{/* <canvas id="myCanvas" ref={canvasRef}></canvas>
 					<svg
 						width="100%"
 						height="1064"
@@ -2007,7 +2008,10 @@ const FlowChart: React.FC = () => {
 								</g>
 							</g>
 						</g>
-					</svg>
+					</svg> */}
+					<center>
+						<Map cardContents={flow} />
+					</center>
 				</div>
 			</center>
 			<br />
