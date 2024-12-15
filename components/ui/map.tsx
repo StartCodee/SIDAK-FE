@@ -191,6 +191,7 @@ export default function Map({ cardContents }: MapProps) {
 	const startIndex = (currentPage - 1) * itemsPerPage;
 	const endIndex = startIndex + itemsPerPage;
 	const currentItems = detailData?.header?.slice(startIndex, endIndex);
+
 	return (
 		<>
 			<Dialog isOpen={isDialogOpen} onClose={closeDialog}>
@@ -219,7 +220,7 @@ export default function Map({ cardContents }: MapProps) {
 								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
 									<p className="text-[10px] font-bold lg:text-lg">Tanggal </p>
 									<h1 className=" text-[10px] lg:text-lg">
-										{detailHarga?.bulan}
+										{detailHarga?.tanggal}
 									</h1>
 								</div>
 								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
@@ -307,7 +308,7 @@ export default function Map({ cardContents }: MapProps) {
 										)}
 									</tbody>
 									<tfoot className='bg-[#F6F9FA]'>
-										<tr >
+										{detailData.kabupatenData != undefined && detailData.kabupatenData.dates.length > 0 ? (<tr >
 											<td colSpan={detailData.headers != undefined ? detailData.headers.length - 1 : undefined} className="px-4 py-2 ">
 												<span className=''>{currentPage} - 10 of {totalPages}</span>
 											</td>
@@ -320,9 +321,8 @@ export default function Map({ cardContents }: MapProps) {
 													Next
 												</button>
 											</td>
-
-												
-										</tr>
+										</tr>) : null}
+										
 									</tfoot>
 								</table>
 							</div>

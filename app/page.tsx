@@ -1,7 +1,7 @@
 'use client';
 
-import { CounterClockwiseClockIcon, ChevronRightIcon, ArrowDownIcon, ArrowUpIcon, ArrowRightIcon, SymbolIcon, TriangleDownIcon, TriangleUpIcon, BellIcon } from '@radix-ui/react-icons';
-import { UserIcon, ScaleIcon, BuildingLibraryIcon, MagnifyingGlassIcon, CalendarIcon } from '@heroicons/react/24/outline';
+import { CounterClockwiseClockIcon, ChevronRightIcon, ArrowDownIcon, ArrowUpIcon, ArrowRightIcon, SymbolIcon, TriangleDownIcon, TriangleUpIcon, BarChartIcon } from '@radix-ui/react-icons';
+import { UserIcon, ScaleIcon, BuildingLibraryIcon, MagnifyingGlassIcon, CalendarIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
@@ -644,6 +644,28 @@ export default function Home() {
 		}
 	};
 
+	const [currentPage, setCurrentPage] = useState(1);
+	const itemsPerPage = 10;
+
+	// detailData.header != undefined
+	// console.log(detailData?.headers)
+	const totalPages = Math.ceil(detailData?.headers?.length / itemsPerPage);
+
+	const handlePreviousPage = () => {
+		if (currentPage > 1) {
+			setCurrentPage(currentPage - 1);
+		}
+	};
+
+	const handleNextPage = () => {
+		if (currentPage < totalPages) {
+			setCurrentPage(currentPage + 1);
+		}
+	};
+
+	const startIndex = (currentPage - 1) * itemsPerPage;
+	const endIndex = startIndex + itemsPerPage;
+	const currentItems = detailData?.header?.slice(startIndex, endIndex);
 
 	useEffect(() => {
 		let today = getCurrentDate();
@@ -1152,12 +1174,12 @@ export default function Home() {
 			</section>
 			<section className="px-4 sm:px-2 md:px-4 lg:px-14 pt-4 space-y-4 sm:space-y-4 md:space-y-6">
 				<div className="flex justify-between">
-				<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
-					Berita Terbaru
-				</h1>
-				<Link href={`/berita`} className='flex gap-2 items-center text-[#3AC1DF]'>
-				Lihat Semua <ArrowRightIcon/>
-				</Link>
+					<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
+						Berita Terbaru
+					</h1>
+					<Link href={`/berita`} className='flex gap-2 items-center text-[#3AC1DF]'>
+						Lihat Semua <ArrowRightIcon />
+					</Link>
 				</div>
 				<div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 justify-center">
 					{loading ? (
@@ -1258,41 +1280,65 @@ export default function Home() {
 								</button>
 							</div>
 							<div className="flex md:flex-row flex-wrap sm:flex-nowrap justify-around space-y-4 sm:space-y-0 gap-5">
-								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4 text-sm lg:text-lg flex flex-col rounded-lg">
-									<p className="text-[10px] lg:text-lg">Harga </p>
-									<h1 className="font-bold text-[10px] lg:text-lg">
-										<div className="flex justify-between items-center">
-											<div>
-												Rp{' '}
-												{Math.round(detailHargaKonsumen?.price as any)
-													.toString()
-													.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-											</div>
-											<div>
-												<TriangleUpIcon color="red" width={50} height={50} />
-											</div>
+								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex items-center gap-4  rounded-lg">
+									<div className='w-full'>
+
+										<p className="text-[10px] font-bold  lg:text-lg">
+											Harga
+										</p>
+										<p>
+											Rp{' '}
+											{Math.round(detailHargaKonsumen?.price as any)
+												.toString()
+												.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+										</p>
+										<div className='flex items-center gap-1'>
+											<div className='w-2 h-2 rounded-full bg-[#ED4527]'></div>
+											<p>increase</p>
 										</div>
-									</h1>
-								</div>
-								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
-									<p className="text-[10px] lg:text-lg">
-										Harga Rata - Rata (MtM)
-									</p>
-									<h1 className="font-bold text-[10px] lg:text-lg">
-										<div className="flex justify-between items-center">
-											<div>
-												Rp{' '}
-												{Math.round(detailHargaKonsumen?.price as any)
-													.toString()
-													.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-											</div>
-											<div className="flex items-center">
-												<TriangleUpIcon color="red" width={50} height={50} />
-											</div>
+									</div>
+									<div className="flex flex-col items-center rounded-lg">
+										<div
+											className={`rounded-xl p-3 bg-[#ED4527] self-center text-center  font-bold text-[20px] items-center flex text-white`}
+										>
+											<TriangleUpIcon color="white" width={50} height={50} />
 										</div>
-									</h1>
+										<p>
+											{detailHargaKonsumen?.change}
+										</p>
+									</div>
 								</div>
-								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
+								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex items-center gap-4  rounded-lg">
+									<div>
+
+										<p className="text-[10px] font-bold lg:text-lg">
+											Harga Rata - Rata <span className='font-normal'>
+												(MtM)
+											</span>
+										</p>
+										<p>
+											Rp{' '}
+											{Math.round(detailHargaKonsumen?.price as any)
+												.toString()
+												.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+										</p>
+										<div className='flex items-center gap-1'>
+											<div className='w-2 h-2 rounded-full bg-[#ED4527]'></div>
+											<p>increase</p>
+										</div>
+									</div>
+									<div className="flex flex-col items-center rounded-lg">
+										<div
+											className={`rounded-xl p-3 bg-[#ED4527] self-center text-center  font-bold text-[20px] items-center flex text-white`}
+										>
+											<TriangleUpIcon color="white" width={50} height={50} />
+										</div>
+										<p>
+											{detailHargaKonsumen?.change}
+										</p>
+									</div>
+								</div>
+								{/* <div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex flex-col rounded-lg">
 									<p className="text-[10px] lg:text-lg">Volatilitas </p>
 									<h1 className="font-bold text-[10px] lg:text-lg">
 										<div className="flex justify-between items-center">
@@ -1314,40 +1360,68 @@ export default function Home() {
 											</div>
 										</div>
 									</h1>
+								</div> */}
+								<div className="shadow-lg w-[10rem] sm:w-[20rem] p-4  text-sm lg:text-lg flex items-center gap-4  rounded-lg">
+									<div className='w-full'>
+
+										<p className="text-[10px] font-bold  lg:text-lg">
+											Volatilitas
+										</p>
+										<p>
+											Rp{' '}
+											{detailHargaKonsumen?.volatility}
+										</p>
+										<div className='flex items-center gap-1'>
+											<div className='w-2 h-2 rounded-full bg-[#ED4527]'></div>
+											<p>increase</p>
+										</div>
+									</div>
+									<div className="flex flex-col items-center rounded-lg">
+										<div
+											className={`rounded-xl p-3 bg-[#ED4527] self-center text-center  font-bold text-[20px] items-center flex text-white`}
+										>
+											<BarChartIcon color="white" width={50} height={50} />
+										</div>
+										<p>
+											{detailHargaKonsumen?.change}
+										</p>
+									</div>
 								</div>
 							</div>
-							<Button onClick={() => { window.open(linkExportHg, '_blank'); }}
-								className="bg-[#f0fdf4] text-[#228848] hover:bg-green-200 rounded-full cursor-pointer"
-								asChild>
-								<span className="self-end inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-									Export
-								</span>
-							</Button>
+
 						</div>
-						<div className="h-1 rounded-lg my-10 bg-black/10 z-0"></div>
-						<div className="flex flex-col ">
-							<h1 className="sm:text-2xl text-lg font-bold mb-3">
-								Tabel Harga Harian
-							</h1>
+						<div className="flex flex-col gap-4 mt-11">
+							<div className='flex justify-between items-center'>
+								<h1 className="sm:text-2xl text-lg font-bold mb-3">
+									Tabel Harga Harian
+								</h1>
+								<Button onClick={() => { window.open(linkExportHg, '_blank'); }}
+									className="bg-[#17D6A9] text-white hover:scale-110 hover:bg-green-300 rounded-full cursor-pointer"
+									asChild>
+
+									<span className="self-end inline-flex items-center rounded-full bg-[#17D6A9] px-2 py-1 text-xs font-medium text-white  ring-1 ring-inset ring-green-600/20">
+										<ArrowDownTrayIcon />
+										Export
+									</span>
+								</Button>
+							</div>
 							<div className="overflow-x-auto">
-								<table className="min-w-full bg-white border border-1">
-									<thead>
-										<tr>
-											<th className="border border-1 px-4 py-2 bg-blue-200">
-												Subjek
-											</th>
+								<table className="min-w-full bg-white text-[16px] rounded-md">
+									<thead className='text-[16px] font-thin border-none rounded-md'>
+										<tr className='border-none text-[16px] font-light'>
+											<th className="px-4 py-2  bg-[#F6F9FA] font-normal">Subjek</th>
 											{detailData.headers != undefined && detailData.headers.map((item: any, index: any) => (
-												<th key={index} className="px-4 py-2 border border-1 bg-blue-200">
+												<th key={index} className="px-4 py-2 font-normal bg-[#F6F9FA]">
 													{item}
 												</th>
 											))}
 										</tr>
 									</thead>
-									<tbody>
+									<tbody className='border-none rounded-md'>
 										{loadingDetail ? (
 											// Tampilkan loading jika data sedang dimuat
 											<tr>
-												<td colSpan={9} className="px-4 py-2 border border-1 text-center">
+												<td colSpan={9} className="px-4 py-2  text-center">
 													Loading...
 												</td>
 											</tr>
@@ -1355,11 +1429,11 @@ export default function Home() {
 											<>
 												{detailData.kabupatenData != undefined && detailData.kabupatenData.dates.length > 0 ? (
 													<tr>
-														<td className="px-4 py-2 border border-1">
+														<td className="px-4 py-2 ">
 															<h2>{detailHargaKonsumen?.city}</h2>
 														</td>
 														{detailData.kabupatenData.dates.map((kabupatenDate: any, index: number) => (
-															<td className="px-4 py-2 border border-1" key={index}>
+															<td className="px-4 py-2 " key={index}>
 																<h2>
 																	{kabupatenDate.harga !== "-"
 																		? `Rp ${kabupatenDate.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
@@ -1369,20 +1443,20 @@ export default function Home() {
 														))}
 													</tr>
 												) : null}
-												<tr>
-													<td className="px-4 py-2 border border-1 bg-blue-300" colSpan={9}></td>
-												</tr>
+												{/* <tr>
+													<td className="px-4 py-2  bg-blue-300" colSpan={9}></td>
+												</tr> */}
 												{detailData.pasarData != undefined && Object.keys(detailData.pasarData).length > 0 ? (
 													Object.entries(detailData.pasarData).map(([pasarName, pasarDetails]: [string, any], pasarIndex: number) => (
 														<tr key={pasarIndex}>
-															<td className="px-4 py-2 border border-1">
+															<td className="px-4 py-2 ">
 																<h2>{pasarName !== "null" ? pasarName : detailHargaKonsumen?.city}</h2>
 															</td>
 															{detailData.headers != undefined &&
 																detailData.headers.map((headerDate: any, headerIndex: any) => {
 																	const dateItem = pasarDetails.dates.find((date: any) => date.date === headerDate);
 																	return (
-																		<td className="px-4 py-2 border border-1" key={headerIndex}>
+																		<td className="px-4 py-2 " key={headerIndex}>
 																			<h2>
 																				{dateItem && dateItem.harga !== "-"
 																					? `Rp ${dateItem.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
@@ -1395,7 +1469,7 @@ export default function Home() {
 													))
 												) : (
 													<tr key="1">
-														<td className="px-4 py-2 border border-1 text-center" colSpan={detailData.headers?.length + 1}>
+														<td className="px-4 py-2  text-center" colSpan={detailData.headers?.length + 1}>
 															Data Kosong
 														</td>
 													</tr>
@@ -1403,6 +1477,29 @@ export default function Home() {
 											</>
 										)}
 									</tbody>
+									<tfoot>
+										{loadingDetail ? (
+											<tr>
+												<td colSpan={9} className="px-4 py-2  text-center">
+
+												</td>
+											</tr>
+										) : (
+											<>
+												<td colSpan={detailData.headers != undefined ? detailData.headers.length - 1 : undefined} className="px-4 py-2 ">
+													<span className=''>{currentPage} - 10 of {totalPages}</span>
+												</td>
+												<td>
+													<button onClick={handlePreviousPage} disabled={currentPage === 1} className="px-4 py-2 bg-gray-200 rounded-md mr-2">
+														Previous
+													</button>
+												</td><td>
+													<button onClick={handleNextPage} disabled={currentPage === totalPages} className="px-4 py-2 bg-gray-200 rounded-md ml-2">
+														Next
+													</button>
+												</td></>
+										)}
+									</tfoot>
 								</table>
 							</div>
 						</div>
