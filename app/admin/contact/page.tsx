@@ -247,10 +247,10 @@ export default function Home() {
 		<>
 			<DefaultLayout>
 				<Breadcrumb pageName="Management Contact" />
-				<div className="col-span-3 rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
+				<div className="col-span-3 rounded-lg border border-stroke bg-white px-7  py-10 shadow-default">
 					<div className={`w-full `}>
 						<h1 className="text-2xl font-bold">Management Contact</h1>
-						<form id="adminRegisterForm" className="p-4 space-y-4">
+						<form id="adminRegisterForm" className="mt-4 space-y-2">
 							<label
 								htmlFor="email"
 								className="block text-sm font-medium leading-6 text-gray-900">

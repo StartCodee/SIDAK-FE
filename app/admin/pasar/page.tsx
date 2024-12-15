@@ -461,7 +461,7 @@ export default function Home() {
         <>
             <DefaultLayout>
                 <Breadcrumb pageName="Management Pasar" />
-                <div className="col-span-3  rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
+                <div className="col-span-3  rounded-lg border border-stroke bg-white px-7  py-10 shadow-default">
                     <div className={`w-full  ${activeTab === 'profile' ? '' : 'hidden'}`}>
                         <h1 className="text-2xl font-bold">Management Pasar</h1>
                         <div className="flex items-center py-4">
