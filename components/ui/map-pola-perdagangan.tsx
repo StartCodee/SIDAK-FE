@@ -192,23 +192,20 @@ export default function Map({ cardContents }: MapProps) {
 		});
 	};
 
-
-
-
 	const cityColors: CityColor[] = [
 		{ cityName: 'Buol', color: '#bf7070' },
 		{ cityName: 'Tolitoli', color: '#f1be5b' },
 		{ cityName: 'Parigi', color: '#76bf70' },
 		{ cityName: 'Morowali', color: '#bf7070' },
 		{ cityName: 'Banggai', color: '#bf7070' },
-		{ cityName: 'Morowali Utara', color: '#bf7070' },
+		{ cityName: 'MorowaliUtara', color: '#bf7070' },
 		{ cityName: 'Touna', color: '#bf7070' },
 		{ cityName: 'Poso', color: '#bf7070' },
 		{ cityName: 'Sigi', color: '#bf7070' },
 		{ cityName: 'Donggala', color: '#76bf70' },
 		{ cityName: 'Palu', color: '#bf7070' },
-		{ cityName: 'Banggai Laut', color: '#bf7070' },
-		{ cityName: 'Banggai Kepulauan', color: '#bf7070' },
+		{ cityName: 'BanggaiLaut', color: '#bf7070' },
+		{ cityName: 'BanggaiKepulauan', color: '#bf7070' },
 	];
 
 	const getColorByCity = (cityName: string): string | undefined => {
@@ -222,50 +219,187 @@ export default function Map({ cardContents }: MapProps) {
 		{ x: 70, y: 230, name: 'Parigi' },
 		{ x: 370, y: 620, name: 'Morowali' },
 		{ x: 440, y: 380, name: 'Banggai' },
-		{ x: 250, y: 500, name: 'Morowali Utara' },
+		{ x: 250, y: 500, name: 'MorowaliUtara' },
 		{ x: 300, y: 400, name: 'Touna' },
 		{ x: 160, y: 460, name: 'Poso' },
 		{ x: 70, y: 430, name: 'Sigi' },
 		{ x: 50, y: 230, name: 'Donggala' },
 		{ x: 65, y: 340, name: 'Palu' },
-		{ x: 610, y: 490, name: 'Banggai Laut' },
-		{ x: 570, y: 430, name: 'Banggai Kepulauan' },
+		{ x: 610, y: 490, name: 'BanggaiLaut' },
+		{ x: 570, y: 430, name: 'BanggaiKepulauan' },
 	];
 
-	// const getCoordinate = (cityName: string) => {
+	// const getCoordinate = (start: string, end: string) => {
 	// 	// Cari koordinat berdasarkan nama yang diberikan
-	// 	const coordinate = coordinatesArray.find(coord => coord.name === cityName);
+	// 	const startCoord = coordinatesArray.find(coord => coord.name === start);
+	// 	const endCoord = coordinatesArray.find(coord => coord.name === end);
 
-	// 	// Jika koordinat ditemukan, kembalikan x dan y
-	// 	if (coordinate) {
-	// 		return `${coordinate.x} ${coordinate.y}`;
+	// 	if (startCoord && endCoord) {
+	// 		// Koordinat awal dan akhir
+	// 		const startX = startCoord.x;
+	// 		const startY = startCoord.y;
+	// 		const endX = endCoord.x;
+	// 		const endY = endCoord.y;
+
+	// 		// Titik kontrol untuk kelengkungan
+	// 		const controlX = (startX + endX) / 2;
+	// 		const controlY = Math.min(startY, endY) - 20;  // Menentukan ketinggian lengkungan (misalnya 20 piksel di atas titik tengah)
+
+	// 		// Menghasilkan perintah path Bezier dengan kelengkungan
+	// 		return `M ${startX} ${startY} C ${controlX} ${controlY}, ${controlX} ${controlY}, ${endX} ${endY}`;
 	// 	}
-	// 	return '0 0'; // Default jika tidak ditemukan
+
+	// 	return 'M 0 0'; // Default jika tidak ditemukan
 	// };
 
+	// const usedCoordinates = new Set<string>(); // Menyimpan koordinat yang sudah digunakan
+
+	// const getAdjustedCoordinates = (start: string, end: string): string => {
+	// 	// Dapatkan koordinat yang belum disesuaikan
+	// 	let coordinates = getCoordinate(start, end);
+
+	// 	// Cek apakah koordinat tersebut sudah ada
+	// 	if (usedCoordinates.has(coordinates)) {
+	// 		// Geser sedikit, misalnya tambah offset pada koordinat
+	// 		const offsetX = 10; // Geser 10px pada sumbu X
+	// 		const offsetY = 10; // Geser 10px pada sumbu Y
+
+	// 		// Ambil koordinat dan geser titik-titiknya
+	// 		const regex = /M (\d+) (\d+) C (\d+) (\d+), (\d+) (\d+), (\d+) (\d+)/;
+	// 		const match = coordinates.match(regex);
+
+	// 		if (match) {
+	// 			const [_, startX, startY, controlX, controlY, controlX2, controlY2, endX, endY] = match;
+
+	// 			// Geser koordinat dengan offset
+	// 			const adjustedCoordinates = `M ${parseInt(startX) + offsetX} ${parseInt(startY) + offsetY} 
+	// 				C ${parseInt(controlX) + offsetX} ${parseInt(controlY) + offsetY}, 
+	// 				${parseInt(controlX2) + offsetX} ${parseInt(controlY2) + offsetY}, 
+	// 				${parseInt(endX) + offsetX} ${parseInt(endY) + offsetY}`;
+
+	// 			// Update koordinat yang sudah disesuaikan
+	// 			coordinates = adjustedCoordinates;
+	// 		}
+	// 	}
+
+	// 	// Menambahkan koordinat yang sudah digunakan
+	// 	usedCoordinates.add(coordinates);
+	// 	return coordinates;
+	// };
+
+	const usedCoordinates = new Set<string>(); // Menyimpan koordinat yang sudah digunakan
 
 	const getCoordinate = (start: string, end: string) => {
 		// Cari koordinat berdasarkan nama yang diberikan
 		const startCoord = coordinatesArray.find(coord => coord.name === start);
 		const endCoord = coordinatesArray.find(coord => coord.name === end);
 
+		// Pastikan startCoord dan endCoord ada
 		if (startCoord && endCoord) {
-			// Koordinat awal dan akhir
-			const startX = startCoord.x;
-			const startY = startCoord.y;
-			const endX = endCoord.x;
-			const endY = endCoord.y;
+			// Buat key koordinat untuk pengecekan apakah sudah digunakan
+			const startKey = `${startCoord.x}-${startCoord.y}`;
+			const endKey = `${endCoord.x}-${endCoord.y}`;
 
-			// Titik kontrol untuk kelengkungan
-			const controlX = (startX + endX) / 2;
-			const controlY = Math.min(startY, endY) - 20;  // Menentukan ketinggian lengkungan (misalnya 100 piksel di atas titik tengah)
+			// Cek apakah koordinat sudah digunakan
+			if (usedCoordinates.has(startKey)) {
+				// Geser koordinat start jika sudah digunakan
+				const startX = startCoord.x - 10;
+				const startY = startCoord.y - 10;
+				const endX = endCoord.x;
+				const endY = endCoord.y;
 
-			// Menghasilkan perintah path Bezier dengan kelengkungan
-			return `M ${startX} ${startY} C ${controlX} ${controlY}, ${controlX} ${controlY}, ${endX} ${endY}`;
+				// Titik kontrol untuk kelengkungan
+				const controlX = (startX + endX) / 2;
+				const controlY = Math.min(startY, endY) - 20;  // Menentukan ketinggian lengkungan
+
+				const startKey = `${startX}-${startY}`;
+				const endKey = `${endX}-${endY}`;
+
+				// Menambahkan koordinat yang sudah digunakan
+				usedCoordinates.add(startKey);
+				usedCoordinates.add(endKey);
+
+				// Menghasilkan perintah path Bezier dengan kelengkungan
+				return `M ${startX} ${startY} C ${controlX} ${controlY}, ${controlX} ${controlY}, ${endX} ${endY}`;
+			} else if (usedCoordinates.has(endKey)) {
+				// Geser koordinat start jika sudah digunakan
+				const startX = startCoord.x;
+				const startY = startCoord.y;
+				const endX = endCoord.x - 10;
+				const endY = endCoord.y - 10;
+
+				// Titik kontrol untuk kelengkungan
+				const controlX = (startX + endX) / 2;
+				const controlY = Math.min(startY, endY) - 20;  // Menentukan ketinggian lengkungan
+
+				const startKey = `${startX}-${startY}`;
+				const endKey = `${endX}-${endY}`;
+
+				// Menambahkan koordinat yang sudah digunakan
+				usedCoordinates.add(startKey);
+				usedCoordinates.add(endKey);
+
+				// Menghasilkan perintah path Bezier dengan kelengkungan
+				return `M ${startX} ${startY} C ${controlX} ${controlY}, ${controlX} ${controlY}, ${endX} ${endY}`;
+			} else {
+				// Koordinat awal dan akhir jika belum digunakan
+				const startX = startCoord.x;
+				const startY = startCoord.y;
+				const endX = endCoord.x;
+				const endY = endCoord.y;
+
+				// Titik kontrol untuk kelengkungan
+				const controlX = (startX + endX) / 2;
+				const controlY = Math.min(startY, endY) - 20;  // Menentukan ketinggian lengkungan
+
+				// Menghasilkan perintah path Bezier dengan kelengkungan
+				const path = `M ${startX} ${startY} C ${controlX} ${controlY}, ${controlX} ${controlY}, ${endX} ${endY}`;
+
+				// Menambahkan koordinat yang sudah digunakan
+				usedCoordinates.add(startKey);
+				usedCoordinates.add(endKey);
+
+				return path;
+			}
 		}
 
 		return 'M 0 0'; // Default jika tidak ditemukan
 	};
+
+
+	const getAdjustedCoordinates = (start: string, end: string): string => {
+		// Dapatkan koordinat yang belum disesuaikan
+		let coordinates = getCoordinate(start, end);
+
+		// Cek apakah koordinat tersebut sudah ada
+		if (usedCoordinates.has(coordinates)) {
+			// Geser sedikit, misalnya tambah offset pada koordinat
+			const offsetX = 10; // Geser 10px pada sumbu X
+			const offsetY = 10; // Geser 10px pada sumbu Y
+
+			// Ambil koordinat dan geser titik-titiknya
+			const regex = /M (\d+) (\d+) C (\d+) (\d+), (\d+) (\d+), (\d+) (\d+)/;
+			const match = coordinates.match(regex);
+
+			if (match) {
+				const [_, startX, startY, controlX, controlY, controlX2, controlY2, endX, endY] = match;
+
+				// Geser koordinat dengan offset
+				const adjustedCoordinates = `M ${parseInt(startX) + offsetX} ${parseInt(startY) + offsetY} 
+					C ${parseInt(controlX) + offsetX} ${parseInt(controlY) + offsetY}, 
+					${parseInt(controlX2) + offsetX} ${parseInt(controlY2) + offsetY}, 
+					${parseInt(endX) + offsetX} ${parseInt(endY) + offsetY}`;
+
+				// Update koordinat yang sudah disesuaikan
+				coordinates = adjustedCoordinates;
+			}
+		}
+
+		// Menambahkan koordinat yang sudah digunakan
+		usedCoordinates.add(coordinates);
+		return coordinates;
+	};
+
 
 	return (
 		<>
@@ -455,7 +589,7 @@ export default function Map({ cardContents }: MapProps) {
 								</mask>
 								<path
 									d="M216.387 499.951C216.387 499.951 214.493 504.292 212.865 505.92C211.237 507.548 202.823 520.159 202.823 520.159C202.823 520.159 201.195 523.82 201.195 525.991V533.046L202.28 535.898L202.547 539.016L202.685 541.454L203.495 546.881L212.848 547.561C212.848 547.561 225.327 548.646 231.7 554.34C231.7 554.34 243.766 552.85 246.892 559.225C246.892 559.225 251.095 563.161 253.266 567.365C255.436 571.569 259.234 569.941 259.234 569.941C259.234 569.941 267.64 567.908 277.268 572.112C277.268 572.112 284.046 571.302 286.079 566.004L283.228 559.63C283.228 559.63 282.547 558.949 286.079 556.106C289.61 553.264 295.707 542.815 295.707 542.815C295.707 542.815 306.145 534.674 310.081 533.589C310.081 533.589 311.029 530.066 310.081 526.672C309.134 523.278 303.846 521.52 303.975 518.264C303.975 518.264 292.856 510.667 292.314 505.24C291.771 499.813 288.654 497.918 287.431 499.27C286.208 500.622 286.346 505.102 286.346 505.102L278.345 505.507C278.345 505.507 275.666 504.249 277.466 502.535C277.466 502.535 278.612 500.648 278.698 498.03C278.784 495.411 285.329 496.066 285.329 496.066C285.329 496.066 289.911 496.315 290.324 491.81C290.738 487.305 290.324 485.996 290.979 485.591C291.634 485.186 292.701 484.85 292.701 486.168C292.701 487.486 292.788 495.506 292.788 495.506L299.91 495.669C299.91 495.669 300.565 495.669 300.728 493.947L303.105 493.783C303.105 493.783 305.809 500.33 309.986 500.33C309.986 500.33 313.345 502.052 313.75 506.058C313.75 506.058 323.981 507.29 326.927 507.204C329.872 507.118 334.704 502.785 334.704 502.785C334.704 502.785 338.226 503.112 338.467 500.002C338.467 500.002 344.031 495.911 345.349 490.828C346.666 485.746 348.785 480.836 350.18 480.181C351.575 479.526 351.739 473.962 351.739 473.962C351.739 473.962 356.571 467.329 361.316 468.561C361.316 468.561 363.693 470.137 365.657 468.405C367.62 466.674 371.547 464.219 376.792 464.46C376.792 464.46 378.3 464.374 381.822 459.74C385.344 455.105 385.749 455.303 388.677 455.002C388.677 455.002 385.034 451.349 385.93 446.465C386.826 441.581 388.505 439.522 386.834 438.618C385.164 437.713 380.788 435.448 384.587 432.476C384.587 432.476 386.567 431.485 388.161 431.563C389.754 431.64 388.841 426.317 386.791 423.121C384.742 419.925 385.267 415.971 385.267 415.971C385.267 415.971 377.886 414.679 377.128 409.812C376.37 404.945 376.827 404.936 376.827 404.936C376.827 404.936 368.912 404.557 364.881 408.356C364.881 408.356 360.317 409.958 355.218 407.788C355.218 407.788 351.644 411.25 347.08 411.25C342.515 411.25 337.494 416.273 337.494 416.273C337.494 416.273 328.288 416.496 325.549 420.08C322.81 423.663 314.895 427.996 312.622 424.034C310.348 420.071 302.201 417.565 300.53 419.167C300.53 419.167 301.064 424.111 294.217 423.121C294.217 423.121 288.662 429.056 284.175 430.348C279.688 431.64 277.027 434.535 268.656 432.631C268.656 432.631 252.68 437.575 245.377 445.414C238.073 453.253 224.69 456.828 220.427 456.527C216.164 456.225 209.773 456.371 209.773 456.371C209.773 456.371 205.364 464.968 204.985 469.835C204.985 469.835 201.635 474.478 203.46 479.044C205.286 483.609 206.811 486.96 207.034 489.011C207.034 489.011 208.171 490.992 209.541 491.371C209.541 491.371 212.167 498.719 216.37 499.951H216.387Z"
-									fill={getColorByCity('Morowali Utara')}
+									fill={getColorByCity('MorowaliUtara')}
 								/>
 								<path
 									d="M216.387 499.951C216.387 499.951 214.493 504.292 212.865 505.92C211.237 507.548 202.823 520.159 202.823 520.159C202.823 520.159 201.195 523.82 201.195 525.991V533.046L202.28 535.898L202.547 539.016L202.685 541.454L203.495 546.881L212.848 547.561C212.848 547.561 225.327 548.646 231.7 554.34C231.7 554.34 243.766 552.85 246.892 559.225C246.892 559.225 251.095 563.161 253.266 567.365C255.436 571.569 259.234 569.941 259.234 569.941C259.234 569.941 267.64 567.908 277.268 572.112C277.268 572.112 284.046 571.302 286.079 566.004L283.228 559.63C283.228 559.63 282.547 558.949 286.079 556.106C289.61 553.264 295.707 542.815 295.707 542.815C295.707 542.815 306.145 534.674 310.081 533.589C310.081 533.589 311.029 530.066 310.081 526.672C309.134 523.278 303.846 521.52 303.975 518.264C303.975 518.264 292.856 510.667 292.314 505.24C291.771 499.813 288.654 497.918 287.431 499.27C286.208 500.622 286.346 505.102 286.346 505.102L278.345 505.507C278.345 505.507 275.666 504.249 277.466 502.535C277.466 502.535 278.612 500.648 278.698 498.03C278.784 495.411 285.329 496.066 285.329 496.066C285.329 496.066 289.911 496.315 290.324 491.81C290.738 487.305 290.324 485.996 290.979 485.591C291.634 485.186 292.701 484.85 292.701 486.168C292.701 487.486 292.788 495.506 292.788 495.506L299.91 495.669C299.91 495.669 300.565 495.669 300.728 493.947L303.105 493.783C303.105 493.783 305.809 500.33 309.986 500.33C309.986 500.33 313.345 502.052 313.75 506.058C313.75 506.058 323.981 507.29 326.927 507.204C329.872 507.118 334.704 502.785 334.704 502.785C334.704 502.785 338.226 503.112 338.467 500.002C338.467 500.002 344.031 495.911 345.349 490.828C346.666 485.746 348.785 480.836 350.18 480.181C351.575 479.526 351.739 473.962 351.739 473.962C351.739 473.962 356.571 467.329 361.316 468.561C361.316 468.561 363.693 470.137 365.657 468.405C367.62 466.674 371.547 464.219 376.792 464.46C376.792 464.46 378.3 464.374 381.822 459.74C385.344 455.105 385.749 455.303 388.677 455.002C388.677 455.002 385.034 451.349 385.93 446.465C386.826 441.581 388.505 439.522 386.834 438.618C385.164 437.713 380.788 435.448 384.587 432.476C384.587 432.476 386.567 431.485 388.161 431.563C389.754 431.64 388.841 426.317 386.791 423.121C384.742 419.925 385.267 415.971 385.267 415.971C385.267 415.971 377.886 414.679 377.128 409.812C376.37 404.945 376.827 404.936 376.827 404.936C376.827 404.936 368.912 404.557 364.881 408.356C364.881 408.356 360.317 409.958 355.218 407.788C355.218 407.788 351.644 411.25 347.08 411.25C342.515 411.25 337.494 416.273 337.494 416.273C337.494 416.273 328.288 416.496 325.549 420.08C322.81 423.663 314.895 427.996 312.622 424.034C310.348 420.071 302.201 417.565 300.53 419.167C300.53 419.167 301.064 424.111 294.217 423.121C294.217 423.121 288.662 429.056 284.175 430.348C279.688 431.64 277.027 434.535 268.656 432.631C268.656 432.631 252.68 437.575 245.377 445.414C238.073 453.253 224.69 456.828 220.427 456.527C216.164 456.225 209.773 456.371 209.773 456.371C209.773 456.371 205.364 464.968 204.985 469.835C204.985 469.835 201.635 474.478 203.46 479.044C205.286 483.609 206.811 486.96 207.034 489.011C207.034 489.011 208.171 490.992 209.541 491.371C209.541 491.371 212.167 498.719 216.37 499.951H216.387Z"
@@ -627,7 +761,7 @@ export default function Map({ cardContents }: MapProps) {
 							<g
 								style={{ cursor: 'pointer' }}
 
-								id="Banggai Laut">
+								id="BanggaiLaut">
 								<g id="Vector">
 									<mask
 										id="path-12-outside-12_0_1"
@@ -648,7 +782,7 @@ export default function Map({ cardContents }: MapProps) {
 									</mask>
 									<path
 										d="M509.614 546.338L511.823 541.917V532.742C511.823 532.742 515.05 522.547 515.897 521.86C516.744 521.173 519.8 519.306 525.408 522.536V526.11C525.408 526.11 529.345 529.179 529.345 530.646C529.345 532.112 528.612 538.251 526.495 538.904C524.378 539.557 518.678 542.925 517.728 547.312C516.778 551.699 510.793 552.352 510.129 549.797C509.465 547.243 509.614 546.338 509.614 546.338Z"
-										fill={getColorByCity('Banggai Laut')}
+										fill={getColorByCity('BanggaiLaut')}
 									/>
 									<path
 										d="M509.614 546.338L511.823 541.917V532.742C511.823 532.742 515.05 522.547 515.897 521.86C516.744 521.173 519.8 519.306 525.408 522.536V526.11C525.408 526.11 529.345 529.179 529.345 530.646C529.345 532.112 528.612 538.251 526.495 538.904C524.378 539.557 518.678 542.925 517.728 547.312C516.778 551.699 510.793 552.352 510.129 549.797C509.465 547.243 509.614 546.338 509.614 546.338Z"
@@ -677,7 +811,7 @@ export default function Map({ cardContents }: MapProps) {
 									</mask>
 									<path
 										d="M553.013 518.619C553.013 518.619 555.988 507.52 562.077 502.984C568.166 498.448 572.789 496.008 572.789 496.008C572.789 496.008 573.842 495.562 573.682 497.085C573.522 498.608 574.563 504.851 574.563 504.851L569.447 508.849C569.447 508.849 567.605 510.613 567.124 508.929C566.643 507.245 564.32 509.089 564.32 509.089L563.782 511.976C563.782 511.976 562.077 517.176 560.646 517.737C559.216 518.299 551.891 522.01 553.013 518.619Z"
-										fill={getColorByCity('Banggai Laut')}
+										fill={getColorByCity('BanggaiLaut')}
 									/>
 									<path
 										d="M553.013 518.619C553.013 518.619 555.988 507.52 562.077 502.984C568.166 498.448 572.789 496.008 572.789 496.008C572.789 496.008 573.842 495.562 573.682 497.085C573.522 498.608 574.563 504.851 574.563 504.851L569.447 508.849C569.447 508.849 567.605 510.613 567.124 508.929C566.643 507.245 564.32 509.089 564.32 509.089L563.782 511.976C563.782 511.976 562.077 517.176 560.646 517.737C559.216 518.299 551.891 522.01 553.013 518.619Z"
@@ -706,7 +840,7 @@ export default function Map({ cardContents }: MapProps) {
 									</mask>
 									<path
 										d="M604.01 465.251C604.01 465.251 603.175 469.077 601.675 470.291C600.176 471.506 598.231 474.484 598.231 475.331C598.231 476.179 597.761 478.596 598.231 479.157C598.7 479.718 601.87 482.697 601.87 482.697C601.87 482.697 599.444 485.961 599.169 487.359C598.894 488.756 598.894 493.235 598.894 493.235C598.894 493.235 597.498 494.174 597.498 495.938C597.498 497.702 598.15 504.243 599.455 505.354C600.76 506.465 602.991 510.107 605.795 510.485C608.599 510.863 612.594 509.271 614.093 509.363V514.586C614.093 514.586 615.306 517.472 617.08 515.056V512.169C617.08 512.169 622.299 506.476 624.908 505.64L625.652 497.805C625.652 497.805 625 491.184 622.768 487.359C620.536 483.533 621.932 476.442 621.932 476.442L620.067 468.046C620.067 468.046 620.811 459.284 618.385 459.181C615.958 459.078 613.635 453.957 613.166 457.692C612.697 461.426 612.239 466.179 612.239 466.179C612.239 466.179 608.599 467.107 608.05 464.965C607.501 462.823 604.044 465.24 604.044 465.24L604.01 465.251Z"
-										fill={getColorByCity('Banggai Laut')}
+										fill={getColorByCity('BanggaiLaut')}
 									/>
 									<path
 										d="M604.01 465.251C604.01 465.251 603.175 469.077 601.675 470.291C600.176 471.506 598.231 474.484 598.231 475.331C598.231 476.179 597.761 478.596 598.231 479.157C598.7 479.718 601.87 482.697 601.87 482.697C601.87 482.697 599.444 485.961 599.169 487.359C598.894 488.756 598.894 493.235 598.894 493.235C598.894 493.235 597.498 494.174 597.498 495.938C597.498 497.702 598.15 504.243 599.455 505.354C600.76 506.465 602.991 510.107 605.795 510.485C608.599 510.863 612.594 509.271 614.093 509.363V514.586C614.093 514.586 615.306 517.472 617.08 515.056V512.169C617.08 512.169 622.299 506.476 624.908 505.64L625.652 497.805C625.652 497.805 625 491.184 622.768 487.359C620.536 483.533 621.932 476.442 621.932 476.442L620.067 468.046C620.067 468.046 620.811 459.284 618.385 459.181C615.958 459.078 613.635 453.957 613.166 457.692C612.697 461.426 612.239 466.179 612.239 466.179C612.239 466.179 608.599 467.107 608.05 464.965C607.501 462.823 604.044 465.24 604.044 465.24L604.01 465.251Z"
@@ -735,7 +869,7 @@ export default function Map({ cardContents }: MapProps) {
 									</mask>
 									<path
 										d="M639.73 543.326C639.73 543.326 639.169 546.705 639.73 549.637C639.73 549.637 639.421 552.696 640.851 553.142C642.282 553.589 643.724 552.959 642.408 548.893C642.408 548.893 642.351 546.522 642.099 545.388C641.847 544.254 640.542 541.642 639.73 543.326Z"
-										fill={getColorByCity('Banggai Laut')}
+										fill={getColorByCity('BanggaiLaut')}
 									/>
 									<path
 										d="M639.73 543.326C639.73 543.326 639.169 546.705 639.73 549.637C639.73 549.637 639.421 552.696 640.851 553.142C642.282 553.589 643.724 552.959 642.408 548.893C642.408 548.893 642.351 546.522 642.099 545.388C641.847 544.254 640.542 541.642 639.73 543.326Z"
@@ -764,7 +898,7 @@ export default function Map({ cardContents }: MapProps) {
 									</mask>
 									<path
 										d="M651.287 552.834V548.275C651.287 548.275 651.917 544.552 655.911 542.788C655.911 542.788 656.781 542.089 657.227 544.655C657.673 547.221 657.914 548.034 657.73 550.909C657.547 553.784 651.299 552.845 651.299 552.845L651.287 552.834Z"
-										fill={getColorByCity('Banggai Laut')}
+										fill={getColorByCity('BanggaiLaut')}
 									/>
 									<path
 										d="M651.287 552.834V548.275C651.287 548.275 651.917 544.552 655.911 542.788C655.911 542.788 656.781 542.089 657.227 544.655C657.673 547.221 657.914 548.034 657.73 550.909C657.547 553.784 651.299 552.845 651.299 552.845L651.287 552.834Z"
@@ -793,7 +927,7 @@ export default function Map({ cardContents }: MapProps) {
 									</mask>
 									<path
 										d="M666.029 542.694V549.017C666.029 549.017 668.032 553.702 668.341 557.769C668.65 561.835 675.528 567.585 680.335 564.515C685.142 561.445 683.711 557.574 683.711 557.574L671.717 539.693H667.162C667.162 539.693 666.041 540.106 666.041 542.683L666.029 542.694Z"
-										fill={getColorByCity('Banggai Laut')}
+										fill={getColorByCity('BanggaiLaut')}
 									/>
 									<path
 										d="M666.029 542.694V549.017C666.029 549.017 668.032 553.702 668.341 557.769C668.65 561.835 675.528 567.585 680.335 564.515C685.142 561.445 683.711 557.574 683.711 557.574L671.717 539.693H667.162C667.162 539.693 666.041 540.106 666.041 542.683L666.029 542.694Z"
@@ -822,7 +956,7 @@ export default function Map({ cardContents }: MapProps) {
 									</mask>
 									<path
 										d="M663.089 566.339C663.089 566.339 663.466 564.334 664.462 564.334C665.458 564.334 667.209 564.964 667.334 566.339C667.46 567.713 667.334 570.21 667.334 570.21H663.089C663.089 570.21 662.78 567.335 663.089 566.339Z"
-										fill={getColorByCity('Banggai Laut')}
+										fill={getColorByCity('BanggaiLaut')}
 									/>
 									<path
 										d="M663.089 566.339C663.089 566.339 663.466 564.334 664.462 564.334C665.458 564.334 667.209 564.964 667.334 566.339C667.46 567.713 667.334 570.21 667.334 570.21H663.089C663.089 570.21 662.78 567.335 663.089 566.339Z"
@@ -851,7 +985,7 @@ export default function Map({ cardContents }: MapProps) {
 									</mask>
 									<path
 										d="M681.514 574.403V570.588C681.514 570.588 682.727 564.964 683.906 564.712C685.084 564.46 690.383 568.458 690.017 579.282C690.017 579.282 689.273 579.97 687.396 578.286C685.519 576.602 681.525 575.342 681.525 574.414L681.514 574.403Z"
-										fill={getColorByCity('Banggai Laut')}
+										fill={getColorByCity('BanggaiLaut')}
 									/>
 									<path
 										d="M681.514 574.403V570.588C681.514 570.588 682.727 564.964 683.906 564.712C685.084 564.46 690.383 568.458 690.017 579.282C690.017 579.282 689.273 579.97 687.396 578.286C685.519 576.602 681.525 575.342 681.525 574.414L681.514 574.403Z"
@@ -880,7 +1014,7 @@ export default function Map({ cardContents }: MapProps) {
 									</mask>
 									<path
 										d="M710.936 525.078C710.936 525.078 710.067 526.716 711.566 529.843C713.065 532.97 714.313 539.671 716.567 539.694C718.822 539.716 720.447 543.978 720.447 543.978C720.447 543.978 723.445 548.319 722.942 542.775C722.438 537.231 721.317 532.592 721.317 532.592C721.317 532.592 717.815 528.09 716.315 528.09C716.315 528.09 714.564 522.317 710.936 525.078Z"
-										fill={getColorByCity('Banggai Laut')}
+										fill={getColorByCity('BanggaiLaut')}
 									/>
 									<path
 										d="M710.936 525.078C710.936 525.078 710.067 526.716 711.566 529.843C713.065 532.97 714.313 539.671 716.567 539.694C718.822 539.716 720.447 543.978 720.447 543.978C720.447 543.978 723.445 548.319 722.942 542.775C722.438 537.231 721.317 532.592 721.317 532.592C721.317 532.592 717.815 528.09 716.315 528.09C716.315 528.09 714.564 522.317 710.936 525.078Z"
@@ -893,7 +1027,7 @@ export default function Map({ cardContents }: MapProps) {
 							<g
 								style={{ cursor: 'pointer' }}
 
-								id="Banggai Kepulauan">
+								id="BanggaiKepulauan">
 								<mask
 									id="path-21-outside-21_0_1"
 									maskUnits="userSpaceOnUse"
@@ -913,7 +1047,7 @@ export default function Map({ cardContents }: MapProps) {
 								</mask>
 								<path
 									d="M509.6 439.267V427.058C509.6 427.058 510.161 422.271 512.95 419.316C512.95 419.316 512.872 414.288 514.15 412.533C515.428 410.779 518.857 410.062 522.363 403.115C525.87 396.169 530.257 398.406 530.257 398.406C530.257 398.406 533.529 400.956 533.444 402.398C533.444 402.398 539.662 398.999 543.254 398.063C546.846 397.128 550.992 396.574 553.22 395.452C553.22 395.452 553.781 394.89 558.799 401.119C558.799 401.119 560.397 402.078 560.553 399.365C560.709 396.652 563.35 393.791 563.35 393.791C563.35 393.791 565.103 392.676 566.942 395.943C568.781 399.209 571.088 404.955 571.088 404.955C571.088 404.955 572.124 408.144 569.412 408.947C566.701 409.75 565.82 410.304 565.742 411.341C565.664 412.377 565.345 415.972 564.948 417.164C564.948 417.164 572.366 423.706 572.685 426.582C573.005 429.459 578.35 424.665 578.264 423.23C578.179 421.796 577.945 417.858 579.94 416.439C581.934 415.02 584.327 413.103 585.285 410.148C586.244 407.193 592.306 403.848 592.306 403.848C592.306 403.848 602.592 403.607 604.664 407.037C604.664 407.037 606.901 407.918 606.659 410.148C606.659 410.148 610.329 409.111 613.36 409.906C616.392 410.701 617.428 411.98 617.428 411.98C617.428 411.98 618.386 415.091 616.953 417.164C616.953 417.164 616.555 420.517 614.085 422.91C614.085 422.91 615.285 432.243 614.163 432.726C613.041 433.209 611.295 434.239 610.976 435.197C610.657 436.156 609.059 438.792 605.397 436.874C605.397 436.874 603.963 442.378 603.963 443.812H601.173C601.173 443.812 601.173 442.378 599.101 443.493C597.028 444.608 597.27 446.923 597.27 446.923C597.27 446.923 595.992 448.755 595.119 445.247C594.246 441.739 590.732 441.341 590.732 441.341C590.732 441.341 587.779 437.03 586.025 436.554C586.025 436.554 584.109 431.128 582.199 430.652C580.29 430.177 578.451 430.411 578.373 432.087C578.296 433.763 574.945 434.324 574.945 434.324C574.945 434.324 574.384 442.939 572.794 447.407L572.716 455.148C572.716 455.148 574.547 457.144 574.547 457.862C574.547 458.579 575.186 461.456 573.589 461.931C571.992 462.407 571.672 459.935 571.672 458.103C571.672 456.271 570.955 454.751 569.358 456.349C567.761 457.947 565.135 460.98 559.945 460.738C559.945 460.738 558.348 458.501 559.15 457.628L555.161 457.55C555.161 457.55 552.371 456.754 552.924 453.238C552.924 453.238 553.166 451.804 555.955 451.96L564.09 445.972C564.09 445.972 564.971 443.501 564.09 440.148C563.21 436.796 560.498 428.422 560.981 423.23C561.464 418.038 562.181 413.336 556.758 414.693C556.758 414.693 547.189 423.791 544.633 431.447C542.077 439.103 540.207 444.054 531.472 448.124L526.571 454.907C526.571 454.907 521.623 457.222 518.358 453.472C518.358 453.472 518.678 441.824 509.623 439.267H509.6Z"
-									fill={getColorByCity('Banggai Kepulauan')}
+									fill={getColorByCity('BanggaiKepulauan')}
 								/>
 								<path
 									d="M509.6 439.267V427.058C509.6 427.058 510.161 422.271 512.95 419.316C512.95 419.316 512.872 414.288 514.15 412.533C515.428 410.779 518.857 410.062 522.363 403.115C525.87 396.169 530.257 398.406 530.257 398.406C530.257 398.406 533.529 400.956 533.444 402.398C533.444 402.398 539.662 398.999 543.254 398.063C546.846 397.128 550.992 396.574 553.22 395.452C553.22 395.452 553.781 394.89 558.799 401.119C558.799 401.119 560.397 402.078 560.553 399.365C560.709 396.652 563.35 393.791 563.35 393.791C563.35 393.791 565.103 392.676 566.942 395.943C568.781 399.209 571.088 404.955 571.088 404.955C571.088 404.955 572.124 408.144 569.412 408.947C566.701 409.75 565.82 410.304 565.742 411.341C565.664 412.377 565.345 415.972 564.948 417.164C564.948 417.164 572.366 423.706 572.685 426.582C573.005 429.459 578.35 424.665 578.264 423.23C578.179 421.796 577.945 417.858 579.94 416.439C581.934 415.02 584.327 413.103 585.285 410.148C586.244 407.193 592.306 403.848 592.306 403.848C592.306 403.848 602.592 403.607 604.664 407.037C604.664 407.037 606.901 407.918 606.659 410.148C606.659 410.148 610.329 409.111 613.36 409.906C616.392 410.701 617.428 411.98 617.428 411.98C617.428 411.98 618.386 415.091 616.953 417.164C616.953 417.164 616.555 420.517 614.085 422.91C614.085 422.91 615.285 432.243 614.163 432.726C613.041 433.209 611.295 434.239 610.976 435.197C610.657 436.156 609.059 438.792 605.397 436.874C605.397 436.874 603.963 442.378 603.963 443.812H601.173C601.173 443.812 601.173 442.378 599.101 443.493C597.028 444.608 597.27 446.923 597.27 446.923C597.27 446.923 595.992 448.755 595.119 445.247C594.246 441.739 590.732 441.341 590.732 441.341C590.732 441.341 587.779 437.03 586.025 436.554C586.025 436.554 584.109 431.128 582.199 430.652C580.29 430.177 578.451 430.411 578.373 432.087C578.296 433.763 574.945 434.324 574.945 434.324C574.945 434.324 574.384 442.939 572.794 447.407L572.716 455.148C572.716 455.148 574.547 457.144 574.547 457.862C574.547 458.579 575.186 461.456 573.589 461.931C571.992 462.407 571.672 459.935 571.672 458.103C571.672 456.271 570.955 454.751 569.358 456.349C567.761 457.947 565.135 460.98 559.945 460.738C559.945 460.738 558.348 458.501 559.15 457.628L555.161 457.55C555.161 457.55 552.371 456.754 552.924 453.238C552.924 453.238 553.166 451.804 555.955 451.96L564.09 445.972C564.09 445.972 564.971 443.501 564.09 440.148C563.21 436.796 560.498 428.422 560.981 423.23C561.464 418.038 562.181 413.336 556.758 414.693C556.758 414.693 547.189 423.791 544.633 431.447C542.077 439.103 540.207 444.054 531.472 448.124L526.571 454.907C526.571 454.907 521.623 457.222 518.358 453.472C518.358 453.472 518.678 441.824 509.623 439.267H509.6Z"
@@ -962,52 +1096,49 @@ export default function Map({ cardContents }: MapProps) {
 					</defs>
 					<defs>
 						{/* <!-- Marker for Circle --> */}
-						<marker id="circle" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5">
-							<circle cx="2.5" cy="2.5" r="1.5" fill="black" />
+						<marker id="circle" markerWidth="4" markerHeight="4" refX="2" refY="2">
+							<circle cx="2" cy="2" r="1" fill="black" />
 						</marker>
 
 						{/* <!-- Marker for Arrow --> */}
-						<marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-							<path d="M 0 0 L 6 3 L 0 6 z" fill="black" />
+						<marker id="arrow" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+							<path d="M 0 0 L 5 2.5 L 0 5 z" fill="black" />
 						</marker>
+
 					</defs>
 
 					{/* Garis Lengkung  */}
 					{cardContents.map((item) => {
-						return (<>
-							<path
-								key={`${item.id}-dash`}
-								d={`${getCoordinate(item.start, item.end)}`}
-								// style={{ cursor: 'pointer' }}
-								// onMouseEnter={() => showCardArea(item.id, item.start, item.end)}
-								// onMouseLeave={() => {
-								// 	hideCardAreaStart(item.start);
-								// 	hideCardAreaEnd(item.end);
-								// }}
-								stroke="red"
-								stroke-dasharray="10 5"
-								strokeWidth="2"
-								fill="none"
-								markerStart="url(#circle)"
-								markerEnd="url(#arrow)"
-							/>
-							<path
-								key={item.id}
-								d={`${getCoordinate(item.start, item.end)}`}
-								style={{ cursor: 'pointer' }}
-								onMouseEnter={() => showCardArea(item.id, item.start, item.end)}
-								onMouseLeave={() => {
-									hideCardAreaStart(item.start);
-									hideCardAreaEnd(item.end);
-								}}
-								stroke='transparent'
-								strokeWidth="2"
-								fill="none"
-								markerStart="url(#circle)"
-								markerEnd="url(#arrow)"
-							/>
+						const d = getCoordinate(item.start, item.end);
+						return (
+							<>
+								<path
+									key={`${item.id}-dash`}
+									d={d}  // Menggunakan getAdjustedCoordinates untuk path pertama
+									stroke="#FFC107"
+									strokeDasharray="10 5"
+									strokeWidth="2"
+									fill="none"
+									markerStart="url(#circle)"
+									markerEnd="url(#arrow)"
+								/>
 
-						</>
+								<path
+									key={`${item.id}-path`}
+									d={d}  // Menggunakan getAdjustedCoordinates untuk path kedua
+									style={{ cursor: 'pointer' }}
+									onMouseEnter={() => showCardArea(item.id, item.start, item.end)}
+									onMouseLeave={() => {
+										hideCardAreaStart(item.start);
+										hideCardAreaEnd(item.end);
+									}}
+									stroke="transparent"
+									strokeWidth="2"
+									fill="none"
+									markerStart="url(#circle)"
+									markerEnd="url(#arrow)"
+								/>
+							</>
 						);
 					})}
 				</svg>
