@@ -197,8 +197,9 @@ export default function Map({ cardContents }: MapProps) {
 	];
 
 	const getColorByCity = (cityName: string): string | undefined => {
-		const cityData = cityColors.find((item) => item.cityName === cityName);
-		return cityData ? cityData.color : undefined;
+		// const cityData = cityColors.find((item) => item.cityName === cityName);
+		// return cityData ? cityData.color : undefined;
+		return '#88B0C1';
 	};
 
 	const coordinatesArray = [
