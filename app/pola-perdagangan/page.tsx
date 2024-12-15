@@ -552,7 +552,7 @@ const FlowChart: React.FC = () => {
 			</Tabs>
 			<center>
 				<div
-					className="container"
+					className="container md:px-40"
 					id="container"
 				// ref={containerRef}
 				// style={{ position: 'relative' }}

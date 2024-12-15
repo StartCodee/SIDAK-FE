@@ -223,123 +223,63 @@ export default function Map({ cardContents }: MapProps) {
 		// Cari koordinat berdasarkan nama yang diberikan
 		const startCoord = coordinatesArray.find(coord => coord.name === start);
 		const endCoord = coordinatesArray.find(coord => coord.name === end);
-
+	
 		// Pastikan startCoord dan endCoord ada
 		if (startCoord && endCoord) {
-			// Inisialisasi koordinat awal
 			let startX = startCoord.x;
 			let startY = startCoord.y;
 			let endX = endCoord.x;
 			let endY = endCoord.y;
-
-			// Loop untuk mencari koordinat yang belum digunakan
+	
+			// Hitung jarak horizontal dan vertikal antara dua titik
+			const deltaX = Math.abs(endX - startX);
+			const deltaY = Math.abs(endY - startY);
+	
+			// Threshold untuk menentukan apakah jarak terlalu dekat
+			const minDistance = 50; // Minimal jarak untuk membuat lengkungan
+	
+			// Jika jarak terlalu kecil atau hampir vertikal, buat garis lurus
+			if (deltaX < minDistance || deltaY < minDistance) {
+				return `M ${startX} ${startY} L ${endX} ${endY}`;
+			}
+	
+			// Inisialisasi variabel untuk pencarian koordinat yang belum digunakan
 			let found = false;
-			let offsetX = 10; // Geser 10px pada koordinat X
-			let offsetY = 10; // Geser 10px pada koordinat Y
-			let maxAttempts = 10; // Batasi jumlah percobaan
-
+			const offsetX = 10; // Geser 10px pada koordinat X
+			const offsetY = 10; // Geser 10px pada koordinat Y
+			const maxAttempts = 10; // Batasi jumlah percobaan
+	
 			// Mencari koordinat yang belum digunakan
 			for (let i = 0; i < maxAttempts; i++) {
 				const startKey = `${startX}-${startY}`;
 				const endKey = `${endX}-${endY}`;
-
+	
 				// Jika kedua koordinat belum digunakan
 				if (!usedCoordinates.has(startKey) && !usedCoordinates.has(endKey)) {
-					// Tandai koordinat sebagai sudah digunakan
 					usedCoordinates.add(startKey);
 					usedCoordinates.add(endKey);
 					found = true;
 					break;
 				}
-
-				// Jika X sudah digunakan, geser Y
-				if (usedCoordinates.has(startKey)) {
-					startY += offsetY;  // Geser Y jika X sudah digunakan
-				}
-
-				if (usedCoordinates.has(endKey)) {
-					endY += offsetY;  // Geser Y jika X sudah digunakan
-				}
-
-				// Geser koordinat X untuk percobaan berikutnya
+	
+				// Geser koordinat jika sudah digunakan
+				if (usedCoordinates.has(startKey)) startY += offsetY;
+				if (usedCoordinates.has(endKey)) endY += offsetY;
+	
 				startX += offsetX;
 				endX += offsetX;
 			}
-
+	
 			// Jika koordinat ditemukan, buat path Bezier
 			if (found) {
 				const controlX = (startX + endX) / 2;
-				const controlY = Math.min(startY, endY) - 20;  // Menentukan ketinggian lengkungan
-
-				// Menghasilkan perintah path Bezier dengan kelengkungan
-				return `M ${startX} ${startY} C ${controlX} ${controlY}, ${controlX} ${controlY}, ${endX} ${endY}`;
+				const controlY = Math.min(startY, endY) - 20; // Tinggi lengkungan
+				return `M ${startX} ${startY} Q ${controlX} ${controlY} ${endX} ${endY}`;
 			}
 		}
-
+	
 		return 'M 0 0'; // Default jika tidak ditemukan
-	};
-
-	//   const getCoordinate = (start: string, end: string) => {
-	// 	// Cari koordinat berdasarkan nama yang diberikan
-	// 	const startCoord = coordinatesArray.find(coord => coord.name === start);
-	// 	const endCoord = coordinatesArray.find(coord => coord.name === end);
-
-	// 	// Pastikan startCoord dan endCoord ada
-	// 	if (startCoord && endCoord) {
-	// 	  // Inisialisasi koordinat awal
-	// 	  let startX = startCoord.x;
-	// 	  let startY = startCoord.y;
-	// 	  let endX = endCoord.x;
-	// 	  let endY = endCoord.y;
-
-	// 	  // Loop untuk mencari koordinat yang belum digunakan
-	// 	  let found = false;
-	// 	  let offsetX = 10; // Geser 10px pada koordinat X
-	// 	  let offsetY = 10; // Geser 10px pada koordinat Y
-	// 	  let maxAttempts = 10; // Batasi jumlah percobaan
-
-	// 	  // Mencari koordinat yang belum digunakan
-	// 	  for (let i = 0; i < maxAttempts; i++) {
-	// 		const startKey = `${startX}-${startY}`;
-	// 		const endKey = `${endX}-${endY}`;
-
-	// 		// Jika kedua koordinat belum digunakan
-	// 		if (!usedCoordinates.has(startKey) && !usedCoordinates.has(endKey)) {
-	// 		  // Tandai koordinat sebagai sudah digunakan
-	// 		  usedCoordinates.add(startKey);
-	// 		  usedCoordinates.add(endKey);
-	// 		  found = true;
-	// 		  break;
-	// 		}
-
-	// 		// Jika X sudah digunakan, geser Y
-	// 		if (usedCoordinates.has(startKey)) {
-	// 		  startY += offsetY;  // Geser Y jika X sudah digunakan
-	// 		}
-
-	// 		if (usedCoordinates.has(endKey)) {
-	// 		  endY += offsetY;  // Geser Y jika X sudah digunakan
-	// 		}
-
-	// 		// Geser koordinat X untuk percobaan berikutnya
-	// 		startX += offsetX;
-	// 		endX += offsetX;
-	// 	  }
-
-	// 	  // Jika koordinat ditemukan, buat path Bezier
-	// 	  if (found) {
-	// 		const controlX = (startX + endX) / 2;
-	// 		const controlY = Math.min(startY, endY) - 20;  // Menentukan ketinggian lengkungan
-
-	// 		// Menghasilkan perintah path Bezier dengan kelengkungan
-	// 		return `M ${startX} ${startY} C ${controlX} ${controlY}, ${controlX} ${controlY}, ${endX} ${endY}`;
-	// 	  }
-	// 	}
-
-	// 	return 'M 0 0'; // Default jika tidak ditemukan
-	//   };
-
-
+	};	
 
 	return (
 		<>
