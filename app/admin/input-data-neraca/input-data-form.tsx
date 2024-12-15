@@ -318,7 +318,7 @@ export default function InputDataForm() {
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
 					className="flex flex-col gap-4">
-					<div className="mt-10 flex flex-wrap justify-between gap-4 px-8">
+					<div className="mt-5 flex flex-wrap justify-between gap-4">
 						<FormControl>
 							<FormField
 								control={form.control}

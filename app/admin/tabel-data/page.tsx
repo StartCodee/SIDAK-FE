@@ -648,7 +648,7 @@ export default function Home() {
 									id="profile"
 									role="tabpanel"
 									aria-labelledby="profile-tab">
-									<div className="rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
+									<div className="rounded-lg border border-stroke bg-white px-5 py-5 shadow-default">
 										<div>
 											<label
 												htmlFor="location"
@@ -945,7 +945,7 @@ export default function Home() {
 							</div>
 						</div>
 					</div>
-					<div className="col-span-3 rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
+					<div className="col-span-3 rounded-lg border border-stroke bg-white px-5 py-5 shadow-default">
 						<div
 							className={`w-full  ${activeTab === 'profile' ? '' : 'hidden'}`}>
 							<h1 className="text-2xl font-bold">Harga Pangan</h1>
@@ -1046,7 +1046,7 @@ export default function Home() {
 									</TableBody>
 								</Table>
 							</div>
-							<div className="flex items-center justify-end space-x-2 py-4">
+							<div className="flex items-center justify-end space-x-2 mt-4">
 								<div className="flex-1 text-sm text-muted-foreground">
 									{table.getFilteredSelectedRowModel().rows.length} of{' '}
 									{table.getFilteredRowModel().rows.length} row(s) selected.
@@ -1249,7 +1249,7 @@ export default function Home() {
 									</TableBody>
 								</Table>
 							</div>
-							<div className="flex items-center justify-end space-x-2 py-4">
+							<div className="flex items-center justify-end space-x-2 mt-4">
 								<div className="flex-1 text-sm text-muted-foreground">
 									{table.getFilteredSelectedRowModel().rows.length} of{' '}
 									{table.getFilteredRowModel().rows.length} row(s) selected.
