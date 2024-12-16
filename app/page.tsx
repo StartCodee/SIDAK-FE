@@ -790,7 +790,7 @@ export default function Home() {
 			{selectedValue === 'harga-pangan' && (
 				<section className="px-4 sm:px-2 md:px-4 lg:px-14 pt-4 space-y-4 sm:space-y-4 md:space-y-6">
 					<div className="flex flex-col sm:flex-row justify-between pt-10">
-						<div className="flex flex-col w-full gap-4">
+						<div className="flex flex-col w-full gap-4 mb-3">
 							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-1 font-semibold">
 								Peta Perubahan Harga
 							</h1>
