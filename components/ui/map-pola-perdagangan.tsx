@@ -27,7 +27,7 @@ interface CityColor {
 }
 
 
-export default function Map({ cardContents }: MapProps) {
+export default function MapPolaPerdagangan({ cardContents }: MapProps) {
 	const showCardArea = (id: number, start: string, end: string) => {
 		// Menampilkan kartu untuk 'start'
 		const content = cardContents.find((card) => card.id === id);

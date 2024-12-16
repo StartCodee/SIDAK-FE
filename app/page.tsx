@@ -11,6 +11,7 @@ import Dialog from '@/components/ui/modal-harga';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import MapPola from '@/components/ui/map-pola';
+import MapPolaPerdagangan from '@/components/ui/map-pola-perdagangan';
 import { Badge } from '@/components/ui/badge';
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/ui/navbar';
@@ -923,7 +924,10 @@ export default function Home() {
 							</div>
 						</section>
 					</Tabs>
-					<MapPola flow={filteredFlow} />
+					{/* <MapPola flow={filteredFlow} /> */}
+					<center className="container cente">
+					<MapPolaPerdagangan cardContents={filteredFlow}/>
+					</center>
 				</>
 			)}
 			<section className=" px-4 sm:px-8 md:px-10 lg:px-16 pt-4 ">
