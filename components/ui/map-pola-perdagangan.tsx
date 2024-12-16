@@ -216,33 +216,33 @@ export default function Map({ cardContents }: MapProps) {
 		{ x: 330, y: 480, name: 'Palu', external_flow: false }, // Done
 		{ x: 900, y: 640, name: 'BanggaiLaut', external_flow: false }, // Done
 		{ x: 850, y: 580, name: 'BanggaiKepulauan', external_flow: false }, // Done		
-		{ x: 115, y: 25, name: 'Aceh', external_flow: true }, // Done		
-		{ x: 250, y: 70, name: 'BangkaBelitung', external_flow: true }, // Done
-		{ x: 450, y: 70, name: 'KepulauanRiau', external_flow: true }, // Done
-		{ x: 650, y: 70, name: 'SumateraSelatan', external_flow: true }, // Done
-		{ x: 880, y: 55, name: 'Gorontalo' },// Done
-		{ x: 1105, y: 50, name: 'Papua', external_flow: true }, // Done
-		{ x: 1020, y: 135, name: 'PapuaPegunungan', external_flow: true }, // Done
-		{ x: 990, y: 255, name: 'Manado', external_flow: true }, // Done
-		{ x: 1020, y: 370, name: 'PapuaSelatan', external_flow: true }, // Done
-		{ x: 1030, y: 495, name: 'MalukuUtara', external_flow: true }, // Done
-		{ x: 1030, y: 620, name: 'PapuaBarat', external_flow: true }, // Done		
-		{ x: 1030, y: 735, name: 'Maluku', external_flow: true }, // Done
-		{ x: 1025, y: 845, name: 'PapuaBaratDaya', external_flow: true }, // Done
-		{ x: 1080, y: 930, name: 'SulawesiTenggara', external_flow: true }, // Done
-		{ x: 895, y: 970, name: 'NTB', external_flow: true }, // Done
-		{ x: 755, y: 970, name: 'NTT', external_flow: true }, // Done
-		{ x: 610, y: 970, name: 'Bali', external_flow: true }, // Done	
-		{ x: 450, y: 970, name: 'Bengkulu', external_flow: true }, // Done				
-		{ x: 250, y: 970, name: 'Yogyakarta', external_flow: true }, // Done	
-		{ x: 60, y: 970, name: 'Banten', external_flow: true }, // Done	
-		{ x: 175, y: 870, name: 'SulawesiSelatan', external_flow: true }, // Done	
-		{ x: 175, y: 715, name: 'SulawesiBarat', external_flow: true }, // Done		
-		{ x: 150, y: 580, name: 'JawaTimur', external_flow: true }, // Done		
-		{ x: 155, y: 470, name: 'JawaBarat', external_flow: true }, // Done
-		{ x: 155, y: 360, name: 'JawaTengah', external_flow: true }, // Done		
-		{ x: 130, y: 250, name: 'Jambi', external_flow: true }, // Done
-		{ x: 155, y: 140, name: 'Jakarta', external_flow: true }, // Done	
+		{ x: 115, y: 25, name: 'aceh', external_flow: true }, // Done		
+		{ x: 250, y: 70, name: 'bangka', external_flow: true }, // Done
+		{ x: 450, y: 70, name: 'kepulauan-riau', external_flow: true }, // Done
+		{ x: 650, y: 70, name: 'sumsel', external_flow: true }, // Done
+		{ x: 880, y: 55, name: 'gorontalo' },// Done
+		{ x: 1105, y: 50, name: 'papua', external_flow: true }, // Done
+		{ x: 1020, y: 135, name: 'papua-pegunungan', external_flow: true }, // Done
+		{ x: 990, y: 255, name: 'manado', external_flow: true }, // Done
+		{ x: 1020, y: 370, name: 'papua-selatan', external_flow: true }, // Done
+		{ x: 1030, y: 495, name: 'maluku-utara', external_flow: true }, // Done
+		{ x: 1030, y: 620, name: 'papua-barat', external_flow: true }, // Done		
+		{ x: 1030, y: 735, name: 'maluku', external_flow: true }, // Done
+		{ x: 1025, y: 845, name: 'papua-barat-daya', external_flow: true }, // Done
+		{ x: 1080, y: 930, name: 'sulteng', external_flow: true }, // Done
+		{ x: 895, y: 970, name: 'ntb', external_flow: true }, // Done
+		{ x: 755, y: 970, name: 'ntt', external_flow: true }, // Done
+		{ x: 610, y: 970, name: 'bali', external_flow: true }, // Done	
+		{ x: 450, y: 970, name: 'bengkulu', external_flow: true }, // Done				
+		{ x: 250, y: 970, name: 'yogya', external_flow: true }, // Done	
+		{ x: 60, y: 970, name: 'banten', external_flow: true }, // Done	
+		{ x: 175, y: 870, name: 'sulsel', external_flow: true }, // Done	
+		{ x: 175, y: 715, name: 'sulbar', external_flow: true }, // Done		
+		{ x: 150, y: 580, name: 'jatim', external_flow: true }, // Done		
+		{ x: 155, y: 470, name: 'jabar', external_flow: true }, // Done
+		{ x: 155, y: 360, name: 'jateng', external_flow: true }, // Done		
+		{ x: 130, y: 250, name: 'jambi', external_flow: true }, // Done
+		{ x: 155, y: 140, name: 'jakarta', external_flow: true }, // Done	
 	];
 
 	const usedCoordinates = new Set<string>(); // Menyimpan koordinat yang sudah digunakan
@@ -487,111 +487,111 @@ export default function Map({ cardContents }: MapProps) {
 							<path d="M791.889 585.568V573.013C791.889 573.013 792.467 568.091 795.343 565.052C795.343 565.052 795.263 559.881 796.58 558.077C797.897 556.273 801.431 555.536 805.045 548.393C808.66 541.249 813.182 543.55 813.182 543.55C813.182 543.55 816.555 546.172 816.467 547.655C816.467 547.655 822.876 544.159 826.579 543.197C830.282 542.235 834.555 541.666 836.852 540.512C836.852 540.512 837.43 539.934 842.603 546.34C842.603 546.34 844.249 547.326 844.41 544.536C844.571 541.746 847.294 538.804 847.294 538.804C847.294 538.804 849.101 537.657 850.996 541.017C852.892 544.376 855.269 550.285 855.269 550.285C855.269 550.285 856.337 553.564 853.542 554.389C850.747 555.215 849.84 555.784 849.759 556.851C849.679 557.917 849.35 561.613 848.94 562.84C848.94 562.84 856.586 569.566 856.916 572.524C857.245 575.483 862.755 570.552 862.667 569.077C862.578 567.602 862.337 563.553 864.394 562.094C866.45 560.635 868.916 558.663 869.903 555.624C870.891 552.586 877.14 549.146 877.14 549.146C877.14 549.146 887.742 548.898 889.879 552.425C889.879 552.425 892.184 553.331 891.935 555.624C891.935 555.624 895.718 554.558 898.843 555.376C901.967 556.193 903.035 557.508 903.035 557.508C903.035 557.508 904.023 560.707 902.545 562.84C902.545 562.84 902.136 566.287 899.59 568.748C899.59 568.748 900.826 578.345 899.67 578.842C898.513 579.339 896.714 580.397 896.385 581.383C896.055 582.37 894.409 585.079 890.634 583.107C890.634 583.107 889.156 588.767 889.156 590.243H886.281C886.281 590.243 886.281 588.767 884.144 589.914C882.008 591.06 882.257 593.441 882.257 593.441C882.257 593.441 880.939 595.325 880.04 591.718C879.14 588.11 875.518 587.701 875.518 587.701C875.518 587.701 872.474 583.268 870.666 582.778C870.666 582.778 868.691 577.198 866.723 576.709C864.755 576.22 862.859 576.461 862.779 578.185C862.699 579.908 859.245 580.486 859.245 580.486C859.245 580.486 858.667 589.345 857.028 593.938L856.948 601.9C856.948 601.9 858.835 603.952 858.835 604.69C858.835 605.427 859.494 608.386 857.848 608.875C856.201 609.364 855.872 606.822 855.872 604.938C855.872 603.054 855.133 601.491 853.486 603.134C851.84 604.778 849.133 607.896 843.784 607.648C843.784 607.648 842.137 605.347 842.964 604.449L838.852 604.369C838.852 604.369 835.977 603.551 836.547 599.935C836.547 599.935 836.796 598.46 839.671 598.621L848.057 592.463C848.057 592.463 848.964 589.922 848.057 586.474C847.149 583.027 844.354 574.416 844.852 569.077C845.35 563.738 846.089 558.903 840.499 560.298C840.499 560.298 830.635 569.654 828.001 577.527C825.366 585.4 823.439 590.491 814.435 594.676L809.383 601.651C809.383 601.651 804.282 604.032 800.917 600.176C800.917 600.176 801.246 588.198 791.913 585.568H791.889Z" fill="#88B0C1" />
 							<path d="M791.889 585.568V573.013C791.889 573.013 792.467 568.091 795.343 565.052C795.343 565.052 795.263 559.881 796.58 558.077C797.897 556.273 801.431 555.536 805.045 548.393C808.66 541.249 813.182 543.55 813.182 543.55C813.182 543.55 816.555 546.172 816.467 547.655C816.467 547.655 822.876 544.159 826.579 543.197C830.282 542.235 834.555 541.666 836.852 540.512C836.852 540.512 837.43 539.934 842.603 546.34C842.603 546.34 844.249 547.326 844.41 544.536C844.571 541.746 847.294 538.804 847.294 538.804C847.294 538.804 849.101 537.657 850.996 541.017C852.892 544.376 855.269 550.285 855.269 550.285C855.269 550.285 856.337 553.564 853.542 554.389C850.747 555.215 849.84 555.784 849.759 556.851C849.679 557.917 849.35 561.613 848.94 562.84C848.94 562.84 856.586 569.566 856.916 572.524C857.245 575.483 862.755 570.552 862.667 569.077C862.578 567.602 862.337 563.553 864.394 562.094C866.45 560.635 868.916 558.663 869.903 555.624C870.891 552.586 877.14 549.146 877.14 549.146C877.14 549.146 887.742 548.898 889.879 552.425C889.879 552.425 892.184 553.331 891.935 555.624C891.935 555.624 895.718 554.558 898.843 555.376C901.967 556.193 903.035 557.508 903.035 557.508C903.035 557.508 904.023 560.707 902.545 562.84C902.545 562.84 902.136 566.287 899.59 568.748C899.59 568.748 900.826 578.345 899.67 578.842C898.513 579.339 896.714 580.397 896.385 581.383C896.055 582.37 894.409 585.079 890.634 583.107C890.634 583.107 889.156 588.767 889.156 590.243H886.281C886.281 590.243 886.281 588.767 884.144 589.914C882.008 591.06 882.257 593.441 882.257 593.441C882.257 593.441 880.939 595.325 880.04 591.718C879.14 588.11 875.518 587.701 875.518 587.701C875.518 587.701 872.474 583.268 870.666 582.778C870.666 582.778 868.691 577.198 866.723 576.709C864.755 576.22 862.859 576.461 862.779 578.185C862.699 579.908 859.245 580.486 859.245 580.486C859.245 580.486 858.667 589.345 857.028 593.938L856.948 601.9C856.948 601.9 858.835 603.952 858.835 604.69C858.835 605.427 859.494 608.386 857.848 608.875C856.201 609.364 855.872 606.822 855.872 604.938C855.872 603.054 855.133 601.491 853.486 603.134C851.84 604.778 849.133 607.896 843.784 607.648C843.784 607.648 842.137 605.347 842.964 604.449L838.852 604.369C838.852 604.369 835.977 603.551 836.547 599.935C836.547 599.935 836.796 598.46 839.671 598.621L848.057 592.463C848.057 592.463 848.964 589.922 848.057 586.474C847.149 583.027 844.354 574.416 844.852 569.077C845.35 563.738 846.089 558.903 840.499 560.298C840.499 560.298 830.635 569.654 828.001 577.527C825.366 585.4 823.439 590.491 814.435 594.676L809.383 601.651C809.383 601.651 804.282 604.032 800.917 600.176C800.917 600.176 801.246 588.198 791.913 585.568H791.889Z" stroke="white" stroke-width="8" mask="url(#path-21-outside-21_0_1)" />
 						</g>
-						<g id="Gorontalo" className='hidden'>
+						<g id="gorontalo" className='hidden'>
 							<rect id="Rectangle 130" x="796" width="162.01" height="48.7462" rx="12" fill="#CEC6C6" />
-							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="818.508" y="30.5945">GORONTALO</tspan></text>
+							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="818.508" y="30.5945">gorontalo</tspan></text>
 						</g>
-						<g id="SulawesiBarat" className='hidden'>
+						<g id="sulbar" className='hidden'>
 							<rect id="Rectangle 130_2" y="671" width="162.01" height="86.0227" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="30.0532" y="709.978">SULAWESI &#x2028;</tspan><tspan x="49.228" y="730.978">BARAT</tspan></text>
 						</g>
-						<g id="SulawesiSelatan" className='hidden'>
+						<g id="sulsel" className='hidden'>
 							<rect id="Rectangle 130_3" x="0.427765" y="825" width="162.01" height="86.0227" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="29.9585" y="863.616">SULAWESI &#x2028;</tspan><tspan x="38.8735" y="884.616">SELATAN</tspan></text>
 						</g>
-						<g id="SulawesiTenggara" className='hidden'>
+						<g id="sulteng" className='hidden'>
 							<rect id="Rectangle 130_4" x="1003" y="938" width="162.01" height="86.0227" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="1033.05" y="976.595">SULAWESI &#x2028;</tspan><tspan x="1032.89" y="997.594">TENGGARA</tspan></text>
 						</g>
-						<g id="Manado" className='hidden'>
+						<g id="manado" className='hidden'>
 							<rect id="Rectangle 130_5" x="1000" y="228" width="162.01" height="48.7462" rx="12" fill="#CEC6C6" />
-							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="1038.14" y="258.92">MANADO</tspan></text>
+							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="1038.14" y="258.92">Manado</tspan></text>
 						</g>
-						<g id="Papua" className='hidden'>
+						<g id="papua" className='hidden'>
 							<rect id="Rectangle 130_6" x="1044" width="119" height="43" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="1074.56" y="27.5945">Papua</tspan></text>
 						</g>
-						<g id="PapuaPegunungan" className='hidden'>
+						<g id="papua-pegunungan" className='hidden'>
 							<rect id="Rectangle 130_7" x="1034" y="103" width="130" height="65" rx="12" fill="#CEC6C6" />
-							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="1068.02" y="132.594">Papua &#10;</tspan><tspan x="1040.34" y="153.594">Pegunungan</tspan></text>
+							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="1068.02" y="132.594">Papua &#10;</tspan><tspan x="1040.34" y="153.594">-pegunungan</tspan></text>
 						</g>
-						<g id="Maluku" className='hidden'>
+						<g id="maluku" className='hidden'>
 							<rect id="Rectangle 130_8" x="1045" y="710" width="119" height="43" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="1070.34" y="737.594">Maluku</tspan></text>
 						</g>
-						<g id="PapuaBaratDaya" className='hidden'>
+						<g id="papua-barat-daya" className='hidden'>
 							<rect id="Rectangle 130_9" x="1034" y="813" width="130" height="65" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="1067.52" y="841.095">Papua &#10;</tspan><tspan x="1048.39" y="862.094">Barat Daya</tspan></text>
 						</g>
-						<g id="PapuaSelatan" className='hidden'>
+						<g id="papua-selatan" className='hidden'>
 							<rect id="Rectangle 130_10" x="1034" y="337" width="130" height="65" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="1067.52" y="366.594">Papua &#10;</tspan><tspan x="1064.35" y="387.594">Selatan</tspan></text>
 						</g>
-						<g id="MalukuUtara" className='hidden'>
+						<g id="maluku-utara" className='hidden'>
 							<rect id="Rectangle 130_11" x="1045" y="462" width="119" height="64" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="1066.79" y="491.594">Maluku &#10;</tspan><tspan x="1078.45" y="512.594">Utara</tspan></text>
 						</g>
-						<g id="PapuaBarat" className='hidden'>
+						<g id="papua-barat" className='hidden'>
 							<rect id="Rectangle 130_12" x="1045" y="586" width="119" height="64" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="1075.56" y="615.594">Papua&#10;</tspan><tspan x="1079.54" y="636.594">Barat</tspan></text>
 						</g>
-						<g id="NTT" className='hidden'>
+						<g id="ntt" className='hidden'>
 							<rect id="Rectangle 130_13" x="719" y="979" width="74" height="43" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="737.962" y="1006.59">NTT</tspan></text>
 						</g>
-						<g id="NTB" className='hidden'>
+						<g id="ntb" className='hidden'>
 							<rect id="Rectangle 130_14" x="861" y="979" width="74" height="43" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="879.033" y="1006.59">NTB</tspan></text>
 						</g>
-						<g id="Bali" className='hidden'>
+						<g id="bali" className='hidden'>
 							<rect id="Rectangle 130_15" x="577" y="979" width="74" height="43" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="596.452" y="1006.59">Bali</tspan></text>
 						</g>
-						<g id="JawaTimur" className='hidden'>
+						<g id="jatim" className='hidden'>
 							<rect id="Rectangle 130_16" y="560" width="138" height="43" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="15.6758" y="587.594">Jawa Timur</tspan></text>
 						</g>
-						<g id="Yogyakarta" className='hidden'>
+						<g id="yogya" className='hidden'>
 							<rect id="Rectangle 130_17" x="183" y="979" width="143" height="43" rx="12" fill="#CEC6C6" />
-							<text id="Yogyakarta" fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="199.142" y="1006.59"> Yogyakarta</tspan></text>
+							<text id="yogya" fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="199.142" y="1006.59"> Yogyakarta</tspan></text>
 						</g>
-						<g id="JawaBarat" className='hidden'>
+						<g id="jabar" className='hidden'>
 							<rect id="Rectangle 130_18" y="449" width="143" height="43" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="20.9399" y="476.594">Jawa barat</tspan></text>
 						</g>
-						<g id="JawaTengah" className='hidden'>
+						<g id="jateng" className='hidden'>
 							<rect id="Rectangle 130_19" y="338" width="143" height="43" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="11.0205" y="365.594">Jawa Tengah</tspan></text>
 						</g>
-						<g id="Jakarta" className='hidden'>
+						<g id="jakarta" className='hidden'>
 							<rect id="Rectangle 130_20" y="116" width="143" height="43" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="17.4038" y="143.594">DKI Jakarta</tspan></text>
 						</g>
-						<g id="BangkaBelitung" className='hidden'>
+						<g id="bangka" className='hidden'>
 							<rect id="Rectangle 130_21" x="193" width="115" height="63" rx="12" fill="#CEC6C6" />
-							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="214.998" y="28.5945">Bangka&#10;</tspan><tspan x="211.511" y="49.5945">belitung</tspan></text>
+							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="214.998" y="28.5945">Bangka&#10;</tspan><tspan x="211.511" y="49.5945">Belitung</tspan></text>
 						</g>
 						<g id="Kepulauan Riau" className='hidden'>
 							<rect id="Rectangle 130_22" x="394" width="115" height="65" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="399.653" y="29.5945">Kepulauan &#10;</tspan><tspan x="431.03" y="50.5945">Riau</tspan></text>
 						</g>
-						<g id="Jambi" className='hidden'>
+						<g id="jambi" className='hidden'>
 							<rect id="Rectangle 130_23" y="227" width="115" height="43" rx="12" fill="#CEC6C6" />
-							<text id="Jambi" fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="29.126" y="254.594">Jambi</tspan></text>
+							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="29.126" y="254.594">Jambi</tspan></text>
 						</g>
-						<g id="Banten" className='hidden'>
+						<g id="banten" className='hidden'>
 							<rect id="Rectangle 130_24" y="979" width="115" height="43" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="24.2222" y="1006.59">Banten</tspan></text>
 						</g>
-						<g id="SumateraSelatan" className='hidden'>
+						<g id="sumsel" className='hidden'>
 							<rect id="Rectangle 130_25" x="595" width="115" height="65" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="608.323" y="29.5945">Sumatera&#10;</tspan><tspan x="617.853" y="50.5945">Selatan</tspan></text>
 						</g>
-						<g id="Aceh" className='hidden'>
+						<g id="aceh" className='hidden'>
 							<rect id="Rectangle 130_26" width="107" height="48" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="29.9839" y="29.5945">Aceh</tspan></text>
 						</g>
-						<g id="Bengkulu" className='hidden'>
+						<g id="bengkulu" className='hidden'>
 							<rect id="Rectangle 130_27" x="394" y="978" width="115" height="44" rx="12" fill="#CEC6C6" />
 							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="406.659" y="1006.09">Bengkulu</tspan></text>
 						</g>
