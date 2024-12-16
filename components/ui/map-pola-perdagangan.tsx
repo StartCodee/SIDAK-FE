@@ -617,8 +617,8 @@ export default function Map({ cardContents }: MapProps) {
 
 					{/* Garis Lengkung  */}
 					{cardContents.map((item) => {
-						const start = coordinatesArray.find(coordinate => coordinate.name === item.start);
-						const end = coordinatesArray.find(coordinate => coordinate.name === item.end);
+						const start = coordinatesArray.find(coordinate => coordinate.cityId === item.start);
+						const end = coordinatesArray.find(coordinate => coordinate.cityId === item.end);
 
 						if (start?.external_flow) {
 							document.getElementById(item.start)?.removeAttribute('class')
