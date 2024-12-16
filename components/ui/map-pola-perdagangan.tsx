@@ -38,8 +38,8 @@ export default function MapPolaPerdagangan({ cardContents }: MapProps) {
 		const groupElementsStart = groupStart.querySelectorAll('path');
 
 		const pathRectStart = groupStart.getBoundingClientRect();
-		const pathTopStart = pathRectStart.top + window.scrollY + 100;
-		const pathLeftStart = pathRectStart.left + window.scrollX + 150;
+		const pathTopStart = pathRectStart.top + window.scrollY + 50;
+		const pathLeftStart = pathRectStart.left + window.scrollX + 75;
 
 		const cardStart = document.createElement('div');
 
