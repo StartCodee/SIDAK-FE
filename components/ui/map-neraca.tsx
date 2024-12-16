@@ -248,11 +248,11 @@ export default function MapNeraca({ cardContents }: MapProps) {
 				</div>
 			</Dialog>
 			<Tabs defaultValue="table">
-				<section className="px-4 sm:px-8 lg:px-20 md:px-10 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+				<section className="px-4 sm:px-2 md:px-4 lg:px-14 pt-4 space-y-4 sm:space-y-4 md:space-y-6">
 					<div className="flex flex-col sm:flex-row justify-between pt-10">
 						<div className="flex-col mb-3">
-							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-1 font-extrabold">
-								NERACA PANGAN
+							<h1 className="text-2xl sm:text-3xl md:text-4xl mb-1 font-semibold">
+								Neraca Pangan
 							</h1>
 							<Badge className="bg-[#3AC1DF] text-xs sm:text-sm md:text-base rounded-full text-white">
 								<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal {formattedDate}
@@ -273,9 +273,8 @@ export default function MapNeraca({ cardContents }: MapProps) {
 					</div>
 					<div className="mx-auto  self-center">
 						<TabsContent value="table">
-							<div className="h-full w-full ">
-								<div id="container" style={{ width: '75%' }} className="relative h-full  ">
-									<center>
+							<div className="h-full w-full flex justify-center">
+								<center id="container" style={{ width: '75%' }} className="relative h-full  ">									
 										<svg
 											viewBox="0 0 731 723"
 											fill="none"
@@ -1092,9 +1091,8 @@ export default function MapNeraca({ cardContents }: MapProps) {
 													/>
 												</filter>
 											</defs>
-										</svg>
-									</center>
-								</div>
+										</svg>									
+								</center>
 							</div>
 							<br />
 							<br />

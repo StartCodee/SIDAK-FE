@@ -887,8 +887,8 @@ export default function Home() {
 						<section className="px-4 sm:px-2 md:px-4 lg:px-14 pt-4 space-y-4 sm:space-y-4 md:space-y-6">
 							<div className="flex flex-col sm:flex-row justify-between pt-10">
 								<div className="flex-col mb-3">
-									<h1 className="text-2xl sm:text-3xl md:text-4xl mb-3 font-extrabold">
-										COMMODITY FLOW
+									<h1 className="text-2xl sm:text-3xl md:text-4xl mb-3 font-semibold">
+										Commodity Flow
 									</h1>
 									<Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
 										<CounterClockwiseClockIcon /> Harga diperbaharui pada
