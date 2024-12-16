@@ -58,7 +58,7 @@ export default function Map({ cardContents }: MapProps) {
 				<p class='text-xs text-[#ED4527]'>Kirim</p>
 			</div>
 			<div class='flex flex-col'>
-				<h1 class='text-md font-semibold'> ${content?.start}</h1>		
+				<h1 class='text-md font-semibold'> ${content?.start ? getCityName(content?.start) : ''}</h1>		
 				<p class='text-sm'>${content?.jumlah_keluar} Ton</p>
 			</div>	
 		`;
@@ -92,7 +92,7 @@ export default function Map({ cardContents }: MapProps) {
 				<p class='text-xs text-[#3AC1DF]'>Terima</p>
 			</div>
 			<div class='flex flex-col'>
-				<h1 class='text-md font-semibold'> ${content?.end}</h1>		
+				<h1 class='text-md font-semibold'> ${content?.end ? getCityName(content?.end) : ''}</h1>		
 				<p class='text-sm'>${content?.jumlah_masuk} Ton</p>
 			</div>
 		`;
@@ -203,54 +203,59 @@ export default function Map({ cardContents }: MapProps) {
 	};
 
 	const coordinatesArray = [
-		{ x: 540, y: 190, name: 'Buol', external_flow: false }, // Done
-		{ x: 470, y: 210, name: 'Tolitoli', external_flow: false }, // Done
-		{ x: 340, y: 380, name: 'Parigi', external_flow: false }, // Done
-		{ x: 635, y: 745, name: 'Morowali', external_flow: false }, // Done
-		{ x: 710, y: 520, name: 'Banggai', external_flow: false }, // Done
-		{ x: 540, y: 640, name: 'MorowaliUtara', external_flow: false }, // Done
-		{ x: 590, y: 530, name: 'Touna', external_flow: false }, // Done
-		{ x: 420, y: 610, name: 'Poso', external_flow: false }, // Done
-		{ x: 340, y: 560, name: 'Sigi', external_flow: false }, // Done
-		{ x: 340, y: 320, name: 'Donggala', external_flow: false }, // Done
-		{ x: 330, y: 480, name: 'Palu', external_flow: false }, // Done
-		{ x: 900, y: 640, name: 'BanggaiLaut', external_flow: false }, // Done
-		{ x: 850, y: 580, name: 'BanggaiKepulauan', external_flow: false }, // Done		
-		{ x: 115, y: 25, name: 'aceh', external_flow: true }, // Done		
-		{ x: 250, y: 70, name: 'bangka', external_flow: true }, // Done
-		{ x: 450, y: 70, name: 'kepulauan-riau', external_flow: true }, // Done
-		{ x: 650, y: 70, name: 'sumsel', external_flow: true }, // Done
-		{ x: 880, y: 55, name: 'gorontalo' },// Done
-		{ x: 1105, y: 50, name: 'papua', external_flow: true }, // Done
-		{ x: 1020, y: 135, name: 'papua-pegunungan', external_flow: true }, // Done
-		{ x: 990, y: 255, name: 'manado', external_flow: true }, // Done
-		{ x: 1020, y: 370, name: 'papua-selatan', external_flow: true }, // Done
-		{ x: 1030, y: 495, name: 'maluku-utara', external_flow: true }, // Done
-		{ x: 1030, y: 620, name: 'papua-barat', external_flow: true }, // Done		
-		{ x: 1030, y: 735, name: 'maluku', external_flow: true }, // Done
-		{ x: 1025, y: 845, name: 'papua-barat-daya', external_flow: true }, // Done
-		{ x: 1080, y: 930, name: 'sulteng', external_flow: true }, // Done
-		{ x: 895, y: 970, name: 'ntb', external_flow: true }, // Done
-		{ x: 755, y: 970, name: 'ntt', external_flow: true }, // Done
-		{ x: 610, y: 970, name: 'bali', external_flow: true }, // Done	
-		{ x: 450, y: 970, name: 'bengkulu', external_flow: true }, // Done				
-		{ x: 250, y: 970, name: 'yogya', external_flow: true }, // Done	
-		{ x: 60, y: 970, name: 'banten', external_flow: true }, // Done	
-		{ x: 175, y: 870, name: 'sulsel', external_flow: true }, // Done	
-		{ x: 175, y: 715, name: 'sulbar', external_flow: true }, // Done		
-		{ x: 150, y: 580, name: 'jatim', external_flow: true }, // Done		
-		{ x: 155, y: 470, name: 'jabar', external_flow: true }, // Done
-		{ x: 155, y: 360, name: 'jateng', external_flow: true }, // Done		
-		{ x: 130, y: 250, name: 'jambi', external_flow: true }, // Done
-		{ x: 155, y: 140, name: 'jakarta', external_flow: true }, // Done	
+		{ x: 540, y: 190, name: 'Buol', cityId: 'Buol', external_flow: false }, // Done
+		{ x: 470, y: 210, name: 'Tolitoli', cityId: 'Tolitoli', external_flow: false }, // Done
+		{ x: 340, y: 380, name: 'Parigi', cityId: 'Parigi', external_flow: false }, // Done
+		{ x: 635, y: 745, name: 'Morowali', cityId: 'Morowali', external_flow: false }, // Done
+		{ x: 710, y: 520, name: 'Banggai', cityId: 'Banggai', external_flow: false }, // Done
+		{ x: 540, y: 640, name: 'Morowali Utara', cityId: 'MorowaliUtara', external_flow: false }, // Done
+		{ x: 590, y: 530, name: 'Touna', cityId: 'Touna', external_flow: false }, // Done
+		{ x: 420, y: 610, name: 'Poso', cityId: 'Poso', external_flow: false }, // Done
+		{ x: 340, y: 560, name: 'Sigi', cityId: 'Sigi', external_flow: false }, // Done
+		{ x: 340, y: 320, name: 'Donggala', cityId: 'Donggala', external_flow: false }, // Done
+		{ x: 330, y: 480, name: 'Palu', cityId: 'Palu', external_flow: false }, // Done
+		{ x: 900, y: 640, name: 'Banggai Laut', cityId: 'BanggaiLaut', external_flow: false }, // Done
+		{ x: 850, y: 580, name: 'Banggai Kepulauan', cityId: 'BanggaiKepulauan', external_flow: false }, // Done		
+		{ x: 115, y: 25, name: 'Aceh', cityId: 'aceh', external_flow: true }, // Done		
+		{ x: 880, y: 55, name: 'Gorontalo', cityId: 'gorontalo', external_flow: true },// Done
+		{ x: 250, y: 70, name: 'Bangka Belitung', cityId: 'bangka', external_flow: true }, // Done
+		{ x: 450, y: 70, name: 'Kepulauan Riau', cityId: 'kepulauan-riau', external_flow: true }, // Done
+		{ x: 650, y: 70, name: 'Sumatera Selatan', cityId: 'sumsel', external_flow: true }, // Done
+		{ x: 1105, y: 50, name: 'Papua', cityId: 'papua', external_flow: true }, // Done
+		{ x: 1020, y: 135, name: 'Papua Pegunungan', cityId: 'papua-pegunungan', external_flow: true }, // Done
+		{ x: 990, y: 255, name: 'Manado', cityId: 'manado', external_flow: true }, // Done
+		{ x: 1020, y: 370, name: 'Papua Selatan', cityId: 'papua-selatan', external_flow: true }, // Done
+		{ x: 1030, y: 495, name: 'Maluku Utara', cityId: 'maluku-utara', external_flow: true }, // Done
+		{ x: 1030, y: 620, name: 'Papua Barat', cityId: 'papua-barat', external_flow: true }, // Done		
+		{ x: 1030, y: 735, name: 'Maluku', cityId: 'maluku', external_flow: true }, // Done
+		{ x: 1025, y: 845, name: 'Papua Barat Daya', cityId: 'papua-barat-daya', external_flow: true }, // Done
+		{ x: 1080, y: 930, name: 'Sulawesi Tenggara', cityId: 'sulteng', external_flow: true }, // Done
+		{ x: 895, y: 970, name: 'NTB', cityId: 'ntb', external_flow: true }, // Done
+		{ x: 755, y: 970, name: 'NTT', cityId: 'ntt', external_flow: true }, // Done
+		{ x: 610, y: 970, name: 'Bali', cityId: 'bali', external_flow: true }, // Done	
+		{ x: 450, y: 970, name: 'Bengkulu', cityId: 'bengkulu', external_flow: true }, // Done				
+		{ x: 250, y: 970, name: 'Yogyakarta', cityId: 'yogya', external_flow: true }, // Done	
+		{ x: 60, y: 970, name: 'Banten', cityId: 'banten', external_flow: true }, // Done	
+		{ x: 175, y: 870, name: 'Sulawesi Selatan', cityId: 'sulsel', external_flow: true }, // Done	
+		{ x: 175, y: 715, name: 'Sulawesi Barat', cityId: 'sulbar', external_flow: true }, // Done		
+		{ x: 150, y: 580, name: 'Jawa Timur', cityId: 'jatim', external_flow: true }, // Done		
+		{ x: 155, y: 470, name: 'Jawa Barat', cityId: 'jabar', external_flow: true }, // Done
+		{ x: 155, y: 360, name: 'Jawa Tengah', cityId: 'jateng', external_flow: true }, // Done		
+		{ x: 130, y: 250, name: 'Jambi', cityId: 'jambi', external_flow: true }, // Done
+		{ x: 155, y: 140, name: 'Jakarta', cityId: 'jakarta', external_flow: true }, // Done	
 	];
 
 	const usedCoordinates = new Set<string>(); // Menyimpan koordinat yang sudah digunakan
 
+	const getCityName = (cityId: string) => {
+		const city = coordinatesArray.find(city => city.cityId == cityId);
+		return city?.name;
+	}
+
 	const getCoordinate = (start: string, end: string) => {
 		// Cari koordinat berdasarkan nama yang diberikan
-		const startCoord = coordinatesArray.find(coord => coord.name === start);
-		const endCoord = coordinatesArray.find(coord => coord.name === end);
+		const startCoord = coordinatesArray.find(coord => coord.cityId === start);
+		const endCoord = coordinatesArray.find(coord => coord.cityId === end);
 
 		// Pastikan startCoord dan endCoord ada
 		if (startCoord && endCoord) {
@@ -489,7 +494,7 @@ export default function Map({ cardContents }: MapProps) {
 						</g>
 						<g id="gorontalo" className='hidden'>
 							<rect id="Rectangle 130" x="796" width="162.01" height="48.7462" rx="12" fill="#CEC6C6" />
-							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="818.508" y="30.5945">gorontalo</tspan></text>
+							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="818.508" y="30.5945">Gorontalo</tspan></text>
 						</g>
 						<g id="sulbar" className='hidden'>
 							<rect id="Rectangle 130_2" y="671" width="162.01" height="86.0227" rx="12" fill="#CEC6C6" />
@@ -513,7 +518,7 @@ export default function Map({ cardContents }: MapProps) {
 						</g>
 						<g id="papua-pegunungan" className='hidden'>
 							<rect id="Rectangle 130_7" x="1034" y="103" width="130" height="65" rx="12" fill="#CEC6C6" />
-							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="1068.02" y="132.594">Papua &#10;</tspan><tspan x="1040.34" y="153.594">-pegunungan</tspan></text>
+							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="1068.02" y="132.594">Papua &#10;</tspan><tspan x="1040.34" y="153.594">Pegunungan</tspan></text>
 						</g>
 						<g id="maluku" className='hidden'>
 							<rect id="Rectangle 130_8" x="1045" y="710" width="119" height="43" rx="12" fill="#CEC6C6" />
@@ -557,7 +562,7 @@ export default function Map({ cardContents }: MapProps) {
 						</g>
 						<g id="jabar" className='hidden'>
 							<rect id="Rectangle 130_18" y="449" width="143" height="43" rx="12" fill="#CEC6C6" />
-							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="20.9399" y="476.594">Jawa barat</tspan></text>
+							<text fill="white" font-size="17" font-weight="900" letter-spacing="0em"><tspan x="20.9399" y="476.594">Jawa Barat</tspan></text>
 						</g>
 						<g id="jateng" className='hidden'>
 							<rect id="Rectangle 130_19" y="338" width="143" height="43" rx="12" fill="#CEC6C6" />
@@ -611,18 +616,18 @@ export default function Map({ cardContents }: MapProps) {
 					</defs>
 
 					{/* Garis Lengkung  */}
-					{cardContents.map((item) => {	
+					{cardContents.map((item) => {
 						const start = coordinatesArray.find(coordinate => coordinate.name === item.start);
 						const end = coordinatesArray.find(coordinate => coordinate.name === item.end);
 
-						if(start?.external_flow){
+						if (start?.external_flow) {
 							document.getElementById(item.start)?.removeAttribute('class')
-						} 
+						}
 
-						if(end?.external_flow){
+						if (end?.external_flow) {
 							document.getElementById(item.end)?.removeAttribute('class')
-						} 
-											
+						}
+
 						const d = getCoordinate(item.start, item.end);
 						return (
 							<>
