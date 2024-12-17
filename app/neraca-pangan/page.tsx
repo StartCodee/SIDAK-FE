@@ -168,62 +168,65 @@ export default function Home() {
 			<Hero />
 			<div
 				style={{ marginTop: '-40px' }}
-				className="mx-auto z-1 relative px-4 py-[0.4rem] sm:py-2 sm:px-8 shadow-xl w-[18rem] md:w-[30rem] sm:w-[30rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
+				className="mx-auto -mt-10 relative px-4 py-[0.4rem] sm:py-6 sm:px-8 shadow-xl w-[18rem] md:w-[32rem] sm:w-[32rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
 				<div className="flex-col flex-1">
-					<h1 className="font-bold text-sm ">Komoditas</h1>
-					<Select
-						styles={{
-							control: (provided) => ({
-								...provided,
-								border: 'none',
-								boxShadow: 'none',
-								fontSize: '14px',
-							}),
-							input: (provided) => ({
-								...provided,
-								fontSize: '14px',
-							}),
-							singleValue: (provided) => ({
-								...provided,
-								fontSize: '14px',
-							}),
-							placeholder: (provided) => ({
-								...provided,
-								fontSize: '14px',
-							}),
-						}}
-						components={{
-							IndicatorSeparator: () => null,
-						}}
-						onChange={(option) => setSelectedCommodity(option)}
-						className="basic-single w-[170px] border-none"
-						options={selectedCommodityOption}
-						value={selectedCommodity}
-					/>
+					<h1 className="font-bold text-sm">Komoditas</h1>
+					<div className="flex items-center h-10">
+						<Select
+							styles={{
+								control: (provided) => ({
+									...provided,
+									border: 'none',
+									boxShadow: 'none',
+									fontSize: '14px',
+								}),
+								input: (provided) => ({
+									...provided,
+									fontSize: '14px',
+								}),
+								singleValue: (provided) => ({
+									...provided,
+									fontSize: '14px',
+								}),
+								placeholder: (provided) => ({
+									...provided,
+									fontSize: '14px',
+								}),
+							}}
+							components={{
+								IndicatorSeparator: () => null,
+							}}
+							onChange={(option) => setSelectedCommodity(option)}
+							className="basic-single w-[170px] border-none"
+							options={selectedCommodityOption}
+							value={selectedCommodity}
+						/>
+					</div>
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm ">Bulan</h1>
-					<LocalizationProvider dateAdapter={AdapterDayjs}>
-						<DatePicker value={selectedDate} onChange={(newValue) => setSelectedDate(newValue as any)} views={['month', 'year']} />
-					</LocalizationProvider>
+					<div className="flex items-center h-10">
+						<LocalizationProvider dateAdapter={AdapterDayjs}>
+							<DatePicker value={selectedDate} onChange={(newValue) => setSelectedDate(newValue as any)} views={['month', 'year']} />
+						</LocalizationProvider>
+					</div>
 				</div>
 				<Button
-					className="bg-blue-300 rounded-full p-2"
-					onClick={handleChangeMonth}>
+					className="bg-blue-300 w-12 h-12 rounded-full p-2">
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 				</Button>
 			</div>
 			<MapNeraca cardContents={cardContents} />
-			
+
 			<section className="px-4 sm:px-8 lg:px-20 md:px-10 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
 				<div className="flex flex-col items-center space-y-8">
-				<Badge className="bg-[#3AC1DF] self-start text-xs sm:text-sm md:text-base rounded-full text-white">
-					<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal {formattedDate}
-				</Badge>
+					<Badge className="bg-[#3AC1DF] self-start text-xs sm:text-sm md:text-base rounded-full text-white">
+						<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal {formattedDate}
+					</Badge>
 					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 px-10 lg:grid-cols-3 xl:grid-cols-4 gap-[2rem] w-full ">
-						{loading ? (<NeracaPanganSkeleton />) : ( cardContents.map((content, index) => (
-							
+						{loading ? (<NeracaPanganSkeleton />) : (cardContents.map((content, index) => (
+
 							<div
 								key={index}
 								className="border border-gray-200 p-4 flex justify-between gap-6 rounded-lg shadow-md">
@@ -236,28 +239,28 @@ export default function Home() {
 										</h1>
 										<table className="w-full mt-2">
 											<tbody className="text-[10px]">
-											<tr className="font-bold">
-										<td className="pr-2">Neraca Pangan:</td>
-										<td className="text-right">{content.neraca}</td>
-										</tr>
-									</tbody>
-									</table>
+												<tr className="font-bold">
+													<td className="pr-2">Neraca Pangan:</td>
+													<td className="text-right">{content.neraca}</td>
+												</tr>
+											</tbody>
+										</table>
 									</div>
 									<div>
 										<table className="w-full mt-2">
-										<tbody className="text-xs">
-											<tr>
-												<td className="pr-2">Ketersediaan:</td>
-												<td className="text-right">{content.ketersediaan}</td>
-											</tr>
-											<tr>
-												<td className="pr-2">Kebutuhan:</td>
-												<td className="text-right">{content.kebutuhan}</td>
-											</tr>
-											
-											
-										</tbody>
-									</table>
+											<tbody className="text-xs">
+												<tr>
+													<td className="pr-2">Ketersediaan:</td>
+													<td className="text-right">{content.ketersediaan}</td>
+												</tr>
+												<tr>
+													<td className="pr-2">Kebutuhan:</td>
+													<td className="text-right">{content.kebutuhan}</td>
+												</tr>
+
+
+											</tbody>
+										</table>
 									</div>
 								</div>
 								<div className="flex flex-col self-center">
@@ -301,7 +304,7 @@ export default function Home() {
 						)))}
 					</div>
 				</div>
-				
+
 			</section>
 			<Footer />
 		</main>

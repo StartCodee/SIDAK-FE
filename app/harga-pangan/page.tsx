@@ -289,59 +289,63 @@ export default function Home() {
 			<Hero />
 			<div
 				style={{ marginTop: '-40px' }}
-				className="mx-auto z-1 relative px-4 py-[0.4rem] sm:py-2 sm:px-8 shadow-xl w-[18rem] md:w-[30rem] sm:w-[30rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
+				className="mx-auto -mt-10 relative px-4 py-[0.4rem] sm:py-6 sm:px-8 shadow-xl w-[18rem] md:w-[32rem] sm:w-[32rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
 				<div className="flex-col flex-1">
-					<h1 className="font-bold text-sm ">Komoditas</h1>
-					<Select
-						styles={{
-							control: (provided) => ({
-								...provided,
-								border: 'none',
-								boxShadow: 'none',
-								fontSize: '14px',
-							}),
-							input: (provided) => ({
-								...provided,
-								fontSize: '14px',
-							}),
-							singleValue: (provided) => ({
-								...provided,
-								fontSize: '14px',
-							}),
-							placeholder: (provided) => ({
-								...provided,
-								fontSize: '14px',
-							}),
-						}}
-						components={{
-							IndicatorSeparator: () => null,
-						}}
-						onChange={(option) => setSelectedCommodity(option)}
-						className="basic-single w-[170px] border-none"
-						options={selectedCommodityOption}
-						value={selectedCommodity}
-					/>
+					<h1 className="font-bold text-sm">Komoditas</h1>
+					<div className="flex items-center h-10">
+						<Select
+							styles={{
+								control: (provided) => ({
+									...provided,
+									border: 'none',
+									boxShadow: 'none',
+									fontSize: '14px',
+								}),
+								input: (provided) => ({
+									...provided,
+									fontSize: '14px',
+								}),
+								singleValue: (provided) => ({
+									...provided,
+									fontSize: '14px',
+								}),
+								placeholder: (provided) => ({
+									...provided,
+									fontSize: '14px',
+								}),
+							}}
+							components={{
+								IndicatorSeparator: () => null,
+							}}
+							onChange={(option) => setSelectedCommodity(option)}
+							className="basic-single w-[170px] border-none"
+							options={selectedCommodityOption}
+							value={selectedCommodity}
+						/>
+					</div>
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm ">Tanggal</h1>
-					<Datepicker theme={customTheme} onChange={
-						(date) => {
-							setSelectedDate(date as any);
-						}
-					} value={selectedDate} maxDate={new Date()} />
+					<div className="flex items-center h-10">
+						<Datepicker theme={customTheme} onChange={
+							(date) => {
+								setSelectedDate(date as any);
+							}
+						} value={selectedDate} maxDate={new Date()} />
+					</div>
 				</div>
 				<Button
 					onClick={handleChangeMonth}
-					className="bg-blue-300 rounded-full p-2">
+					className="bg-blue-300 w-12 h-12 rounded-full p-2">
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 				</Button>
 			</div>
-			<section className="px-4 sm:px-8 md:px-10 lg:px-20 pt-4 space-y-4 sm:space-y-8 md:space-y-20">
+			<section className="px-4 sm:px-2 md:px-4 lg:px-14 pt-4 space-y-4 sm:space-y-4 md:space-y-6">
 				<div className="flex flex-col sm:flex-row justify-between pt-10">
 					<div className="flex-col">
-						<h1 className="text-2xl sm:text-3xl md:text-4xl mb-1 font-extrabold">
-							PETA PERUBAHAN HARGA
+						<h1 className="text-2xl sm:text-3xl md:text-4xl mb-3 font-semibold">
+							Peta Perubahan Harga
 						</h1>
 						<Badge className="bg-green-400 text-xs sm:text-sm md:text-base rounded-full text-white gap-2">
 							<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal{' '}
@@ -369,7 +373,7 @@ export default function Home() {
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-6xl">
 						{loading ? (
 							<HargaPanganSkeleton />
-						) : ( cardContents.map((content, index) => (
+						) : (cardContents.map((content, index) => (
 							<div
 								key={index}
 								className="border border-gray-200 p-4 flex justify-between gap-6 rounded-lg shadow-md">
@@ -446,7 +450,7 @@ export default function Home() {
 							</Card>
 						</div>
 						<div className="text-center w-48 md:w-60">
-							
+
 							<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
 								<div className="flex items-center gap-4">
 									<div className="bg-[#17D6A9] p-2 rounded-md">
@@ -461,7 +465,7 @@ export default function Home() {
 							</Card>
 						</div>
 						<div className="text-center w-48 md:w-60">
-							
+
 							<Card className="flex justify-between items-center p-4 rounded-xl gap-4">
 								<div className="flex items-center gap-4">
 									<div className="bg-[#3AC1DF] p-2 rounded-md">
