@@ -693,89 +693,97 @@ export default function Home() {
 				className="mx-auto -mt-10 relative px-4 py-[0.4rem] sm:py-6 sm:px-8 shadow-xl w-[18rem] md:w-[44rem] sm:w-[40rem] rounded-xl md:rounded-full flex flex-col sm:flex-row items-center sm:justify-between bg-white space-y-4 sm:space-y-0 sm:space-x-4">
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm mb-1">Jenis Informasi</h1>
-					<Select
-						styles={{
-							control: (provided) => ({
-								...provided,
-								border: 'none',
-								boxShadow: 'none',
-								fontSize: '14px',
-							}),
-							input: (provided) => ({
-								...provided,
-								fontSize: '14px',
-							}),
-							singleValue: (provided) => ({
-								...provided,
-								fontSize: '14px',
-							}),
-							placeholder: (provided) => ({
-								...provided,
-								fontSize: '14px',
-							}),
-						}}
-						components={{
-							IndicatorSeparator: () => null
-						}}
-						onChange={(e) => handleValueChange(e)}
-						className=" basic-single w-[170px] border-none"
-						options={jenisInformasi}
-						defaultValue={jenisInformasi[0]}
-					/>
+					<div className="flex items-center h-10">
+						<Select
+							styles={{
+								control: (provided) => ({
+									...provided,
+									border: 'none',
+									boxShadow: 'none',
+									fontSize: '14px',
+								}),
+								input: (provided) => ({
+									...provided,
+									fontSize: '14px',
+								}),
+								singleValue: (provided) => ({
+									...provided,
+									fontSize: '14px',
+								}),
+								placeholder: (provided) => ({
+									...provided,
+									fontSize: '14px',
+								}),
+							}}
+							components={{
+								IndicatorSeparator: () => null
+							}}
+							onChange={(e) => handleValueChange(e)}
+							className=" basic-single w-[170px] border-none"
+							options={jenisInformasi}
+							defaultValue={jenisInformasi[0]}
+						/>
+					</div>
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
 				<div className="flex-col flex-1">
 					<h1 className="font-bold text-sm mb-1">Komoditas</h1>
-					<Select
-						styles={{
-							control: (provided) => ({
-								...provided,
-								border: 'none',
-								boxShadow: 'none',
-								fontSize: '14px',
-							}),
-							input: (provided) => ({
-								...provided,
-								fontSize: '14px',
-							}),
-							singleValue: (provided) => ({
-								...provided,
-								fontSize: '14px',
-							}),
-							placeholder: (provided) => ({
-								...provided,
-								fontSize: '14px',
-							}),
-						}}
-						components={{
-							IndicatorSeparator: () => null,
-						}}
-						onChange={(option) => setSelectedCommodity(option)}
-						className="basic-single w-[170px] border-none"
-						options={selectedCommodityOption}
-						value={selectedCommodity}
-					/>
+					<div className="flex items-center h-10">
+						<Select
+							styles={{
+								control: (provided) => ({
+									...provided,
+									border: 'none',
+									boxShadow: 'none',
+									fontSize: '14px',
+								}),
+								input: (provided) => ({
+									...provided,
+									fontSize: '14px',
+								}),
+								singleValue: (provided) => ({
+									...provided,
+									fontSize: '14px',
+								}),
+								placeholder: (provided) => ({
+									...provided,
+									fontSize: '14px',
+								}),
+							}}
+							components={{
+								IndicatorSeparator: () => null,
+							}}
+							onChange={(option) => setSelectedCommodity(option)}
+							className="basic-single w-[170px] border-none"
+							options={selectedCommodityOption}
+							value={selectedCommodity}
+						/>
+					</div>
 				</div>
 				<div className="mx-4 border-l border-black/15 h-auto self-stretch sm:block" />
 				<div className="flex-col flex-1">
 					{selectedValue === 'harga-pangan' ? (
 						<>
 							<h1 className="font-bold text-sm">Tanggal</h1>
-							<Datepicker theme={customTheme}
-								onChange={
-									(date) => {
-										setSelectedDate(date as any);
+							<div className="flex items-center h-10">
+								<Datepicker theme={customTheme}
+									onChange={
+										(date) => {
+											setSelectedDate(date as any);
+										}
 									}
-								}
-								maxDate={new Date()} />
+									maxDate={new Date()} />
+							</div>
 
 						</>
 					) : (
 						<>
 							<h1 className="font-bold text-sm">Bulan</h1>
-							<LocalizationProvider dateAdapter={AdapterDayjs}>
-								<DatePicker value={selectedMonth} onChange={(newValue) => setSelectedMonth(newValue as any)} views={['month', 'year']} />
-							</LocalizationProvider>
+							<div className="flex items-center h-10">
+								<LocalizationProvider dateAdapter={AdapterDayjs}>
+									<DatePicker value={selectedMonth} onChange={(newValue) => setSelectedMonth(newValue as any)} views={['month', 'year']} />
+								</LocalizationProvider>
+							</div>
 						</>
 
 					)}
@@ -926,7 +934,7 @@ export default function Home() {
 					</Tabs>
 					{/* <MapPola flow={filteredFlow} /> */}
 					<center className="container cente">
-					<MapPolaPerdagangan cardContents={filteredFlow}/>
+						<MapPolaPerdagangan cardContents={filteredFlow} />
 					</center>
 				</>
 			)}
