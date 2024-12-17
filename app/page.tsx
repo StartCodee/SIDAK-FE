@@ -817,11 +817,14 @@ export default function Home() {
 							</div>
 						</div>
 					</div>
-					<div className="flex flex-col lg:flex-row items-center md:px-40 lg:px-96">
+					{/* <div className="flex flex-col lg:flex-row items-center md:px-40 lg:px-96">
 						<div className="h-full w-full">
 							<Map cardContents={cardContents} />
 						</div>
-					</div>
+					</div> */}
+					<center className="container">
+						<Map cardContents={cardContents} />
+					</center>
 					<Badge className="bg-[#3AC1DF] text-xs sm:text-sm md:text-base rounded-full text-white">
 						<CounterClockwiseClockIcon /> Harga diperbaharui pada tanggal {formattedDate}
 					</Badge>
@@ -893,7 +896,7 @@ export default function Home() {
 				<>
 					<Tabs defaultValue="all">
 						<section className="px-4 sm:px-2 md:px-4 lg:px-14 pt-4 space-y-4 sm:space-y-4 md:space-y-6">
-							<div className="flex flex-col sm:flex-row justify-between pt-10">
+							<div className="flex flex-col sm:flex-row justify-between pt-10 mb-3">
 								<div className="flex-col mb-3">
 									<h1 className="text-2xl sm:text-3xl md:text-4xl mb-3 font-semibold">
 										Commodity Flow
@@ -933,7 +936,7 @@ export default function Home() {
 						</section>
 					</Tabs>
 					{/* <MapPola flow={filteredFlow} /> */}
-					<center className="container cente">
+					<center className="container">
 						<MapPolaPerdagangan cardContents={filteredFlow} />
 					</center>
 				</>
