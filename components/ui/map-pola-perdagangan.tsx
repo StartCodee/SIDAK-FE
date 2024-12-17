@@ -31,16 +31,56 @@ export default function MapPolaPerdagangan({ cardContents }: MapProps) {
 	const showCardArea = (id: number, start: string, end: string) => {
 		// Menampilkan kartu untuk 'start'
 		const content = cardContents.find((card) => card.id === id);
+
 		const groupStart = document.getElementById(start);
-
 		if (!groupStart) return;
-
 		const groupElementsStart = groupStart.querySelectorAll('path');
 
-		const pathRectStart = groupStart.getBoundingClientRect();
-		const pathTopStart = pathRectStart.top + window.scrollY + 50;
-		const pathLeftStart = pathRectStart.left + window.scrollX + 75;
 
+		const groupEnd = document.getElementById(end);
+		if (!groupEnd) return;
+		const groupElementsEnd = groupEnd.querySelectorAll('path');
+
+
+
+
+		const pathRectStart = groupStart.getBoundingClientRect();
+		let pathTopStart = pathRectStart.top + window.scrollY + 50;
+		let pathLeftStart = pathRectStart.left + window.scrollX + 75;
+
+		const pathRectEnd = groupEnd.getBoundingClientRect();
+		let pathTopEnd = pathRectEnd.top + window.scrollY + 50;
+		let pathLeftEnd = pathRectEnd.left + window.scrollX + 75;
+
+		const startCity = citiesArray.find((city) => city.cityId === start);
+		const endCity = citiesArray.find((city) => city.cityId === end);
+
+		const diffX = Math.abs((startCity?.x ?? 0) - (endCity?.x ?? 0));
+		const diffY = Math.abs((startCity?.y ?? 0) - (endCity?.y ?? 0));
+
+		console.log(diffX, diffY)
+
+		if (diffX <= 100) {
+			if ((startCity?.y ?? 0) > (endCity?.y ?? 0)) {
+				pathLeftStart = pathRectStart.left + window.scrollX + 80;
+				pathLeftEnd = pathRectEnd.left + window.scrollX + 60;
+			} else {
+				pathLeftStart = pathRectStart.left + window.scrollX + 60;
+				pathLeftEnd = pathRectEnd.left + window.scrollX + 80;
+			}
+		}
+
+		if (diffY <= 100) {
+			if ((startCity?.y ?? 0) > (endCity?.y ?? 0)) {
+				pathTopStart = pathRectStart.top + window.scrollY + 65;
+				pathTopEnd = pathRectEnd.top + window.scrollY + 35;
+			} else {
+				pathTopStart = pathRectStart.top + window.scrollY + 35;
+				pathTopEnd = pathRectEnd.top + window.scrollY + 65;
+			}
+		}
+
+		// Menampilkan Start
 		const cardStart = document.createElement('div');
 
 		cardStart.id = 'card-' + start;
@@ -64,17 +104,7 @@ export default function MapPolaPerdagangan({ cardContents }: MapProps) {
 		`;
 		document.body.appendChild(cardStart);
 
-		// Menampilkan kartu untuk 'end'
-		const groupEnd = document.getElementById(end);
-
-		if (!groupEnd) return;
-
-		const groupElementsEnd = groupEnd.querySelectorAll('path');
-
-		const pathRectEnd = groupEnd.getBoundingClientRect();
-		const pathTopEnd = pathRectEnd.top + window.scrollY + 100;
-		const pathLeftEnd = pathRectEnd.left + window.scrollX + 150;
-
+		// Menampilkan End
 		const cardEnd = document.createElement('div');
 
 		cardEnd.id = 'card-' + end;
@@ -202,7 +232,7 @@ export default function MapPolaPerdagangan({ cardContents }: MapProps) {
 		return '#88B0C1';
 	};
 
-	const coordinatesArray = [
+	const citiesArray = [
 		{ x: 540, y: 190, name: 'Buol', cityId: 'Buol', external_flow: false }, // Done
 		{ x: 470, y: 210, name: 'Tolitoli', cityId: 'Tolitoli', external_flow: false }, // Done
 		{ x: 340, y: 380, name: 'Parigi', cityId: 'Parigi', external_flow: false }, // Done
@@ -248,14 +278,14 @@ export default function MapPolaPerdagangan({ cardContents }: MapProps) {
 	const usedCoordinates = new Set<string>(); // Menyimpan koordinat yang sudah digunakan
 
 	const getCityName = (cityId: string) => {
-		const city = coordinatesArray.find(city => city.cityId == cityId);
+		const city = citiesArray.find(city => city.cityId == cityId);
 		return city?.name;
 	}
 
 	const getCoordinate = (start: string, end: string) => {
 		// Cari koordinat berdasarkan nama yang diberikan
-		const startCoord = coordinatesArray.find(coord => coord.cityId === start);
-		const endCoord = coordinatesArray.find(coord => coord.cityId === end);
+		const startCoord = citiesArray.find(coord => coord.cityId === start);
+		const endCoord = citiesArray.find(coord => coord.cityId === end);
 
 		// Pastikan startCoord dan endCoord ada
 		if (startCoord && endCoord) {
@@ -617,8 +647,8 @@ export default function MapPolaPerdagangan({ cardContents }: MapProps) {
 
 					{/* Garis Lengkung  */}
 					{cardContents.map((item) => {
-						const start = coordinatesArray.find(coordinate => coordinate.cityId === item.start);
-						const end = coordinatesArray.find(coordinate => coordinate.cityId === item.end);
+						const start = citiesArray.find(coordinate => coordinate.cityId === item.start);
+						const end = citiesArray.find(coordinate => coordinate.cityId === item.end);
 
 						if (start?.external_flow) {
 							document.getElementById(item.start)?.removeAttribute('class')
