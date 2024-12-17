@@ -756,7 +756,7 @@ export default function Home() {
 						value={selectedCommodity}
 					/>
 				</div>
-				<div className="mx-4 border-l border-black/15 h-auto self-stretch  sm:block" />
+				<div className="mx-4 border-l border-black/15 h-auto self-stretch sm:block" />
 				<div className="flex-col flex-1">
 					{selectedValue === 'harga-pangan' ? (
 						<>
@@ -772,7 +772,7 @@ export default function Home() {
 						</>
 					) : (
 						<>
-							<h1 className="font-bold text-sm ">Bulan</h1>
+							<h1 className="font-bold text-sm">Bulan</h1>
 							<LocalizationProvider dateAdapter={AdapterDayjs}>
 								<DatePicker value={selectedMonth} onChange={(newValue) => setSelectedMonth(newValue as any)} views={['month', 'year']} />
 							</LocalizationProvider>
