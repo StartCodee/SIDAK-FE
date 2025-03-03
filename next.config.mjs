@@ -7,7 +7,7 @@ const nextConfig = {
         hostname: "api-sidak.startcode.id",
       },
     ],
-    unoptimized: true, // Matikan optimasi gambar bawaan Next.js
+   
   },
 };
 
