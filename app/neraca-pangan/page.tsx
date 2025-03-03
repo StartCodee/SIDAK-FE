@@ -213,6 +213,7 @@ export default function Home() {
 					</div>
 				</div>
 				<Button
+					onClick={handleChangeMonth}
 					className="bg-blue-300 w-12 h-12 rounded-full p-2">
 					<MagnifyingGlassIcon className="text-white" width={24} height={24} />
 				</Button>
