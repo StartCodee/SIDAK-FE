@@ -63,6 +63,7 @@ import { Label } from "@/components/ui/label"
 interface Kabupaten {
     id: number;
     name: string;
+    code: string;
     created_at: string;
     updated_at: string;
     deleted_at: string | null;
@@ -95,6 +96,7 @@ export default function Home() {
     const [kabupaten, setKabupaten] = React.useState({
         id: 0,
         name: '',
+        code:'',
     });
 
     const columns: ColumnDef<Kabupaten>[] = [
@@ -212,6 +214,7 @@ export default function Home() {
             `${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kabupaten`,
             {
                 name: kabupaten.name,
+                code:kabupaten.code,
             },
             {
                 headers: {
@@ -225,6 +228,7 @@ export default function Home() {
                 setKabupaten({
                     id: 0,
                     name: '',
+                    code:'',
                 })
                 e.target.reset();
                 Swal.close()
@@ -243,7 +247,7 @@ export default function Home() {
                     Swal.fire({
                         icon: 'error',
                         target: document.getElementById('modal-dialog'),
-                        title: 'error terjadidsds',
+                        title: 'error terjadi',
                         text: 'mohon coba lagi nanti.',
                         showConfirmButton: false,
                         timer: 10000
@@ -258,6 +262,7 @@ export default function Home() {
             setKabupaten({
                 id: fr.id,
                 name: fr.name,
+                code:fr.code,
             })
             setIsDialogOpen(true);
         }
@@ -279,6 +284,7 @@ export default function Home() {
                 `${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kabupaten/${kabupaten.id}`,
                 {
                     name: kabupaten.name,
+                    code:kabupaten.code,
                 },
                 {
                     headers: {
@@ -291,6 +297,7 @@ export default function Home() {
             setKabupaten({
                 id: 0,
                 name: '',
+                code:'',
             });
             e.target.reset();
             Swal.close();
@@ -407,6 +414,19 @@ export default function Home() {
                                                             value={kabupaten.name}
                                                             onChange={handleInputChange}
                                                             placeholder="Nama Kabupaten"
+                                                            className="col-span-3 mt-1"
+                                                        />
+                                                    </div>
+                                                    <div className="">
+                                                        <Label htmlFor="code" className="text-right mb-3">
+                                                            Code Kabupaten
+                                                        </Label>
+                                                        <Input
+                                                            id="code"
+                                                            name="code"
+                                                            value={kabupaten.code}
+                                                            onChange={handleInputChange}
+                                                            placeholder="Isi Kode Kabupaten"
                                                             className="col-span-3 mt-1"
                                                         />
                                                     </div>
