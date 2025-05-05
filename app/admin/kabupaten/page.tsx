@@ -417,19 +417,6 @@ export default function Home() {
                                                             className="col-span-3 mt-1"
                                                         />
                                                     </div>
-                                                    <div className="">
-                                                        <Label htmlFor="code" className="text-right mb-3">
-                                                            Code Kabupaten
-                                                        </Label>
-                                                        <Input
-                                                            id="code"
-                                                            name="code"
-                                                            value={kabupaten.code}
-                                                            onChange={handleInputChange}
-                                                            placeholder="Isi Kode Kabupaten"
-                                                            className="col-span-3 mt-1"
-                                                        />
-                                                    </div>
                                                 </div>
                                                 <DialogFooter>
                                                     <Button type="submit">Simpan</Button>
