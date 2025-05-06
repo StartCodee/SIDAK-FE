@@ -1,4 +1,5 @@
-import React from 'react';
+'use client'
+import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/ui/navbar';
 import Image from 'next/image';
 import Background from '@/public/bgg.png';
@@ -20,44 +21,47 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import berita from '@/public/berita.png';
 import berita2 from '@/public/berita 2.png';
 import berita3 from '@/public/berita 3.png';
+import { useRouter } from "next/navigation";
+import axios from 'axios';
+import Swal from 'sweetalert2';
 import Hero from '@/components/ui/hero';
 import Footer from '@/components/ui/footer';
 
-const BeritaPage: React.FC = () => {
-	const data = [
-		{
-			Image: berita,
-			id: 1,
-			title:
-				'Kantor Perwakilan Bank Indonesia Sulawesi Tengah Bersama BULOG Lakukan Pengecekan Stok Beras untuk Cegah Kenaikan Harga Pangan 1',
-			content:
-				'Pada Kamis, 2 februari 2024 kantor perwakilan bank indonesia provinsi sulawesi tengah, melakukan pengecekan stok beras di gudang BULOG. Tujuan kegiatan ini adalah. ',
-		},
-		{
-			image: berita2,
-			id: 2,
-			title:
-				'Kantor Perwakilan Bank Indonesia Sulawesi Tengah Bersama BULOG Lakukan Pengecekan Stok Beras untuk Cegah Kenaikan Harga Pangan 2',
-			content:
-				'Pada Kamis, 2 februari 2024 kantor perwakilan bank indonesia provinsi sulawesi tengah, melakukan pengecekan stok beras di gudang BULOG. Tujuan kegiatan ini adalah. ',
-		},
-		{
-			image: berita3,
-			id: 3,
-			title:
-				'Kantor Perwakilan Bank Indonesia Sulawesi Tengah Bersama BULOG Lakukan Pengecekan Stok Beras untuk Cegah Kenaikan Harga Pangan 3',
-			content:
-				'Pada Kamis, 2 februari 2024 kantor perwakilan bank indonesia provinsi sulawesi tengah, melakukan pengecekan stok beras di gudang BULOG. Tujuan kegiatan ini adalah. ',
-		},
-		{
-			image: berita,
-			id: 4,
-			title:
-				'Kantor Perwakilan Bank Indonesia Sulawesi Tengah Bersama BULOG Lakukan Pengecekan Stok Beras untuk Cegah Kenaikan Harga Pangan 4',
-			content:
-				'Pada Kamis, 2 februari 2024 kantor perwakilan bank indonesia provinsi sulawesi tengah, melakukan pengecekan stok beras di gudang BULOG. Tujuan kegiatan ini adalah. ',
-		},
-	];
+
+
+export default function Page({ params }: { params: { id: string } }) {
+	const router = useRouter();
+
+	const [berita, setBerita] = useState<any>({});
+
+	const getBerita = async () => {
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/news/${params.id}`,
+				{
+					headers: {
+						'content-type': 'application/json',
+						// 'Authorization': `Bearer ${localStorage.getItem('token')}`,
+					},
+				},
+			);
+			console.log(response);
+			setBerita(response.data);
+		} catch (error) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Error terjadi',
+				text: 'Mohon coba lagi nanti.',
+				showConfirmButton: false,
+				timer: 1500,
+			});
+		}
+	};
+
+	useEffect(() => {
+		getBerita();
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+
 	return (
 		<>
 			<Navbar />
@@ -75,17 +79,16 @@ const BeritaPage: React.FC = () => {
 									Lakukan Pengecekan Stok Beras untuk Cegah Kenaikan Harga
 									Pangan
 									<br />
-									<span className='text-xs text-graydark opacity-50'>
-									2024-02-02 | Oleh Admin 
-								</span>
+									<span className="text-xs text-graydark opacity-50">
+										2024-02-02 | Oleh Admin
+									</span>
 								</h1>
 
-								
 								<div className="h-1 rounded-lg my-10 bg-black z-0"></div>
 							</div>
 							<Image
-								src={berita}
-								alt={data[0].title}
+								src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/image/${berita.image}`}
+								alt={berita.title}
 								width={550}
 								height={300}
 								className="rounded-2xl mr-15"
@@ -133,4 +136,3 @@ const BeritaPage: React.FC = () => {
 	);
 };
 
-export default BeritaPage;

@@ -1,43 +1,50 @@
 
 "use client";
 
-import * as React from "react";
+// import * as React from "react";
 import {
-    ColumnDef,
-    ColumnFiltersState,
-    SortingState,
-    VisibilityState,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
+	ColumnDef,
+	ColumnFiltersState,
+	SortingState,
+	VisibilityState,
+	flexRender,
+	getCoreRowModel,
+	getFilteredRowModel,
+	getPaginationRowModel,
+	getSortedRowModel,
+	useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 
+import Swal from "sweetalert2";
+import axios from "axios";
+import React, { ChangeEvent, useEffect, useState } from 'react';
+
+import Select from 'react-select';
+import { AuthHeader } from '@/lib/authHeader';
+
 import { Button } from "@/components/ui/button";
 import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
 } from "@/components/ui/table";
 import DefaultLayout from "@/components/admin/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/admin/Breadcrumbs/Breadcrumb";
-import { useState } from "react";
+// import { useState } from "react";
 
 
 import CheckboxFive from "@/components/admin/Checkboxes/CheckboxFive";
@@ -47,204 +54,584 @@ import CheckboxThree from "@/components/admin/Checkboxes/CheckboxThree";
 import CheckboxTwo from "@/components/admin/Checkboxes/CheckboxTwo";
 
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 
-export type Commodity = {
-    nama: string;
-};
 
 
-// Sample data
-const data: Commodity[] = [
-    {
-        nama: "Beras Premium",
-
-    },
-    {
-        nama: "Daging Premium",
-
-    },
-    // Add other commodities similarly...
-];
-
+interface Kecamatan {
+	id: number;
+	name: string;
+	code: string;
+	kabupaten_kota_id: number;
+	created_at: string;
+	updated_at: string;
+	deleted_at: string | null;
+}
+interface kabupaten {
+	id: number;
+	name: string;
+	created_at: string;
+	updated_at: string;
+	deleted_at: string | null;
+	value: number;
+}
+interface PaginationInfo {
+	current_page: number;
+	from: number;
+	last_page: number;
+	first_page_url: string;
+	next_page_url: string | null;
+	prev_page_url: string | null;
+	last_page_url: string;
+	path: string;
+	per_page: number;
+	to: number;
+	total: number;
+	links: {
+		url: string | null;
+		label: string;
+		active: boolean;
+	}[];
+}
 
 
 export default function Home() {
+	const [kecamatanData, setKecamatanData] = useState<Kecamatan[]>([]);
+	const [kabupatenData, setKabupatenData] = useState<kabupaten[]>([]);
 
-    // Define columns based on the data structure
-    const columns: ColumnDef<Commodity>[] = [
-        {
-            accessorKey: "commodity",
-            header: "No",
-        },
-        {
-            accessorKey: "nama",
-            header: "Nama Komoditas",
-        },
+	const [paginationInfo, setPaginationInfo] = useState<PaginationInfo | null>(
+		null,
+	);
+	const [selectedFile, setSelectedFile] = React.useState<File>();
+	const [kecamatan, setKecamatan] = React.useState({
+		id: 0,
+		code: '',
+		name: '',
+	});
 
-    ];
+	const columns: ColumnDef<Kecamatan>[] = [
+		{
+			id: 'sequence',
+			header: '#',
+			cell: (info) => info.row.index + 1,
+		},
+		{
+			accessorKey: 'kabupaten_name',
+			header: ({ column }) => {
+				return (
+					<Button
+						variant="ghost"
+						onClick={() =>
+							column.toggleSorting(column.getIsSorted() === 'asc')
+						}>
+						Nama Kabupaten
+						<ArrowUpDown className="ml-2 h-4 w-4" />
+					</Button>
+				);
+			},
+		},
+		{
+			accessorKey: 'name',
+			header: ({ column }) => {
+				return (
+					<Button
+						variant="ghost"
+						onClick={() =>
+							column.toggleSorting(column.getIsSorted() === 'asc')
+						}>
+						Name
+						<ArrowUpDown className="ml-2 h-4 w-4" />
+					</Button>
+				);
+			},
+		},
+		{
+			id: 'actions',
+			accessorKey: 'id',
+			header: ({ column }) => {
+				return 'Actions';
+			},
+			cell: (row) => (
+				<div className="flex items-center space-x-2">
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => editKecamatan(row.getValue())}>
+						Edit
+					</Button>
+					<Button
+						variant="destructive"
+						onClick={() => deleteKecamatan(row.getValue())}
+						size="sm">
+						Delete
+					</Button>
+				</div>
+			),
+		},
+	];
 
+	const [activeTab, setActiveTab] = useState('profile');
 
-    const [activeTab, setActiveTab] = useState('profile');
+	const handleTabClick = (tab: string): void => {
+		setActiveTab(tab);
+	};
 
-    const handleTabClick = (tab: string): void => {
-        setActiveTab(tab);
-    };
+	const getKabupaten = async (page: number = 1, limit: number = 2) => {
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kabupaten`,
+				{
+					headers: AuthHeader(),
+				},
+			);
+			if (response.data.data) {
+				const mappedOptions = response.data.data.map(
+					(kabupaten: { name: string; id: number }) => ({
+						value: kabupaten.id,
+						label: kabupaten.name,
+					}),
+				);
+				setKabupatenData(mappedOptions);
+				setPaginationInfo(response.data.paginationInfo);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			}
+		}
+	};
 
-    const [sorting, setSorting] = React.useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-    const [rowSelection, setRowSelection] = React.useState({});
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const [selectedKabupaten, setSelectedKabupaten] = useState({
+		value: 0,
+		label: 'Select',
+	});
 
-    const table = useReactTable({
-        data,
-        columns,
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
-        state: {
-            sorting,
-            columnFilters,
-            columnVisibility,
-            rowSelection,
-        },
-    });
+	const [sorting, setSorting] = React.useState<SortingState>([]);
+	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+		[],
+	);
+	const [columnVisibility, setColumnVisibility] =
+		React.useState<VisibilityState>({});
+	const [rowSelection, setRowSelection] = React.useState({});
 
+	const table = useReactTable<Kecamatan>({
+		data: kecamatanData,
+		columns,
+		onSortingChange: setSorting,
+		onColumnFiltersChange: setColumnFilters,
+		getCoreRowModel: getCoreRowModel(),
+		getPaginationRowModel: getPaginationRowModel(),
+		getSortedRowModel: getSortedRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
+		onColumnVisibilityChange: setColumnVisibility,
+		onRowSelectionChange: setRowSelection,
+		state: {
+			sorting,
+			columnFilters,
+			columnVisibility,
+			rowSelection,
+		},
+	});
 
+	const getKecamatan = async (page: number = 1, limit: number = 2) => {
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kecamatan`,
+				{
+					headers: AuthHeader(),
+				},
+			);
+			if (response.data.data) {
+				setKecamatanData(response.data.data);
+				setPaginationInfo(response.data.paginationInfo);
+			}
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			}
+		}
+	};
 
-    return (
-        <>
-            <DefaultLayout>
-                <Breadcrumb pageName="Management Kecamatan" />
+	const createKecamatan = async (e: any) => {
+		e.preventDefault();
+		Swal.fire({
+			title: 'Loading...',
+			target: document.getElementById('modal-dialog'),
+			text: 'Mohon tunggu sebentar...',
+			allowOutsideClick: false,
+			didOpen: () => {
+				Swal.showLoading();
+			},
+		});
 
-                <div className="col-span-3 bg-white rounded-lg border border-stroke bg-white px-5  py-10 shadow-default">
-                    <div className={`w-full  ${activeTab === 'profile' ? '' : 'hidden'}`}>
-                        <h1 className="text-2xl font-bold">Management Kecamatan</h1>
-                        <div className="flex items-center py-4">
-                            <Input
-                                placeholder="Filter commodities..."
-                                value={(table.getColumn("commodity")?.getFilterValue() as string) ?? ""}
-                                onChange={(event) =>
-                                    table.getColumn("commodity")?.setFilterValue(event.target.value)
-                                }
-                                className="max-w-sm"
-                            />
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" className="ml-auto">
-                                        Columns <ChevronDown className="ml-2 h-4 w-4" />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <div className="ms-2">
-                                <Dialog >
-                                    <DialogTrigger asChild>
-                                        <Button variant="outline">Add Commodity</Button>
-                                    </DialogTrigger>
-                                    <DialogContent className="sm:max-w-[425px]">
-                                        <DialogHeader>
-                                            <DialogTitle>Add Commodity</DialogTitle>
-                                        </DialogHeader>
-                                        <div className="grid gap-4 py-4">
-                                            <div className="grid grid-cols-4 items-center gap-4">
-                                                <Label htmlFor="name" className="text-right">
-                                                    Name
-                                                </Label>
-                                                <Input
-                                                    id="name"
-                                                    defaultValue="Pedro Duarte"
-                                                    className="col-span-3"
-                                                />
-                                            </div>
-                                        </div>
-                                        <DialogFooter>
-                                            <Button type="submit">Save changes</Button>
-                                        </DialogFooter>
-                                    </DialogContent>
-                                </Dialog>
+		var res = await axios
+			.post(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kecamatan`,
+				{
+					name: kecamatan.name,
+					kabupaten_id: selectedKabupaten.value,
+				},
+				{
+					headers: AuthHeader(),
+				},
+			)
+			.then(function (response) {
+				getKecamatan();
+				setKecamatan({
+					id: 0,
+					code: '',
+					name: '',
+				});
+				e.target.reset();
+				Swal.close();
+				setIsDialogOpen(false);
+			})
+			.catch(function (error) {
+				console.log(error);
+				if (error.response && error.response.status === 401) {
+					Swal.fire({
+						icon: 'error',
+						target: document.getElementById('modal-dialog'),
+						title: error.response.data.message,
+						showConfirmButton: false,
+						timer: 10000,
+					});
+				} else {
+					Swal.fire({
+						icon: 'error',
+						target: document.getElementById('modal-dialog'),
+						title: 'error terjadi',
+						text: 'mohon coba lagi nanti.',
+						showConfirmButton: false,
+						timer: 10000,
+					});
+				}
+			});
+	};
 
-                                </div>
-                            </DropdownMenu>
-                        </div>
-                        <div className="rounded-md border">
-                            <Table>
-                                <TableHeader>
-                                    {table.getHeaderGroups().map((headerGroup) => (
-                                        <TableRow key={headerGroup.id}>
-                                            {headerGroup.headers.map((header) => (
-                                                <TableHead key={header.id}>
-                                                    {header.isPlaceholder ? null : flexRender(
-                                                        header.column.columnDef.header,
-                                                        header.getContext()
-                                                    )}
-                                                </TableHead>
-                                            ))}
-                                        </TableRow>
-                                    ))}
-                                </TableHeader>
-                                <TableBody>
-                                    {table.getRowModel().rows?.length ? (
-                                        table.getRowModel().rows.map((row,key) => (
-                                            <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+	const editKecamatan = async (id: any) => {
+		let fr = kecamatanData.find((f) => f.id === id);
+		console.log(fr, kecamatanData);
+		if (fr) {
+			setKecamatan({
+				id: fr.id,
+				code: fr.code,
+				name: fr.name,
+			});
+			console.log(fr);
 
-                                                    <TableCell>
-                                                        {key + 1}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {row.original.nama}
-                                                    </TableCell>
+			let kab = kabupatenData.find((f) => f.value == fr?.kabupaten_kota_id);
+			console.log('ini');
+			console.log(kab);
+			setSelectedKabupaten({
+				value: fr.kabupaten_kota_id,
+				label: kab?.name ?? '',
+			});
+			setIsDialogOpen(true);
+		}
+	};
 
-                                            </TableRow>
-                                        ))
-                                    ) : (
-                                        <TableRow>
-                                            <TableCell colSpan={columns.length} className="h-24 text-center">
-                                                No results.
-                                            </TableCell>
-                                        </TableRow>)}
-                                </TableBody>
+	const updateKecamatan = async (e: any) => {
+		e.preventDefault();
+		Swal.fire({
+			title: 'Loading...',
+			target: document.getElementById('modal-dialog'),
+			text: 'Mohon tunggu sebentar...',
+			allowOutsideClick: false,
+			didOpen: () => {
+				Swal.showLoading();
+			},
+		});
+		try {
+			const response = await axios.put(
+				`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kecamatan/${kecamatan.id}`,
+				{
+					name: kecamatan.name,
+					kabupaten_id: selectedKabupaten.value,
+				},
+				{
+					headers: AuthHeader(),
+				},
+			);
+			getKecamatan();
+			setKecamatan({
+				id: 0,
+				code: '',
+				name: '',
+			});
+			e.target.reset();
+			Swal.close();
+			setIsDialogOpen(false);
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				Swal.fire({
+					icon: 'error',
+					title: error.response.data.message,
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'error terjadi',
+					text: 'mohon coba lagi nanti.',
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			}
+		}
+	};
 
-                            </Table>
-                        </div>
-                        <div className="flex items-center justify-end space-x-2 py-4">
-                            <div className="flex-1 text-sm text-muted-foreground">
-                                {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                                {table.getFilteredRowModel().rows.length} row(s) selected.
-                            </div>
-                            <div className="space-x-2">
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => table.previousPage()}
-                                    disabled={!table.getCanPreviousPage()}
-                                >
-                                    Previous
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => table.nextPage()}
-                                    disabled={!table.getCanNextPage()}
-                                >
-                                    Next
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </DefaultLayout>
-        </>
-    );
+	const deleteKecamatan = async (id: any) => {
+		Swal.fire({
+			title: 'Are you sure?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, delete it!',
+		}).then(async (result) => {
+			if (result.isConfirmed) {
+				Swal.fire({
+					title: 'Loading...',
+					text: 'Mohon tunggu sebentar...',
+					allowOutsideClick: false,
+					didOpen: () => {
+						Swal.showLoading();
+					},
+				});
+				try {
+					await axios.delete(
+						`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/kecamatan/${id}`,
+						{
+							headers: {
+								Authorization: `Bearer ${localStorage.getItem('token')}`,
+							},
+						},
+					);
+					await getKecamatan();
+					Swal.fire('Deleted!', 'Your data has been deleted.', 'success');
+				} catch (error) { }
+			}
+		});
+	};
+
+	const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setSelectedFile(event.target.files?.[0]);
+	};
+
+	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = event.target;
+		setKecamatan({ ...kecamatan, [name]: value });
+	};
+
+	useEffect(() => {
+		getKecamatan();
+		getKabupaten();
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+	return (
+		<>
+			<DefaultLayout>
+				<Breadcrumb pageName="Management Kecamatan" />
+				<div className="col-span-3  rounded-lg border border-stroke bg-white px-7 py-10 shadow-default">
+					<div className={`w-full  ${activeTab === 'profile' ? '' : 'hidden'}`}>
+						<h1 className="text-2xl font-bold">Management Kecamatan</h1>
+						<div className="flex items-center py-4">
+							<Input
+								placeholder="Filter Kecamatan..."
+								value={
+									(table.getColumn('name')?.getFilterValue() as string) ?? ''
+								}
+								onChange={(event) =>
+									table.getColumn('name')?.setFilterValue(event.target.value)
+								}
+								className="max-w-sm"
+							/>
+							<DropdownMenu>
+								<div className="ms-2">
+									<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+										<DialogTrigger asChild>
+											<Button
+												variant="outline"
+												onClick={() => setIsDialogOpen(true)}>
+												Tambah Kecamatan
+											</Button>
+										</DialogTrigger>
+										<DialogContent className="sm:max-w-[425px]">
+											<form
+												action=""
+												method="dialog"
+												onSubmit={
+													kecamatan.id == 0 ? createKecamatan : updateKecamatan
+												}>
+												<DialogHeader>
+													<DialogTitle>Tambah Kecamatan</DialogTitle>
+												</DialogHeader>
+												<div className="grid gap-4 py-4">
+													<div>
+														<Label htmlFor="name" className="text-right mb-3">
+															Nama Kabupaten
+														</Label>
+														<Select
+															onChange={(kabupatenData) =>
+																setSelectedKabupaten({
+																	value: kabupatenData!.value,
+																	label: kabupatenData!.label,
+																})
+															}
+															value={selectedKabupaten}
+															className=" basic-single w-full border-none"
+															options={kabupatenData as any}
+														/>
+													</div>
+
+													<div className="">
+														<Label htmlFor="code" className="text-right mb-3">
+															Kode Kecamatan
+														</Label>
+														<Input
+															id="code"
+															name="code"
+															value={kecamatan.code}
+															onChange={handleInputChange}
+															placeholder="Isi kode Kecamatan"
+															className="col-span-3 mt-1"
+														/>
+													</div>
+
+													<div className="">
+														<Label htmlFor="name" className="text-right mb-3">
+															Nama Kecamatan
+														</Label>
+														<Input
+															id="name"
+															name="name"
+															value={kecamatan.name}
+															onChange={handleInputChange}
+															placeholder="Isi nama Kecamatan"
+															className="col-span-3 mt-1"
+														/>
+													</div>
+												</div>
+												<DialogFooter>
+													<Button type="submit">Simpan</Button>
+												</DialogFooter>
+											</form>
+										</DialogContent>
+									</Dialog>
+								</div>
+							</DropdownMenu>
+						</div>
+						<div className="rounded-md border">
+							<Table>
+								<TableHeader>
+									{table.getHeaderGroups().map((headerGroup) => (
+										<TableRow key={headerGroup.id}>
+											{headerGroup.headers.map((header) => {
+												return (
+													<TableHead key={header.id}>
+														{header.isPlaceholder
+															? null
+															: flexRender(
+																header.column.columnDef.header,
+																header.getContext(),
+															)}
+													</TableHead>
+												);
+											})}
+										</TableRow>
+									))}
+								</TableHeader>
+								<TableBody>
+									{table.getRowModel().rows?.length ? (
+										table.getRowModel().rows.map((row) => (
+											<TableRow
+												key={row.id}
+												data-state={row.getIsSelected() && 'selected'}>
+												{row.getVisibleCells().map((cell) => (
+													<TableCell key={cell.id}>
+														{flexRender(
+															cell.column.columnDef.cell,
+															cell.getContext(),
+														)}
+													</TableCell>
+												))}
+											</TableRow>
+										))
+									) : (
+										<TableRow>
+											<TableCell
+												colSpan={columns.length}
+												className="h-24 text-center">
+												No results.
+											</TableCell>
+										</TableRow>
+									)}
+								</TableBody>
+							</Table>
+						</div>
+						<div className="flex items-center justify-end space-x-2 py-4">
+							<div className="flex-1 text-sm text-muted-foreground">
+								{table.getFilteredSelectedRowModel().rows.length} of{' '}
+								{table.getFilteredRowModel().rows.length} row(s) selected.
+							</div>
+							<div className="space-x-2">
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() => table.previousPage()}
+									disabled={!table.getCanPreviousPage()}>
+									Previous
+								</Button>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() => table.nextPage()}
+									disabled={!table.getCanNextPage()}>
+									Next
+								</Button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</DefaultLayout>
+		</>
+	);
 }

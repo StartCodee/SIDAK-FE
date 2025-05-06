@@ -1,5 +1,7 @@
 import type { Config } from 'tailwindcss';
 
+const flowbite = require("flowbite-react/tailwind");
+
 const config = {
 	darkMode: ['class'],
 	content: [
@@ -7,13 +9,14 @@ const config = {
 		'./components/**/*.{ts,tsx}',
 		'./app/**/*.{ts,tsx}',
 		'./src/**/*.{ts,tsx}',
+		flowbite.content(),
 	],
 	prefix: '',
 	theme: {
 		fontFamily: {
 			satoshi: ["Satoshi", "sans-serif"],
 		},
-		
+
 		container: {
 			center: true,
 			padding: '2rem',
@@ -33,10 +36,8 @@ const config = {
 				bodydark1: "#DEE4EE",
 				bodydark2: "#8A99AF",
 				stroke: "#E2E8F0",
-				gray: "#EFF4FB",
-				graydark: "#333A48",
-				"gray-2": "#F7F9FC",
-				"gray-3": "#FAFAFA",
+				"b-gray": "#F3F4F6",
+				"gray": "#F9FAFC",
 				whiten: "#F1F5F9",
 				whiter: "#F5F7FD",
 				boxdark: "#24303F",
@@ -380,7 +381,8 @@ const config = {
 		},
 	},
 	plugins: [require('tailwindcss-animate'),
-		require('@tailwindcss/forms'),
+	require('@tailwindcss/forms'),
+	flowbite.plugin(),
 	],
 } satisfies Config;
 

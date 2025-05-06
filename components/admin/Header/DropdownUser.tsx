@@ -2,9 +2,23 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ClickOutside from "@/components/admin/ClickOutside";
+import Cookies from 'js-cookie';
+import adminThumb from '@/public//admin/images/user/profile.png'
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const username = Cookies.get('userName');
+  const userEmail = Cookies.get('userEmail');
+
+
+
+ const logout = () => {
+    Cookies.remove('token');
+    Cookies.remove('userEmail');
+    Cookies.remove('userName');
+    Cookies.remove('userId');
+    window.location.href = '/auth';
+  }
 
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
@@ -15,16 +29,16 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Admin SIDAK
+            {username}
           </span>
-          <span className="block text-xs">admin</span>
+          <span className="block text-xs">{userEmail}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full border">
           <Image
             width={112}
             height={112}
-            src={"/admin/images/user/profile.png"}
+            src={adminThumb}
             style={{
               width: "auto",
               height: "auto",
@@ -83,7 +97,7 @@ const DropdownUser = () => {
             </li>
             
           </ul>
-          <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+          <button onClick={logout} className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
             <svg
               className="fill-current"
               width="22"
