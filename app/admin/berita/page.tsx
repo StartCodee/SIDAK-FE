@@ -215,7 +215,7 @@ export default function Home() {
 	// 						Swal.fire({
 	// 							icon: 'error',
 	// 							target: document.getElementById('modal-dialog'),
-	// 							title: 'error terjadidsds',
+	// 							title: 'error terjadi',
 	// 							text: 'mohon coba lagi nanti.',
 	// 							showConfirmButton: false,
 	// 							timer: 10000,

@@ -416,7 +416,7 @@ export default function Home() {
                                                             placeholder="Nama Kabupaten"
                                                             className="col-span-3 mt-1"
                                                         />
-                                                        <Label htmlFor="name" className="text-right mb-3">
+                                                        <Label htmlFor="code" className="text-right mb-3">
                                                             Code Kabupaten
                                                         </Label>
                                                         <Input
