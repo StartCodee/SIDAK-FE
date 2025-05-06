@@ -416,6 +416,17 @@ export default function Home() {
                                                             placeholder="Nama Kabupaten"
                                                             className="col-span-3 mt-1"
                                                         />
+                                                        <Label htmlFor="name" className="text-right mb-3">
+                                                            Code Kabupaten
+                                                        </Label>
+                                                        <Input
+                                                            id="code"
+                                                            name="code"
+                                                            value={kabupaten.code}
+                                                            onChange={handleInputChange}
+                                                            placeholder="Code Kabupaten"
+                                                            className="col-span-3 mt-1"
+                                                        />
                                                     </div>
                                                 </div>
                                                 <DialogFooter>
